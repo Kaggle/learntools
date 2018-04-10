@@ -16,7 +16,7 @@ def answer_q1():
 
 def check_q2(ans):
     expected = reviews.price.astype(str)
-    return ans == expected
+    return ans.equals(expected)
 
 
 def answer_q2():
