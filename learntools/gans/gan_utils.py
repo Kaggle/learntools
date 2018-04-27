@@ -30,11 +30,11 @@ def visualize_training_generator(train_step_num, start_time, plottables, undo_no
     plt.imshow(plottables, cmap='gray')
     plt.show()
 
-def dataset_to_stream(inp, batch_size, max_epochs=100):
-    batched = inp.apply(tf.contrib.data.batch_and_drop_remainder(batch_size))
-    batched_repeated = batched.repeat(max_epochs)
-    my_iter = batched_repeated.make_one_shot_iterator()
-    return my_iter.get_next()
+def dataset_to_stream(inp, batch_size):
+    with tf.device('/cpu:0'):
+        batched = inp.apply(tf.contrib.data.batch_and_drop_remainder(batch_size))
+        data_feeder = batched.repeat().make_one_shot_iterator().get_next()
+    return data_feeder
 
 def parse_img_dir(img_dir, output_height, output_width, batch_size, max_epochs):
     '''Original images are 256 x 512 x 3. Left half is original image, right is semantic seg'''
@@ -52,6 +52,6 @@ def parse_img_dir(img_dir, output_height, output_width, batch_size, max_epochs):
     img_dataset = img_paths_dataset.map(parse_img)
     left_imgs = img_dataset.map(lambda x: x[:, :output_width, :])
     right_imgs = img_dataset.map(lambda x: x[:, output_width:, :])
-    left_provider = dataset_to_stream(left_imgs, batch_size, max_epochs)
-    right_provider = dataset_to_stream(right_imgs, batch_size, max_epochs)
+    left_provider = dataset_to_stream(left_imgs, batch_size)
+    right_provider = dataset_to_stream(right_imgs, batch_size)
     return left_provider, right_provider

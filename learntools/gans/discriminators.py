@@ -31,7 +31,7 @@ def basic_discriminator(img, unused_conditioning):
     net = Dense(1, activation='linear')(net)
     return net
 
-def conditional_discriminator_fn(img, conditioning):
+def conditional_discriminator(img, conditioning):
     """Conditional discriminator network on MNIST digits.
 
     Args:
