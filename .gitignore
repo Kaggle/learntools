@@ -100,4 +100,8 @@ ENV/
 # mypy
 .mypy_cache/
 
+# Mac OS
 *DS_Store*
+
+# JetBrains
+.idea

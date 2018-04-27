@@ -16,7 +16,7 @@ def answer_q1():
 
 def check_q2(ans):
     expected = reviews.price.astype(str)
-    return ans == expected
+    return ans.equals(expected)
 
 
 def answer_q2():
@@ -42,36 +42,8 @@ def answer_q4():
 
 
 def check_q5(ans):
-    def find_year(description):
-        if "20" in description:
-            idx = description.index("20")
-            maybe_date = description[idx:idx + 4]
-            if maybe_date.isdigit():
-                return maybe_date
-            else:
-                return None
-        else:
-            return None
-
-    if ans.equals(reviews.title.map(find_year).fillna("N/A").sort_values()):
-        fig = plt.subplots(1, figsize=(10, 6))
-        return sns.countplot(ans)
-    else:
-        return False
+        return ans.plot.bar() if ans.equals(reviews.isnull().sum()) else False
 
 
 def answer_q5():
-    print("""
-def find_year(description):
-    if "20" in description:
-        idx = description.index("20")
-        maybe_date = description[idx:idx + 4]
-        if maybe_date.isdigit():
-            return maybe_date
-        else:
-            return None
-    else:
-        return None
-        
-reviews.title.map(find_year).fillna("N/A").sort_values()
-""")
+    print("""reviews.isnull().sum()""")

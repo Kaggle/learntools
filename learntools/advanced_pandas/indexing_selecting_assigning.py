@@ -59,12 +59,12 @@ def answer_q6():
 
 
 def check_q7(ans):
-    expected = reviews.loc[0:100, ['country', 'variety']]
+    expected = reviews.loc[0:99, ['country', 'variety']]
     return ans.equals(expected)
 
 
 def answer_q7():
-    print("""reviews.loc[0:100, ['country', 'variety']]""")
+    print("""reviews.loc[0:99, ['country', 'variety']]""")
 
 
 def check_q8(ans):
@@ -95,12 +95,12 @@ def answer_q10():
 
 
 def check_q11(ans):
-    expected = reviews.loc[:1000, 'points']
+    expected = reviews.loc[:999, 'points']
     return sns.countplot(ans) if ans.head().equals(expected.head()) else False
 
 
 def answer_q11():
-    print("""reviews.loc[:1000, 'points']""")
+    print("""reviews.loc[:999, 'points']""")
 
 
 def check_q12(ans):
