@@ -1,3 +1,10 @@
+
+import tensorflow as tf
+
+from tensorflow.python.keras.layers import Conv2D, Conv2DTranspose, Conv3D, Dense, Reshape
+
+tfgan = tf.contrib.gan
+
 def basic_generator(noise):
     """Simple generator to produce MNIST images.
 

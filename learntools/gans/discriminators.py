@@ -1,6 +1,11 @@
+import tensorflow as tf
+
+from tensorflow.python.keras.layers import Dense, Flatten, Conv2D, LeakyReLU
+
+tfgan = tf.contrib.gan
 leaky = LeakyReLU(0.2)
 
-def basic_discriminator_fn(img, unused_conditioning):
+def basic_discriminator(img, unused_conditioning):
     """Discriminator network on MNIST digits.
 
     Args:

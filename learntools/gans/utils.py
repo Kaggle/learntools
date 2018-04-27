@@ -1,7 +1,5 @@
-%matplotlib inline
 import numpy as np
 import matplotlib.pyplot as plt
-import numpy as np
 import os
 import tensorflow as tf
 import time
