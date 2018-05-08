@@ -2,7 +2,9 @@ from exercise import Exercise, FunctionExercise, ThoughtExperiment
 
 class q1(FunctionExercise):
 
-    # TODO: special check() message if there's no return
+    # Maybe should give a special message if they've modified the function body
+    # but they don't have a return statement?
+
     _test_cases = [
             (1.000001, 1.00),
             (1.23456, 1.23),
@@ -25,7 +27,6 @@ We probably don't care whether it's really 338,424, or 338,425, or 338,177. All 
 """
 
 class q4(ThoughtExperiment):
-    # Just hint and solution. Nothing meaningful to call check() on.
 
     _hint = "Think about what happened when we called `help(abs(-2))`"
     

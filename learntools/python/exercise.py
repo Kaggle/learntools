@@ -1,36 +1,9 @@
 from IPython.display import display
 
-"""
-TODO: if we do go the IPython.display route, we probably need some way to detect 
-whether we're in a code cell, or if we're being run from the console. :/
-If we are going to direct them to call stuff like hint() and solution() in the 
-console rather than in a code cell, then I guess it's not even worth trying to
-implement Ipython display fanciness.
-
-Maybe if we implement both __repr__ and _repr_[html/markdown/whatever]_
-then display() will be smart enough to fall back to printing the plain text
-repr when called in the console? Yeah, seems like this works. (Though it's
-mildly annoying that when run in a code cell, it writes the rich output
-*and* displays the basic output in the console.
-
-IPython display options
-- Code (6.3)
-- HTML
-- Latex
-- Markdown
-- cf. _repr_html_, _repr_latex_, etc. (_repr_markdown_?)
-
-- color coding?
-
-When defining new exercise, may need to specify...
-- how to tell whether starter code is unchanged
-- test cases
-- hint(s)
-- solution text
-- 
-"""
-
 def displayer(fn):
+    """Decorator taking a function returning a str/RichText object, and 
+    making it instead display that value (and return nothing)
+    """
     def wrapped(cls, *args):
         res = fn(cls, *args)
         cls.display(res)
@@ -38,9 +11,11 @@ def displayer(fn):
     return wrapped
 
 class ExerciseMeta(type):
+    """Metaclass for Exercises. Decorates all methods with classmethod, and wraps certain methods with displayer().
+    """
     display_wraps = ['check', 'hint', 'solution',]
-    """Decorate all methods with classmethod"""
     def __new__(meta, name, parents, dct):
+        # TODO: I don't think this is really used/needed anymore?
         # Set _varname attr (q1, q2...)
         dct.setdefault('_varname', name)
         for attr, val in dct.items():
@@ -55,6 +30,10 @@ def colorify(text, color):
     return '<span style="color:{}">{}</span>'.format(color, text)
 
 class RichText:
+    """Crucially this defines methods for both rich and plaintext representations.
+    If displayed from a code cell, it will render the nice rich output. If in the console,
+    we'll fall back to the simple representation.
+    """
     def __init__(self, txt, color=None):
         self.txt = txt
         self.color = color
@@ -77,17 +56,11 @@ class PrefixedRichText(RichText):
         return self.__class__.__name__
 
     def _repr_markdown_(self):
-        #pre = '<span style="color:{}">{}</span> '.format(self.label_color, self.label)
         pre = colorify(self.label+':', self.label_color)
         return pre + ' ' + self.txt
 
 
-class Solution(RichText): # XXX
-    def _repr_markdown_(self):
-        # This doesn't really work. Would need to import markdown, use markdown.markdown
-        # to get the html repr, and then wrap *that* in a styled div (in _repr_html_).
-        return "<div style='background-color:green'>{}</div>".format(self.txt)
-
+# Might be worth also investigating other formatting options. Maybe set a bg-color throughout?
 class Hint(PrefixedRichText):
     label_color = "#3366cc"
 
@@ -104,6 +77,12 @@ class ProblemStatement(PrefixedRichText):
 
 
 class Exercise(object, metaclass=ExerciseMeta):
+    """Exercise objects are what will be presented to the user for (almost) every problem in the 
+    exercise notebooks for the Python track. They can be interacted with using the standard methods:
+    - check
+    - hint
+    - solution
+    """
 
     _hint = ''
     _solution = ''
@@ -117,9 +96,9 @@ class Exercise(object, metaclass=ExerciseMeta):
         """Check the given answer. 3 possibilities:
         1. If we can detect that the user has probably not attempted the problem
            (i.e. the starter code is unchanged), then 'yellow light'. Remind them
-           what they have to do, and that they can get hints/solutions.
+           what they have to do (and that they can get hints/solutions?).
         2. If their answer is wrong, red light. Maybe give some idea of in what
-            way their answer is wrong. Remind about hints/solutions.
+            way their answer is wrong. (Remind about hints/solutions?)
         3. If their answer is right, green light. Congratulations. Possibly some coda.
         """
         if not cls.is_attempted(*args):
@@ -140,7 +119,7 @@ class Exercise(object, metaclass=ExerciseMeta):
     def solution(cls, *args):
         return Solution(cls._solution)
 
-    def display(cls, text): # XXX
+    def display(cls, text):
         if isinstance(text, str):
             text = RichText(text)
         display(text)
@@ -153,10 +132,11 @@ class Exercise(object, metaclass=ExerciseMeta):
         return True
 
     def _do_check(cls, *args):
-        # XXX: Maybe the nicest way to handle this is to let subclasses just
-        # implement a method that does a bunch of asserts, and they get wrapped
-        # in a method that intercepts the messages and renders them nicely.
-        # TODO: Also, maybe expose to the user the fact that k/n tests passed?
+        """Subclasses must implement. If a problem is found with the given solution, 
+        they should raise an AssertionError with an appropriate message. If none are
+        raised, the solution is presumed correct.
+        """
+        # TODO: maybe expose to the user the fact that k/n tests passed?
         pass
 
 class ThoughtExperiment(Exercise):
@@ -169,7 +149,10 @@ class ThoughtExperiment(Exercise):
         return msg
 
 class FunctionExercise(Exercise):
+    """An exercise that requires filling in the body of a function.
+    """
     
+    # List of (input, expected_output) pairs, where input may be a scalar or tuple of args.
     _test_cases = []
 
     def is_attempted(cls, fn):
@@ -186,12 +169,10 @@ class FunctionExercise(Exercise):
         return src(fn) not in (src(dummy), src(dummy_w_docstring))
 
     def _do_check(cls, fn):
-        # TODO: format assertion failures nicely. (And maybe don't propagate as
-        # actual exceptions, so they don't halt the rest of the code in the cell
-        # in which they're run?)
         assert cls._test_cases, "Oops, someone forgot to write test cases."
         for args, expected in cls._test_cases:
             orig_args = args
+            # Wrap in tuple if necessary
             if not isinstance(args, tuple):
                 args = args,
             actual = fn(*args)
