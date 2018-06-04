@@ -1,4 +1,5 @@
-from IPython.display import display
+from IPython.display import display, clear_output
+import ipywidgets as widgets
 
 def displayer(fn):
     """Decorator taking a function returning a str/RichText object, and 
@@ -138,6 +139,26 @@ class Exercise(object, metaclass=ExerciseMeta):
     _problem = ("When you've updated the starter code, `check()` will"
             " tell you whether your code is correct."
             )
+
+    def GUI(cls, checkarg=None):
+        if not issubclass(cls, ThoughtExperiment):
+            check = widgets.Button(
+                    description='check',
+                    button_style='',
+            )
+            check.on_click(lambda _: clear_output() or cls.GUI(checkarg) or cls.check(checkarg))
+        hint = widgets.Button(description='hint', button_style='warning')
+        # Zzz, ordering of wrapping. Ugly.
+        hint.on_click(lambda _: clear_output() or cls.GUI(checkarg) or cls.hint())
+        soln = widgets.Button(description='solution', button_style='success')
+        soln.on_click(lambda _: clear_output() or cls.GUI(checkarg) or cls.solution())
+        if not issubclass(cls, ThoughtExperiment):
+            butts = [check, hint, soln]
+        else:
+            butts = [hint, soln]
+
+        box = widgets.HBox(butts)
+        display(box)
 
     def check(cls, *args):
         """Check the given answer. 3 possibilities:
