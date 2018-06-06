@@ -1,6 +1,9 @@
 from IPython.display import display
 from globals_binder import binder 
-from rich_text import *
+from richtext import *
+
+#XXX: This is probably problematic from a testing point of view...
+G = binder.readonly_globals()
 
 def displayer(fn):
     """Decorator taking a function returning a str/RichText object, and 
@@ -12,12 +15,20 @@ def displayer(fn):
         # Don't propagate the return to avoid double printing.
     return wrapped
 
-class ExerciseMeta(type):
-    """Metaclass for Exercises. Does stuff like...
+# TODO: Might want to rethink this Metaclass cleverness. I've tried to structure
+# the code such that concrete Problem subclasses will (almost?) never need to directly
+# implement check(), is_attempted(), hint(), or solution(). They usually just need
+# to define some class attributes. In a complicated case, they might have to define
+# their own is_attempted(), or _do_check().
+# SO, the automatic wrapping of those methods doesn't really save many lines of code,
+# and maybe isn't worth the added crypticness and debugging difficulty.
+class ProblemMeta(type):
+    """Metaclass for Problems. Does stuff like...
     - Decorates all methods with classmethod
     - wraps certain methods with displayer()
     - wraps certain attrs in corresponding RichText classes (e.g. Hint() around _hint(s))
     """
+    # Wrap methods with these names with the displayer decorator
     display_wraps = ['check', 'hint', 'solution',]
     def __new__(meta, name, parents, dct):
         # TODO: I don't think this is really used/needed anymore?
@@ -46,9 +57,15 @@ class ExerciseMeta(type):
         return super().__new__(meta, name, parents, dct)
 
 
+class NotAttempted(Exception):
+    pass
 
-class Exercise(object, metaclass=ExerciseMeta):
-    """Exercise objects are what will be presented to the user for (almost) every problem in the 
+class Incorrect(Exception):
+    pass
+
+
+class Problem(object, metaclass=ProblemMeta):
+    """Problem objects are what will be presented to the user for (almost) every problem in the 
     exercise notebooks for the Python track. They can be interacted with using the standard methods:
     - check
     - hint
@@ -64,12 +81,45 @@ class Exercise(object, metaclass=ExerciseMeta):
 
     _solution = ''
 
+    # subclasses should define up to 1 of these attrs. Names of variables the
+    # user must define to solve the problem. Will be injected into subclass
+    # method calls.
+    _var = None
+    _vars = None
+
     # TODO: would be nice if this said q1.check() or q2.check() or whatever
+    # Probably doable once we tie problems together into "Exercise" containers
     _problem = ("When you've updated the starter code, `check()` will"
             " tell you whether your code is correct."
             )
 
-    def check(cls, *args):
+    def _injectable_vars(cls):
+        assert cls._var is None or cls._vars is None, ("Subclass should not implement"
+                " _var and _vars")
+        if cls._var:
+            names = [cls._var]
+        elif cls._vars:
+            names = cls._vars
+        else:
+            names = []
+        return names
+
+    def _get_injected_args(cls):
+        """Snoop notebook global namespace for variables whose value we should
+        inject into calls to check() and is_attempted()"""
+        names = cls._injectable_vars()
+        missing = set(names) - G.keys()
+        if len(missing) == 0:
+            return G.lookup(names)
+        elif len(missing) == len(names):
+            # Hm, maybe RichText objects should be raisable? Or is that too much?
+            raise NotAttempted("Remember, you must create the following variables: {}"\
+                    .format(missing))
+        else:
+            raise Incorrect("You still need to define the following variables: {}".format(
+                missing))
+
+    def check(cls):
         """Check the given answer. 3 possibilities:
         1. If we can detect that the user has probably not attempted the problem
            (i.e. the starter code is unchanged), then 'yellow light'. Remind them
@@ -78,14 +128,22 @@ class Exercise(object, metaclass=ExerciseMeta):
             way their answer is wrong. (Remind about hints/solutions?)
         3. If their answer is right, green light. Congratulations. Possibly some coda.
         """
-        if not cls.is_attempted(*args):
-            return ProblemStatement(cls._problem)
+        try:
+            args = cls._get_injected_args()
+            cls._check_whether_attempted(*args)
+            cls._do_check(*args)
+        except NotAttempted as e:
+            return ProblemStatement(cls._problem + ' ' + str(e))
+        # TODO: switch over to just Incorrect (wrap AssertionErrors at some level)
+        except (Incorrect, AssertionError) as e:
+            return TestFailure(str(e))
         else:
-            try:
-                cls._do_check(*args)
-                return RichText('Correct!', color='#33cc33')
-            except AssertionError as e:
-                return TestFailure(str(e))
+            return RichText('Correct!', color='#33cc33')
+
+    def _check_whether_attempted(cls, *args):
+        # TODO: just have subclasses implement this directly rather than is_attempted?
+        if not cls.is_attempted(*args):
+            raise NotAttempted
 
     def hint(cls, n=1):
         if not cls._hints:
@@ -111,7 +169,7 @@ class Exercise(object, metaclass=ExerciseMeta):
     def is_attempted(cls, *args):
         # TODO: I wonder if there's some kind of magic IPython introspection that
         # we could use to read the contents of the code corresponding code cell? Seems tricky.
-        # esp. given that the user may interact with the Exercise obj in a different cell
+        # esp. given that the user may interact with the Problem obj in a different cell
         # or in the console.
         return True
 
@@ -123,8 +181,8 @@ class Exercise(object, metaclass=ExerciseMeta):
         # TODO: maybe expose to the user the fact that k/n tests passed?
         pass
 
-class ThoughtExperiment(Exercise):
-    """An Exercise with no checking logic."""
+class ThoughtExperiment(Problem):
+    """A Problem with no checking logic."""
 
     def check(cls, *args):
         msg = ("Nothing to check! (Just do this one in your head, then"
@@ -132,8 +190,42 @@ class ThoughtExperiment(Exercise):
                         cls._varname)
         return msg
 
-class FunctionExercise(Exercise):
-    """An exercise that requires filling in the body of a function.
+class VarCreationProblem(Problem):
+    """A problem that requires creating one or more variables. We know ahead of
+    time the values that those variables should have.
+
+    If none of the variables have been created, we treat the problem as unattempted.
+    If some but not all have been created, it's incorrect.
+    Otherwise, it's correct if and only if all the variables' values are equal to
+    their expected values.
+    """
+    # Expected value of variable or variables (corresponding to class attrs
+    # _var/_vars)
+    _expected = None
+
+    # In future, may need to handle situation where our checking logic depends on a
+    # few variables, at least one of which the user must create, and at least one
+    # of which we will have already created for them in the starter code.
+    # (assuming we want to automatically inject the latter variables)
+
+    def _expecteds(cls):
+        ex = cls._expected
+        if isinstance(ex, (list, tuple)):
+            return ex
+        return [ex]
+
+    def _do_check(cls, *args):
+        for (var, actual, expected) in zip(
+                cls._injectable_vars(),
+                args,
+                cls._expecteds()):
+            msg = "Incorrect value for variable `{}`: `{}`".format(
+                    var, repr(actual))
+            assert actual == expected, msg 
+
+class FunctionProblem(Problem):
+    """A Problem that requires filling in the body of a function.
+    (The name of the function should be specified as _var)
     """
     
     # List of (input, expected_output) pairs, where input may be a scalar or tuple of args.
@@ -176,26 +268,26 @@ class FunctionExercise(Exercise):
                     " but got `{}` instead.").format(
                             expected, cls._format_args(fn, args), actual)
 
-class MultipartExercise:
-    """A container for multiple related exercises grouped together in one 
-    question. If q1 is a MPE, its subquestions are accessed as q1.a, q1.b, etc.
+class MultipartProblem:
+    """A container for multiple related Problems grouped together in one 
+    question. If q1 is a MPP, its subquestions are accessed as q1.a, q1.b, etc.
     """
     
-    def __init__(self, *exs):
-        self.exercises = exs
-        self._ex_map = {}
-        assert len(exs) <= 26
-        for i, ex in enumerate(exs):
+    def __init__(self, *probs):
+        self.problems = probs
+        self._prob_map = {}
+        assert len(probs) <= 26
+        for i, prob in enumerate(probs):
             letter = chr(ord('a')+i)
-            setattr(self, letter, ex)
-            self._ex_map[letter] = ex
+            setattr(self, letter, prob)
+            self._prob_map[letter] = prob
 
     def _repr_markdown_(self):
         return repr(self)
 
     def __repr__(self):
         varname = self.__class__.__name__
-        part_names = ['`{}.{}`'.format(varname, letter) for letter in self._ex_map]
+        part_names = ['`{}.{}`'.format(varname, letter) for letter in self._prob_map]
         return """This question is in {} parts. Those parts can be accessed as {}.
 For example, to get a hint about part a, you would type `{}.a.hint()`.""".format(
-        len(self._ex_map), ', '.join(part_names), varname)
+        len(self._prob_map), ', '.join(part_names), varname)

@@ -60,7 +60,8 @@ class Solution(PrefixedRichText):
 class CodeSolution(Solution):
     _label = 'Solution'    
 
-    def __init__(self, txt):
+    def __init__(self, *lines):
+        txt = '\n'.join(lines)
         wrapped = "\n```python\n{}\n```".format(txt)
         super().__init__(wrapped)
 
