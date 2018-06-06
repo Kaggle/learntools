@@ -290,4 +290,9 @@ class MultipartProblem:
         part_names = ['`{}.{}`'.format(varname, letter) for letter in self._prob_map]
         return """This question is in {} parts. Those parts can be accessed as {}.
 For example, to get a hint about part a, you would type `{}.a.hint()`.""".format(
-        len(self._prob_map), ', '.join(part_names), varname)
+            len(self._prob_map), ', '.join(part_names), varname
+        )
+
+# TODO: do something slightly cleverer here
+class DummyProblem:
+    pass
