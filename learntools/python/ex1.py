@@ -1,6 +1,6 @@
-from utils import bind_exercises
-from problem import *
-from richtext import *
+from learntools.python.utils import bind_exercises
+from learntools.python.problem import *
+from learntools.python.richtext import *
 
 class ExerciseFormatTutorial(VarCreationProblem):
     _var = 'color'

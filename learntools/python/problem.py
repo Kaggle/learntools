@@ -1,6 +1,6 @@
 from IPython.display import display
-from globals_binder import binder 
-from richtext import *
+from learntools.python.globals_binder import binder 
+from learntools.python.richtext import *
 
 #XXX: This is probably problematic from a testing point of view...
 G = binder.readonly_globals()
