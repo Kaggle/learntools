@@ -93,6 +93,11 @@ class Problem(object, metaclass=ProblemMeta):
             " tell you whether your code is correct."
             )
 
+    # How many times this problem has been attempted (by calling .check())
+    _tries = 0
+    _hinted = False
+    _peeked = False
+
     def _injectable_vars(cls):
         assert cls._var is None or cls._vars is None, ("Subclass should not implement"
                 " _var and _vars")
@@ -128,6 +133,7 @@ class Problem(object, metaclass=ProblemMeta):
             way their answer is wrong. (Remind about hints/solutions?)
         3. If their answer is right, green light. Congratulations. Possibly some coda.
         """
+        cls._tries += 1
         try:
             args = cls._get_injected_args()
             cls._check_whether_attempted(*args)
@@ -138,7 +144,10 @@ class Problem(object, metaclass=ProblemMeta):
         except (Incorrect, AssertionError) as e:
             return TestFailure(str(e))
         else:
-            return RichText('Correct!', color='#33cc33')
+            return Correct(cls._correct_message())
+
+    def _correct_message(cls):
+        return ''
 
     def _check_whether_attempted(cls, *args):
         # TODO: just have subclasses implement this directly rather than is_attempted?
@@ -146,6 +155,7 @@ class Problem(object, metaclass=ProblemMeta):
             raise NotAttempted
 
     def hint(cls, n=1):
+        cls._hinted = True
         if not cls._hints:
             return RichText('Sorry, no hints available for this question.', 
                     color='#cc5533')
@@ -156,6 +166,7 @@ class Problem(object, metaclass=ProblemMeta):
         return hint
 
     def solution(cls, *args):
+        cls._peeked = True
         soln = cls._solution
         if isinstance(soln, RichText):
             return soln
@@ -214,14 +225,20 @@ class VarCreationProblem(Problem):
             return ex
         return [ex]
 
+    def _failure_message(cls, var, actual, expected):
+        return "Incorrect value for variable `{}`: `{}`".format(
+                    var, repr(actual))
+
     def _do_check(cls, *args):
         for (var, actual, expected) in zip(
                 cls._injectable_vars(),
                 args,
                 cls._expecteds()):
-            msg = "Incorrect value for variable `{}`: `{}`".format(
-                    var, repr(actual))
-            assert actual == expected, msg 
+            if isinstance(expected, float):
+                check = math.isclose(actual, expected, rel_tol=1e-06)
+            else:
+                check = actual == expected
+            assert check, cls._failure_message(var, actual, expected)
 
 class FunctionProblem(Problem):
     """A Problem that requires filling in the body of a function.

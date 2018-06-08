@@ -30,8 +30,17 @@ class PrefixedRichText(RichText):
         return self.__class__.__name__
 
     def _repr_markdown_(self):
+        if not self.txt:
+            # TODO: hm, this fallback behaviour makes sense for Correct and
+            # TestFailure, but not really for the others.
+            return colorify(self.label, self.label_color)
         pre = colorify(self.label+':', self.label_color)
         return pre + ' ' + self.txt
+
+    def __repr__(self):
+        if not self.txt:
+            return self.label
+        return self.label + ':' + ' ' + self.txt
 
 
 # Might be worth also investigating other formatting options. Maybe set a bg-color throughout?
@@ -53,6 +62,10 @@ class Hint(PrefixedRichText):
         if self.is_multi:
             return 'Hint {}'.format(self.n)
         return 'Hint'
+
+class Correct(PrefixedRichText):
+    _label = 'Correct'
+    _label_color = '#33cc33'
 
 class Solution(PrefixedRichText):
     label_color = "#33cc99"

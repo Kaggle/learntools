@@ -9,16 +9,40 @@ class ExerciseFormatTutorial(VarCreationProblem):
     _hint = "Your favorite color rhymes with *glue*."
     _solution = CodeSolution('color = "blue"')
 
+    def _correct_message(cls):
+        if not cls._hinted and not cls._peeked:
+            return ("What?! You got it right without needing a hint or anything?"
+                    " Drats. Well hey, you should still continue to the next step"
+                    " to get some practice asking for a hint and checking solutions."
+                    " (Even though you obviously don't need any help here.)"
+                    )
+        return ''
+
+    def _failure_message(cls, var, actual, expected):
+        if (
+                any(actual.endswith(suff) for suff in ['oo', 'ue', 'ew'])
+                and actual.strip().lower() != 'blue'
+            ):
+            return "Ha ha, very funny."
+        elif actual.strip(' .!').lower() == 'ni':
+            return "Please! Please! No more! We will find you a shrubbery."
+        return ("{} is not your favorite color!"
+                " Well, maybe it is, but we're writing the rules. The point"
+                " of this question is to force you to get some practice asking"
+                " for a hint. Go ahead and uncomment the call to `q0.hint()`"
+                " in the code cell below, for a hint at what your favorite color"
+                " *really* is.")
+
 
 class CircleArea(VarCreationProblem):
     _vars = ['radius', 'area']
-    # TODO: make sure we do approx-equal checks when appropriate
     _expected = [3/2, (3/2)**2 * 3.14159]
 
     _hint = "The syntax to raise a to the b'th power is `a ** b`"
     _solution = CodeSolution('radius = diameter / 2',
             'area = pi * radius ** 2')
 
+# Not used.
 class MemModelAliasing(ThoughtExperiment):
     # No hint?
     _solution = CodeSolution(
@@ -102,7 +126,7 @@ class CandySplitting(VarCreationProblem):
 
 
 class MysteryExpression(VarCreationProblem): 
-    _var = 'hundred_dashes'
+    _var = 'ninety_nine_dashes'
     _expected = 4
 
     _hint = ("What would the value of the expression be if there were exactly one `-`?"
@@ -113,15 +137,40 @@ class MysteryExpression(VarCreationProblem):
 `7--3` is `10`. To match how Python evaluates this expression, we would parenthesize it as `7-(-3)`. The first `-` is treated as a subtraction operator, but the second one is treated as *negation*. We're subtracting negative 3 (which is equivalent to adding 3). Subsequent `-`s are all treated as additional negations, so they cause the subtracted quantity to flip back and forth between 3 and negative 3. Therefore, when there are an even number of `-`s, the expression equals 4. When there's an odd number, the expression equals 10.
 """
 
+# TODO: mention side effects.
+class SameValueInitializationRiddle(ThoughtExperiment):
+
+    _hints = [
+            "You're unlikely to see any practical difference when the value we're initializing to is an int. But think about other Python types you're familiar with...",
+            """`a = b = <expression>` is equivalent to...
+```python
+b = <expression>
+a = b```""",
+    ]
+
+    _solution = """The one-line syntax results in `a` and `b` having the same memory address - i.e. they refer to the same object. This matters if that object is of a **mutable** type, like list. Consider the following code:
+```python
+odds = evens = []
+for i in range(5):
+    if (i % 2) == 0:
+        evens.append(i)
+    else:
+        odds.append(i)
+print(odds)
+print(evens)```
+
+We might expect this would print `[1, 3]`, then `[0, 2, 4]`. But actually, it will print `[0, 1, 2, 3, 4]` twice in a row. `evens` and `odds` refer to the same object, so appending an element to one of them appends it to both of them. This is occasionally the source of hair-pulling debugging sessions. :)"""
+
 
 qvars = bind_exercises(globals(), [
     ExerciseFormatTutorial,
     CircleArea,
-    MemModelAliasing,
+    #MemModelAliasing,
     VariableSwap,
     ArithmeticParens,
     CandySplitting,
-    MysteryExpression
+    MysteryExpression,
+    SameValueInitializationRiddle,
     ],
     start=0,
     )
