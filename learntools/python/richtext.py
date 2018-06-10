@@ -65,7 +65,7 @@ class Hint(PrefixedRichText):
 
 class Correct(PrefixedRichText):
     _label = 'Correct'
-    _label_color = '#33cc33'
+    label_color = '#33cc33'
 
 class Solution(PrefixedRichText):
     label_color = "#33cc99"

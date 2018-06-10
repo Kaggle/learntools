@@ -31,7 +31,7 @@ class ExerciseFormatTutorial(VarCreationProblem):
                 " of this question is to force you to get some practice asking"
                 " for a hint. Go ahead and uncomment the call to `q0.hint()`"
                 " in the code cell below, for a hint at what your favorite color"
-                " *really* is.")
+                " *really* is.").format(actual)
 
 
 class CircleArea(VarCreationProblem):
@@ -42,17 +42,10 @@ class CircleArea(VarCreationProblem):
     _solution = CodeSolution('radius = diameter / 2',
             'area = pi * radius ** 2')
 
-# Not used.
-class MemModelAliasing(ThoughtExperiment):
-    # No hint?
-    _solution = CodeSolution(
-            'The value of `y` is still `1`. You can verify this by adding a line to the end of the cell with the code `print(y)`.',
-            "#TODO: maybe this actually isn't a great question, since it ultimately comes down to mutability, which is really too advanced a topic to be going into right now, and isn't talked about in the tutorial...")
-
 class VariableSwap(Problem):
 
     _hint = "Try using a third variable."
-    _solution = """Use a third variable to temporarily store one of the old values. e.g.:
+    _solution = """The most straightforward solution is to use a third variable to temporarily store one of the old values. e.g.:
 
     tmp = a
     a = b
@@ -62,7 +55,7 @@ If you've read lots of Python code, you might have seen the following trick to s
 
     a, b = b, a
 
-We'll demystify this bit of Python magic later when we talk about **tuples**."""
+We'll demystify this bit of Python magic later when we talk about *tuples*."""
 
     def store_original_ids(cls):
         cls.id_a = id(G['a'])
@@ -80,16 +73,23 @@ We'll demystify this bit of Python magic later when we talk about **tuples**."""
         orig_ids = (cls.id_a, cls.id_b)
         if (b, a) == orig_values:
             # well this is ridiculous in its verbosity
-            assert False, ("You successfully set `a` to `[3, 2, 1]` and `b` to"
-                    " `[1, 2, 3]`, but you didn't succeed at swapping the variables.\n\n"
-                    "How can that be? Imagine the following scenario:\n" +
-"""
-- Al is in Albania holding an alabaster piece of paper
-- Brad is in Brazil holding a brown piece of paper
-
-You're tasked with getting them to swap papers. You might decide that a clever shortcut is to have Al toss his paper in the recycling and go to a stationary shop to get a brown piece of paper, and have Brad buy a white piece of paper. But even if the paper that Al acquires is the exact same shade of brown as Brad's, and the same size, it's not the same piece of paper. It may be *equivalent*, but it's not *identical*. The only way to truly execute our task is to have Al and Brad ship their papers across the Atlantic to each other.
-
-Similarly, in Python, if `a = [1, 2, 3]`, then running `b = [1, 2, 3]` assigns a value to `b` which is *equivalent* to `a`'s value, but not *identical*. If we want the latter, we need to assign `b = a`. Why does this matter? If `a` and `b` refer to the same object, then modifying one of them (for example by calling `a.append(4)` - we'll learn more about that later) will modify both of them.""")
+            assert False, (
+        "Hm, did you write something like...\n"
+        "```python\na = [3, 2, 1]\nb = [1, 2, 3]```\n?\n"
+        "That's not an unreasonable think to try, but there are two problems:\n"
+        "1. You're relying on knowing the values of `a` and `b` ahead of time."
+        " What if you wanted to swap two variables whose values weren't known"
+        " to you ahead of time?\n"
+        "2. Your code actually results in `a` referring to a *new* object (whose value is the same as `b`'s previous value), and similarly for `b`. To see why this is, consider that the code...\n"
+        "```python"
+        "a = [1, 2, 3]\n"
+        "b = [1, 2, 3]```\n"
+        "Is actually *different* from:\n"
+        "```python"
+        "a = [1, 2, 3]\n"
+        "b = a```\n"
+        "In the second case, `a` and `b` refer to the same object. In the first case, `a` and `b` refer to different objects which happen to be equivalent. This may seem like a merely philosophical difference, but it matters when we start *modifying* objects. In the second scenario, if we run `a.append(4)`, then `a` and `b` would both have the value `[1, 2, 3, 4]`. If we run `a.append(4)` in the first scenario, `a` refers to `[1, 2, 3, 4]`, but `b` remains `[1, 2, 3]`. (We'll talk more about lists in a later lesson.)"
+        )
         assert ida in orig_ids, ("`a` was assigned something weird (its id has changed,"
                 " but to something other than `b`'s id)")
         assert idb in orig_ids, ("`b` was assigned something weird (its id has changed,"
@@ -117,6 +117,7 @@ ArithmeticParens = MultipartProblem(ArithmeticParensEasy, ArithmeticParensHard)
 class CandySplitting(VarCreationProblem):
     _var = 'to_smash'
     _expected = (121 + 77 + 109) % 3
+    _default_values = [-1]
 
     _hints = [
             "You'll probably want to use the modulo operator, `%`.",
@@ -135,6 +136,25 @@ class MysteryExpression(VarCreationProblem):
 `7-3` is of course just 3 subtracted from 7: 4. The key is what happens when we add another `-`.
 
 `7--3` is `10`. To match how Python evaluates this expression, we would parenthesize it as `7-(-3)`. The first `-` is treated as a subtraction operator, but the second one is treated as *negation*. We're subtracting negative 3 (which is equivalent to adding 3). Subsequent `-`s are all treated as additional negations, so they cause the subtracted quantity to flip back and forth between 3 and negative 3. Therefore, when there are an even number of `-`s, the expression equals 4. When there's an odd number, the expression equals 10.
+"""
+
+class QuickdrawGridProblem(ThoughtExperiment):
+    _hint = """There are a few ways to solve this. Of the tools we've talked about so far, `//` and `%` (the integer division and modulo operators) and the `min` function may be useful."""
+    _solution = """Here's one possible solution:
+```python
+rows = n // 8 + min(1, n % 8)
+cols = min(n, 8)
+height = rows * 2
+width = cols * 2
+```
+Calculating `rows` is the trickiest part. Here's another way of doing it:
+```python
+rows = (n + 7) // 8```
+We haven't shown the `math` module, but if you're familiar with the ceiling function, you might find this approach more intuitive:
+```python
+import math
+rows = math.ceil(n / 8)
+rows = int(rows) # ceil returns a float```
 """
 
 # TODO: mention side effects.
@@ -159,17 +179,20 @@ for i in range(5):
 print(odds)
 print(evens)```
 
-We might expect this would print `[1, 3]`, then `[0, 2, 4]`. But actually, it will print `[0, 1, 2, 3, 4]` twice in a row. `evens` and `odds` refer to the same object, so appending an element to one of them appends it to both of them. This is occasionally the source of hair-pulling debugging sessions. :)"""
+We might expect this would print `[1, 3]`, then `[0, 2, 4]`. But actually, it will print `[0, 1, 2, 3, 4]` twice in a row. `evens` and `odds` refer to the same object, so appending an element to one of them appends it to both of them. This is occasionally the source of hair-pulling debugging sessions. :)
+
+
+"""
 
 
 qvars = bind_exercises(globals(), [
     ExerciseFormatTutorial,
     CircleArea,
-    #MemModelAliasing,
     VariableSwap,
     ArithmeticParens,
     CandySplitting,
     MysteryExpression,
+    QuickdrawGridProblem,
     SameValueInitializationRiddle,
     ],
     start=0,

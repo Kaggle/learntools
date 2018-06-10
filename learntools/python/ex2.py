@@ -13,7 +13,7 @@ class RoundFunctionProblem(FunctionProblem):
             (1.000001, 1.00),
             (1.23456, 1.23),
     ]
-    _hint = ("Type `help(round)` into the console to learn more about the round function."
+    _hint = ("Run `help(round)` in the console (or in a code cell) to learn more about the round function."
             " You'll need to use the function's optional second argument.")
     _solution = CS("return round(num, 2)")
 
@@ -32,7 +32,7 @@ We probably don't care whether it's really 338,424, or 338,425, or 338,177. All 
 
 class PrintPrintProblem(ThoughtExperiment):
 
-    _hint = "Think about what happened when we called `help(abs(-2))`"
+    _hint = "Think about what happened when we called `help(abs(-2))` in the tutorial"
     
     _solution = """If you've tried running the code, you've seen that it prints:
 

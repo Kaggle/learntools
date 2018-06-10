@@ -1,3 +1,4 @@
+import math
 from IPython.display import display
 from learntools.python.globals_binder import binder 
 from learntools.python.richtext import *
@@ -100,7 +101,7 @@ class Problem(object, metaclass=ProblemMeta):
 
     def _injectable_vars(cls):
         assert cls._var is None or cls._vars is None, ("Subclass should not implement"
-                " _var and _vars")
+                " both _var and _vars")
         if cls._var:
             names = [cls._var]
         elif cls._vars:
@@ -118,8 +119,11 @@ class Problem(object, metaclass=ProblemMeta):
             return G.lookup(names)
         elif len(missing) == len(names):
             # Hm, maybe RichText objects should be raisable? Or is that too much?
-            raise NotAttempted("Remember, you must create the following variables: {}"\
-                    .format(missing))
+            raise NotAttempted("Remember, you must create the following variable{}: {}"\
+                    .format('s' if len(missing) > 1 else '', 
+                        ', '.join(missing)
+                        )
+                    )
         else:
             raise Incorrect("You still need to define the following variables: {}".format(
                 missing))
@@ -147,6 +151,9 @@ class Problem(object, metaclass=ProblemMeta):
             return Correct(cls._correct_message())
 
     def _correct_message(cls):
+        # This is a heuristic that will probably fail at some point.
+        if cls._solution and isinstance(cls._solution, str):
+            return '\n\n' + cls._solution
         return ''
 
     def _check_whether_attempted(cls, *args):
@@ -214,6 +221,8 @@ class VarCreationProblem(Problem):
     # _var/_vars)
     _expected = None
 
+    _default_values = []
+
     # In future, may need to handle situation where our checking logic depends on a
     # few variables, at least one of which the user must create, and at least one
     # of which we will have already created for them in the starter code.
@@ -224,6 +233,23 @@ class VarCreationProblem(Problem):
         if isinstance(ex, (list, tuple)):
             return ex
         return [ex]
+
+    def _check_whether_attempted(cls, *values):
+        # TODO: bleh, this overrides the is_attempted checking base implementation
+        # maybe need to call super or something.
+        if cls._default_values:
+            defaulty = []
+            for var, actual, default in zip(
+                    cls._injectable_vars(),
+                    values,
+                    cls._default_values
+                    ):
+                if actual == default:
+                    defaulty.append(var)
+            if defaulty:
+                raise NotAttempted("You need to update the code that creates"
+                        " variable{} {}".format('s' if len(defaulty) > 1 else '',
+                            ', '.join(defaulty)))
 
     def _failure_message(cls, var, actual, expected):
         return "Incorrect value for variable `{}`: `{}`".format(
