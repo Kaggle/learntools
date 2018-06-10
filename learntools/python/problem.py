@@ -121,7 +121,7 @@ class Problem(object, metaclass=ProblemMeta):
             # Hm, maybe RichText objects should be raisable? Or is that too much?
             raise NotAttempted("Remember, you must create the following variable{}: {}"\
                     .format('s' if len(missing) > 1 else '', 
-                        ', '.join(missing)
+                        ', '.join('`{}`'.format(v) for v in missing)
                         )
                     )
         else:
