@@ -2,6 +2,7 @@ import math
 from IPython.display import display
 from learntools.python.globals_binder import binder 
 from learntools.python.richtext import *
+from learntools.python.utils import backtickify
 
 #XXX: This is probably problematic from a testing point of view...
 G = binder.readonly_globals()
@@ -126,7 +127,8 @@ class Problem(object, metaclass=ProblemMeta):
                     )
         else:
             raise Incorrect("You still need to define the following variables: {}".format(
-                missing))
+                    ', '.join('`{}`'.format(v) for v in missing)
+                    ))
 
     def check(cls):
         """Check the given answer. 3 possibilities:
@@ -249,7 +251,7 @@ class VarCreationProblem(Problem):
             if defaulty:
                 raise NotAttempted("You need to update the code that creates"
                         " variable{} {}".format('s' if len(defaulty) > 1 else '',
-                            ', '.join(defaulty)))
+                            ', '.join(map(backtickify, defaulty))))
 
     def _failure_message(cls, var, actual, expected):
         return "Incorrect value for variable `{}`: `{}`".format(

@@ -81,14 +81,14 @@ We'll demystify this bit of Python magic later when we talk about *tuples*."""
         " What if you wanted to swap two variables whose values weren't known"
         " to you ahead of time?\n"
         "2. Your code actually results in `a` referring to a *new* object (whose value is the same as `b`'s previous value), and similarly for `b`. To see why this is, consider that the code...\n"
-        "```python"
+        "```python\n"
         "a = [1, 2, 3]\n"
         "b = [1, 2, 3]```\n"
         "Is actually *different* from:\n"
-        "```python"
+        "```python\n"
         "a = [1, 2, 3]\n"
         "b = a```\n"
-        "In the second case, `a` and `b` refer to the same object. In the first case, `a` and `b` refer to different objects which happen to be equivalent. This may seem like a merely philosophical difference, but it matters when we start *modifying* objects. In the second scenario, if we run `a.append(4)`, then `a` and `b` would both have the value `[1, 2, 3, 4]`. If we run `a.append(4)` in the first scenario, `a` refers to `[1, 2, 3, 4]`, but `b` remains `[1, 2, 3]`. (We'll talk more about lists in a later lesson.)"
+        "In the second case, `a` and `b` refer to the same object. In the first case, `a` and `b` refer to different objects which happen to be equivalent. This may seem like a merely philosophical difference, but it matters when we start *modifying* objects. In the second scenario, if we run `a.append(4)`, then `a` and `b` would both have the value `[1, 2, 3, 4]`. If we run `a.append(4)` in the first scenario, `a` refers to `[1, 2, 3, 4]`, but `b` remains `[1, 2, 3]`. (We'll talk more about lists and mutability in a later lesson.)"
         )
         assert ida in orig_ids, ("`a` was assigned something weird (its id has changed,"
                 " but to something other than `b`'s id)")
@@ -181,7 +181,7 @@ print(evens)```
 
 We might expect this would print `[1, 3]`, then `[0, 2, 4]`. But actually, it will print `[0, 1, 2, 3, 4]` twice in a row. `evens` and `odds` refer to the same object, so appending an element to one of them appends it to both of them. This is occasionally the source of hair-pulling debugging sessions. :)
 
-
+Another consideration is expressions that have side effects. For example, `list.pop` is a method which removes and returns the final element of a list. If we have `L = [1, 2, 3]`, then `a = b = L.pop()`, will result in `a` and `b` both having a value of 3. But running `a = L.pop()`, then `b = L.pop()` will result in `a` having value 3 and `b` having value 2.
 """
 
 

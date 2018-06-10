@@ -1,3 +1,5 @@
+def backtickify(s):
+    return '`{}`'.format(s)
 
 def bind_exercises(g, exercises, start=1):
     for i, ex in enumerate(exercises):
