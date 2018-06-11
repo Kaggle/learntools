@@ -23,6 +23,7 @@ plot_kwargs = dict(
     linestyle='-',
     color='black',
 )
+# Adapted from Kevin Mader's "QuickDraw Overview" kernel here: https://www.kaggle.com/kmader/quickdraw-overview
 def draw_dict(in_dict, in_ax):
     for i, (x_coord, y_coord) in enumerate(in_dict['drawing']):
         # upside-down!
