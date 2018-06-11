@@ -51,7 +51,16 @@ def sample_images_of_category(n, cat):
 
 def draw_images_on_subplots(dicts, figax):
     fig, axes = figax
-    rows, cols = axes.shape
+    if not hasattr(axes, 'shape'):
+        rows = cols = 1
+    elif len(axes.shape) == 2:
+        rows, cols = axes.shape
+    elif len(axes.shape) == 1:
+        rows = 1
+        cols = axes.shape[0]
+    else:
+        assert False, 'Unrecognized axes shape: {}'.format(axes.shape)
+
     n = len(dicts)
     extra_cols = max(0, cols - n)
     extra_rows = max(0, rows - ( (n+cols-1)//cols ))
