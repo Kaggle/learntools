@@ -135,7 +135,7 @@ class MysteryExpression(VarCreationProblem):
     _solution = """The original expression's value is `10`. If we had used 99 `-`s, the expression's value would be 4. But why? Let's start with a simpler version...
 `7-3` is of course just 3 subtracted from 7: 4. The key is what happens when we add another `-`.
 
-`7--3` is `10`. To match how Python evaluates this expression, we would parenthesize it as `7-(-3)`. The first `-` is treated as a subtraction operator, but the second one is treated as *negation*. We're subtracting negative 3 (which is equivalent to adding 3). Subsequent `-`s are all treated as additional negations, so they cause the subtracted quantity to flip back and forth between 3 and negative 3. Therefore, when there are an even number of `-`s, the expression equals 4. When there's an odd number, the expression equals 10.
+`7--3` is `10`. To match how Python evaluates this expression, we would parenthesize it as `7-(-3)`. The first `-` is treated as a subtraction operator, but the second one is treated as *negation*. We're subtracting negative 3 (which is equivalent to adding 3). Subsequent `-`s are all treated as additional negations, so they cause the subtracted quantity to flip back and forth between 3 and negative 3. Therefore, when there are an odd number of `-`s, the expression equals 4. When there's an even number, the expression equals 10.
 """
 
 class QuickdrawGridProblem(ThoughtExperiment):
