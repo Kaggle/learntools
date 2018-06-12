@@ -96,12 +96,6 @@ class SlowestCallProblem(ThoughtExperiment):
 return max(time_call(fn, arg1), time_call(fn, arg2), time_call(fn, arg3))
 ```
 
-Or if you want to be extra-clever (and save a bit of typing):
-
-```python
-return max(arg1, arg2, arg3, key=lambda arg: time_call(fn, arg))
-```
-
 You *could* copy-paste the code you wrote for `time_call` three times with some slight variable changes. But that's highly not recommended. It's more typing, and if you later noticed a bug in `time_call`, you'd have to fix it in 4 places. [Laziness is one of the three great virtues of a programmer.](http://threevirtues.com/)
 """
 
