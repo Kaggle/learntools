@@ -113,7 +113,9 @@ class Problem(object, metaclass=ProblemMeta):
 
     def _get_injected_args(cls):
         """Snoop notebook global namespace for variables whose value we should
-        inject into calls to check() and is_attempted()"""
+        inject into calls to check() and is_attempted()
+        Return their values as a list (in the same order as cls._vars)
+        """
         names = cls._injectable_vars()
         missing = set(names) - G.keys()
         if len(missing) == 0:
