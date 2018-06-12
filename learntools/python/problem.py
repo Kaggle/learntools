@@ -296,7 +296,7 @@ class FunctionProblem(Problem):
         params = c.co_varnames[:c.co_argcount]
         assert len(args) == len(params)
         return ', '.join([
-            '`{}={}`'.format(param, arg)
+            '`{}={}`'.format(param, repr(arg))
             for (param, arg) in zip(params, args)
             ])
 
@@ -311,7 +311,7 @@ class FunctionProblem(Problem):
             actual = fn(*args)
             assert actual == expected, ("Expected return value of `{}` given {},"
                     " but got `{}` instead.").format(
-                            expected, cls._format_args(fn, args), actual)
+                            repr(expected), cls._format_args(fn, args), repr(actual))
 
 class MultipartProblem:
     """A container for multiple related Problems grouped together in one 
