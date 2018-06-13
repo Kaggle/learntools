@@ -18,16 +18,16 @@ class SelectSecondItem(FunctionProblem):
     _hint = "Python starts counting at 0. So the second item isn't indexed with a 2"
 
     _solution = CS(
-"""def select_second(x):
-    return x[1]""")
+"""def select_second(L):
+    return L[1]""")
 
-class SecondItemLastSublist(FunctionProblem):
-    _var = 'second_item_last_sublist'
+class LosingTeamCaptain(FunctionProblem):
+    _var = 'losing_team_captain'
 
     _test_cases = [
-            ([[0, 1, 2]], 1),
-            ([[1,2], [[[1], [2]]]], [2]),
-            ([[1], [2,3], [4,5,6]], 5),
+            ([["Paul", "John", "Ringo", "George"]], "John"),
+            ([["Paul", "John", "Ringo", "George"], ["Jen", "Jamie"]], "Jamie"),
+            ([["Who", "What", "I don't Know", "I'll tell you later"], ["Al", "Bonnie", "Clyde"]], "Bonnie"),
     ]
 
     _hint = ("The last item in a list a can be selected with a[-1]."
@@ -35,12 +35,12 @@ class SecondItemLastSublist(FunctionProblem):
              )
 
     _solution = CS(
-"""def second_item_last_sublist(x):
-    return x[-1][1]""")
+"""def losing_team_captain(teams):
+    return teams[-1][1]""")
 
-class SwapFirstLast(FunctionProblem):
+class PurpleShell(FunctionProblem):
 
-    _var = 'swap_first_last'
+    _var = 'purple_shell'
 
 
     _hint = ("Your function should change the list it receives, but not return anything\n\n"
@@ -50,9 +50,8 @@ class SwapFirstLast(FunctionProblem):
              )
 
     def _do_check(cls, fn):
-        lists = ([1,2],
-                 [1,1],
-                 [[1],[2]],
+        lists = (["M","L"],
+                 ["M","L","J"],
                  [1,2,3,4,5]
                 )
         def sol_fn(x): x[0], x[-1] = x[-1], x[0]
@@ -60,27 +59,40 @@ class SwapFirstLast(FunctionProblem):
             copy_for_soln_fn = l.copy()
             copy_for_user_fn = l.copy()
             sol_fn(copy_for_soln_fn) # create desired output for comparison
-            fn_output = fn(copy_used_by_user_fn) # also applies swap in this line
-            assert(type(fn_output) == NoneType), "Your function should not return anything"
+            user_output = fn(copy_for_user_fn) # also applies swap in this line
+            assert(type(user_output) == type(None)), ("Your function should not return anything."
+                                                      "Instead, change the list without returning it.")
             assert copy_for_user_fn == copy_for_soln_fn, \
-                "Failed on list " + l + \
-                ". Expected " + copy_for_soln_fn  + \
-                ". Your function created " + copy_for_user_fn
+                "Expected " + copy_for_soln_fn  + " on list " + l + \
+                ".\nGot " + copy_for_user_fn + " instead."
 
 
 
     _solution = CS(
-"""def swap_first_last(x):
+"""def purple_shell(racers):
     # One slick way to do the swap is x[0], x[-1] = x[-1], x[0].
-    temp = x[0]
-    x[0] = x[-1]
-    x[-1] = temp
+    temp = racers[0]
+    racers[0] = racers[-1]
+    racers[-1] = temp
     return""")
+
+class UnderstandLen(Problem):
+    '''TODO: Wrap index errors'''
+    _var = 'understand_len'
+
+    _hint = "Use len to check the lengths of the lists. Call the solution function for an explanation"
+
+    _solution = CS(
+"""[1, 2, 3] - There are three items in this list. Nothing tricky yetself.
+[1, [2, 3]] - The list [2, 3] counts as a single item. It has one item before it. So we have 2 items in the list
+[] - The empty list has 0 items
+[1, 2, 3][1:] - The expression is the same as the list [2, 3], which has length 2.""")
 
 qvars = bind_exercises(globals(), [
     SelectSecondItem,
-    SecondItemLastSublist,
-    SwapFirstLast,
+    LosingTeamCaptain,
+    PurpleShell,
+    UnderstandLen
     ],
 )
 __all__ = list(qvars)
