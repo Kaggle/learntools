@@ -88,11 +88,42 @@ class UnderstandLen(Problem):
 [] - The empty list has 0 items
 [1, 2, 3][1:] - The expression is the same as the list [2, 3], which has length 2.""")
 
+class FashionablyLate(FunctionProblem):
+    _var = 'fashionably_late'
+
+
+
+    _test_cases = [
+            ((['Adela', 'Fleda', 'Owen', 'May', 'Mona', 'Gilbert', 'Ford'], "Adela"), False),
+            ((['Adela', 'Fleda', 'Owen', 'May', 'Mona', 'Gilbert', 'Ford'], "Fleda"), False),
+            ((['Adela', 'Fleda', 'Owen', 'May', 'Mona', 'Gilbert', 'Ford'], "Owen"), False),
+            ((['Adela', 'Fleda', 'Owen', 'May', 'Mona', 'Gilbert', 'Ford'], "May"), False),
+            ((['Adela', 'Fleda', 'Owen', 'May', 'Mona', 'Gilbert', 'Ford'], "Mona"), True),
+            ((['Adela', 'Fleda', 'Owen', 'May', 'Mona', 'Gilbert', 'Ford'], "Gilbert"), True),
+            ((['Adela', 'Fleda', 'Owen', 'May', 'Mona', 'Gilbert', 'Ford'], "Ford"), False),
+            ((["Paul", "John", "Ringo", "George"], "John"), False),
+            ((["Paul", "John", "Ringo", "George"], "Ringo"), False),
+            ((["Lebron", "Kevin"], "Lebron"), False),
+            ((["Lebron", "Kevin"], "Kevin"), False),
+    ]
+
+    _hint = ("Use the index method to find when the person arrived. Check whether "
+            "that is a fashionably late spot given the list length (len). Think about 0-indexing"
+             )
+
+    _solution = CS(
+"""def fashionably_late(arrivals, name):
+    arrival_spot = arrivals.index(name)
+    index_midpoint = len(arrivals) / 2       # could be fraction like 3.5
+    return (arrival_spot != (list_len-1)) and (arrival_spot > index_midpoint)""")
+
+
 qvars = bind_exercises(globals(), [
     SelectSecondItem,
     LosingTeamCaptain,
     PurpleShell,
-    UnderstandLen
+    UnderstandLen,
+    FashionablyLate
     ],
 )
 __all__ = list(qvars)
