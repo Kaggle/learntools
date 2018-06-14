@@ -234,7 +234,8 @@ class VarCreationProblem(Problem):
 
     def _expecteds(cls):
         ex = cls._expected
-        if isinstance(ex, (list, tuple)):
+        # TODO: Bleh, this is dangerous.
+        if isinstance(ex, (list, tuple)) and len(ex) == len(cls._injectable_vars()):
             return ex
         return [ex]
 
@@ -310,10 +311,16 @@ class FunctionProblem(Problem):
             # Wrap in tuple if necessary
             if not isinstance(args, tuple):
                 args = args,
-            actual = fn(*args)
+            # TODO: ugh, need to guard against mutation :(
+            args = [(arg.copy() if hasattr(arg, 'copy') else arg) for arg in args]
+            orig_args = [(arg.copy() if hasattr(arg, 'copy') else arg) for arg in args]
+            try:
+                actual = fn(*args)
+            except Exception as e:
+                actual = e
             assert actual == expected, ("Expected return value of `{}` given {},"
                     " but got `{}` instead.").format(
-                            repr(expected), cls._format_args(fn, args), repr(actual))
+                            repr(expected), cls._format_args(fn, orig_args), repr(actual))
 
 class MultipartProblem:
     """A container for multiple related Problems grouped together in one 
