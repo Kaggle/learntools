@@ -17,6 +17,8 @@ def displayer(fn):
         # Don't propagate the return to avoid double printing.
     return wrapped
 
+# TODO: Might even be worth overhauling the whole architecture of having a class
+# for each problem (rather than having each problem be an instance).
 # TODO: Might want to rethink this Metaclass cleverness. I've tried to structure
 # the code such that concrete Problem subclasses will (almost?) never need to directly
 # implement check(), is_attempted(), hint(), or solution(). They usually just need
@@ -271,6 +273,12 @@ class VarCreationProblem(Problem):
                 check = actual == expected
             assert check, cls._failure_message(var, actual, expected)
 
+# TODO: would be nice to have some way to specify a canonical implementation of
+# the function. That way for our test cases we only need to specify some set of
+# inputs - we wouldn't need to manually specific the expected outputs.
+# TODO: Maybe give some generically useful message when the user's function
+# returns None but it's expected to return something? (e.g. "did you forget
+# a return statement?")
 class FunctionProblem(Problem):
     """A Problem that requires filling in the body of a function.
     (The name of the function should be specified as _var)

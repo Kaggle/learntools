@@ -78,6 +78,16 @@ class CodeSolution(Solution):
         wrapped = "\n```python\n{}\n```".format(txt)
         super().__init__(wrapped)
 
+    @classmethod
+    def load(cls, path):
+        with open(path) as f:
+            lines = f.readlines()
+            # Strip trailing newlines (cause constructor adds them back...)
+            lines = [line[:-1] for line in lines 
+                    if not line.startswith('from learntools.python.solns')
+                    ]
+            return cls(*lines)
+
 class TestFailure(PrefixedRichText):
     label_color = "#cc3333"
     _label = 'Incorrect'
