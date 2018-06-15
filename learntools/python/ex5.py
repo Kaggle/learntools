@@ -1,6 +1,7 @@
 from learntools.python.utils import bind_exercises
 from learntools.python.problem import *
 from learntools.python.richtext import *
+import random
 CS = CodeSolution
 
 class EarlyExitDebugging(FunctionProblem):
@@ -99,10 +100,68 @@ The key to our solution is the call to `range`. `range(len(meals))` would give u
 But don't we need to check if `meals` is empty? Turns out that `range(0) == range(-1)` - they're both empty. So if `meals` has length 0 or 1, we just won't do any iterations of our for loop.
 """
 
+# Analytic solution for expected payout =
+# .005 * 100 + (.05 - .005) * 5 + (.25 - .05 - .005) * 1.5
+def play_slot_machine():
+    r = random.random()
+    if r < .005:
+        return 100
+    elif r < .05:
+        return 5
+    elif r < .25:
+        return 1.5
+    else:
+        return 0
+
+class ExpectedSlotsPayout(ThoughtExperiment):
+    #_var = 'estimate_average_slot_payout'
+    _solution = ("The exact expected value of one pull of the slot machine is 0.0175"
+            " - i.e. a little less than 2 cents. See? Not every game in the Python"
+            " Challenge Casino is rigged against the player!\n\n"
+            "Because of the high variance of the outcome (there are some very rare "
+            "high payout results that significantly affect the average) you might need"
+            " to run your function with a very high value of `n_runs` to get a stable "
+            "answer close to the true expectation.\n\n"
+            "If your answer is way higher than 0.0175, then maybe you forgot to account for the"
+            " $1 cost per play?")
+
+class SlotsSurvival(FunctionProblem):
+    _var = 'slots_survival_probability'
+    
+    _solution = CS("""def slots_survival_probability(start_balance, n_spins, n_simulations):
+    # How many times did we last the given number of spins?
+    successes = 0
+    # A convention in Python is to use '_' to name variables we won't use
+    for _ in range(n_simulations):
+        balance = start_balance
+        spins_left = n_spins
+        while balance >= 1 and spins_left:
+            # subtract the cost of playing
+            balance -= 1
+            balance += play_slot_machine()
+            spins_left -= 1
+        # did we make it to the end?
+        if spins_left == 0:
+            successes += 1
+    return successes / n_simulations""")
+
+    def _do_check(cls, fn):
+        actual = fn(10, 10, 1000)
+        assert actual == 1.0, "Expected slots_survival_probability(10, 10, 1000) to be 1.0, but was actually {}".format(repr(actual))
+        
+        actual = fn(1, 2, 10000)
+        assert .24 <= actual <= .26, "Expected slots_survival_probability(1, 2, 10000) to be around .25, but was actually {}".format(repr(actual))
+
+        actual = fn(25, 150, 10000)
+        assert .22 <= actual <= .235, "Expected slots_survival_probability(25, 150, 10000) to be around .228, but was actually {}".format(repr(actual))
+
+
 qvars = bind_exercises(globals(), [
     EarlyExitDebugging,
     ElementWiseComparison,
     BoringMenu,
+    ExpectedSlotsPayout,
+    SlotsSurvival,
     ],
 )
-__all__ = list(qvars)
+__all__ = list(qvars) + ['play_slot_machine']
