@@ -101,7 +101,7 @@ But don't we need to check if `meals` is empty? Turns out that `range(0) == rang
 """
 
 # Analytic solution for expected payout =
-# .005 * 100 + (.05 - .005) * 5 + (.25 - .05 - .005) * 1.5
+# .005 * 100 + (.05 - .005) * 5 + (.25 - .05) * 1.5
 def play_slot_machine():
     r = random.random()
     if r < .005:
@@ -115,14 +115,14 @@ def play_slot_machine():
 
 class ExpectedSlotsPayout(ThoughtExperiment):
     #_var = 'estimate_average_slot_payout'
-    _solution = ("The exact expected value of one pull of the slot machine is 0.0175"
-            " - i.e. a little less than 2 cents. See? Not every game in the Python"
+    _solution = ("The exact expected value of one pull of the slot machine is 0.025"
+            " - i.e. a little more than 2 cents. See? Not every game in the Python"
             " Challenge Casino is rigged against the player!\n\n"
             "Because of the high variance of the outcome (there are some very rare "
             "high payout results that significantly affect the average) you might need"
             " to run your function with a very high value of `n_runs` to get a stable "
             "answer close to the true expectation.\n\n"
-            "If your answer is way higher than 0.0175, then maybe you forgot to account for the"
+            "If your answer is way higher than 0.025, then maybe you forgot to account for the"
             " $1 cost per play?")
 
 class SlotsSurvival(FunctionProblem):
