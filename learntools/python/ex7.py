@@ -37,7 +37,7 @@ Variable shadowing bugs like this don't come up super often, but when they do th
 '''
 
 def gen_bj_hand():
-    cards = list(map(str, range(1, 11))) + ['J', 'Q', 'K', 'A']
+    cards = list(map(str, range(2, 11))) + ['J', 'Q', 'K', 'A']
     ncards = random.randint(1, 6)
     hand = [random.choice(cards) for _ in range(ncards)]
     return hand
