@@ -18,6 +18,8 @@ class ExerciseFormatTutorial(VarCreationProblem):
                     )
         return ''
 
+    # TODO: This could also have been implemented under _do_check
+    # (thinking this method might actually not be necessary in general)
     def _failure_message(cls, var, actual, expected):
         if (
                 any(actual.endswith(suff) for suff in ['oo', 'ue', 'ew'])
