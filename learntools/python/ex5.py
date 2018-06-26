@@ -1,6 +1,6 @@
-from learntools.python.utils import bind_exercises
-from learntools.python.problem import *
-from learntools.python.richtext import *
+from learntools.core.utils import bind_exercises
+from learntools.core.problem import *
+from learntools.core.richtext import *
 import random
 CS = CodeSolution
 
@@ -145,7 +145,7 @@ class SlotsSurvival(FunctionProblem):
             successes += 1
     return successes / n_simulations""")
 
-    def _do_check(cls, fn):
+    def check(self, fn):
         actual = fn(10, 10, 1000)
         assert actual == 1.0, "Expected slots_survival_probability(10, 10, 1000) to be 1.0, but was actually {}".format(repr(actual))
         

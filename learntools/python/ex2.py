@@ -1,13 +1,10 @@
-from learntools.python.utils import bind_exercises
-from learntools.python.problem import *
-from learntools.python.richtext import *
+from learntools.core import *
+from learntools.core.richtext import *
+from learntools.core.exceptions import *
 CS = CodeSolution
 
 class RoundFunctionProblem(FunctionProblem):
     _var = 'round_to_two_places'
-
-    # TODO: Maybe should give a special message if they've modified the function body
-    # but they don't have a return statement?
 
     _test_cases = [
             (1.000001, 1.00),
@@ -62,7 +59,7 @@ class CandySmashingFunctionProblem(FunctionProblem):
 """def to_smash(total_candies, n_friends=3):
     return total_candies % n_friends""")
 
-    def _do_check(cls, fn):
+    def check(self, fn):
         try:
             x = fn(10, 2)
         except TypeError:
@@ -71,7 +68,7 @@ class CandySmashingFunctionProblem(FunctionProblem):
             x = fn(10)
         except TypeError:
             raise Incorrect("`to_smash` should be callable with a single argument (e.g. `to_smash(10)`")
-        super()._do_check(fn)
+        super().check(fn)
 
 # How the heck to test this?
 class TimeCallProblem(ThoughtExperiment):
@@ -126,7 +123,7 @@ qvars = bind_exercises(globals(), [
     RoundFunctionProblem,
     RoundNdigitsProblem,
     CandySmashingFunctionProblem,
-    DummyProblem, # Reading exceptions
+    None, # Reading exceptions
     TimeCallProblem,
     SlowestCallProblem,
     PrintPrintProblem,

@@ -1,8 +1,7 @@
 import itertools
 
-from learntools.python.utils import bind_exercises
-from learntools.python.problem import *
-from learntools.python.richtext import *
+from learntools.core import *
+from learntools.core.richtext import *
 CS = CodeSolution
 
 import learntools.python.solns.word_search as word_search_module
@@ -142,8 +141,8 @@ class DiamondArt(FunctionProblem):
             for h in _test_heights
             ]
 
-    def _do_check(cls, fn):
-        for args, expected in cls._test_cases:
+    def check(self, fn):
+        for args, expected in self._test_cases:
             orig_args = args
             # Wrap in tuple if necessary
             if not isinstance(args, tuple):

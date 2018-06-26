@@ -6,9 +6,10 @@ from abc import ABC, abstractmethod
 from typing import List
 import math
 import numbers
+import functools
 
 from learntools.core.richtext import *
-from learntools.core.exceptions import NotAttempted
+from learntools.core.exceptions import NotAttempted, Uncheckable
 from learntools.core import utils
 
 # TODO: I'm sure there's a more elegant way to do this.
@@ -37,6 +38,7 @@ class Problem(ABC):
     def hints(self) -> List[str]:
         return optionally_plural_property(self, '_hint')
 
+    @property
     def correct_message(self):
         if (
                 self.show_solution_on_correct 
@@ -63,7 +65,22 @@ class ThoughtExperiment(Problem):
         # level in the ProblemView?)
         msg = ("Nothing to check! (Just do this one in your head, then"
                 " call `.solution()` to see if your prediction was correct.)")
-        return msg
+        raise Uncheckable(msg)
+
+
+# TODO: apply directly to VarCreationProblem.check etc.?
+def injected(method):
+    @functools.wraps(method)
+    def wrapped(self, *args, **kwargs):
+        # More muddying of the waters btwn Problem and ProblemView :/
+        injargs = self._view._get_injected_args()
+        # Sometimes there are user-supplied args to pass on in addition to the
+        # ones we're injecting (see python.ex3 Blackjack problem for an example of this)
+        # Injected args first, then any additional ones.
+        newargs = list(injargs) + list(args)
+        return method(self, *newargs, **kwargs)
+
+    return wrapped
 
 class CodingProblem(Problem):
     # What do we show when the user calls .check() and their code is correct?
@@ -76,6 +93,7 @@ class CodingProblem(Problem):
 
     _var = None
     _vars = None
+    # Can optionally set _default_values class attr (for purposes of NotAttempted checking)
     
     @property
     def injectable_vars(self) -> List[str]:
@@ -101,8 +119,8 @@ class VarCreationProblem(CodingProblem):
     def assert_equal(self, var, actual, expected):
         if isinstance(expected, float):
             assert isinstance(actual, numbers.Number), \
-                "Expected `{}` to be a number, but had value `{}` (type = `{}`)".format(
-                    var, actual, type(actual))
+                "Expected `{}` to be a number, but had value `{!r}` (type = `{}`)".format(
+                    var, actual, type(actual).__name__)
             check = math.isclose(actual, expected, rel_tol=1e-06)
         else:
             check = actual == expected
@@ -111,6 +129,22 @@ class VarCreationProblem(CodingProblem):
     def check(self, *args):
         for (var, actual, expected) in zip(self.injectable_vars, args, self.expected):
             self.assert_equal(var, actual, expected)
+
+    def check_whether_attempted(self, *args):
+        if not hasattr(self, '_default_values'):
+            return
+        for var, val, default in zip(
+                self.injectable_vars, args, self._default_values
+                ):
+            if val != default:
+                return
+        # It'd be kind of odd if a VarCreationProblem didn't have any associated
+        # vars, but I guess it's not worth raising a fuss over...
+        if len(args):
+            vars = self.injectable_vars
+            raise NotAttempted("You need to update the code that creates"
+                    " variable{} {}".format('s' if len(vars) > 1 else '',
+                        ', '.join(map(utils.backtickify, vars))))
 
 
 class FunctionProblem(CodingProblem):
@@ -148,35 +182,14 @@ class FunctionProblem(CodingProblem):
                 actual = fn(*args)
             except Exception as e:
                 actual = e
+            assert not (actual is None and expected is not None), ("Got a return value of `None`"
+                    " given {}, but expected a value of type `{}`. (Did you forget a `return` statement?)"
+                    ).format(utils.format_args(fn, orig_args), type(expected).__name__)
             assert actual == expected, ("Expected return value of `{}` given {},"
                     " but got `{}` instead.").format(
                             repr(expected), utils.format_args(fn, orig_args), repr(actual))
 
-class MultipartProblem:
-    """A container for multiple related Problems grouped together in one 
-    question. If q1 is a MPP, its subquestions are accessed as q1.a, q1.b, etc.
-    """
-    
-    def __init__(self, *probs):
-        self.problems = probs
-        self._prob_map = {}
-        assert len(probs) <= 26
-        for i, prob in enumerate(probs):
-            letter = chr(ord('a')+i)
-            setattr(self, letter, prob)
-            self._prob_map[letter] = prob
-
-    def _repr_markdown_(self):
-        return repr(self)
-
-    def __repr__(self):
-        varname = self.__class__.__name__
-        part_names = ['`{}.{}`'.format(varname, letter) for letter in self._prob_map]
-        return """This question is in {} parts. Those parts can be accessed as {}.
-For example, to get a hint about part a, you would type `{}.a.hint()`.""".format(
-            len(self._prob_map), ', '.join(part_names), varname
-        )
 
 __all__ = ['Problem', 'VarCreationProblem', 'FunctionProblem',
-        'MultipartProblem', 'ThoughtExperiment',
+        'ThoughtExperiment', 'CodingProblem',
         ]

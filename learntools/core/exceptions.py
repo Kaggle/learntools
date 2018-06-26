@@ -4,3 +4,6 @@ class NotAttempted(Exception):
 
 class Incorrect(Exception):
     pass
+
+class Uncheckable(Exception):
+    pass

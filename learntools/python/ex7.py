@@ -1,8 +1,8 @@
 import random
 
-from learntools.python.utils import bind_exercises
-from learntools.python.problem import *
-from learntools.python.richtext import *
+from learntools.core.utils import bind_exercises
+from learntools.core.problem import *
+from learntools.core.richtext import *
 CS = CodeSolution
 
 import learntools.python.solns.jimmygraph as jg_module
@@ -66,7 +66,7 @@ qvars = bind_exercises(globals(), [
     JimmySlots,
     LuigiAnalysis,
     BlackjackCmp,
-    DummyProblem,
+    None,
     ], start=1,
 )
 __all__ = list(qvars)

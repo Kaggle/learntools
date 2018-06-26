@@ -1,6 +1,6 @@
-from learntools.python.utils import bind_exercises
-from learntools.python.problem import *
-from learntools.python.richtext import *
+from learntools.core.utils import bind_exercises
+from learntools.core.problem import *
+from learntools.core.richtext import *
 CS = CodeSolution
 
 # Complete fn that takes a list and returns the second element
@@ -52,7 +52,7 @@ class PurpleShell(FunctionProblem):
             " two variables."
              )
 
-    def _do_check(cls, fn):
+    def check(self, fn):
         lists = (["M","L"],
                  ["M","L","J"],
                  [1,2,3,4,5]
