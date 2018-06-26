@@ -2,6 +2,7 @@ from learntools.python.utils import bind_exercises
 from learntools.python.problem import *
 from learntools.python.richtext import *
 
+# TODO: Need to define a custom viewer I guess?
 class ExerciseFormatTutorial(VarCreationProblem):
     _var = 'color'
     _expected = 'blue'
