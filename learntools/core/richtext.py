@@ -1,3 +1,4 @@
+from . import colors
 
 def colorify(text, color):
     return '<span style="color:{}">{}</span>'.format(color, text)
@@ -18,13 +19,19 @@ class RichText:
         return self.txt
 
     def __repr__(self):
-        # TODO: filter out markdown
+        # TODO: we should strip out markdown syntax here
+        # (Though, in practice, this will basically never be seen. These exercises
+        # were really designed to be run in notebooks.)
         return self.txt
 
 class PrefixedRichText(RichText):
-    label_color = 'black'
+    """A RichText message prefixed with some label (which may optionally be styled
+    with a distinct color).
+    """
+    label_color = 'black' # This can be overridden with any valid CSS color
     @property
     def label(self):
+        # If no _label attribute is present, fall back to the class name.
         if hasattr(self, '_label'):
             return self._label
         return self.__class__.__name__
@@ -43,9 +50,9 @@ class PrefixedRichText(RichText):
         return self.label + ':' + ' ' + self.txt
 
 
-# Might be worth also investigating other formatting options. Maybe set a bg-color throughout?
+# Might be worth also investigating other formatting options. Maybe set a bg-color throughout? (Would help distinguish markdown output from a code cell and rendered markdown cells - they can sometimes bleed together visually)
 class Hint(PrefixedRichText):
-    label_color = "#3366cc"
+    label_color = colors.HINT
     def __init__(self, txt, n=1, last=True):
         self.n = n
         # Is this one of a series of hints?
@@ -65,33 +72,43 @@ class Hint(PrefixedRichText):
 
 class Correct(PrefixedRichText):
     _label = 'Correct'
-    label_color = '#33cc33'
+    label_color = colors.CORRECT
 
 class Solution(PrefixedRichText):
-    label_color = "#33cc99"
+    label_color = colors.SOLUTION
 
 class CodeSolution(Solution):
+    """A solution consisting entirely of Python code. We wrap this in a 
+    syntax-highlighted code block.
+    """
     _label = 'Solution'    
 
     def __init__(self, *lines):
+        """As a convenience, may pass in one string per line of code, rather than
+        one big multi-line string.
+        """
         txt = '\n'.join(lines)
         wrapped = "\n```python\n{}\n```".format(txt)
         super().__init__(wrapped)
 
     @classmethod
     def load(cls, path):
+        """Return a CodeSolution containing the code located in the source file
+        at the given path.
+        """
         with open(path) as f:
             lines = f.readlines()
             # Strip trailing newlines (cause constructor adds them back...)
             lines = [line[:-1] for line in lines 
+                    # Hack
                     if not line.startswith('from learntools.python.solns')
                     ]
             return cls(*lines)
 
 class TestFailure(PrefixedRichText):
-    label_color = "#cc3333"
+    label_color = colors.INCORRECT
     _label = 'Incorrect'
 
 class ProblemStatement(PrefixedRichText):
-    label_color = '#ccaa33'
+    label_color = colors.INFO
     _label = 'Check'

@@ -56,6 +56,7 @@ class BlackjackCmp(FunctionProblem):
             )
     _solution = CS.load(bj_module.__file__)
 
+    # TODO: explicitly make sure to test multi-ace cases. e.g. [K, A, A]
     _test_cases = [
             (args, hand_gt_soln(*args))
             for args in gen_bj_inputs(100)

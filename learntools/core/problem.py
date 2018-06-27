@@ -52,6 +52,17 @@ class Problem(ABC):
 
     @abstractmethod
     def check(self, *args):
+        """If this method runs without exceptions, it indicates that checking passed
+        and the solution is correct. To indicate other outcomes, implementations of 
+        this method should raise one of the following:
+        - Uncheckable: If this problem explicitly has no checking logic.
+        - NotAttempted: If it seems the problem hasn't been attempted (i.e. the 
+            starter code hasn't been modified.
+        - Incorrect, AssertionError: If there's a problem with the user's solution.
+
+        Any messages attached to these exceptions will be passed on in the message shown
+        to the user.
+        """
         pass
 
     def check_whether_attempted(self, *args):
@@ -70,9 +81,18 @@ class ThoughtExperiment(Problem):
 
 # TODO: apply directly to VarCreationProblem.check etc.?
 def injected(method):
+    """A decorator for (custom) methods of Problem subclasses which want to receive
+    injected values from the student's notebook as arguments - in the same way that
+    .check(), .check_whether_attempted() etc. are automatically supplied injected
+    args in CodingProblem subclasses.
+
+    Injected methods may also receive additional, explicit, user-supplied arguments.
+    They should come before any injected args.
+    """
     @functools.wraps(method)
     def wrapped(self, *args, **kwargs):
         # More muddying of the waters btwn Problem and ProblemView :/
+        # XXX: Handling of unset variables. This call may throw NotAttempted/Incorrect.
         injargs = self._view._get_injected_args()
         # Sometimes there are user-supplied args to pass on in addition to the
         # ones we're injecting (see python.ex3 Blackjack problem for an example of this)
@@ -175,7 +195,12 @@ class FunctionProblem(CodingProblem):
             # Wrap in tuple if necessary
             if not isinstance(args, tuple):
                 args = args,
-            # TODO: ugh, need to guard against mutation :(
+            # XXX: ugh, need to guard against mutation :(
+            # Beware of more exotic mutable types (which lack a copy method, or which
+            # require a deep copy). Maybe this shouldn't be handled at this level -
+            # maybe cleaner to have a method that can repeatedly spit out fresh lists
+            # of test cases every time it's called, rather than having test cases be
+            # a static attribute.
             args = [(arg.copy() if hasattr(arg, 'copy') else arg) for arg in args]
             orig_args = [(arg.copy() if hasattr(arg, 'copy') else arg) for arg in args]
             try:

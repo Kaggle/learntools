@@ -6,6 +6,7 @@ from IPython.display import display
 from learntools.core.richtext import *
 from learntools.core.exceptions import *
 from learntools.core.problem import Problem, CodingProblem
+from learntools.core import colors
 
 def displayer(fn):
     @functools.wraps(fn)
@@ -54,12 +55,11 @@ class ProblemView:
             self.problem.check(*args)
         except NotAttempted as e:
             return ProblemStatement(self._not_attempted_msg + ' ' + str(e))
-        # TODO: switch over to just Incorrect (wrap AssertionErrors at some level)
         except (Incorrect, AssertionError) as e:
             return TestFailure(str(e))
         except Uncheckable as e:
             return RichText(str(e) or 'Sorry, no auto-checking available for this question.', 
-                    color='#cc5533')
+                    color=colors.WARN)
         else:
             return Correct(self.problem.correct_message)
 
@@ -86,14 +86,14 @@ class ProblemView:
     def hint(self, n=1):
         hints = self.problem.hints
         if not hints:
-            # TODO: magic colors
             return RichText('Sorry, no hints available for this question.', 
-                    color='#cc5533')
+                    color=colors.WARN)
         # TODO: maybe wrap these kinds of user errors to present them in a nicer way?
+        # (e.g. LearnUserError, LearnUsageError)
         assert n <= len(hints), "No further hints available!"
         hint = hints[n-1]
         assert isinstance(hint, str)
-        return Hint(hint)
+        return Hint(hint, n, last=(n == len(hints)))
 
     @record
     @displayer
