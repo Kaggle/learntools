@@ -30,7 +30,7 @@ This will import variables like `q1, q2, q3`... (you can use the `var_format` kw
 
 ## Interacting with problems
 
-A standard problem can be interacted with in three ways:
+A standard problem can be interacted with in up to three ways:
 
 - `q1.check()`, checks the student's code. It will display a message corresponding to one of three outcomes: correct, incorrect, or not attempted (if we can detect that the starter code hasn't been touched).
 - `q1.hint()`, displays a hint. In some cases (if you define a `_hints` list of more than 1 element in your `Problem`), the student will be prompted to call `q1.hint(2)`, `q1.hint(3)`, etc. if they need further hints.
@@ -52,9 +52,9 @@ q1.check()
 
 I recommend following that with one or two code cells with commented-out calls to `q1.hint()` and `q1.solution()`.
 
-# Writing an exercise module.
+# Writing an exercise module - defining Problems
 
-The majority of the work in writing an exercise module is defining a `learntools.core.Problem` subclass for each of your problems. Your `Problem` is essentially responsible for taking care of the three forms of problem interaction described above - checking code, hinting, and showing solutions.
+The majority of the work in writing an exercise module is defining a `learntools.core.Problem` subclass for each of your problems. Your `Problem` is essentially responsible for taking care of the three forms of interaction described above - checking code, hinting, and showing solutions.
 
 ## Hints
 
@@ -108,7 +108,7 @@ Any methods of your `Problem` not marked with a leading underscore (which are ta
 
 ## A note on injected arguments
 
-All `CodingProblem` subclasses define a `_var` or `_vars` to indicate the names of the variables (from the exercise notebook's namespace) which are of interest to this problem. The standard methods `check` and `check_whether_attempted` will receive the values of those variables when called. If any of the variables are undefined (or if a `_default_values` member is defined, and all current values match those) any call to `check()` will be aborted, and the user will get an Incorrect/NotAttempted message with a hopefully-useful message about which variables they still need to define.
+All `CodingProblem` subclasses define a `_var` or `_vars` to indicate the names of the variables (from the exercise notebook's namespace) which are of interest to this problem. The standard methods `check` and `check_whether_attempted` will receive the values of those variables as arguments when called. If any of the variables are undefined (or if a `_default_values` member is defined, and all current values match those) any call to `check()` will be aborted, and the user will get an Incorrect/NotAttempted message with a hopefully-useful message about which variables they still need to define.
 
 If you define a custom method on your problem which you'd like to also receive injected arguments when called, mark it with the `@injected` decorator, defined in `learntools.core.problem`.
 
