@@ -1,11 +1,13 @@
 import pandas as pd
 
 from learntools.core.utils import bind_exercises
+from learntools.core.problem_factories import simple_problem
 from learntools.core.richtext import CodeSolution as CS
 from learntools.core.problem import *
 
-class LoadHomeData(VarCreationProblem):
-    _var = 'home_data'
+
+class SetTarget(VarCreationProblem):
+    _var = 'y'
     _hint = "Use the `pd.read_csv` function"
     _solution = CS('home_data = pd.read_csv(iowa_file_path)')
 
@@ -33,7 +35,7 @@ newest_home_age = 8
 #        .with_expected(avg_lot_size=10516.828, newest_home_age=8)
 
 qvars = bind_exercises(globals(), [
-    LoadHomeData,
+    SetTarget,
     HomeDescription,
     ],
     var_format='step_{n}',
