@@ -93,7 +93,7 @@ class ProblemView:
         assert n <= len(hints), "No further hints available!"
         hint = hints[n-1]
         assert isinstance(hint, str)
-        return Hint(hint)
+        return Hint(hint, n, last=(n == len(hints)))
 
     @record
     @displayer

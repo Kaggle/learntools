@@ -52,6 +52,17 @@ class Problem(ABC):
 
     @abstractmethod
     def check(self, *args):
+        """If this method runs without exceptions, it indicates that checking passed
+        and the solution is correct. To indicate other outcomes, implementations of 
+        this method should raise one of the following:
+        - Uncheckable: If this problem explicitly has no checking logic.
+        - NotAttempted: If it seems the problem hasn't been attempted (i.e. the 
+            starter code hasn't been modified.
+        - Incorrect, AssertionError: If there's a problem with the user's solution.
+
+        Any messages attached to these exceptions will be passed on in the message shown
+        to the user.
+        """
         pass
 
     def check_whether_attempted(self, *args):

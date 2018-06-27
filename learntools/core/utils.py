@@ -20,6 +20,17 @@ def instantiate_probview(prob_cls):
 
 
 def bind_exercises(g, exercises, start=1, var_format='q{n}'):
+    """Given the globals() dict of an exercise module, and an ordered list of
+    Problem subclasses, create a sequence of variables (by default q1, q2, q3...
+    but customizable via the start and var_format kwargs) referring to instantiations
+    of the Problem subclasses (well, technically wrapped in ProblemView instances).
+    Embed those variable assignments in the given namespace, and yield the names of
+    all the new variables.
+
+    Elements of exercises may also be None as a placeholder, in which case the 
+    corresponding variable in the sequence is skipped over. e.g. [SpamProblem, None,
+    EggsProblem], will generate variables q1 and q3.
+    """
     for i, prob_cls in enumerate(exercises):
         # A value of None is a placeholder. Reserve the corresponding question number, but don't create any corresponding Problem obj.
         if prob_cls is None:
