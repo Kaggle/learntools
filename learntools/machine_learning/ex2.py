@@ -17,9 +17,9 @@ class LoadHomeData(VarCreationProblem):
                 " got shape {}").format(expected_shape[0], expected_shape[1], df.shape)
 
 class HomeDescription(VarCreationProblem):
-    _vars = ['avg_lot_size', 'newest_home_age']
-    _expected = [10516.828, 8]
-    _hint = 'This is a hint'
+    _vars = ['ave_lot_size', 'newest_home_age']
+    _expected = [10517, 8]
+    _hint = 'Run the describe command. Lot size is another name for Lot Area'
     _solution = 'idk'
 
 # Shorter syntax equivalent to above
