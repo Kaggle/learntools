@@ -1,8 +1,9 @@
+import learntools
 from setuptools import setup
 from setuptools import find_packages
 
 setup(name='learntools',
-      version='0.1',
+      version=learntools.__version__,
       description='Utilities for Kaggle Learn exercises',
       url='http://github.com/kaggle/learntools',
       author='Dan Becker',
