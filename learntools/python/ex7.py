@@ -1,8 +1,8 @@
 import random
 
-from learntools.python.utils import bind_exercises
-from learntools.python.problem import *
-from learntools.python.richtext import *
+from learntools.core.utils import bind_exercises
+from learntools.core.problem import *
+from learntools.core.richtext import *
 CS = CodeSolution
 
 import learntools.python.solns.jimmygraph as jg_module
@@ -56,6 +56,7 @@ class BlackjackCmp(FunctionProblem):
             )
     _solution = CS.load(bj_module.__file__)
 
+    # TODO: explicitly make sure to test multi-ace cases. e.g. [K, A, A]
     _test_cases = [
             (args, hand_gt_soln(*args))
             for args in gen_bj_inputs(100)
@@ -66,7 +67,7 @@ qvars = bind_exercises(globals(), [
     JimmySlots,
     LuigiAnalysis,
     BlackjackCmp,
-    DummyProblem,
+    None,
     ], start=1,
 )
 __all__ = list(qvars)

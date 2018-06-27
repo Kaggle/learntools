@@ -1,16 +1,19 @@
-from learntools.python.utils import bind_exercises
-from learntools.python.problem import *
-from learntools.python.richtext import *
+from learntools.core import *
+from learntools.core.richtext import CodeSolution as CS
+from learntools.core.problem import injected
+
 
 class ExerciseFormatTutorial(VarCreationProblem):
     _var = 'color'
     _expected = 'blue'
 
     _hint = "Your favorite color rhymes with *glue*."
-    _solution = CodeSolution('color = "blue"')
+    _solution = CS('color = "blue"')
 
-    def _correct_message(cls):
-        if not cls._hinted and not cls._peeked:
+    @property
+    def correct_message(self):
+        history = self._view.interactions
+        if history['hint'] == 0 and history['solution'] == 0:
             return ("What?! You got it right without needing a hint or anything?"
                     " Drats. Well hey, you should still continue to the next step"
                     " to get some practice asking for a hint and checking solutions."
@@ -18,9 +21,7 @@ class ExerciseFormatTutorial(VarCreationProblem):
                     )
         return ''
 
-    # TODO: This could also have been implemented under _do_check
-    # (thinking this method might actually not be necessary in general)
-    def _failure_message(cls, var, actual, expected):
+    def failure_message(self, var, actual, expected):
         if (
                 any(actual.endswith(suff) for suff in ['oo', 'ue', 'ew'])
                 and actual.strip().lower() != 'blue'
@@ -41,10 +42,11 @@ class CircleArea(VarCreationProblem):
     _expected = [3/2, (3/2)**2 * 3.14159]
 
     _hint = "The syntax to raise a to the b'th power is `a ** b`"
-    _solution = CodeSolution('radius = diameter / 2',
+    _solution = CS('radius = diameter / 2',
             'area = pi * radius ** 2')
 
-class VariableSwap(Problem):
+class VariableSwap(CodingProblem):
+    _vars = ['a', 'b']
 
     _hint = "Try using a third variable."
     _solution = """The most straightforward solution is to use a third variable to temporarily store one of the old values. e.g.:
@@ -59,20 +61,20 @@ If you've read lots of Python code, you might have seen the following trick to s
 
 We'll demystify this bit of Python magic later when we talk about *tuples*."""
 
-    def store_original_ids(cls):
-        cls.id_a = id(G['a'])
-        cls.id_b = id(G['b'])
+    @injected
+    def store_original_ids(self, a, b):
+        self.id_a = id(a)
+        self.id_b = id(b)
 
-    def _do_check(cls):
-        ida = id(G['a'])
-        idb = id(G['b'])
+    def check(self, a, b):
+        ida = id(a)
+        idb = id(b)
         orig_values = [1, 2, 3], [3, 2, 1]
-        a, b = G['a'], G['b']
-        if ida == cls.id_b and idb == cls.id_a:
+        if ida == self.id_b and idb == self.id_a:
             return
-        assert not (ida == cls.id_a and idb == cls.id_b), ("`a` and `b` still"
+        assert not (ida == self.id_a and idb == self.id_b), ("`a` and `b` still"
                 " have their original values.")
-        orig_ids = (cls.id_a, cls.id_b)
+        orig_ids = (self.id_a, self.id_b)
         if (b, a) == orig_values:
             # well this is ridiculous in its verbosity
             assert False, (
@@ -97,20 +99,18 @@ We'll demystify this bit of Python magic later when we talk about *tuples*."""
         assert idb in orig_ids, ("`b` was assigned something weird (its id has changed,"
                 " but to something other than `a`'s id)")
         assert ida != idb, "`b` and `a` are the same! Both have value `{}`".format(
-                repr(G['a']))
+                repr(a))
         assert False, "This fails in a way we did not anticipate!"
 
 # It's an interesting question whether to make these parens questions checkable.
 # Making them non-checkable for now.
 class ArithmeticParensEasy(ThoughtExperiment):
-
     _hint = ('Following its default "BEDMAS"-like rules for order of operations,'
             ' Python will first divide 3 by 2, then subtract the result from 5.'
             ' You need to add parentheses to force it to perform the subtraction first.')
-    _solution = CodeSolution("(5 - 3) // 2")
+    _solution = CS("(5 - 3) // 2")
 
 class ArithmeticParensHard(ThoughtExperiment):
-
     _hint = 'You may need to use several pairs of parentheses.'
     _solution = "`(8 - 3) * (2 - (1 + 1))` is one solution. There may be others."
 
@@ -125,7 +125,7 @@ class CandySplitting(VarCreationProblem):
             "You'll probably want to use the modulo operator, `%`.",
             "`j % k` is the remainder after dividing `j` by `k`",
     ]
-    _solution = CodeSolution("(alice_candies + bob_candies + carol_candies) % 3")
+    _solution = CS("(alice_candies + bob_candies + carol_candies) % 3")
 
 
 class MysteryExpression(VarCreationProblem): 
@@ -159,7 +159,6 @@ rows = math.ceil(n / 8)
 rows = int(rows) # ceil returns a float```
 """
 
-# TODO: mention side effects.
 class SameValueInitializationRiddle(ThoughtExperiment):
 
     _hints = [

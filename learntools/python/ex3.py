@@ -1,6 +1,8 @@
-from learntools.python.utils import bind_exercises, format_args
-from learntools.python.problem import *
-from learntools.python.richtext import *
+from learntools.core import *
+from learntools.core.problem import injected
+from learntools.core.exceptions import Uncheckable
+from learntools.core.utils import format_args
+from learntools.core.richtext import *
 from learntools.python.blackjack import BlackJack
 CS = CodeSolution
 
@@ -92,13 +94,13 @@ not (rain_level > 0 and is_workday)
     def ill_prepared(have_umbrella, rain_level, have_hood, is_workday):
         return have_umbrella or rain_level < 5 and have_hood or not rain_level > 0 and is_workday
 
-    def _do_check(cls, *args):
-        expected = cls.canonical_prepared(*args)
-        actual = cls.ill_prepared(*args)
+    def check(self, *args):
+        expected = self.canonical_prepared(*args)
+        actual = self.ill_prepared(*args)
         assert actual != expected, ("Given {}, `prepared_for_weather` returned"
                 " `{}`. But I think that's correct. (We want inputs that lead to"
                 " an incorrect result from `prepared_for_weather`.)").format(
-                        format_args(cls.ill_prepared, args),
+                        format_args(self.ill_prepared, args),
                         repr(actual),
                         )
 
@@ -204,21 +206,20 @@ return (ketchup + mustard + onion) == 1
             ((False, False, True), True),
     ]
 
-class BlackJackProblem(Problem):
+class BlackJackProblem(CodingProblem):
     _var = 'should_hit'
 
 
+    def check(self, should_hit):
+        raise Uncheckable
 
-    # TODO: would nice to have an injection decorator for this kind of thing,
-    # but I'm not sure how well it would work with the existing magical
-    # metaclass method decoration :/
-    def simulate_one_game(cls):
-        phit = cls._get_injected_args()[0]
+    @injected
+    def simulate_one_game(self, phit):
         game = BlackJack(phit, True)
         game.play()
 
-    def simulate(cls, n_games=100):
-        phit = cls._get_injected_args()[0]
+    @injected
+    def simulate(self, phit, n_games=100):
         wins = 0
         for _ in range(n_games):
             wins += 1 == BlackJack(phit).play()

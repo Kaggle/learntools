@@ -1,8 +1,7 @@
 import itertools
 
-from learntools.python.utils import bind_exercises
-from learntools.python.problem import *
-from learntools.python.richtext import *
+from learntools.core import *
+from learntools.core.richtext import *
 CS = CodeSolution
 
 import learntools.python.solns.word_search as word_search_module
@@ -11,6 +10,7 @@ import learntools.python.solns.multi_word_search as mws_module
 multi_word_search = mws_module.multi_word_search
 import learntools.python.solns.diamond as d_module
 diamond = d_module.diamond
+# TODO: comment this solution code more
 import learntools.python.solns.roulette_analysis as rou_module
 roulette_gt = rou_module.conditional_roulette_probs
 
@@ -142,8 +142,8 @@ class DiamondArt(FunctionProblem):
             for h in _test_heights
             ]
 
-    def _do_check(cls, fn):
-        for args, expected in cls._test_cases:
+    def check(self, fn):
+        for args, expected in self._test_cases:
             orig_args = args
             # Wrap in tuple if necessary
             if not isinstance(args, tuple):
