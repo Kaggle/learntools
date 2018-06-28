@@ -4,7 +4,7 @@ from learntools.core.utils import bind_exercises
 from learntools.core.richtext import CodeSolution as CS
 from learntools.core.problem import *
 
-class LoadHomeData(VarCreationProblem):
+class LoadHomeData(EqualityCheckProblem):
     _var = 'home_data'
     _hint = "Use the `pd.read_csv` function"
     _solution = CS('home_data = pd.read_csv(iowa_file_path)')
@@ -16,7 +16,7 @@ class LoadHomeData(VarCreationProblem):
         assert df.shape == expected_shape, ("Expected {} rows and {} columns, but"
                 " got shape {}").format(expected_shape[0], expected_shape[1], df.shape)
 
-class HomeDescription(VarCreationProblem):
+class HomeDescription(EqualityCheckProblem):
     _vars = ['ave_lot_size', 'newest_home_age']
     _expected = [10517, 8]
     _hint = 'Run the describe command. Lot size is in the column called LotArea. Also look at YearBuilt'

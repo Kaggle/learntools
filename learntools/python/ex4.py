@@ -78,7 +78,7 @@ class PurpleShell(FunctionProblem):
     racers[0] = racers[-1]
     racers[-1] = temp""")
 
-class UnderstandLen(VarCreationProblem):
+class UnderstandLen(EqualityCheckProblem):
     _var = 'lengths'
     _expected = [3, 2, 0, 2]
     _default_values = [ [] ]

@@ -13,34 +13,34 @@ diamond = d_module.diamond
 import learntools.python.solns.roulette_analysis as rou_module
 roulette_gt = rou_module.conditional_roulette_probs
 
-class ZA(VarCreationProblem):
+class ZA(EqualityCheckProblem):
     _var = 'length'
     _default_values = [-1]
     _expected = 0
     _solution = ("The empty string has length zero. Note that the empty "
             "string is also the only string that Python considers as False"
             " when converting to boolean.")
-class ZB(VarCreationProblem):
+class ZB(EqualityCheckProblem):
     _var = 'length'
     _default_values = [-1]
     _expected = 7
     _solution = ("Keep in mind Python includes spaces (and punctuation) when"
             " counting string length.")
-class ZC(VarCreationProblem):
+class ZC(EqualityCheckProblem):
     _var = 'length'
     _default_values = [-1]
     _expected = 7
     _solution = ("Even though we use different syntax to create it, the string"
             " `c` is identical to `b`. In particular, note that the backslash"
             " is not part of the string, so it doesn't contribute to its length.")
-class ZD(VarCreationProblem):
+class ZD(EqualityCheckProblem):
     _var = 'length'
     _default_values = [-1]
     _expected = 3
     _solution = ("The fact that this string was created using triple-quote syntax"
             " doesn't make any difference in terms of its content or length. This"
             " string is exactly the same as `'hey'`.")
-class ZE(VarCreationProblem):
+class ZE(EqualityCheckProblem):
     _var = 'length'
     _default_values = [-1]
     _expected = 1

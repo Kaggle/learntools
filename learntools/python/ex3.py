@@ -47,10 +47,10 @@ Here's a slightly more succinct solution using a conditional expression:
 print("Splitting", total_candies, "candy" if total_candies == 1 else "candies")
 ```"""
 
-class WeatherDebug(VarCreationProblem):
+class WeatherDebug(EqualityCheckProblem):
 
     _vars = ['have_umbrella', 'rain_level', 'have_hood', 'is_workday']
-    # Default VarCreationProblem logic says that if any vars haven't changed
+    # Default EqualityCheckProblem logic says that if any vars haven't changed
     # from their initial/default values then the problem isn't attempted. Which
     # doesn't work here...
     #_default_values = [True, 0.0, True, True]

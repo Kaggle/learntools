@@ -3,7 +3,7 @@ from learntools.core.richtext import CodeSolution as CS
 from learntools.core.problem import injected
 
 
-class ExerciseFormatTutorial(VarCreationProblem):
+class ExerciseFormatTutorial(EqualityCheckProblem):
     _var = 'color'
     _expected = 'blue'
 
@@ -37,7 +37,7 @@ class ExerciseFormatTutorial(VarCreationProblem):
                 " *really* is.").format(actual)
 
 
-class CircleArea(VarCreationProblem):
+class CircleArea(EqualityCheckProblem):
     _vars = ['radius', 'area']
     _expected = [3/2, (3/2)**2 * 3.14159]
 
@@ -116,7 +116,7 @@ class ArithmeticParensHard(ThoughtExperiment):
 
 ArithmeticParens = MultipartProblem(ArithmeticParensEasy, ArithmeticParensHard)
 
-class CandySplitting(VarCreationProblem):
+class CandySplitting(EqualityCheckProblem):
     _var = 'to_smash'
     _expected = (121 + 77 + 109) % 3
     _default_values = [-1]
@@ -128,7 +128,7 @@ class CandySplitting(VarCreationProblem):
     _solution = CS("(alice_candies + bob_candies + carol_candies) % 3")
 
 
-class MysteryExpression(VarCreationProblem): 
+class MysteryExpression(EqualityCheckProblem): 
     _var = 'ninety_nine_dashes'
     _expected = 4
 
