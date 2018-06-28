@@ -9,29 +9,32 @@ from learntools.core.problem import *
 
 class SetTarget(CodingProblem):
     _var = 'y'
-    _hint = "Use `print(home_data.columns)`. The column you want is at the end of the list. Use the dot notation to pull out this column from the DataFrame"
+    _hint = ("Use `print(home_data.columns)`. The column you want is at the end "
+            "of the list. Use the dot notation to pull out this column from the DataFrame")
     _solution = CS('y = home_data.SalePrice')
 
     def check(self, targ):
-        assert isinstance(targ, pd.Series), ("`home_data` should be a Pandas Series with the actual data. Your current answer is a"
-                "  `{}`").format(type(targ),)
+        assert isinstance(targ, pd.Series), ("`home_data` should be a Pandas Series "
+                                             "with the actual data. Your current answer is a "
+                                             "  `{}`").format(type(targ),)
         true_mean = 180921.19589041095
         assert int(targ.mean()) == int(true_mean), ("You've selected the wrong data.")
 
-class ChoosePredictors(VarCreationProblem):
+class ChoosePredictors(EqualityCheckProblem):
     _var = 'predictor_names'
-    _expected = ['LotArea', 'YearBuilt', '1stFlrSF', '2ndFlrSF', 'FullBath', 'BedroomAbvGr', 'TotRmsAbvGrd']
+    _expected = ['LotArea', 'YearBuilt', '1stFlrSF', '2ndFlrSF',
+                 'FullBath', 'BedroomAbvGr', 'TotRmsAbvGrd']
     _hint = 'Create a list of strings with the specified names. Capitalization and spelling is important.'
-    _solution = CS(
-"""predictor_names = ["LotArea", "YearBuilt", "1stFlrSF", "2ndFlrSF", "FullBath", "BedroomAbvGr", "TotRmsAbvGrd"]
-    """)
+    _solution = CS("""predictor_names = ["LotArea", "YearBuilt", "1stFlrSF", "2ndFlrSF", "FullBath",
+            "BedroomAbvGr", "TotRmsAbvGrd"]""")
 
 class SelectPredictionData(CodingProblem):
     _var = 'X'
     _hint = 'Set X equal to home data with the right set of predictors. Use the brackets notation.'
-    _solution = CS(
-"""# requires you have set predictor_names correctly
-X=home_data[predictor_names]""")
+    _solution = """If you have set predictor_names correctly, you can do this with
+```python
+X=home_data[predictor_names]
+```"""
     def check(self, df):
         assert isinstance(df, pd.DataFrame), ("`X` should be a DataFrame,"
                 " not `{}`").format(type(df),)
@@ -41,11 +44,13 @@ X=home_data[predictor_names]""")
 
 class SpecifyModel(CodingProblem):
     _var = 'iowa_model'
-    _hint = 'You will need to import DecisionTreeRegressorModel but you want need to supply arguments when calling it.'
+    _hint = ("You will need to import DecisionTreeRegressorModel but you want need "
+             "to supply arguments when calling it.")
     _solution = CS("""from sklearn.tree import DecisionTreeRegressor
 iowa_model = DecisionTreeRegressor()""")
     def check(self, dtree):
-        assert type(dtree) == sklearn.tree.tree.DecisionTreeRegressor, ("Expected type object of type DecisionTreeRegressor but got an object of type {}").format(type(dtree))
+        assert type(dtree) == sklearn.tree.tree.DecisionTreeRegressor, ("Expected "
+            "type object of type DecisionTreeRegressor but got an object of type {}").format(type(dtree))
 
 class FitModel(CodingProblem):
     _var = 'iowa_model'
@@ -58,7 +63,7 @@ class MakePredictions(CodingProblem):
     _var = 'first_preds'
     _hint = """Use iowa_model.predict with an argument holding the data to predict with.
     Use head on the predictors rather than the predictions."""
-    _solution = 'iowa_model.predict(X.head())'
+    _solution = CS("iowa_model.predict(X.head())")
     def check(self, preds):
         ground_truth = array([208500., 181500., 223500., 140000., 250000.])
         preds_len = len(preds)
