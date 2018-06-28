@@ -75,6 +75,7 @@ class TimeCallProblem(ThoughtExperiment):
     _var = 'time_call'
 
     _hint = "You'll need to call `time()` before and after calling the input function in order to measure its running time. The `sleep` function will be very useful for testing."
+    # TODO: Write out the whole function
     _solution = '''Example function body:
 ```python
 t0 = time()

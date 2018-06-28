@@ -100,6 +100,8 @@ It should define a `_test_cases` member, containing a list of (input, expected-o
 
 The above abstract classes provide convenient shortcuts for defining a problem class without having to explicitly implement the checking logic. When they aren't up to the task, you can always implement a `check` method on your `Problem` subclass. See the docstring for `Problem.check` for the semantics of this method.
 
+If you're overriding `Problem.check`, you will probably want to inherit from `CodingProblem`.
+
 ## Custom interactions
 
 Occasionally you may want to attach some custom functionality to your problem which can be invoked by the student in the exercise notebook. See for example the `VariableSwap` question in the Python track, with its `store_original_ids` method.
