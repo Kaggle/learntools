@@ -121,13 +121,29 @@ class CodingProblem(Problem):
 
 
 class VarCreationProblem(CodingProblem):
+    """A problem which is considered solved iff some user-defined variables 
+    are equal to some groundtruth expected values.
+
+    The conventional way for subclasses to specify expected values is with a _expected
+    member, containing a list of expected values (of the same length as _vars and in
+    the same order).
+
+    In the common case where there is only one variable of interest (_var), subclasses
+    can set _expected to be a simple scalar (rather than wrapping the value in a list of
+    length 1). (Special case: to avoid ambiguity, if the expected value is itself a list 
+    of length 1, it must be wrapped)
+    """
 
     @property
     def expected(self):
-        # This is somewhat fraught
         ex = self._expected
         if len(self.injectable_vars) == 1:
-            return [ex]
+            # Don't wrap length-1 lists (i.e. assume that ex[0] is the expected value
+            # of our single variable of interest, rather than ex itself)
+            if isinstance(ex, list) and len(ex) == 1:
+                return ex
+            else:
+                return [ex]
         else:
             assert len(ex) == len(self.injectable_vars)
             return ex
