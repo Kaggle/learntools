@@ -82,9 +82,9 @@ A `ThoughtExperiment` has a solution (and probably a hint), but no checking logi
 
 (Occasionally you may want to implement a problem without checking but which has some code interaction, in which case you'd inherit from `CodingProblem`. See `BlackjackProblem` in the python track for an example. See also the 'custom interactions' section below.) 
 
-### Checking the value of one or more variables? `VarCreationProblem`
+### Checking the value of one or more variables? `EqualityCheckProblem`
 
-A `VarCreationProblem` has a variable name (`_var`) or names (`_vars`), and corresponding expected values, `_expected`.
+A `EqualityCheckProblem` has a variable name (`_var`) or names (`_vars`), and corresponding expected values, `_expected`.
 
 In the common case where the problem involves defining a single variable, `_expected` can be a simple scalar value rather than a list of length 1. Otherwise, `_expected` should be a list of values of the same length as `_vars` and in the same order.
 

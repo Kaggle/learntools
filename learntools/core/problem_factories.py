@@ -20,4 +20,4 @@ class ProblemSeed:
 
 def simple_problem(name, solution, hint=None):
     assert name.isidentifier()
-    return ProblemSeed(name, solution, hint, parent=VarCreationProblem)
+    return ProblemSeed(name, solution, hint, parent=EqualityCheckProblem)

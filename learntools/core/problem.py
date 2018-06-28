@@ -79,7 +79,7 @@ class ThoughtExperiment(Problem):
         raise Uncheckable(msg)
 
 
-# TODO: apply directly to VarCreationProblem.check etc.?
+# TODO: apply directly to EqualityCheckProblem.check etc.?
 def injected(method):
     """A decorator for (custom) methods of Problem subclasses which want to receive
     injected values from the student's notebook as arguments - in the same way that
@@ -120,7 +120,7 @@ class CodingProblem(Problem):
         return optionally_plural_property(self, '_var')
 
 
-class VarCreationProblem(CodingProblem):
+class EqualityCheckProblem(CodingProblem):
     """A problem which is considered solved iff some user-defined variables 
     are equal to some groundtruth expected values.
 
@@ -174,7 +174,7 @@ class VarCreationProblem(CodingProblem):
                 ):
             if val != default:
                 return
-        # It'd be kind of odd if a VarCreationProblem didn't have any associated
+        # It'd be kind of odd if a EqualityCheckProblem didn't have any associated
         # vars, but I guess it's not worth raising a fuss over...
         if len(args):
             vars = self.injectable_vars
@@ -231,6 +231,6 @@ class FunctionProblem(CodingProblem):
                             repr(expected), utils.format_args(fn, orig_args), repr(actual))
 
 
-__all__ = ['Problem', 'VarCreationProblem', 'FunctionProblem',
+__all__ = ['Problem', 'EqualityCheckProblem', 'FunctionProblem',
         'ThoughtExperiment', 'CodingProblem',
         ]
