@@ -15,26 +15,28 @@ class SetTarget(CodingProblem):
 
     def check(self, targ):
         assert isinstance(targ, pd.Series), ("`home_data` should be a Pandas Series "
-                                             "with the actual data. Your current answer is a "
-                                             "  `{}`").format(type(targ),)
+                                             "with the actual data. Your current "
+                                             "answer is a `{}`").format(type(targ),)
         true_mean = 180921.19589041095
         assert int(targ.mean()) == int(true_mean), ("You've selected the wrong data.")
 
-class ChoosePredictors(EqualityCheckProblem):
+class ChoosePredictors(VarCreationProblem):
     _var = 'predictor_names'
     _expected = ['LotArea', 'YearBuilt', '1stFlrSF', '2ndFlrSF',
                  'FullBath', 'BedroomAbvGr', 'TotRmsAbvGrd']
-    _hint = 'Create a list of strings with the specified names. Capitalization and spelling is important.'
-    _solution = CS("""predictor_names = ["LotArea", "YearBuilt", "1stFlrSF", "2ndFlrSF", "FullBath",
-            "BedroomAbvGr", "TotRmsAbvGrd"]""")
+    _hint = ("Create a list of strings with the specified names. Capitalization "
+             "and spelling is important.")
+    _solution = CS(
+"""predictor_names = ["LotArea", "YearBuilt", "1stFlrSF", "2ndFlrSF",
+                      "FullBath", "BedroomAbvGr", "TotRmsAbvGrd"]
+    """)
 
 class SelectPredictionData(CodingProblem):
     _var = 'X'
     _hint = 'Set X equal to home data with the right set of predictors. Use the brackets notation.'
-    _solution = """If you have set predictor_names correctly, you can do this with
-```python
-X=home_data[predictor_names]
-```"""
+    _solution = CS(
+"""# requires you have set predictor_names correctly
+X=home_data[predictor_names]""")
     def check(self, df):
         assert isinstance(df, pd.DataFrame), ("`X` should be a DataFrame,"
                 " not `{}`").format(type(df),)
@@ -42,28 +44,33 @@ X=home_data[predictor_names]
         assert df.shape == expected_shape, ("Expected {} rows and {} columns, but"
                 " got shape {}").format(expected_shape[0], expected_shape[1], df.shape)
 
+
 class SpecifyModel(CodingProblem):
     _var = 'iowa_model'
     _hint = ("You will need to import DecisionTreeRegressorModel but you want need "
              "to supply arguments when calling it.")
     _solution = CS("""from sklearn.tree import DecisionTreeRegressor
-iowa_model = DecisionTreeRegressor()""")
+iowa_model = DecisionTreeRegressor(random_state=1)""")
+
     def check(self, dtree):
-        assert type(dtree) == sklearn.tree.tree.DecisionTreeRegressor, ("Expected "
-            "type object of type DecisionTreeRegressor but got an object of type {}").format(type(dtree))
+        assert type(dtree) == sklearn.tree.tree.DecisionTreeRegressor, \
+                    ("Expected type object of type DecisionTreeRegressor but got an "
+                     "object of type {}").format(type(dtree))
+        assert dtree.random_state == 1
 
 class FitModel(CodingProblem):
     _var = 'iowa_model'
     _hint = 'The only arguments you need for the fit method have been stored as X and y'
     _solution = CS("""iowa_model.fit(X, y)""")
     def check(self, iowa_model):
+        # most mistakes in fitting will cause Exceptions. Accept anything for now
         pass
 
 class MakePredictions(CodingProblem):
     _var = 'first_preds'
     _hint = """Use iowa_model.predict with an argument holding the data to predict with.
     Use head on the predictors rather than the predictions."""
-    _solution = CS("iowa_model.predict(X.head())")
+    _solution = 'iowa_model.predict(X.head())'
     def check(self, preds):
         ground_truth = array([208500., 181500., 223500., 140000., 250000.])
         preds_len = len(preds)
