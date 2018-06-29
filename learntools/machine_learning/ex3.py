@@ -24,7 +24,7 @@ class SetTarget(CodingProblem):
 class SelectPredictionData(CodingProblem):
     _var = 'X'
     _hint = ("Capitalization and spelling are important when specifying variable names. "
-             "Use the brackets notation when data for X.")
+             "Use the brackets notation when specifying data for X.")
     _solution = CS(
 """predictor_names = ["LotArea", "YearBuilt", "1stFlrSF", "2ndFlrSF",
                       "FullBath", "BedroomAbvGr", "TotRmsAbvGrd"]
@@ -64,6 +64,8 @@ class MakePredictions(CodingProblem):
         # This step is just checking that they can make predictions.
         # If we want to check model is correct, do it in fitting step.
         ground_truth = iowa_model.predict(X)
+        assert ground_truth.shape == predictions.shape, ("Your predictions are "
+                    "shape {}. Expected shape {}").format(ground_truth.shape,  predictions.shape)
         assert all(predictions == ground_truth), ("Expected {} but got predictions {}").format(ground_truth, preds)
 
 
