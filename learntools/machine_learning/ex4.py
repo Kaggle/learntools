@@ -14,7 +14,7 @@ class SplitData(CodingProblem):
     _hint = ("The function you need to import is part of sklearn. When calling "
              "the function, the arguments are X and y")
     _solution = CS("""from sklearn.model_selection import train_test_split
-train_x, val_X, train_y, val_y = train_test_split(X, y)""")
+train_x, val_X, train_y, val_y = train_test_split(X, y, random_state=1)""")
 
     def check(self, train_X, val_y, X, y):
 
