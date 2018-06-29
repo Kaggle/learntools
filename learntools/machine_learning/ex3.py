@@ -20,7 +20,7 @@ class SetTarget(CodingProblem):
         true_mean = 180921.19589041095
         assert int(targ.mean()) == int(true_mean), ("You've selected the wrong data.")
 
-class ChoosePredictors(VarCreationProblem):
+class ChoosePredictors(EqualityCheckProblem):
     _var = 'predictor_names'
     _expected = ['LotArea', 'YearBuilt', '1stFlrSF', '2ndFlrSF',
                  'FullBath', 'BedroomAbvGr', 'TotRmsAbvGrd']
@@ -67,12 +67,12 @@ class FitModel(CodingProblem):
         pass
 
 class MakePredictions(CodingProblem):
-    _var = 'first_preds'
+    _vars = ['first_preds', 'iowa_model', 'X']
     _hint = """Use iowa_model.predict with an argument holding the data to predict with.
     Use head on the predictors rather than the predictions."""
     _solution = 'iowa_model.predict(X.head())'
     def check(self, preds):
-        ground_truth = array([208500., 181500., 223500., 140000., 250000.])
+        ground_truth = iowa_model.predict(X.head())
         preds_len = len(preds)
         assert (preds_len == 5), ("Expected 5 predictions. Received {}. Did you use head()?").format(preds_len)
         assert all(preds == ground_truth), ("Expected {} but got predictions {}").format(ground_truth, preds)
