@@ -14,3 +14,5 @@ Feature requests / Nice-to-haves
 - Some convenience for initializing an exercise module with standard boilerplate (imports at top, `bind_exercises` stuff at the bottom)
 - Make ProblemViews (and Problems?) aware of their canonical `bind_exercises` name for more helpful messages. (See Hint "coda" for example)
 - revive/complete scripts for autogenerating (/autotesting) exercise notebook skeleton 
+- some helper for checking variable types in Problem.check() implementations
+- some helper for testing notebooks to exec a problem's CodeSolution source and verify that checking passes?

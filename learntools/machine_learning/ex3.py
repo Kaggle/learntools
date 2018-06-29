@@ -40,7 +40,7 @@ X=home_data[predictor_names]""")
 
 class CreateModel(CodingProblem):
     _var = 'iowa_model'
-    _hint = ("Include random_state when specifying model. Data is specified when fitting it.")
+    _hint = ("Include `random_state` when specifying model. Data is specified when fitting it.")
     _solution = CS("""from sklearn.tree import DecisionTreeRegressor
 iowa_model = DecisionTreeRegressor(random_state=1)
 iowa_model.fit(X, y)""")
@@ -58,8 +58,8 @@ iowa_model.fit(X, y)""")
 
 class MakePredictions(CodingProblem):
     _vars = ['predictions', 'iowa_model', 'X']
-    _hint = """Use iowa_model.predict with an argument holding the data to predict with."""
-    _solution = 'iowa_model.predict(X)'
+    _hint = """Use `iowa_model.predict` with an argument holding the data to predict with."""
+    _solution = CS('iowa_model.predict(X)')
     def check(self, predictions, iowa_model, X):
         # This step is just checking that they can make predictions.
         # If we want to check model is correct, do it in fitting step.

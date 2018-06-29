@@ -52,10 +52,10 @@ iowa_model.fit(train_X, train_y)""")
 class ValPreds(CodingProblem):
     _vars = ['val_predictions', 'iowa_model', 'val_X']
     _hint = 'Run predict on the right validation data object.'
-    _solution = CS("""iowa_model.predict(val_X)""")
+    _solution = CS("""val_predictions = iowa_model.predict(val_X)""")
 
     def check(self, val_predictions, iowa_model, val_X):
-        assert val_predictions.size == 365, "val_predictions is wrong size. Did predict with wrong data?"
+        assert val_predictions.size == 365, "`val_predictions` is wrong size. Did you predict with the wrong data?"
         comparison_val_preds = iowa_model.predict(val_X)
         assert all(comparison_val_preds == val_predictions), ("Predictions do not match expectations. "
                                                              "Did you supply the right data")
