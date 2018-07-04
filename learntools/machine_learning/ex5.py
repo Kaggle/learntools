@@ -8,70 +8,35 @@ from learntools.core.richtext import CodeSolution as CS
 from learntools.core.problem import *
 
 
-class SplitData(CodingProblem):
-    # test are on train_X and val_y. If these are right, others will be right too.
-    _vars = ["train_X", "val_y", "X", "y"]
-    _hint = ("The function you need to import is part of sklearn. When calling "
-             "the function, the arguments are X and y")
-    _solution = CS("""from sklearn.model_selection import train_test_split
-train_x, val_X, train_y, val_y = train_test_split(X, y, random_state=1)""")
-
-    def check(self, train_X, val_y, X, y):
-
-        true_train_X, _, _, true_val_y = \
-                    [i for i in sklearn.model_selection.train_test_split(X, y, random_state=1)]
-        assert train_X.shape == true_train_X.shape, ("Expected train_X to have shape {}. "
-                                                     "Your code produced train_X with shape {}."
-                                                     ).format(true_train_X.shape, train_X.shape)
-        assert val_y.shape == true_val_y.shape, ("Expected val_y to have shape {}. "
-                                                     "Your code produced val_y with shape {}."
-                                                     ).format(true_val_y.shape, val_y.shape)
-        # Verify they have set the seed correctly, to help with later steps
-        assert all(train_X.index == true_train_X.index), "The training data had different rows than expected"
+class BestTreeSize(EqualityCheckProblem):
+    _var = 'best_tree_size'
+    _expected = 100
+    _hint = ("You will call get_mae in the loop. You'll need to map "
+             "the names of your data structure to the names in get_mae")
+    _solution = CS("""# Here is a short solution with a dict comprehension.
+# The lesson gives an example of how to do this with an explicit loop.
+scores = {leaf_size: get_mae(leaf_size, train_X, val_X, train_y, val_y) for leaf_size in candidate_max_leaf_nodes}
+best_tree_size = min(scores, key=scores.get)
+""")
 
 
-class FitModelWithTrain(CodingProblem):
-    _vars = ['iowa_model', 'train_X', 'train_y']
-    _hint = 'Remember, you fit with training data. You will test with validation data soon'
-    _solution = CS("""iowa_model = DecisionTreeRegressor(random_state=1)
-iowa_model.fit(train_X, train_y)""")
+class FitModelWithAllData(CodingProblem):
+    _vars = ['final_model', 'X', 'y']
+    _hint = 'Fit with the ideal value of max_leaf_nodes. In the fit step, use all of the data in the dataset'
+    _solution = CS("""# Fit the model with best_tree_size. Fill in argument to make optimal size
+final_model = DecisionTreeRegressor(max_leaf_nodes=best_tree_size, random_state=1)
 
-    def check(self, iowa_model, train_X, train_y):
-        assert iowa_model.tree_, "You have not fit your model yet."
-        assert iowa_model.random_state == 1, "Ensure you created your model with random_state=1"
-        # Fitting this model is cheap. So we do it in check
-        correct_model = DecisionTreeRegressor(random_state=1)
-        correct_model.fit(train_X, train_y)
-        expected_pred = iowa_model.predict(train_X.head(1))
-        actual_pred = iowa_model.predict(train_X.head(1))
-        assert actual_pred == expected_pred, (
-                    "Model was tested by predicting the value of first row training data "
-                    "Expected prediction of {}. Model actually predicted {}"
-                    "Did you set the random_state and pass the right data?").format(expected_pred, actual_pred)
+# fit the final model
+final_model.fit(X, y)""")
 
-class ValPreds(CodingProblem):
-    _vars = ['val_predictions', 'iowa_model', 'val_X']
-    _hint = 'Run predict on the right validation data object.'
-    _solution = CS("""val_predictions = iowa_model.predict(val_X)""")
-
-    def check(self, val_predictions, iowa_model, val_X):
-        assert val_predictions.size == 365, "`val_predictions` is wrong size. Did you predict with the wrong data?"
-        comparison_val_preds = iowa_model.predict(val_X)
-        assert all(comparison_val_preds == val_predictions), ("Predictions do not match expectations. "
-                                                             "Did you supply the right data")
-
-class MAE(EqualityCheckProblem):
-    _var = 'val_mae'
-    _expected = 29652.931506849316
-    _hint = ("The order of arguments to mean_absolute_error doesn't matter.")
-    _solution = CS("""val_mae = mean_absolute_error(val_predictions, val_y)""")
-
-
+    def check(self, final_model, X, y):
+        assert final_model.max_leaf_nodes == 100, "Didn't set max_leaf_nodes to the right value when building the tree"
+        # Model has in-sample R^2 of 0.92 when run on all data, independent of seed.
+        # score(X,y) is 0.88 if model was trained on train_X and train_y
+        assert final_model.score(X, y) > 0.9, "Your model isn't quite as accurate as expected. Did you fit it on all the data?"
 qvars = bind_exercises(globals(), [
-    SplitData,
-    FitModelWithTrain,
-    ValPreds,
-    MAE
+    BestTreeSize,
+    FitModelWithAllData
     ],
     var_format='step_{n}',
     )
