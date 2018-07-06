@@ -105,3 +105,6 @@ ENV/
 
 # JetBrains
 .idea
+
+# Submission files which are output of nbs
+*submission.csv

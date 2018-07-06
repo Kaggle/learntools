@@ -52,7 +52,7 @@ iowa_model.fit(X, y)""")
                     ("Expected type object of type DecisionTreeRegressor but got an "
                      "object of type {}").format(type(dtree))
         assert dtree.random_state is not None, "You forgot to set the random_state."
-        assert dtree.tree_, "You have not fit the model."
+        assert getattr(dtree, 'tree_', None) is not None, "You have not fit the model."
 
 
 
