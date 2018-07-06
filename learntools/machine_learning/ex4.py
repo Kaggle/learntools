@@ -1,6 +1,7 @@
 from numpy import array
 import pandas as pd
 import sklearn
+from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeRegressor
 from learntools.core.utils import bind_exercises
 from learntools.core.problem_factories import simple_problem
@@ -10,16 +11,16 @@ from learntools.core.problem import *
 
 class SplitData(CodingProblem):
     # test are on train_X and val_y. If these are right, others will be right too.
-    _vars = ["train_X", "val_y", "X", "y"]
+    _vars = ["train_X", "val_X", "train_y", "val_y", "X", "y"]
     _hint = ("The function you need to import is part of sklearn. When calling "
              "the function, the arguments are X and y")
     _solution = CS("""from sklearn.model_selection import train_test_split
 train_x, val_X, train_y, val_y = train_test_split(X, y, random_state=1)""")
 
-    def check(self, train_X, val_y, X, y):
+    def check(self, train_X, val_X, train_y, val_y, X, y):
 
         true_train_X, _, _, true_val_y = \
-                    [i for i in sklearn.model_selection.train_test_split(X, y, random_state=1)]
+                    [i for i in train_test_split(X, y, random_state=1)]
         assert train_X.shape == true_train_X.shape, ("Expected train_X to have shape {}. "
                                                      "Your code produced train_X with shape {}."
                                                      ).format(true_train_X.shape, train_X.shape)

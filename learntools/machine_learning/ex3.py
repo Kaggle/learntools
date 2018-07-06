@@ -1,6 +1,8 @@
 from numpy import array
 import pandas as pd
 import sklearn
+from sklearn.tree import DecisionTreeRegressor
+
 from learntools.core.utils import bind_exercises
 from learntools.core.problem_factories import simple_problem
 from learntools.core.richtext import CodeSolution as CS
@@ -48,7 +50,7 @@ iowa_model.fit(X, y)""")
     def check(self, dtree):
         # Not checking what they fit, because likely mistakes cause exceptions
 
-        assert type(dtree) == sklearn.tree.tree.DecisionTreeRegressor, \
+        assert type(dtree) == type(DecisionTreeRegressor()), \
                     ("Expected type object of type DecisionTreeRegressor but got an "
                      "object of type {}").format(type(dtree))
         assert dtree.random_state is not None, "You forgot to set the random_state."
