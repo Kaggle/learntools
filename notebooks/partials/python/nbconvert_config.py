@@ -62,20 +62,20 @@ lessons_meta = [
         dict(topic='strings and dictionaries',
             exercise=dict(
                 scriptid=TODO,
-                slug='colinmorris/foo-bar-exercises-3',
+                slug='colinmorris/foo-bar-exercises-6',
                 ),
             tutorial=dict(
-                slug='colinmorris/foo-bar-tut-3',
+                slug='colinmorris/foo-bar-tut-6',
                 ),
             ),
         
         dict(topic='imports',
             exercise=dict(
                 scriptid=TODO,
-                slug='colinmorris/foo-bar-exercises-3',
+                slug='colinmorris/foo-bar-exercises-7',
                 ),
             tutorial=dict(
-                slug='colinmorris/foo-bar-tut-3',
+                slug='colinmorris/foo-bar-tut-7',
                 ),
             ),
 ]

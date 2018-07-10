@@ -99,12 +99,15 @@ class LearnLessonPreprocessor(Preprocessor):
     def EXERCISE_FORKING_URL(self):
         return self.lesson.exercise_forking_url
 
-    def YOURTURN(self, topic):
+    def YOURTURN(self):
         return """# Your turn!
 
-Head over to [the Exercises notebook]({}) to get some hands-on practice working with {}.""".format(FORK_URL, topic)
+Head over to [the Exercises notebook]({}) to get some hands-on practice working with {}.""".format(
+        self.lesson.exercise_forking_url, self.lesson.topic,
+        )
 
     def EXERCISE_SETUP(self):
+        # Standard setup code. Not currently used. Maybe should be.
         pass
 
     def TUTORIAL_URL(self, lesson_num=None):
@@ -126,15 +129,22 @@ Head over to [the Exercises notebook]({}) to get some hands-on practice working 
                 self.lesson.topic, self.lesson.tutorial_url,
                 )
 
-    def END_OF_EXERCISE(self):
+    def END_OF_EXERCISE(self, forum_cta=1):
         # Don't use this macro for the very last exercise
         next = self.lesson.next
-        return """If you have any questions, be sure to post them on the [forums](https://www.kaggle.com/learn-forum).
+        res = ''
+        if int(forum_cta):
+            res += "If you have any questions, be sure to post them on the [forums](https://www.kaggle.com/learn-forum).\n\n"
 
-Remember that your notebook is private by default, and in order to share it with other people or ask for help with it, you'll need to make it public. First, you'll need to save a version of your notebook that shows your current work by hitting the "Commit & Run" button. (Your work is saved automatically, but versioning your work lets you go back and look at what it was like at the point you saved it. It also let's you share a nice compiled notebook instead of just the raw code.) Then, once your notebook is finished running, you can go to the Settings tab in the panel to the left (you may have to expand it by hitting the [<] button next to the "Commit & Run" button) and setting the "Visibility" dropdown to "Public".
+        res += """Remember that your notebook is private by default, and in order to share it with other people or ask for help with it, you'll need to make it public. First, you'll need to save a version of your notebook that shows your current work by hitting the "Commit & Run" button. (Your work is saved automatically, but versioning your work lets you go back and look at what it was like at the point you saved it. It also let's you share a nice compiled notebook instead of just the raw code.) Then, once your notebook is finished running, you can go to the Settings tab in the panel to the left (you may have to expand it by hitting the [<] button next to the "Commit & Run" button) and setting the "Visibility" dropdown to "Public".
 
 When you're ready to continue, [click here]({}) to continue on to the next tutorial on {}.""".format(
         next.tutorial_url, next.topic,
         )
+        return res
+
+        # Alternative formulation (used on days 5 and 6):
+        # Want feedback on your code? To share it with others or ask for help, you'll need to make it public. Save a version of your notebook that shows your current work by hitting the "Commit & Run" button. Once your notebook is finished running, go to the Settings tab in the panel to the left (you may have to expand it by hitting the [<] button next to the "Commit & Run" button) and set the "Visibility" dropdown to "Public".
+
 
 
