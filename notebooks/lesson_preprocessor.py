@@ -138,6 +138,8 @@ Head over to [the Exercises notebook]({}) to get some hands-on practice working 
 
         res += """Remember that your notebook is private by default, and in order to share it with other people or ask for help with it, you'll need to make it public. First, you'll need to save a version of your notebook that shows your current work by hitting the "Commit & Run" button. (Your work is saved automatically, but versioning your work lets you go back and look at what it was like at the point you saved it. It also let's you share a nice compiled notebook instead of just the raw code.) Then, once your notebook is finished running, you can go to the Settings tab in the panel to the left (you may have to expand it by hitting the [<] button next to the "Commit & Run" button) and setting the "Visibility" dropdown to "Public".
 
+# Keep Going
+
 When you're ready to continue, [click here]({}) to continue on to the next tutorial on {}.""".format(
         next.tutorial_url, next.topic,
         )
