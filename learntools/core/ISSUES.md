@@ -16,3 +16,4 @@ Feature requests / Nice-to-haves
 - revive/complete scripts for autogenerating (/autotesting) exercise notebook skeleton 
 - some helper for checking variable types in Problem.check() implementations
 - some helper for testing notebooks to exec a problem's CodeSolution source and verify that checking passes?
+- in RichText, replace angle brackets with html entities (this is a frequent problem when passing in strings that include the result of calling `type()` on something, which gives you something like `"<class 'str'>"`
