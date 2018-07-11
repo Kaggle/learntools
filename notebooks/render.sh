@@ -7,6 +7,7 @@ trackname() {
 }
 
 for nb in "$@"; do
+    python3 clean.py $nb
     jupyter nbconvert --config partials/python/nbconvert_config.py \
        --to notebook \
        --output "$(basename $nb)" \
