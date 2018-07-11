@@ -48,7 +48,7 @@ class PurpleShell(FunctionProblem):
 
 
     _hint = ("Your function should change the list it receives, but not return anything\n\n"
-            "To swap the list elements, think back to the code you used on day one to swap"
+            "To swap the list elements, think back to the code you used in the very first exercise to swap"
             " two variables."
              )
 
@@ -147,7 +147,7 @@ The above implementation relies on the fact that `list.index` returns the index 
 
 *Note*: it's usually considered "impolite" to modify a list that someone passes to your function without giving them some warning (i.e. unless the docstring says that it modifies its input). So, if we wanted to be nice, we could have started by making a copy of nums using the `list.copy()` method (e.g. `our_nums = nums.copy()`), and then working with that copy rather than the original.
 
-If you're a big Lisp fan (and based on the pre-challenge survey I know there's at least one of you out there!) you might have written this technically compliant solution (we haven't talked about recursion, but I guess this doesn't use any syntax or functions we haven't seen yet...):
+If you're a big Lisp fan, you might have written this technically compliant solution (we haven't talked about recursion, but I guess this doesn't use any syntax or functions we haven't seen yet...):
 
 ```python
 def count_negatives(nums):
@@ -155,8 +155,8 @@ def count_negatives(nums):
     if not nums:
         return 0
     else:
-        # Implicitly converting a boolean to an int! See question 6 of the day
-        # 3 exercises.
+        # Implicitly converting a boolean to an int! See question 6 of the
+        # exercise on booleans and conditionals
         return (nums[0] < 0) + count_negatives(nums[1:])
 ```"""
 

@@ -54,7 +54,7 @@ class CandySmashingFunctionProblem(FunctionProblem):
            ((10, 10), 0),
            ((10, 11), 10),
             ]
-    _hint = "Refer to the section of today's tutorial notebook where we talked about default arguments"
+    _hint = "Refer to the section of the last tutorial notebook where we talked about default arguments"
     _solution = CS(
 """def to_smash(total_candies, n_friends=3):
     return total_candies % n_friends""")
