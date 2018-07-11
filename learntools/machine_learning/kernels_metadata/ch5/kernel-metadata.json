@@ -1,0 +1,11 @@
+{"title": "Exercise: Underfittng and Overfitting",
+  "slug": "dansbecker/exercise-underfitting-and-overfitting",
+  "resources": [{"path": "../nbs/ch5.ipynb"}],
+  "language": "python",
+  "kernel_type": "notebook",
+  "dataset_sources": ["dansbecker/melbourne-housing-snapshot"],
+  "competition_sources": ["house-prices-advanced-regression-techniques"],
+  "enable_gpu": false,
+  "enable_internet": false,
+  "is_private": true
+}

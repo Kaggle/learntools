@@ -1,0 +1,11 @@
+{"new_title": "Random Forests STAGING",
+  "slug": "dansbecker/Random-Forests-staging",
+  "resources": [{"path": "../nbs/tut6.ipynb"}],
+  "language": "python",
+  "kernel_type": "notebook",
+  "dataset_sources": ["dansbecker/melbourne-housing-snapshot"],
+  "competition_sources": ["house-prices-advanced-regression-techniques"],
+  "enable_gpu": false,
+  "enable_internet": false,
+  "is_private": true
+}

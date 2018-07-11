@@ -1,0 +1,11 @@
+{"new_title": "Model Validation STAGING",
+  "slug": "dansbecker/model-validation-staging",
+  "resources": [{"path": "../nbs/tut4.ipynb"}],
+  "language": "python",
+  "kernel_type": "notebook",
+  "dataset_sources": ["dansbecker/melbourne-housing-snapshot"],
+  "competition_sources": ["house-prices-advanced-regression-techniques"],
+  "enable_gpu": false,
+  "enable_internet": false,
+  "is_private": true
+}
