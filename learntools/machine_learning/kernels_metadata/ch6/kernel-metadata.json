@@ -1,0 +1,11 @@
+{"title": "Exercise: Random Forests",
+  "slug": "dansbecker/exercise-random-forests",
+  "resources": [{"path": "../nbs/ch6.ipynb"}],
+  "language": "python",
+  "kernel_type": "notebook",
+  "dataset_sources": ["dansbecker/melbourne-housing-snapshot"],
+  "competition_sources": ["house-prices-advanced-regression-techniques"],
+  "enable_gpu": false,
+  "enable_internet": false,
+  "is_private": true
+}

@@ -1,0 +1,10 @@
+{"title": "Exercise: Machine Learning Competitions",
+  "slug": "dansbecker/exercise-machine-learning-competitions",
+  "resources": [{"path": "../nbs/ch7.ipynb"}],
+  "language": "python",
+  "kernel_type": "notebook",
+  "competition_sources": ["house-prices-advanced-regression-techniques"],
+  "enable_gpu": false,
+  "enable_internet": false,
+  "is_private": true
+}
