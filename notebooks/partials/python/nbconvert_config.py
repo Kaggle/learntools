@@ -4,7 +4,7 @@ lessons_meta = [
         # then lets us update this with the actual scriptids/slugs.
         dict(topic='syntax, variable assignment, and numbers',
             exercise=dict(
-                title='Exercise (Syntax, Variables, and Numbers)',
+                title='Exercise: Syntax, Variables, and Numbers',
                 scriptid=1275163,
                 ),
             tutorial=dict(
@@ -72,7 +72,7 @@ lessons_meta = [
 ]
 
 def slugify(title):
-    s = title.replace('(', '').replace(')', '').replace(',', '').lower()
+    s = title.replace('(', '').replace(')', '').replace(',', '').replace(':', '').lower()
     tokens = s.split()
     return '-'.join(tokens)
 
@@ -83,7 +83,7 @@ for i, lesson in enumerate(lessons_meta):
     ex = lesson['exercise']
     tut = lesson['tutorial']
     if 'title' not in ex:
-        ex['title'] = 'Exercise ({})'.format(tut['title'])
+        ex['title'] = 'Exercise: {}'.format(tut['title'])
     for thing in [ex, tut]:
         thing['slug'] = 'colinmorris/' + slugify(thing['title'])
 
