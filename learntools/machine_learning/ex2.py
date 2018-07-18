@@ -1,3 +1,4 @@
+import datetime
 import pandas as pd
 
 from learntools.core.utils import bind_exercises
@@ -19,7 +20,7 @@ class LoadHomeData(EqualityCheckProblem):
 class HomeDescription(EqualityCheckProblem):
     _vars = ['avg_lot_size', 'newest_home_age']
     max_year_built = 2010
-    min_home_age = now().year - max_year_built
+    min_home_age = datetime.datetime.now().year - max_year_built
     _expected = [10517, min_home_age]
     _hint = 'Run the describe command. Lot size is in the column called LotArea. Also look at YearBuilt'
     _solution = CS(
