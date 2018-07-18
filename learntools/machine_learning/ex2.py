@@ -17,15 +17,16 @@ class LoadHomeData(EqualityCheckProblem):
                 " got shape {}").format(expected_shape[0], expected_shape[1], df.shape)
 
 class HomeDescription(EqualityCheckProblem):
-    _vars = ['ave_lot_size', 'newest_home_age']
-    _expected = [10517, 8]
+    _vars = ['avg_lot_size', 'newest_home_age']
+    max_year_built = 2010
+    min_home_age = now().year - max_year_built
+    _expected = [10517, min_home_age]
     _hint = 'Run the describe command. Lot size is in the column called LotArea. Also look at YearBuilt'
     _solution = CS(
 """# using data read from home_data.describe()
 avg_lot_size = 10517
 newest_home_age = 8
-
-    """)
+""")
 
 # Shorter syntax equivalent to above
 # from learntools.core.problem_factories import simple_problem

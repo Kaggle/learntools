@@ -28,10 +28,10 @@ class SelectPredictionData(CodingProblem):
     _hint = ("Capitalization and spelling are important when specifying variable names. "
              "Use the brackets notation when specifying data for X.")
     _solution = CS(
-"""predictor_names = ["LotArea", "YearBuilt", "1stFlrSF", "2ndFlrSF",
+"""feature_names = ["LotArea", "YearBuilt", "1stFlrSF", "2ndFlrSF",
                       "FullBath", "BedroomAbvGr", "TotRmsAbvGrd"]
 
-X=home_data[predictor_names]""")
+X=home_data[feature_names]""")
     def check(self, df):
         assert isinstance(df, pd.DataFrame), ("`X` should be a DataFrame,"
                 " not `{}`").format(type(df),)
