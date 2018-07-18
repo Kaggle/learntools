@@ -1,10 +1,10 @@
 {"title": "Exercise: Model Validation",
   "slug": "dansbecker/exercise-model-validation",
-  "resources": [{"path": "../nbs/ch4.ipynb"}],
+  "resources": [{"path": "../../nbs/ch4.ipynb"}],
   "language": "python",
   "kernel_type": "notebook",
   "dataset_sources": ["dansbecker/melbourne-housing-snapshot"],
-  "competition_sources": ["house-prices-advanced-regression-techniques"],
+  "competition_sources": ["home-data-for-ml-course"],
   "enable_gpu": false,
   "enable_internet": false,
   "is_private": true

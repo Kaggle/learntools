@@ -1,10 +1,10 @@
-{"new_title": "How Models Work STAGING",
+{"title": "How Models Work STAGING",
   "slug": "dansbecker/how-models-work-staging",
-  "resources": [{"path": "../nbs/tut1.ipynb"}],
+  "resources": [{"path": "../../nbs/tut1.ipynb"}],
   "language": "python",
   "kernel_type": "notebook",
   "dataset_sources": ["dansbecker/melbourne-housing-snapshot"],
-  "competition_sources": ["house-prices-advanced-regression-techniques"],
+  "competition_sources": ["home-data-for-ml-course"],
   "enable_gpu": false,
   "enable_internet": false,
   "is_private": true
