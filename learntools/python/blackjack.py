@@ -13,8 +13,10 @@ Example display:
 
 class BlackJack:
 
-    def __init__(self, player_agent, verbose=False):
+    def __init__(self, player_agent, verbose=False, legacy=False):
         self.phit = player_agent
+        # Backwards compatibility with old call signature of should_hit
+        self.legacy = legacy
         self.verbose = verbose
         self.player_cards = []
         self.dealer_cards = []
@@ -35,7 +37,7 @@ class BlackJack:
         return self.card_total(self.dealer_cards)
 
     @staticmethod
-    def card_total(cards):
+    def card_total(cards, ace_counts=False):
         tot = 0
         aces = 0
         for c in cards:
@@ -48,13 +50,24 @@ class BlackJack:
         # tot is now the total of non-ace cards
         tot = tot + aces
         # tot is now the smallest possible total
+        # Looping here isn't strictly necessary because we'll never count more 
+        # than one ace as high. But hey, we're future-proofed in case we ever
+        # want to implement 31.
+        high_aces = 0
         for _ in range(aces):
             if (tot + 10) <= 21:
                 tot += 10
+                high_aces += 1
+        if ace_counts:
+            return tot, (aces-high_aces), high_aces
         return tot
 
     def player_hits(self):
-        args = [self.player_total, self.dealer_total, self.player_cards.count('A')]
+        if self.legacy:
+            args = [self.player_total, self.dealer_total, self.player_cards.count('A')]
+        else:
+            player_total, low_aces, high_aces = self.card_total(self.player_cards, ace_counts=1)
+            args = [self.dealer_total, player_total, low_aces, high_aces]
         return self.phit(*args)
 
     def play(self):

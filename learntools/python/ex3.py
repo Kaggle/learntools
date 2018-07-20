@@ -1,3 +1,5 @@
+import inspect
+
 from learntools.core import *
 from learntools.core.problem import injected
 from learntools.core.exceptions import Uncheckable
@@ -213,16 +215,29 @@ class BlackJackProblem(CodingProblem):
     def check(self, should_hit):
         raise Uncheckable
 
+    def is_legacy(self, phit):
+        # Check for old call signature of should_hit
+        # i.e. should_hit(player_total, dealer_total, player_aces):
+        sig = inspect.signature(phit)
+        nparams = len(sig.parameters)
+        assert nparams in (3, 4), ("Unexpected call signature for should_hit:"
+                " `{}`\n(Did you add or remove parameters?)").format(
+                        ', '.join(sig.parameters.keys())
+                        )
+        return nparams == 3
+
+
     @injected
     def simulate_one_game(self, phit):
-        game = BlackJack(phit, True)
+        game = BlackJack(phit, True, self.is_legacy(phit))
         game.play()
 
     @injected
     def simulate(self, phit, n_games=100):
         wins = 0
+        legacy = self.is_legacy(phit)
         for _ in range(n_games):
-            wins += 1 == BlackJack(phit).play()
+            wins += 1 == BlackJack(phit, legacy=legacy).play()
         print("Player won {} out of {} games (win rate = {:.1%})".format(
             wins, n_games, wins/n_games
             ))
