@@ -52,12 +52,16 @@ reviews.price.apply(lambda v: v - median_price)""")
 
 
 def check_q6(ans):
-    expected = reviews.loc[(reviews.points / reviews.price).idxmax()].title
+    ratio = reviews.points / reviews.price
+    best = reviews[ratio == ratio.max()]
+    expected = best.title
     return ans == expected
 
 
 def answer_q6():
-    print("""reviews.loc[(reviews.points / reviews.price).idxmax()].title""")
+    print("""ratio = reviews.points / reviews.price
+    reviews[ratio == ratio.max()].title
+    """)
 
 
 def check_q7(ans):
