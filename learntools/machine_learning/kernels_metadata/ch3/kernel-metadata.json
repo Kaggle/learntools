@@ -1,6 +1,6 @@
 {"title": "Exercise: Building Your Model",
-  "slug": "dansbecker/exercise-building-your-model",
-  "resources": [{"path": "../../nbs/ch3.ipynb"}],
+  "id": "dansbecker/exercise-building-your-model",
+  "code_file": "../../nbs/ch3.ipynb",
   "language": "python",
   "kernel_type": "notebook",
   "dataset_sources": ["dansbecker/melbourne-housing-snapshot"],

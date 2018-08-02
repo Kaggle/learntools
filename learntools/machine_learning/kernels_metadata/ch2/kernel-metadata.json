@@ -1,6 +1,6 @@
 {"title": "Exercise: Exploring Your Data",
-  "slug": "dansbecker/exercise-exploring-your-data",
-  "resources": [{"path": "../../nbs/ch2.ipynb"}],
+  "id": "dansbecker/exercise-exploring-your-data",
+  "code_file": "../../nbs/ch2.ipynb",
   "language": "python",
   "kernel_type": "notebook",
   "dataset_sources": ["dansbecker/melbourne-housing-snapshot"],

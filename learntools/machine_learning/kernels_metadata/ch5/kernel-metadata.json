@@ -1,6 +1,6 @@
 {"title": "Exercise: Underfittng and Overfitting",
-  "slug": "dansbecker/exercise-underfitting-and-overfitting",
-  "resources": [{"path": "../../nbs/ch5.ipynb"}],
+  "id": "dansbecker/exercise-underfitting-and-overfitting",
+  "code_file": "../../nbs/ch5.ipynb",
   "language": "python",
   "kernel_type": "notebook",
   "dataset_sources": ["dansbecker/melbourne-housing-snapshot"],
