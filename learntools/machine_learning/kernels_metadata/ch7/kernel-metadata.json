@@ -6,5 +6,5 @@
   "competition_sources": ["home-data-for-ml-course"],
   "enable_gpu": false,
   "enable_internet": false,
-  "is_private": true
+  "is_private": false
 }
