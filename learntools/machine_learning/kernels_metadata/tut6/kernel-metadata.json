@@ -1,11 +1,11 @@
-{"title": "Random Forests STAGING",
-  "slug": "dansbecker/Random-Forests-staging",
-  "resources": [{"path": "../../nbs/tut6.ipynb"}],
+{"title": "Random Forests",
+  "id": "dansbecker/Random-Forests",
+  "code_file": "../../nbs/tut6.ipynb",
   "language": "python",
   "kernel_type": "notebook",
   "dataset_sources": ["dansbecker/melbourne-housing-snapshot"],
   "competition_sources": ["home-data-for-ml-course"],
   "enable_gpu": false,
   "enable_internet": false,
-  "is_private": true
+  "is_private": false
 }

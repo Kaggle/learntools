@@ -1,10 +1,10 @@
 {"title": "Exercise: Machine Learning Competitions",
-  "slug": "dansbecker/exercise-machine-learning-competitions",
-  "resources": [{"path": "../../nbs/ch7.ipynb"}],
+  "id": "dansbecker/exercise-machine-learning-competitions",
+  "code_file": "../../nbs/ch7.ipynb",
   "language": "python",
   "kernel_type": "notebook",
   "competition_sources": ["home-data-for-ml-course"],
   "enable_gpu": false,
   "enable_internet": false,
-  "is_private": true
+  "is_private": false
 }
