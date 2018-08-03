@@ -9,7 +9,7 @@ import numbers
 import functools
 
 from learntools.core.richtext import *
-from learntools.core.exceptions import NotAttempted, Uncheckable
+from learntools.core.exceptions import NotAttempted, Uncheckable, UserlandExceptionIncorrect
 from learntools.core import utils
 
 # TODO: I'm sure there's a more elegant way to do this.
@@ -136,6 +136,8 @@ class EqualityCheckProblem(CodingProblem):
 
     @property
     def expected(self):
+        """A list of expected values. Matches length and order of _var/_vars
+        """
         ex = self._expected
         if len(self.injectable_vars) == 1:
             # Don't wrap length-1 lists (i.e. assume that ex[0] is the expected value
@@ -222,7 +224,7 @@ class FunctionProblem(CodingProblem):
             try:
                 actual = fn(*args)
             except Exception as e:
-                actual = e
+                raise UserlandExceptionIncorrect(e, orig_args)
             assert not (actual is None and expected is not None), ("Got a return value of `None`"
                     " given {}, but expected a value of type `{}`. (Did you forget a `return` statement?)"
                     ).format(utils.format_args(fn, orig_args), type(expected).__name__)

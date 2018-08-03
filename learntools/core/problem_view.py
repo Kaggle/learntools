@@ -1,4 +1,5 @@
 import functools
+import traceback
 from collections import Counter
 
 from IPython.display import display
@@ -42,6 +43,12 @@ class ProblemView:
         if not attr.endswith('_') and callable(val):
             return val
         raise AttributeError
+
+    def _track_event(self, interactionType, **kwargs):
+        pass # TODO
+
+    def _track_check(self, outcome, **kwargs):
+        self._track_event(tracking.InteractionType.CHECK, outcomeType=outcome, **kwargs)
     
     @record
     @displayer
@@ -54,13 +61,33 @@ class ProblemView:
             self.problem.check_whether_attempted(*args)
             self.problem.check(*args)
         except NotAttempted as e:
+            self._track_check(tracking.OutcomeType.UNATTEMPTED)
             return ProblemStatement(self._not_attempted_msg + ' ' + str(e))
         except (Incorrect, AssertionError) as e:
+            if isinstance(e, UserlandExceptionIncorrect):
+                wrapped = e.wrapped_exception
+                tb_lines = traceback.format_tb(wrapped.__traceback__)
+                tb_str = '\n'.join(tb_lines)
+                self._track_check(tracking.OutcomeType.EXCEPTION,
+                    exceptionClass=wrapped.__class__.__name__,
+                    trace=tb_str,
+                    failureMessage=str(e),
+                    )
+            else:
+                self._track_check(tracking.OutcomeType.FAIL,
+                    failureMessage=str(e),
+                    )
             return TestFailure(str(e))
         except Uncheckable as e:
-            return RichText(str(e) or 'Sorry, no auto-checking available for this question.', 
-                    color=colors.WARN)
+            msg = str(e) or 'Sorry, no auto-checking available for this question.' 
+            self._track_check(tracking.OutcomeType.EXCEPTION, 
+                failureMessage=msg,
+                exceptionClass='Uncheckable',
+                trace='',
+            )
+            return RichText(msg, color=colors.WARN)
         else:
+            self._track_check(tracking.OutcomeType.PASS)
             return Correct(self.problem.correct_message)
 
     def _get_injected_args(self):
