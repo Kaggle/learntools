@@ -4,14 +4,14 @@ def backtickify(s):
     return '`{}`'.format(s)
 
 # TODO: Maybe this factory should be a class method of ProblemView or something?
-def instantiate_probview(prob_cls):
+def instantiate_probview(prob_cls, tutorial_id):
     # TODO: Bleh, circular import...
     from learntools.core import problem_view as pv
     from learntools.core.globals_binder import binder
     # NB: May eventually have some subclasses for this?
     viewer_cls = pv.ProblemView
     prob = prob_cls()
-    view = viewer_cls(prob, binder.readonly_globals())
+    view = viewer_cls(prob, binder.readonly_globals(), tutorial_id)
     # XXX: Circular reference. :/
     # Consider using weakref (https://docs.python.org/3/library/weakref.html)
     # Also, would just have preferred a cleaner separation between these abstractions...
@@ -19,7 +19,7 @@ def instantiate_probview(prob_cls):
     return view
 
 
-def bind_exercises(g, exercises, start=1, var_format='q{n}'):
+def bind_exercises(g, exercises, tutorial_id=-1, start=1, var_format='q{n}'):
     """Given the globals() dict of an exercise module, and an ordered list of
     Problem subclasses, create a sequence of variables (by default q1, q2, q3...
     but customizable via the start and var_format kwargs) referring to instantiations
@@ -31,6 +31,20 @@ def bind_exercises(g, exercises, start=1, var_format='q{n}'):
     corresponding variable in the sequence is skipped over. e.g. [SpamProblem, None,
     EggsProblem], will generate variables q1 and q3.
     """
+    all_problem_classes = []
+    for thing in exercises:
+        if isinstance(thing, list):
+            all_problem_classes.extend(thing)
+        else:
+            all_problem_classes.append(thing)
+    denom = sum( (prob._counts_for_points and not prob._bonus) for prob in all_problem_classes)
+    try:
+        value_per_problem = 1 / denom
+    except ZeroDivisionError:
+        value_per_problem = 1.0
+    quantum_of_bonus = 1/37
+    # TODO: Assign point values to ProblemViews and read them in PV tracking methods.
+
     for i, prob_cls in enumerate(exercises):
         # A value of None is a placeholder. Reserve the corresponding question number, but don't create any corresponding Problem obj.
         if prob_cls is None:
@@ -44,13 +58,16 @@ def bind_exercises(g, exercises, start=1, var_format='q{n}'):
             mpp = prob_cls
             g[varname] = mpp
             mpp._varname = varname
-            for i, prob_cls in enumerate(mpp.problems):
-                prob = instantiate_probview(prob_cls)
-                letter = chr(ord('a')+i)
+            for j, prob_cls in enumerate(mpp.problems):
+                prob = instantiate_probview(prob_cls, tutorial_id)
+                # Bleh, more properties tacked on ad-hoc outside the class.
+                prob._order = '{}.{}'.format(qno, j+1)
+                letter = chr(ord('a')+j)
                 setattr(mpp, letter, prob)
                 mpp._prob_map[letter] = prob
         else:
-            pv = instantiate_probview(prob_cls)
+            pv = instantiate_probview(prob_cls, tutorial_id)
+            pv._order = str(qno)
             g[varname] = pv
         yield varname
 

@@ -30,6 +30,10 @@ class Problem(ABC):
 
     _solution = ''
 
+    # used for valueTowardsCompletion bookkeeping
+    _counts_for_points = True
+    _bonus = False
+
     @property
     def solution(self):
         return self._solution
@@ -50,6 +54,14 @@ class Problem(ABC):
         else:
             return ''
 
+    @property
+    def questionId(self):
+        # e.g. '3_MyHardProblem'
+        id = self.__class__.__name__
+        if hasattr(self, '_order'):
+            id = '{}_{}'.format(order, id)
+        return id
+
     @abstractmethod
     def check(self, *args):
         """If this method runs without exceptions, it indicates that checking passed
@@ -69,6 +81,9 @@ class Problem(ABC):
         pass
 
 class ThoughtExperiment(Problem):
+
+    # By default, ThoughtExperiment subclasses have no bearing on progress tracking.
+    _counts_for_points = False
     
     def check(self, *args):
         # TODO: Would be nice to be able to put the variable name this problem is

@@ -30,9 +30,10 @@ class ProblemView:
             " tell you whether your code is correct."
     )
 
-    def __init__(self, problem:Problem, globals_):
+    def __init__(self, problem:Problem, globals_, tutorial_id):
         self.problem = problem
         self.globals = globals_
+        self.tutorial_id = tutorial_id
         self.interactions = Counter()
 
     def __getattr__(self, attr):
@@ -45,7 +46,13 @@ class ProblemView:
         raise AttributeError
 
     def _track_event(self, interactionType, **kwargs):
-        pass # TODO
+       kwargs['interactionType'] = interactionType
+       problem_fields = dict(
+               learnTutorialId=self.tutorial_id,
+               questionId=self.problem.questionId,
+        )
+       kwargs.update(problem_fields)
+       tracking.track(kwargs)
 
     def _track_check(self, outcome, **kwargs):
         self._track_event(tracking.InteractionType.CHECK, outcomeType=outcome, **kwargs)
