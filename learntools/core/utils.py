@@ -3,14 +3,23 @@ from learntools.core.multiproblem import MultipartProblem
 def backtickify(s):
     return '`{}`'.format(s)
 
+quantum_of_bonus = 1/37
+
 # TODO: Maybe this factory should be a class method of ProblemView or something?
-def instantiate_probview(prob_cls, tutorial_id):
+def instantiate_probview(prob_cls, tutorial_id, value_per_problem):
     # TODO: Bleh, circular import...
     from learntools.core import problem_view as pv
     from learntools.core.globals_binder import binder
     # NB: May eventually have some subclasses for this?
     viewer_cls = pv.ProblemView
     prob = prob_cls()
+    if prob._counts_for_points:
+        if prob._bonus:
+            prob.point_value = quantum_of_bonus
+        else:
+            prob.point_value = value_per_problem
+    else:
+        prob.point_value = 0
     view = viewer_cls(prob, binder.readonly_globals(), tutorial_id)
     # XXX: Circular reference. :/
     # Consider using weakref (https://docs.python.org/3/library/weakref.html)
@@ -37,13 +46,14 @@ def bind_exercises(g, exercises, tutorial_id=-1, start=1, var_format='q{n}'):
             all_problem_classes.extend(thing)
         else:
             all_problem_classes.append(thing)
-    denom = sum( (prob._counts_for_points and not prob._bonus) for prob in all_problem_classes)
+    denom = sum( 
+            (getattr(prob, '_counts_for_points', False) and not prob._bonus) 
+            for prob in all_problem_classes
+            )
     try:
         value_per_problem = 1 / denom
     except ZeroDivisionError:
         value_per_problem = 1.0
-    quantum_of_bonus = 1/37
-    # TODO: Assign point values to ProblemViews and read them in PV tracking methods.
 
     for i, prob_cls in enumerate(exercises):
         # A value of None is a placeholder. Reserve the corresponding question number, but don't create any corresponding Problem obj.
@@ -59,14 +69,14 @@ def bind_exercises(g, exercises, tutorial_id=-1, start=1, var_format='q{n}'):
             g[varname] = mpp
             mpp._varname = varname
             for j, prob_cls in enumerate(mpp.problems):
-                prob = instantiate_probview(prob_cls, tutorial_id)
+                prob = instantiate_probview(prob_cls, tutorial_id, value_per_problem)
                 # Bleh, more properties tacked on ad-hoc outside the class.
                 prob._order = '{}.{}'.format(qno, j+1)
                 letter = chr(ord('a')+j)
                 setattr(mpp, letter, prob)
                 mpp._prob_map[letter] = prob
         else:
-            pv = instantiate_probview(prob_cls, tutorial_id)
+            pv = instantiate_probview(prob_cls, tutorial_id, value_per_problem)
             pv._order = str(qno)
             g[varname] = pv
         yield varname

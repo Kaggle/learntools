@@ -4,6 +4,8 @@ import json
 
 import learntools
 
+DEBUG = False
+
 class InteractionType(enum.Enum):
     CHECK = 1
     HINT = 2
@@ -41,4 +43,8 @@ def track(event):
             data=event)
     js = 'parent.postMessage({}, "*")'.format(json.dumps(message))
     display(Javascript(js))
+    if DEBUG:
+        debug_js = 'console.log({})'.format(json.dumps(message))
+        display(Javascript(debug_js))
+        display(message)
 

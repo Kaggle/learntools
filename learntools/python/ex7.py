@@ -68,6 +68,8 @@ qvars = bind_exercises(globals(), [
     LuigiAnalysis,
     BlackjackCmp,
     None,
-    ], start=1,
+    ],
+    tutorial_id=114,
+    start=1,
 )
 __all__ = list(qvars)

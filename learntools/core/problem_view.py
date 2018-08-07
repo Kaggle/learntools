@@ -7,7 +7,7 @@ from IPython.display import display
 from learntools.core.richtext import *
 from learntools.core.exceptions import *
 from learntools.core.problem import Problem, CodingProblem
-from learntools.core import colors
+from learntools.core import colors, tracking
 
 def displayer(fn):
     @functools.wraps(fn)
@@ -55,6 +55,8 @@ class ProblemView:
        tracking.track(kwargs)
 
     def _track_check(self, outcome, **kwargs):
+        if outcome == tracking.OutcomeType.PASS:
+            kwargs['valueTowardsCompletion'] = self.problem.point_value
         self._track_event(tracking.InteractionType.CHECK, outcomeType=outcome, **kwargs)
     
     @record
@@ -127,6 +129,7 @@ class ProblemView:
         assert n <= len(hints), "No further hints available!"
         hint = hints[n-1]
         assert isinstance(hint, str)
+        self._track_event(tracking.InteractionType.HINT)
         return Hint(hint, n, last=(n == len(hints)))
 
     @record
@@ -135,4 +138,5 @@ class ProblemView:
         soln = self.problem.solution
         if isinstance(soln, RichText):
             return soln
+        self._track_event(tracking.InteractionType.SOLUTION)
         return Solution(soln)

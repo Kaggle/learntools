@@ -130,5 +130,6 @@ qvars = bind_exercises(globals(), [
     PrintPrintProblem,
     SmallestStringyProblem,
     ],
+    tutorial_id=104,
 )
 __all__ = list(qvars)

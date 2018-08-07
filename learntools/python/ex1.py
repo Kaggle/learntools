@@ -141,6 +141,7 @@ class MysteryExpression(EqualityCheckProblem):
 """
 
 class QuickdrawGridProblem(ThoughtExperiment):
+    _bonus = True
     _hint = """There are a few ways to solve this. Of the tools we've talked about so far, `//` and `%` (the integer division and modulo operators) and the `min` function may be useful."""
     _solution = """Here's one possible solution:
 ```python
@@ -160,7 +161,7 @@ rows = int(rows) # ceil returns a float```
 """
 
 class SameValueInitializationRiddle(ThoughtExperiment):
-
+    _bonus = True
     _hints = [
             "You're unlikely to see any practical difference when the value we're initializing to is an int. But think about other Python types you're familiar with...",
             """`a = b = <expression>` is equivalent to...
@@ -196,6 +197,7 @@ qvars = bind_exercises(globals(), [
     QuickdrawGridProblem,
     SameValueInitializationRiddle,
     ],
+    tutorial_id=102,
     start=0,
     )
 __all__ = list(qvars)
