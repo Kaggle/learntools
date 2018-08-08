@@ -23,7 +23,6 @@ _EVENT_DEFAULTS = dict(
         failureMessage = '',
         exceptionClass = '',
         trace = '',
-        outcomeType=None,
 )
 
 def track(event):
@@ -39,6 +38,11 @@ def track(event):
     if outcome_type:
         assert outcome_type in OutcomeType
         event['outcomeType'] = outcome_type.value
+    else:
+        assert intxn_type != InteractionType.CHECK, "Check events must have an OutcomeType set: {!r}".format(event)
+        # Looks like we need to set some dummy value here (even if this field isn't applicable because this
+        # isn't a check event. Setting outcomeType to None/null resulted in 500 errors.)
+        event['outcomeType'] = 4
 
     message = dict(jupyterEvent='custom.exercise_interaction',
             data=event)
