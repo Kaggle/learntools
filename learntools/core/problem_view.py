@@ -50,7 +50,7 @@ class ProblemView:
         # e.g. '3_MyHardProblem'
         id = self.problem.__class__.__name__
         if hasattr(self, '_order'):
-            id = '{}_{}'.format(order, id)
+            id = '{}_{}'.format(self._order, id)
         return id
 
     def _track_event(self, interactionType, **kwargs):
