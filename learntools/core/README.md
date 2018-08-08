@@ -130,6 +130,16 @@ __all__ = list(qvars)
 
 The net effect of this is to instantiate instances of the given problem classes, assign them to a regularly named sequence of variables (e.g. q1, q2, q3), and make it so that `from my_exercise_module import *` imports precisely those auto-generated variables. You can check out `bind_exercises` and its docstring if you want more of the gory details.
 
+# Interaction/Progress Tracking
+
+For the most part, you shouldn't need to worry about this when creating problems/exercises.
+
+One consideration: by default, a problem 'counts' for the purposes of progress tracking iff it's not a `ThoughtExperiment`. To explicitly control this (e.g. if you have a non-checkable `CodingProblem`), set the class attribute `_counts_for_points`.
+
+Set `_bonus = True` to mark a problem as being a bonus (i.e. the user doesn't need to get the question right in order to pass this exercise and earn a checkmark).
+
+Sending tracking events is managed at the `ProblemView` layer. See `problem_view.py` and `tracking.py` for details.
+
 # Testing notebooks (optional but recommended)
 
 I recommend making testing notebooks for each exercise. See `learntools/python/*testing.ipynb` for examples. My process for doing this is to fork the main exercise notebook (the one intended for eventual user consumption), and expand it by...
