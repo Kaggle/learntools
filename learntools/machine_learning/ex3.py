@@ -77,6 +77,7 @@ qvars = bind_exercises(globals(), [
     CreateModel,
     MakePredictions
     ],
+    tutorial_id=84,
     var_format='step_{n}',
     )
 __all__ = list(qvars)
