@@ -1,11 +1,11 @@
-{"title": "Exploring Your Data STAGING",
-  "slug": "dansbecker/exploring-your-data-staging",
-  "resources": [{"path": "../../nbs/tut2.ipynb"}],
+{"title": "Explore Your Data",
+  "id": "dansbecker/explore-your-data",
+  "code_file": "../../nbs/tut2.ipynb",
   "language": "python",
   "kernel_type": "notebook",
   "dataset_sources": ["dansbecker/melbourne-housing-snapshot"],
   "competition_sources": ["home-data-for-ml-course"],
   "enable_gpu": false,
   "enable_internet": false,
-  "is_private": true
+  "is_private": false
 }

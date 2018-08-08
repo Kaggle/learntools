@@ -1,11 +1,11 @@
-{"title": "How Models Work STAGING",
-  "slug": "dansbecker/how-models-work-staging",
-  "resources": [{"path": "../../nbs/tut1.ipynb"}],
+{"title": "How Models Work",
+  "id": "dansbecker/how-models-work",
+  "code_file": "../../nbs/tut1.ipynb",
   "language": "python",
   "kernel_type": "notebook",
   "dataset_sources": ["dansbecker/melbourne-housing-snapshot"],
   "competition_sources": ["home-data-for-ml-course"],
   "enable_gpu": false,
   "enable_internet": false,
-  "is_private": true
+  "is_private": false
 }
