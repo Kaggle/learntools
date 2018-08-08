@@ -126,6 +126,7 @@ class ExpectedSlotsPayout(ThoughtExperiment):
             " $1 cost per play?")
 
 class SlotsSurvival(FunctionProblem):
+    _bonus = True
     _var = 'slots_survival_probability'
     
     _solution = CS("""def slots_survival_probability(start_balance, n_spins, n_simulations):

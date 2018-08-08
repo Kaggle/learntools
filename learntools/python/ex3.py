@@ -209,6 +209,7 @@ return (ketchup + mustard + onion) == 1
     ]
 
 class BlackJackProblem(CodingProblem):
+    _counts_for_points = False
     _var = 'should_hit'
 
 

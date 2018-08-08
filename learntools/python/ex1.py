@@ -129,6 +129,7 @@ class CandySplitting(EqualityCheckProblem):
 
 
 class MysteryExpression(EqualityCheckProblem): 
+    _bonus = True
     _var = 'ninety_nine_dashes'
     _expected = 4
 

@@ -126,6 +126,7 @@ class MultiWordSearch(FunctionProblem):
 
 
 class DiamondArt(FunctionProblem):
+    _bonus = True
     _var = 'diamond'
 
     _solution = CS.load(d_module.__file__)
@@ -178,6 +179,7 @@ class DiamondArt(FunctionProblem):
                             )
 
 class RouletteAnalyzer(FunctionProblem):
+    _bonus = True
     _var = 'conditional_roulette_probs'
 
     _solution = CS.load(rou_module.__file__)

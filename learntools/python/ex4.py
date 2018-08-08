@@ -121,6 +121,7 @@ class FashionablyLate(FunctionProblem):
     return order >= len(arrivals) / 2 and order != len(arrivals) - 1""")
 
 class CountNegativesRiddle(FunctionProblem):
+    _bonus = True
     _var = 'count_negatives'
 
     _test_cases = [
