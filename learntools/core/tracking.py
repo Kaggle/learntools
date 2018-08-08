@@ -19,10 +19,11 @@ class OutcomeType(enum.Enum):
 
 _EVENT_DEFAULTS = dict(
         learnToolsVersion = str(learntools.__version__),
-        valueTowardsCompletion = 0.0, # technically optional
+        valueTowardsCompletion = 0.0,
         failureMessage = '',
         exceptionClass = '',
         trace = '',
+        outcomeType=None,
 )
 
 def track(event):

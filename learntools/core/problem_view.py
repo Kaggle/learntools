@@ -120,11 +120,12 @@ class ProblemView:
     @record
     @displayer
     def hint(self, n=1):
-        self._track_event(tracking.InteractionType.HINT)
         hints = self.problem.hints
         if not hints:
-            return RichText('Sorry, no hints available for this question.', 
-                    color=colors.WARN)
+            msg = 'Sorry, no hints available for this question.'
+            self._track_event(tracking.InteractionType.HINT, failureMessage=msg)
+            return RichText(msg, color=colors.WARN)
+        self._track_event(tracking.InteractionType.HINT)
         # TODO: maybe wrap these kinds of user errors to present them in a nicer way?
         # (e.g. LearnUserError, LearnUsageError)
         assert n <= len(hints), "No further hints available!"
