@@ -4,6 +4,7 @@ import json
 
 import learntools
 
+# If set to True, then echo logged events as output.
 DEBUG = False
 
 class InteractionType(enum.Enum):

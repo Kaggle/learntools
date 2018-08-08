@@ -44,12 +44,20 @@ class ProblemView:
         if not attr.endswith('_') and callable(val):
             return val
         raise AttributeError
+    
+    @property
+    def questionId(self):
+        # e.g. '3_MyHardProblem'
+        id = self.problem.__class__.__name__
+        if hasattr(self, '_order'):
+            id = '{}_{}'.format(order, id)
+        return id
 
     def _track_event(self, interactionType, **kwargs):
        kwargs['interactionType'] = interactionType
        problem_fields = dict(
                learnTutorialId=self.tutorial_id,
-               questionId=self.problem.questionId,
+               questionId=self.questionId,
         )
        kwargs.update(problem_fields)
        tracking.track(kwargs)

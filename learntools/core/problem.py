@@ -54,14 +54,6 @@ class Problem(ABC):
         else:
             return ''
 
-    @property
-    def questionId(self):
-        # e.g. '3_MyHardProblem'
-        id = self.__class__.__name__
-        if hasattr(self, '_order'):
-            id = '{}_{}'.format(order, id)
-        return id
-
     @abstractmethod
     def check(self, *args):
         """If this method runs without exceptions, it indicates that checking passed
