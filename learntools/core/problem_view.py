@@ -120,6 +120,7 @@ class ProblemView:
     @record
     @displayer
     def hint(self, n=1):
+        self._track_event(tracking.InteractionType.HINT)
         hints = self.problem.hints
         if not hints:
             return RichText('Sorry, no hints available for this question.', 
@@ -129,14 +130,13 @@ class ProblemView:
         assert n <= len(hints), "No further hints available!"
         hint = hints[n-1]
         assert isinstance(hint, str)
-        self._track_event(tracking.InteractionType.HINT)
         return Hint(hint, n, last=(n == len(hints)))
 
     @record
     @displayer
     def solution(self):
+        self._track_event(tracking.InteractionType.SOLUTION)
         soln = self.problem.solution
         if isinstance(soln, RichText):
             return soln
-        self._track_event(tracking.InteractionType.SOLUTION)
         return Solution(soln)
