@@ -32,15 +32,15 @@ def track(event):
         event.setdefault(k, v)
 
     # Convert enum values to plain ints
-    intxn_type = event['interactionType']
-    assert intxn_type in InteractionType
-    event['interactionType'] = intxn_type.value
+    interaction_type = event['interactionType']
+    assert interaction_type in InteractionType
+    event['interactionType'] = interaction_type.value
     outcome_type = event.get('outcomeType', None)
     if outcome_type:
         assert outcome_type in OutcomeType
         event['outcomeType'] = outcome_type.value
     else:
-        assert intxn_type != InteractionType.CHECK, "Check events must have an OutcomeType set: {!r}".format(event)
+        assert interaction_type != InteractionType.CHECK, "Check events must have an OutcomeType set: {!r}".format(event)
         # Looks like we need to set some dummy value here (even if this field isn't applicable because this
         # isn't a check event. Setting outcomeType to None/null resulted in 500 errors.)
         event['outcomeType'] = 4

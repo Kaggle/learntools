@@ -40,15 +40,9 @@ def bind_exercises(g, exercises, tutorial_id=-1, start=1, var_format='q{n}'):
     corresponding variable in the sequence is skipped over. e.g. [SpamProblem, None,
     EggsProblem], will generate variables q1 and q3.
     """
-    all_problem_classes = []
-    for thing in exercises:
-        if isinstance(thing, list):
-            all_problem_classes.extend(thing)
-        else:
-            all_problem_classes.append(thing)
     denom = sum( 
             (getattr(prob, '_counts_for_points', False) and not prob._bonus) 
-            for prob in all_problem_classes
+            for prob in exercises
             )
     try:
         value_per_problem = 1 / denom
