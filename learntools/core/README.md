@@ -82,7 +82,7 @@ A `ThoughtExperiment` has a solution (and probably a hint), but no checking logi
 
 (Occasionally you may want to implement a problem without checking but which has some code interaction, in which case you'd inherit from `CodingProblem`. See `BlackjackProblem` in the python track for an example. See also the 'custom interactions' section below.) 
 
-### Checking the value of one or more variables? `EqualityCheckProblem`
+### Checking one or more variables against static expected values? `EqualityCheckProblem`
 
 A `EqualityCheckProblem` has a variable name (`_var`) or names (`_vars`), and corresponding expected values, `_expected`.
 
@@ -96,11 +96,13 @@ A `FunctionProblem` should have a `_var` member with the name of the function th
 
 It should define a `_test_cases` member, containing a list of (input, expected-output) pairs, where input may be a scalar (for unary functions) or tuple of args. 
 
-### Custom checking logic - override `Problem.check`
+### else: `CodingProblem`
 
 The above abstract classes provide convenient shortcuts for defining a problem class without having to explicitly implement the checking logic. When they aren't up to the task, you can always implement a `check` method on your `Problem` subclass. See the docstring for `Problem.check` for the semantics of this method.
 
 If you're overriding `Problem.check`, you will probably want to inherit from `CodingProblem`.
+
+A common use case is a problem where the student has to create or modify one or more variables, but correctness can't be reduced to an equality check. In this case, you can implement `check` to do more granular inspection of those variables - e.g. asserting that a DataFrame has a column of a certain name, or that a numpy array has a certain shape, or that a model has been fit.
 
 ## Custom interactions
 
