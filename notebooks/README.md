@@ -32,3 +32,4 @@ Note: currently keeping `rendered/` notebooks under version control. At first th
     - Importantly, the metadata in nbconvert_config.py only has facility for storing metadata about notebooks which are exercises or tutorials. If we want these ancilliary nbs to follow the same pipeline (particularly for kernel syncing), they need to have metadata like title, slug, kernel_sources, etc.
     - Currently, for the ~3 ancilliary kernels used in the embeddings course, I'm manually managing the kernel-metadata.json files and symlinks. And not doing any macro expansion. (Neither of which concessions are particularly onerous)
 - Standardize naming across tracks? maybe something like tut1-tag.ipynb ex3-tag.ipynb etc.? With everything else assumed to be an ancilliary notebook?
+- argparse for the various python scripts in this directory. argparse is great.

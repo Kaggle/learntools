@@ -1,0 +1,15 @@
+{
+  "code_file": "script.ipynb",
+  "competition_sources": [],
+  "dataset_sources": [],
+  "enable_gpu": "false",
+  "enable_internet": "false",
+  "id": "colinmorris/exercise-1-embedding-layers",
+  "is_private": "true",
+  "kernel_sources": [
+    "colinmorris/0-movielens-preprocessing"
+  ],
+  "kernel_type": "notebook",
+  "language": "python",
+  "title": "Exercise: 1 Embedding layers"
+}

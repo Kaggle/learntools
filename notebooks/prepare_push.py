@@ -32,12 +32,14 @@ def prepare_push(lesson, track, force):
             with open(meta_fname, 'w') as f:
                 json.dump(meta, f, indent=2, sort_keys=True)
 
-        script_loc = os.path.join(dest_dir, 'script.ipynb')
+        sympath = os.path.join(dest_dir, 'script.ipynb')
         # symlink the canonical rendered version with the pushable directory
-        if not os.path.exists(script_loc):
+        if not os.path.exists(sympath):
             canon = os.path.join('rendered', track, thing['filename'])
-            canon = os.path.abspath(canon)
-            os.symlink(canon, script_loc)
+            # Since we're checking these symlinks in to version control, make 
+            # them point to relative paths so they'll play nicely with any filesystem
+            rel_canon = os.path.relpath(canon, dest_dir)
+            os.symlink(rel_canon, sympath)
 
 def main():
     trackname = sys.argv[1]
