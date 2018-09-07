@@ -12,7 +12,10 @@ if DEBUG:
     logging.basicConfig(level=logging.DEBUG)
 
 
-def load_lessons(lesson_dicts):
+def wrap_lessons(lesson_dicts):
+    """Given a list of lesson dicts (as set in nbconvert_config.py), return a list
+    of Lesson objects wrapping those dicts.
+    """
     res = [Lesson(d, i) for i, d in enumerate(lesson_dicts)]
     for i, lesson in enumerate(res):
         if i > 0:
@@ -56,12 +59,14 @@ class Lesson:
 
 class LearnLessonPreprocessor(Preprocessor):
 
+    # This gets set directly (to a list of lesson dicts) in track's 
+    # nbconvert_config.py file. This code is insane.
     lessons_metadata = traitlets.List().tag(config=True)
     
     def preprocess(self, nb, resources):
         lt_meta = nb['metadata']['learntools_metadata']
         lesson_ix = lt_meta['lesson_index']
-        lessons = load_lessons(self.lessons_metadata)
+        lessons = wrap_lessons(self.lessons_metadata)
         self.lessons = lessons
         self.lesson = lessons[lesson_ix]
         for i, cell in enumerate(nb.cells):

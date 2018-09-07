@@ -7,11 +7,17 @@ FORCE = True
 
 def make_meta(thing):
     return dict(
-            resources=[{'path': 'script.ipynb'}],
-            slug=thing['slug'],
+            id=thing['slug'],
             language='python',
+            is_private='true',
+            code_file="script.ipynb",
+            enable_gpu="false",
+            enable_internet="false",
             kernel_type='notebook',
-            new_title=thing['title'],
+            title=thing['title'],
+            dataset_sources=thing.get('dataset_sources', []),
+            kernel_sources=thing.get('kernel_sources', []),
+            competition_sources=[],
             )
 
 def prepare_push(lesson, track, force):

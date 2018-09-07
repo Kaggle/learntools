@@ -29,6 +29,7 @@ lessons_meta = [
                 scriptid=1,
                 ),
             tutorial=dict(
+                filename='1-embeddings.ipynb',
                 ),
             # Keys later added to each of exercise and tutorial:
             #   - filename (e.g. ex_1.ipynb)
@@ -41,6 +42,7 @@ lessons_meta = [
                 scriptid=1,
                 ),
             tutorial=dict(
+                filename='2-factorization.ipynb',
                 ),
             ),
         
@@ -49,6 +51,7 @@ lessons_meta = [
                 scriptid=1,
                 ),
             tutorial=dict(
+                filename='3-gensim.ipynb',
                 ),
             ),
         
@@ -57,6 +60,7 @@ lessons_meta = [
                 scriptid=1,
                 ),
             tutorial=dict(
+                filename='4-tsne.ipynb',
                 ),
             ),
         
@@ -69,15 +73,20 @@ def slugify(title):
 
 for i, lesson in enumerate(lessons_meta):
     num = i + 1
-    lesson['exercise']['filename'] = 'ex_{}.ipynb'.format(num)
-    lesson['tutorial']['filename'] = 'tut_{}.ipynb'.format(num)
+    lesson['exercise']['filename'] = '{}-exercises.ipynb'.format(num)
+    #lesson['tutorial']['filename'] = 'tut_{}.ipynb'.format(num)
     ex = lesson['exercise']
     tut = lesson['tutorial']
+    assert 'filename' in tut
+    nbs = [ex, tut]
+    assert not any('kernel_sources' in nb for nb in nbs)
+    for nb in nbs:
+        nb['kernel_sources'] = ['colinmorris/0-movielens-preprocessing']
     if 'title' not in tut:
         tut['title'] = lesson['topic'].capitalize()
     if 'title' not in ex:
         ex['title'] = 'Exercise: {}'.format(tut['title'])
-    for thing in [ex, tut]:
+    for thing in nbs:
         thing['slug'] = 'colinmorris/' + slugify(thing['title'])
 
 # Haaaaack.
