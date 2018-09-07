@@ -34,6 +34,10 @@ def prepare_push(lesson, track, force):
 
         sympath = os.path.join(dest_dir, 'script.ipynb')
         # symlink the canonical rendered version with the pushable directory
+        # TODO: Actually, I think this symlinking stuff is totally unnecessary now?
+        # It was a workaround for a bug(?) in the kernels API that required the ipynb
+        # file to be in the same directory as the metadata.json file. But can now
+        # (I believe) just specify some relative path in the code_file field.
         if not os.path.exists(sympath):
             canon = os.path.join('rendered', track, thing['filename'])
             # Since we're checking these symlinks in to version control, make 
