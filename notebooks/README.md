@@ -25,4 +25,7 @@ Note: currently keeping `rendered/` notebooks under version control. At first th
 
 # TODO
 
-May be problematic that the embeddings track includes some ancilliary kernels which aren't tutorials or exercises but which serve as data sources for tuts and exs. Some code (e.g. in clean.py, lesson_preprocessor.py) assumes that every nb file it sees will be an exercise or a tutorial.
+- May be problematic that the embeddings track includes some ancilliary kernels which aren't tutorials or exercises but which serve as data sources for tuts and exs. Some code (e.g. in clean.py, lesson_preprocessor.py) assumes that every nb file it sees will be an exercise or a tutorial.
+    - Definitely could be useful to include these ancilliary nbs in the same dir, and apply the same pipeline. Might still want to expand macros in them. Might still want to sync them via API.
+    - Importantly, the metadata in nbconvert_config.py only has facility for storing metadata about notebooks which are exercises or tutorials. If we want these ancilliary nbs to follow the same pipeline (particularly for kernel syncing), they need to have metadata like title, slug, 
+- Standardize naming across tracks? maybe something like tut1-tag.ipynb ex3-tag.ipynb etc.? With everything else assumed to be an ancilliary notebook?

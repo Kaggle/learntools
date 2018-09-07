@@ -3,6 +3,7 @@ import sys
 import os
 import json
 
+# Whether to overwrite existing metadata files.
 FORCE = True
 
 def make_meta(thing):
@@ -41,6 +42,7 @@ def prepare_push(lesson, track, force):
 def main():
     trackname = sys.argv[1]
     trackdir = 'partials/{}'.format(trackname)
+    # Yuck
     sys.path.append(trackdir)
     from nbconvert_config import lessons_meta
     for lesson in lessons_meta:

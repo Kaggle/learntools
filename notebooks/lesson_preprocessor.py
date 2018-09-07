@@ -11,6 +11,10 @@ DEBUG = 1
 if DEBUG:
     logging.basicConfig(level=logging.DEBUG)
 
+IGNORE_UNKNOWN_MACROS = 0
+
+class UnrecognizedMacroException(Exception):
+    pass
 
 def wrap_lessons(lesson_dicts):
     """Given a list of lesson dicts (as set in nbconvert_config.py), return a list
@@ -66,6 +70,9 @@ class LearnLessonPreprocessor(Preprocessor):
     def preprocess(self, nb, resources):
         lt_meta = nb['metadata']['learntools_metadata']
         lesson_ix = lt_meta['lesson_index']
+        if lesson_ix < 0:
+            logging.warn("Aborting preprocessing for notebook with index {}".format(lesson_ix))
+            return nb, resources
         lessons = wrap_lessons(self.lessons_metadata)
         self.lessons = lessons
         self.lesson = lessons[lesson_ix]
@@ -84,38 +91,60 @@ class LearnLessonPreprocessor(Preprocessor):
             a, b = match.span()
             macro = match.group(1)
             try:
-                newsrc += src[i:a] + self.expand_macro(macro)
+                expansion = self.expand_macro(macro, cell)
+            except UnrecognizedMacroException as e:
+                if IGNORE_UNKNOWN_MACROS:
+                    expansion = None
+                    logging.warn("Unrecognized macro: {}".format(macro))
+                else:
+                    raise e
             except Exception as e:
                 print("Error parsing macro match {}".format(match))
                 raise e
+            newsrc += src[i:a]
+            # Some macros might actually expand to nothing (e.g. if their purpose is to mutate cell metadata)
+            if expansion:
+                newsrc += expansion
             i = b
         newsrc += src[i:]
         cell['source'] = newsrc
         return cell
 
-    def expand_macro(self, macro):
+    def expand_macro(self, macro, cell):
         args = []
         if macro.endswith(')'):
             macro, argstr = macro[:-1].split('(')
             args = [argstr.strip()] if argstr.strip() else []
-        macro_method = getattr(self, macro)
-        return macro_method(*args)
+        macro_method = getattr(self, macro, None)
+        if macro_method is None:
+            raise UnrecognizedMacroException("Don't know how to handle the macro with name: {}".format(macro))
+        return macro_method(*args, cell=cell)
 
-    def EXERCISE_FORKING_URL(self):
+    def EXERCISE_FORKING_URL(self, **kwargs):
         return self.lesson.exercise_forking_url
 
-    def YOURTURN(self):
+    def HIDE_INPUT(self, cell):
+        cell['metadata']['_kg_hide-input'] = True
+    
+    def HIDE_OUTPUT(self, cell):
+        cell['metadata']['_kg_hide-output'] = True
+
+    def HIDE(self, cell):
+        self.HIDE_INPUT(cell)
+        self.HIDE_OUTPUT(cell)
+
+    def YOURTURN(self, **kwargs):
         return """# Your turn!
 
 Head over to [the Exercises notebook]({}) to get some hands-on practice working with {}.""".format(
         self.lesson.exercise_forking_url, self.lesson.topic,
         )
 
-    def EXERCISE_SETUP(self):
+    def EXERCISE_SETUP(self, **kwargs):
         # Standard setup code. Not currently used. Maybe should be.
         pass
 
-    def TUTORIAL_URL(self, lesson_num=None):
+    def TUTORIAL_URL(self, lesson_num=None, **kwargs):
         if lesson_num is None:
             lesson = self.lesson
         else:
@@ -123,18 +152,18 @@ Head over to [the Exercises notebook]({}) to get some hands-on practice working 
             lesson = self.lessons[lesson_idx]
         return lesson.tutorial_url
 
-    def EXERCISE_URL(self, lesson_num):
+    def EXERCISE_URL(self, lesson_num, **kwargs):
         # TODO: unify this + EXERCISE_FORKING_URL (have that be this with default arg)
         lesson_idx = int(lesson_num) - 1
         lesson = self.lessons[lesson_idx]
         return lesson.exercise_forking_url
 
-    def EXERCISE_PREAMBLE(self):
+    def EXERCISE_PREAMBLE(self, **kwargs):
         return """These exercises accompany the tutorial on [{}]({}).""".format(
                 self.lesson.topic, self.lesson.tutorial_url,
                 )
 
-    def END_OF_EXERCISE(self, forum_cta=1):
+    def END_OF_EXERCISE(self, forum_cta=1, **kwargs):
         # Don't use this macro for the very last exercise
         next = self.lesson.next
         res = ''
