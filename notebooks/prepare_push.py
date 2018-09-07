@@ -30,7 +30,7 @@ def prepare_push(lesson, track, force):
         if not os.path.exists(meta_fname) or force:
             meta = make_meta(thing)
             with open(meta_fname, 'w') as f:
-                json.dump(meta, f, indent=2)
+                json.dump(meta, f, indent=2, sort_keys=True)
 
         script_loc = os.path.join(dest_dir, 'script.ipynb')
         # symlink the canonical rendered version with the pushable directory

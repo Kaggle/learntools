@@ -6,6 +6,8 @@ These notebooks contain some 'macros' in the source of some cells, such as `#$EN
 
     render.sh partials/python/*.ipynb
 
+NB: render.sh calls clean.py (which clears some ipynb metadata cruft, and sets some lt internal metadata), then nbconvert with the corresponding course-specific nbconvert_config.py
+
 When you're ready to sync changes to the site, run `prepare_push.py`, passing the name of the track to prepare (e.g. `prepare_push.py python`). This will create a directory structure in a subdirectory `pushables` which is amenable to the Kernels API.
 
 To push a particular notebook, do something like...
@@ -27,5 +29,6 @@ Note: currently keeping `rendered/` notebooks under version control. At first th
 
 - May be problematic that the embeddings track includes some ancilliary kernels which aren't tutorials or exercises but which serve as data sources for tuts and exs. Some code (e.g. in clean.py, lesson_preprocessor.py) assumes that every nb file it sees will be an exercise or a tutorial.
     - Definitely could be useful to include these ancilliary nbs in the same dir, and apply the same pipeline. Might still want to expand macros in them. Might still want to sync them via API.
-    - Importantly, the metadata in nbconvert_config.py only has facility for storing metadata about notebooks which are exercises or tutorials. If we want these ancilliary nbs to follow the same pipeline (particularly for kernel syncing), they need to have metadata like title, slug, 
+    - Importantly, the metadata in nbconvert_config.py only has facility for storing metadata about notebooks which are exercises or tutorials. If we want these ancilliary nbs to follow the same pipeline (particularly for kernel syncing), they need to have metadata like title, slug, kernel_sources, etc.
+    - Currently, for the ~3 ancilliary kernels used in the embeddings course, I'm manually managing the kernel-metadata.json files and symlinks. And not doing any macro expansion. (Neither of which concessions are particularly onerous)
 - Standardize naming across tracks? maybe something like tut1-tag.ipynb ex3-tag.ipynb etc.? With everything else assumed to be an ancilliary notebook?
