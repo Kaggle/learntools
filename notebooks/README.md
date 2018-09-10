@@ -33,3 +33,4 @@ Note: currently keeping `rendered/` notebooks under version control. At first th
     - Currently, for the ~3 ancilliary kernels used in the embeddings course, I'm manually managing the kernel-metadata.json files and symlinks. And not doing any macro expansion. (Neither of which concessions are particularly onerous)
 - Standardize naming across tracks? maybe something like tut1-tag.ipynb ex3-tag.ipynb etc.? With everything else assumed to be an ancilliary notebook?
 - argparse for the various python scripts in this directory. argparse is great.
+- Ambitious idea: rather than trying to make the 'partials' (locally) runnable, have multiple nbconvert configs for generating rendered kernel ipynbs, rendered local ipynbs, and any other desired versions. 

@@ -128,13 +128,13 @@ inter_notebook_deps = [
         #   (lesson_num starting from 1, type in 'tutorial', 'exercise')
         # And B either has the same format (if it's a tutorial/exercise), or
         # is a string slug (if it's an ancilliary nb)
+        [ (2, 'tutorial'), (1, 'tutorial') ],
         [ (2, 'exercise'), (2, 'tutorial') ],
         [ (4, 'exercise'), (4, 'tutorial') ],
         [ (2, 'exercise'), 'colinmorris/x2-movielens-factorization-r12n' ],
         [ (3, 'tutorial'), _nice_model_slug ],
         [ (3, 'exercise'), _nice_model_slug ],
         [ (4, 'tutorial'), _nice_model_slug ],
-        [ (4, 'exercise'), _nice_model_slug ],
 ]
 def _lookup_nb_tuple(tup):
     n, tag = tup

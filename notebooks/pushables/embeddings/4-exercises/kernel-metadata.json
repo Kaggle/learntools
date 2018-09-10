@@ -8,8 +8,7 @@
   "is_private": "true",
   "kernel_sources": [
     "colinmorris/0-movielens-preprocessing",
-    "colinmorris/4-visualizing-embeddings-with-t-sne",
-    "colinmorris/x3-movielens-spiffy-model"
+    "colinmorris/4-visualizing-embeddings-with-t-sne"
   ],
   "kernel_type": "notebook",
   "language": "python",

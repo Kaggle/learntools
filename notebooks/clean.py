@@ -17,8 +17,13 @@ def clean(nb, path):
     # Hacks on hacks
     if not match:
         # Format used for emb track
+        try:
+            lesson_index = int(fname[0]) - 1
+        except ValueError:
+            # In case of ancilliary nbs
+            lesson_index = -2
         ltmeta = dict(
-                lesson_index = int(fname[0]) - 1,
+                lesson_index = lesson_index,
                 type='exercise' if 'exercise' in fname else 'tutorial',
                 )
     else:

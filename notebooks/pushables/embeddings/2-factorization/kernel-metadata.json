@@ -7,7 +7,8 @@
   "id": "colinmorris/2-matrix-factorization",
   "is_private": "true",
   "kernel_sources": [
-    "colinmorris/0-movielens-preprocessing"
+    "colinmorris/0-movielens-preprocessing",
+    "colinmorris/1-embedding-layers"
   ],
   "kernel_type": "notebook",
   "language": "python",
