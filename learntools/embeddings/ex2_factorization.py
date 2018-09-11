@@ -57,6 +57,10 @@ If we're willing to train a new model, there's another less hacky approach we ca
 class RecommendNonObscure(CodingProblem):
     _vars = ['recommend_nonobscure', 'model']
     _solution = CS.load(recc_no_solution_module.__file__)
+
+    _hint = ("The `movies` dataframe has a column called `n_ratings`. You'll want to use "
+            "a subset of movies filtered by the value of that column. (You can choose to "
+            " do the filtering either before or after calculating predicted ratings.)")
     
     def check_whether_attempted(self, recommend, model):
         # A bit hacky. Attempted iff function body is non-empty.
