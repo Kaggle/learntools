@@ -156,6 +156,8 @@ if __name__ == 'builtins':
 
     # XXX: I forget what this signifies?
     c.NbConvertApp.notebooks = ['*.ipynb']
-    c.Exporter.preprocessors = ['lesson_preprocessor.LearnLessonPreprocessor']
+    #c.Exporter.preprocessors = ['lesson_preprocessor.LearnLessonPreprocessor']
+    c.Exporter.preprocessors = ['embeddings_lesson_preprocessor.EmbeddingsLessonPreprocessor']
 
-    c.LearnLessonPreprocessor.lessons_metadata = lessons_meta
+    #c.LearnLessonPreprocessor.lessons_metadata = lessons_meta
+    c.EmbeddingsLessonPreprocessor.lessons_metadata = lessons_meta

@@ -8,9 +8,10 @@ trackname() {
 
 for nb in "$@"; do
     python3 clean.py $nb
-    jupyter nbconvert --config partials/python/nbconvert_config.py \
+    TRACK=$(trackname $nb)
+    jupyter nbconvert --config partials/${TRACK}/nbconvert_config.py \
        --to notebook \
        --output "$(basename $nb)" \
-       --output-dir rendered/$(trackname $nb) \
+       --output-dir rendered/${TRACK} \
       $nb
 done

@@ -6,6 +6,9 @@ import json
 # Whether to overwrite existing metadata files.
 FORCE = True
 
+# XXX: This is pretty ad-hoc. Again, would be good to centralize this kind of config. (cf. embeddings_lesson_preprocessor.py)
+PIP_HACK = True
+
 def make_meta(thing):
     return dict(
             id=thing['slug'],
@@ -13,7 +16,7 @@ def make_meta(thing):
             is_private='true',
             code_file="script.ipynb",
             enable_gpu="false",
-            enable_internet="false",
+            enable_internet="true" if PIP_HACK else "false",
             kernel_type='notebook',
             title=thing['title'],
             dataset_sources=thing.get('dataset_sources', []),

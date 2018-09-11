@@ -7,7 +7,7 @@ from nbconvert.preprocessors import Preprocessor
 import traitlets
 from box import Box
 
-DEBUG = 1
+DEBUG = 0
 if DEBUG:
     logging.basicConfig(level=logging.DEBUG)
 
@@ -67,6 +67,7 @@ class LearnLessonPreprocessor(Preprocessor):
     # nbconvert_config.py file. This code is insane.
     lessons_metadata = traitlets.List().tag(config=True)
     
+    # NB: This is the only overridden Preprocessor method. All other methods are custom.
     def preprocess(self, nb, resources):
         lt_meta = nb['metadata']['learntools_metadata']
         lesson_ix = lt_meta['lesson_index']
