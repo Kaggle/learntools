@@ -37,8 +37,9 @@ def clean(nb, path):
     nb['metadata']['learntools_metadata'] = ltmeta
     nb['metadata']['language_info']['version'] = '3.6.5'
     for cell in nb.cells:
-        if cell['cell_type'] == 'code' and CLEAR_OUTPUT:
-            cell['outputs'] = []
+        if cell['cell_type'] == 'code':
+            if CLEAR_OUTPUT:
+                cell['outputs'] = []
             cell['execution_count'] = None
         for k in BAD_CELL_METADATA_KEYS:
             cell.get('metadata', {}).pop(k, None)
