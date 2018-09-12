@@ -1,0 +1,11 @@
+{"title": "Model Validation",
+  "id": "dansbecker/model-validation",
+  "code_file": "../../nbs/tut4.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "dataset_sources": ["dansbecker/melbourne-housing-snapshot"],
+  "competition_sources": ["home-data-for-ml-course"],
+  "enable_gpu": false,
+  "enable_internet": false,
+  "is_private": false
+}
