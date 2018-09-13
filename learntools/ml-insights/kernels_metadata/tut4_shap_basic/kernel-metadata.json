@@ -1,11 +1,15 @@
-{"title": "Model Validation",
-  "id": "dansbecker/model-validation",
-  "code_file": "../../nbs/tut4.ipynb",
+{"title": "SHAP Values",
+  "id": "dansbecker/shap-values",
+  "code_file": "../../nbs/tut4_shap_basic.ipynb",
   "language": "python",
   "kernel_type": "notebook",
-  "dataset_sources": ["dansbecker/melbourne-housing-snapshot"],
-  "competition_sources": ["home-data-for-ml-course"],
+  "dataset_sources": [
+    "mathan/fifa-2018-match-statistics",
+    "dansbecker/new-york-city-taxi-fare-prediction",
+    "dansbecker/hospital-readmissions"
+  ],
+  "competition_sources": [],
   "enable_gpu": false,
   "enable_internet": false,
-  "is_private": false
+  "is_private": true
 }
