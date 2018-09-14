@@ -11,8 +11,8 @@
   "keywords": [],
   "dataset_sources": [
     "mathan/fifa-2018-match-statistics",
-    "dansbecker/new-york-city-taxi-fare-prediction",
-    "dansbecker/hospital-readmissions"
+    "dansbecker/hospital-readmissions",
+    "dansbecker/new-york-city-taxi-fare-prediction"
   ],
   "kernel_sources": [],
   "competition_sources": []
