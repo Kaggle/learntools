@@ -1,7 +1,9 @@
 
-def assert_has_columns(df, cols):
+def assert_has_columns(df, cols, name=None):
     for col in cols:
-        assert col in df.columns, "Expected df to have column {}".format(col)
+        assert col in df.columns, "Expected dataframe{} to have column {}".format(
+                '' if name is None else ' `{}`'.format(name), col
+                )
 
 def assert_isinstance(cls, **named_things):
     for name, val in named_things.items():
