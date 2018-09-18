@@ -1,0 +1,20 @@
+{
+  "id": "dansbecker/exercise-permutation-importance",
+  "id_no": 1637562,
+  "title": "Exercise: Permutation Importance",
+  "code_file": "../../nbs/ex2_perm_importance.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": false,
+  "enable_internet": false,
+  "keywords": [],
+  "dataset_sources": [
+    "mathan/fifa-2018-match-statistics",
+    "dansbecker/hospital-readmissions",
+    "dansbecker/new-york-city-taxi-fare-prediction",
+    "dansbecker/ml-insights-tools"
+  ],
+  "kernel_sources": [],
+  "competition_sources": []
+}
