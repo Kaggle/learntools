@@ -27,7 +27,8 @@ eli5.show_weights(perm, feature_names = base_features)
 """)
     def check(self, perm_obj):
         assert np.allclose(perm_obj.feature_importances_,
-                            [ 0.62288714,  0.8266946 ,  0.53837499,  0.84735854, -0.00291397], rtol=0.05)
+                            np.array([ 0.62288714,  0.8266946 ,  0.53837499,
+                                       0.84735854, -0.00291397]), rtol=0.05)
 
 class WhyLatitude(ThoughtExperiment):
     _solution = """
@@ -38,7 +39,6 @@ class WhyLatitude(ThoughtExperiment):
 
 class ImportanceWithAbsFeatures(CodingProblem):
     _vars = ['perm2']
-    _hint = 'The only thing you need to change is the first argument to `PermutationImportance()`. Find the right model name in the code above'
     _solution = CS(
 """
 data['abs_lon_change'] = abs(data.dropoff_longitude - data.pickup_longitude)
@@ -62,28 +62,27 @@ perm2 = PermutationImportance(second_model).fit(new_val_X, new_val_y)
 eli5.show_weights(perm2, feature_names = features_2)
 """)
     def check(self, perm_obj):
-        assert np.allcose(perm.feature_importances_,
-                          array([0.05823664,  0.08093442,  0.07724215,
-                                 0.07773621,  0.56968221, 0.45045541]),
+        assert np.allclose(perm_obj.feature_importances_,
+                          np.array([0.06128774,  0.08575455, 0.07350467,
+                                    0.07330853,  0.57827417, 0.44671882]),
                           rtol=0.05)
 
 class ScaleUpFeatureMagnitude(ThoughtExperiment):
     _solution = """
-    Rescaling a variable (e.g. by multiplying it by a large number) can affect permutation importance for some model types, and it has absolutely
-    no impact for other types of models.
-    For tree based models, like the Random Forest used here, the model itself is unaffected by the scale of the variables, so it has no impact on the  permutation importance either.
-    Other types of models **can** be affected by scaling. If you are familiar with ridge regression, see if you can figure out why scaling a variable affects predictions, and thus affects permutation importanceself.
-    In example you've dealt, the `abs_lat_change` show greater importance because they capture total distance traveled, which is the primary determinant of taxi fares... It is not influenced by the fact they tend to have large or small values.
+    The scale of features does not affect permutation importance per se. The only reason that rescaling a feature would affect PI is indirectly, if rescaling helped or hurt the ability of the particular learning method we're using to make use of that feature.
+    That won't happen with tree based models, like the Random Forest used here.
+    If you are familiar with Ridge Regression, you might be able to think of how that would be affected.
+    That said, the absolute change features are have high importance because they capture total distance traveled, which is the primary determinant of taxi fares...It is not an artifact of the feature magnitude.
     """
 
 class FromPermImportanceToMarginalEffect(ThoughtExperiment):
     _solution = """
-    We cannott tell form the permutation importance results whether traveling a fixed latitudinal distance is more or less expensive than traveling the same longitudinal distance.
-    Possible reasons latitudine feature are more important than longitude features
+    We cannot tell from the permutation importance results whether traveling a fixed latitudinal distance is more or less expensive than traveling the same longitudinal distance.
+    Possible reasons latitude feature are more important than longitude features
     1. latitudinal distances in the dataset tend to be larger
     2. it is more expensive to travel a fixed latitudinal distance
     3. Both of the above
-    If abs_lon_change were extremely small, it longitues could have a smaller than latitudes even if it has a higher cost per mile traveled.
+    If abs_lon_change values were very small, longitues could be less important to the model even if the cost per mile of travel in that direction were high.
     """
 
 qvars = bind_exercises(globals(), [
