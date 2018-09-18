@@ -113,6 +113,7 @@ def play_slot_machine():
     else:
         return 0
 
+# TODO: Could probably make this checkable.
 class ExpectedSlotsPayout(ThoughtExperiment):
     #_var = 'estimate_average_slot_payout'
     _solution = ("The exact expected value of one pull of the slot machine is 0.025"
