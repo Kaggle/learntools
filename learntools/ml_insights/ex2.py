@@ -93,7 +93,7 @@ qvars = bind_exercises(globals(), [
     ScaleUpFeatureMagnitude,
     FromPermImportanceToMarginalEffect
     ],
-    # tutorial_id=118,
+    tutorial_id=0,
     var_format='q_{n}',
     )
 __all__ = list(qvars)
