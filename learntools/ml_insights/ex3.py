@@ -76,7 +76,7 @@ The biggest difference is that the partial dependence plot became much smaller. 
         correct = np.array([9.92212681,  8.97384862,  8.80044327,  8.71024292,  8.71564739,
                          8.73523192,  8.76626448,  8.87855912,  9.00098688, 10.99584622])
         submitted = pdp_result.pdp
-        assert allclose(submitted, correct, rtol=0.1)
+        assert np.allclose(submitted, correct, rtol=0.1)
 
 class DoesSteepnessImplyImportance(ThoughtExperiment):
     _solution = "No. This doesn't guarantee `feat_a` is more important. For example, `feat_a` could have a big effect in the cases where it varies, but could have a single value 99\% of the time. In that case, permuting `feat_a` wouldn't matter much, since most values would be unchanged."
