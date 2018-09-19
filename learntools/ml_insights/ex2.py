@@ -28,7 +28,7 @@ eli5.show_weights(perm, feature_names = base_features)
     def check(self, perm_obj):
         assert np.allclose(perm_obj.feature_importances_,
                             np.array([ 0.62288714,  0.8266946 ,  0.53837499,
-                                       0.84735854, -0.00291397]), rtol=0.05)
+                                       0.84735854, -0.00291397]), rtol=0.1)
 
 class WhyLatitude(ThoughtExperiment):
     _solution = """
@@ -56,7 +56,7 @@ new_train_X, new_val_X, new_train_y, new_val_y = train_test_split(X, y, random_s
 second_model = RandomForestRegressor(n_estimators=30, random_state=1).fit(new_train_X, new_train_y)
 
 # Create a PermutationImportance object on second_model and fit it to new_val_X and new_val_y
-perm2 = PermutationImportance(second_model).fit(new_val_X, new_val_y)
+perm2 = PermutationImportance(second_model, random_state=1).fit(new_val_X, new_val_y)
 
 # show the weights for the permutation importance you just calculated
 eli5.show_weights(perm2, feature_names = features_2)
@@ -65,7 +65,7 @@ eli5.show_weights(perm2, feature_names = features_2)
         assert np.allclose(perm_obj.feature_importances_,
                           np.array([0.06128774,  0.08575455, 0.07350467,
                                     0.07330853,  0.57827417, 0.44671882]),
-                          rtol=0.05)
+                          rtol=0.1)
 
 class ScaleUpFeatureMagnitude(ThoughtExperiment):
     _solution = """
@@ -93,7 +93,7 @@ qvars = bind_exercises(globals(), [
     ScaleUpFeatureMagnitude,
     FromPermImportanceToMarginalEffect
     ],
-    tutorial_id=0,
+    tutorial_id=131,
     var_format='q_{n}',
     )
 __all__ = list(qvars)
