@@ -1,4 +1,5 @@
 import datetime
+from decimal import Decimal
 import pandas as pd
 import numpy as np
 
@@ -9,37 +10,57 @@ from learntools.core.problem import *
 
 class WhyThatUShape(ThoughtExperiment):
     _solution = """
-    We have a strong sense from the permutation importance that distance is what matters most. This model didn't include distance (absolute change in latitude or longitude) as a feature, so the role of pickup longitude may primarily be to capture distance.
-    Being picked up near the center of the longitude values lowers predicted fares on average, because it makes most trips shorter.
+    We have a strong sense from the permutation importance results that distance is the most important determinant of taxi fare.
+    This model didn't include distance measures (like absolute change in latitude or longitude) as features, so coordinate features (like `pickup_longitude`) capture the effect of distance.
+    Being picked up near the center of the longitude values lowers predicted fares on average, because it means shorter trips (on average).
+
+    For the same reason, we see the general U-shape in all our partial dependence plots.
+    The code to see all plots is:
+    `
+    for feat_name in base_features:
+        pdp_dist = pdp.pdp_isolate(model=first_model, dataset=val_X,
+                                   model_features=base_features, feature=feat_name)
+        pdp.pdp_plot(pdp_dist, feat_name)
+        plt.show()
+    `
     """
 
-class FirstPermImportance(CodingProblem):
-    _var = 'perm'
-    _hint = 'The only thing you need to change is the first argument to `PermutationImportance()`. Find the right model name in the code above'
-    _solution = CS(
+class PonderPDPContour(ThoughtExperiment):
+    _solution = \
 """
-import eli5
-from eli5.sklearn import PermutationImportance
+You should expect the plot to have contours running along a diagonal. We see that to some extent, though there are interesting caveats.
+We expect the diagonal contours because these are pairs of values where the pickup and dropoff longitudes are nearby, indicating shorter trips (controlling for other factors).
+As you get further from the central diagonal, we should expect prices to increase as the distances between the pickup and dropoff longitudes also increase.
+The surprising feature is that prices increase as you go further to the upper-right of this graph, even staying near that 45-degree line.
+This could be worth further investigation, though the effect of moving to the upper right of this graph is small compared to moving away from that 45-degree line.
+The code you need to create the desired plot is
+`
+fnames = ['pickup_longitude', 'dropoff_longitude']
 
-perm = PermutationImportance(first_model, random_state=1).fit(val_X, val_y)
-eli5.show_weights(perm, feature_names = base_features)
-""")
-    def check(self, perm_obj):
-        assert np.allclose(perm_obj.feature_importances_,
-                            np.array([ 0.62288714,  0.8266946 ,  0.53837499,
-                                       0.84735854, -0.00291397]), rtol=0.05)
+longitudes_partial_plot  =  pdp.pdp_interact(model=first_model, dataset=val_X,
+                                             model_features=base_features, features=fnames)
 
-class WhyLatitude(ThoughtExperiment):
-    _solution = """
-    1. Travel might tend to have greater latitude distances than longitude distances. If the longitudes values were generally closer together, shuffling them wouldn't matter as much.
-    2. Different parts of the city might have different pricing rules (e.g. price per mile), and pricing rules could vary more by latitude than longitude.
-    3. Tolls might be greater on roads going North<->South (changing latitude) than on roads going East <-> West (changing longitude).  Thus latitude would have a larger effect on the prediction because it captures the amount of the tolls.
-    """
-
-class ImportanceWithAbsFeatures(CodingProblem):
-    _vars = ['perm2']
-    _solution = CS(
+pdp.pdp_interact_plot(pdp_interact_out=longitudes_partial_plot,
+                      feature_names=fnames, plot_type='contour')
+plt.show()
+`
 """
+
+class ReadPDPContour(CodingProblem):
+    _var = 'savings_from_shorter_trip'
+    _hint = 'First find the vertical level corresponding to -74 dropoff longitude. Then read off the horizontal values you are switching between. Use the white contour lines to orient yourself on what values you are near. You can round to the nearest integer rather than stressing about the exact cost to the nearest penny'
+    _solution = '\$15. The price decreases from slightly more than \$24 to slightly more than \$9.'
+    def check(self, savings):
+        if type(savings) == str:
+            savings = Decimal(dollars.strip('$'))
+        assert (savings > 13) and (savings < 17)
+
+class MakePDPWithAbsFeatures(CodingProblem):
+    _var = 'pdp_dist'
+    _hint = ''
+    _solution =CS(
+"""
+# create new features
 data['abs_lon_change'] = abs(data.dropoff_longitude - data.pickup_longitude)
 data['abs_lat_change'] = abs(data.dropoff_latitude - data.pickup_latitude)
 
@@ -54,39 +75,79 @@ X = data[features_2]
 new_train_X, new_val_X, new_train_y, new_val_y = train_test_split(X, y, random_state=1)
 second_model = RandomForestRegressor(n_estimators=30, random_state=1).fit(new_train_X, new_train_y)
 
-# Create a PermutationImportance object on second_model and fit it to new_val_X and new_val_y
-perm2 = PermutationImportance(second_model).fit(new_val_X, new_val_y)
+feat_name = 'pickup_longitude'
+pdp_dist = pdp.pdp_isolate(model=second_model, dataset=new_val_X, model_features=features_2, feature=feat_name)
 
-# show the weights for the permutation importance you just calculated
-eli5.show_weights(perm2, feature_names = features_2)
+pdp.pdp_plot(pdp_dist, feat_name)
+plt.show()
+"""
+    )
+    def check(self, pdp_result):
+        correct = array([9.92212681,  8.97384862,  8.80044327,  8.71024292,  8.71564739,
+                         8.73523192,  8.76626448,  8.87855912,  9.00098688, 10.99584622])
+        submitted = pdp_result.pdp
+        assert allclose(submitted, correct, rtol=0.1)
+
+class DoesSteepnessImplyImportance(ThoughtExperiment):
+    _hint = ''
+    _solution = "No. This doesn't guarantee `feat_A` is more important. For example, feat_a could have a big effect in the cases where it varies, but could have a single value 99\% of the time. In that case, permuting `feat_a` wouldn't matter much, since most values would be unchanged."
+
+class DesignDatasetUShapedPdp(CodingProblem):
+    _var = 'pdp_dist'
+    _hint = "Consider explicitly using terms that include mathematical expressions like `(X1 < -1)`"
+    _solution = CS(
+"""
+# There are many possible solutions.
+# Sample expression for y is. Rest of needed code is supplied to you.
+y = -2 * X1 * (X1<-1) + X1 - 2 * X1 * (X1>1) - X2
 """)
-    def check(self, perm_obj):
-        assert np.allclose(perm_obj.feature_importances_,
-                          np.array([0.06128774,  0.08575455, 0.07350467,
-                                    0.07330853,  0.57827417, 0.44671882]),
-                          rtol=0.05)
 
-class ScaleUpFeatureMagnitude(ThoughtExperiment):
-    _solution = """
-    The scale of features does not affect permutation importance per se. The only reason that rescaling a feature would affect PI is indirectly, if rescaling helped or hurt the ability of the particular learning method we're using to make use of that feature.
-    That won't happen with tree based models, like the Random Forest used here.
-    If you are familiar with Ridge Regression, you might be able to think of how that would be affected.
-    That said, the absolute change features are have high importance because they capture total distance traveled, which is the primary determinant of taxi fares...It is not an artifact of the feature magnitude.
-    """
+    def check(self, pdp_result):
+        segment_1_end = np.argmin(pdp_result.feature_grids<-1)
+        segment_3_start = np.argmax(pdp_result.feature_grids>1)
+        segment_2_start = segment_1_end + 1
+        segment_2_end = segment_3_start - 1
 
-class FromPermImportanceToMarginalEffect(ThoughtExperiment):
-    _solution = """
-    We cannot tell from the permutation importance results whether traveling a fixed latitudinal distance is more or less expensive than traveling the same longitudinal distance.
-    Possible reasons latitude feature are more important than longitude features
-    1. latitudinal distances in the dataset tend to be larger
-    2. it is more expensive to travel a fixed latitudinal distance
-    3. Both of the above
-    If abs_lon_change values were very small, longitues could be less important to the model even if the cost per mile of travel in that direction were high.
-    """
+        segment_1_slopes_down = pdp_result.pdp[0] > pdp_result.pdp[segment_1_end]
+        segment_2_slopes_up = pdp_result.pdp[segment_2_start] < pdp_result.pdp[segment_2_end]
+        segment_3_slopes_down = pdp_result.pdp[segment_3_start] > pdp_result.pdp[-1]
+
+        assert segment_1_slopes_down, ("The partial dependence plot does not slope down for values below -1.")
+        assert segment_2_slopes_up, ("The partial dependence plot does not slope up for values between -1 and 1.")
+        assert segment_3_slopes_down, ("The partial dependence plot does not slope down for values above 1.")
+
+class DesignFlatPDPWithHighImportance(CodingProblem):
+    _vars = ['perm', 'pdp_dist']
+    _hint = "Create an interaction, so the effect of X1 depends on the value of X2 and vice-versa."
+    _solution = CS(
+"""
+# Create array holding predictive feature
+X1 = 4 * rand(n_samples) - 2
+X2 = 4 * rand(n_samples) - 2
+# Create y. you should have X in the expression for y
+y = X1 * X2
+""")
+
+    def check(self, importance, pdpResult):
+        X1_imp = importance.feature_importances_[0]
+        pdpRange = max(pdpResult.pdp) - min(pdpResult.pdp)
+        assert (X1_imp > 0.5), ("Tested that X1 has an importance > 0.5. "
+                                "Actual importance was {}").format(X1_imp)
+        assert (pdpRange < 0.5), ("Tested that the highest point on the Partial "
+                                  "Dependence Plot is within 0.5 of the lowest point. "
+                                  "Actual difference was {}").format(pdpRange)
+
+
+
 
 qvars = bind_exercises(globals(), [
     WhyThatUShape,
-
+    PonderPDPContour,
+    ReadPDPContour,
+    MakePDPWithAbsFeatures,
+    DoesSteepnessImplyImportance,
+    DesignDatasetUShapedPdp,
+    DesignFlatPDPWithHighImportance
     ],
     tutorial_id=135,
     var_format='q_{n}',
