@@ -7,11 +7,10 @@ from learntools.core.problem_factories import simple_problem
 from learntools.core.richtext import CodeSolution as CS
 from learntools.core.problem import *
 
-class WhichFeaturesAreUseful(ThoughtExperiment):
-    _solution = """It would be helpful to know whether New York City taxis
-    vary prices based on how many passengers they have. Most places do not
-    change fares based on numbers of passengers.
-    If you assume New York City is the same, than only the top 4 features listed should matter. At first glance, it seems all of those should matter equally.
+class WhyThatUShape(ThoughtExperiment):
+    _solution = """
+    We have a strong sense from the permutation importance that distance is what matters most. This model didn't include distance (absolute change in latitude or longitude) as a feature, so the role of pickup longitude may primarily be to capture distance.
+    Being picked up near the center of the longitude values lowers predicted fares on average, because it makes most trips shorter.
     """
 
 class FirstPermImportance(CodingProblem):
@@ -28,7 +27,7 @@ eli5.show_weights(perm, feature_names = base_features)
     def check(self, perm_obj):
         assert np.allclose(perm_obj.feature_importances_,
                             np.array([ 0.62288714,  0.8266946 ,  0.53837499,
-                                       0.84735854, -0.00291397]), rtol=0.1)
+                                       0.84735854, -0.00291397]), rtol=0.05)
 
 class WhyLatitude(ThoughtExperiment):
     _solution = """
@@ -56,7 +55,7 @@ new_train_X, new_val_X, new_train_y, new_val_y = train_test_split(X, y, random_s
 second_model = RandomForestRegressor(n_estimators=30, random_state=1).fit(new_train_X, new_train_y)
 
 # Create a PermutationImportance object on second_model and fit it to new_val_X and new_val_y
-perm2 = PermutationImportance(second_model, random_state=1).fit(new_val_X, new_val_y)
+perm2 = PermutationImportance(second_model).fit(new_val_X, new_val_y)
 
 # show the weights for the permutation importance you just calculated
 eli5.show_weights(perm2, feature_names = features_2)
@@ -65,7 +64,7 @@ eli5.show_weights(perm2, feature_names = features_2)
         assert np.allclose(perm_obj.feature_importances_,
                           np.array([0.06128774,  0.08575455, 0.07350467,
                                     0.07330853,  0.57827417, 0.44671882]),
-                          rtol=0.1)
+                          rtol=0.05)
 
 class ScaleUpFeatureMagnitude(ThoughtExperiment):
     _solution = """
@@ -86,14 +85,10 @@ class FromPermImportanceToMarginalEffect(ThoughtExperiment):
     """
 
 qvars = bind_exercises(globals(), [
-    WhichFeaturesAreUseful,
-    FirstPermImportance,
-    WhyLatitude,
-    ImportanceWithAbsFeatures,
-    ScaleUpFeatureMagnitude,
-    FromPermImportanceToMarginalEffect
+    WhyThatUShape,
+
     ],
-    tutorial_id=131,
+    tutorial_id=135,
     var_format='q_{n}',
     )
 __all__ = list(qvars)
