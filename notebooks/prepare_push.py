@@ -3,6 +3,8 @@ import sys
 import os
 import json
 
+import utils
+
 # Whether to overwrite existing metadata files.
 FORCE = True
 
@@ -50,11 +52,14 @@ def prepare_push(lesson, track, force):
 
 def main():
     trackname = sys.argv[1]
-    trackdir = 'partials/{}'.format(trackname)
-    # Yuck
-    sys.path.append(trackdir)
-    from nbconvert_config import lessons_meta
-    for lesson in lessons_meta:
-        prepare_push(lesson, trackname, FORCE)
+    meta = utils.get_track_meta(trackname)
+    push_dir = os.path.join(trackname, 'pushables')
+    for nb in meta.notebooks:
+        dest_dir = os.path.join(push_dir, nb.stem)
+        os.makedirs(dest_dir, exist_ok=True)
+        dest_path = os.path.join(dest_dir, 'kernel-metadata.json')
+        kernel_meta = nb.kernel_metadata()
+        with open(dest_path, 'w') as f:
+            json.dump(kernel_meta, f, indent=2, sort_keys=True)
 
 main()

@@ -1,11 +1,13 @@
 import sys
 import re
 import logging
+import os
 
 import nbformat as nbf
 from nbconvert.preprocessors import Preprocessor
 import traitlets
 from box import Box
+import utils
 
 DEBUG = 0
 if DEBUG:
@@ -65,18 +67,28 @@ class LearnLessonPreprocessor(Preprocessor):
 
     # This gets set directly (to a list of lesson dicts) in track's 
     # nbconvert_config.py file. This code is insane.
+    # TODO: deprecate me
     lessons_metadata = traitlets.List().tag(config=True)
     
     # NB: This is the only overridden Preprocessor method. All other methods are custom.
     def preprocess(self, nb, resources):
-        lt_meta = nb['metadata']['learntools_metadata']
-        lesson_ix = lt_meta['lesson_index']
-        if lesson_ix < 0:
-            logging.warn("Aborting preprocessing for notebook with index {}".format(lesson_ix))
-            return nb, resources
-        lessons = wrap_lessons(self.lessons_metadata)
-        self.lessons = lessons
-        self.lesson = lessons[lesson_ix]
+        # NB: resources is dict-like with keys:
+        #   - config_dir
+        #   - output_files_dir, output_extension
+        #   - metadata, inner dict-like w/ keys name, path, modified_date
+        #   - unique_key
+        path = resources['metadata']['path']
+        suff = '/partials'
+        assert path.endswith(suff), path
+        track_path = path[:-len(suff)]
+        track = utils.get_track_meta(track_path)
+        self.track = track
+        nb_fname = resources['metadata']['name'] + '.ipynb'
+        nb_meta = track.get_notebook(nb_fname)
+        # TODO: May need to catch an exception here in case of nbs that have no associated lesson
+        self.lesson = nb_meta.lesson
+
+        # NB: Previously aborted at this point if this notebook didn't belong to a lesson.
         for i, cell in enumerate(nb.cells):
             nb.cells[i] = self.process_cell(cell)
         return nb, resources
@@ -122,7 +134,7 @@ class LearnLessonPreprocessor(Preprocessor):
         return macro_method(*args, cell=cell)
 
     def EXERCISE_FORKING_URL(self, **kwargs):
-        return self.lesson.exercise_forking_url
+        return self.lesson.exercise.forking_url
 
     def HIDE_INPUT(self, cell):
         cell['metadata']['_kg_hide-input'] = True
@@ -150,18 +162,18 @@ Head over to [the Exercises notebook]({}) to get some hands-on practice working 
             lesson = self.lesson
         else:
             lesson_idx = int(lesson_num) - 1
-            lesson = self.lessons[lesson_idx]
-        return lesson.tutorial_url
+            lesson = self.track.lessons[lesson_idx]
+        return lesson.tutorial.url
 
     def EXERCISE_URL(self, lesson_num, **kwargs):
         # TODO: unify this + EXERCISE_FORKING_URL (have that be this with default arg)
         lesson_idx = int(lesson_num) - 1
-        lesson = self.lessons[lesson_idx]
-        return lesson.exercise_forking_url
+        lesson = self.track.lessons[lesson_idx]
+        return lesson.exercise.forking_url
 
     def EXERCISE_PREAMBLE(self, **kwargs):
         return """These exercises accompany the tutorial on [{}]({}).""".format(
-                self.lesson.topic, self.lesson.tutorial_url,
+                self.lesson.topic, self.lesson.tutorial.url,
                 )
 
     def END_OF_EXERCISE(self, forum_cta=1, **kwargs):
