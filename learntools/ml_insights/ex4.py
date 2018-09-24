@@ -86,7 +86,8 @@ def patient_risk_factors(model, patient_data):
     explainer = shap.TreeExplainer(model)
     shap_values = explainer.shap_values(patient_data)
     shap.initjs()
-    shap.force_plot(explainer.expected_value[1], shap_values[1], patient_data)
+    return shap.force_plot(explainer.expected_value[1], shap_values[1], patient_data)
+
 """
 )
 

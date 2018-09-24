@@ -1,0 +1,20 @@
+{
+  "id": "dansbecker/exercise_shap_advanced",
+  "id_no": 1699743,
+  "title": "Exercise: Advanced Uses of SHAP Values",
+  "code_file": "../../nbs/ex5_shap_advanced.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": false,
+  "enable_internet": false,
+  "keywords": [],
+  "dataset_sources": [
+    "mathan/fifa-2018-match-statistics",
+    "dansbecker/hospital-readmissions",
+    "dansbecker/new-york-city-taxi-fare-prediction",
+    "dansbecker/ml-insights-tools"
+  ],
+  "kernel_sources": [],
+  "competition_sources": []
+}
