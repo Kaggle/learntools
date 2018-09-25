@@ -6,4 +6,5 @@ mkdir $1/rendered
 mkdir $1/pushables
 cp track_meta_template.py $1/track_meta.py
 touch $1/__init__.py
-touch $1/track_config.yaml
+cp track_config_template.yaml $1/track_config.yaml
+
