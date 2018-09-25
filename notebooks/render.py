@@ -6,6 +6,9 @@ import nbformat
 from nbconvert import NotebookExporter
 
 import utils
+from clean import clean
+
+CLEAN = 1
 
 # TODO: would be nice to do some Make-like shortcuts to avoid processing notebooks
 # whose rendered mtime > their partial mtime (and > the track meta mtime)
@@ -22,6 +25,8 @@ def main():
     for nb_meta in meta.notebooks:
         resources['lesson'] = nb_meta.lesson
         in_path = os.path.join(track, 'partials', nb_meta.filename)
+        if CLEAN:
+            clean(in_path)
         nb, _ = exporter.from_filename(in_path, resources)
         out_path = os.path.join(track, 'rendered', nb_meta.filename)
         with open(out_path, 'w') as f:
