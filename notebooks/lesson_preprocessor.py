@@ -150,7 +150,7 @@ class LearnLessonPreprocessor(Preprocessor):
         return """# Your turn!
 
 Head over to [the Exercises notebook]({}) to get some hands-on practice working with {}.""".format(
-        self.lesson.exercise_forking_url, self.lesson.topic,
+        self.lesson.exercise.forking_url, self.lesson.topic,
         )
 
     def EXERCISE_SETUP(self, **kwargs):
@@ -188,7 +188,7 @@ Head over to [the Exercises notebook]({}) to get some hands-on practice working 
 # Keep Going
 
 When you're ready to continue, [click here]({}) to continue on to the next tutorial on {}.""".format(
-        next.tutorial_url, next.topic,
+        next.tutorial.url, next.topic,
         )
         return res
 
