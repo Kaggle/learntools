@@ -30,7 +30,6 @@ def main():
         out_path = os.path.join(track, 'rendered', nb_meta.filename)
         with open(out_path, 'w') as f:
             f.write(nb)
-        break
 
 if __name__ == '__main__':
     main()
