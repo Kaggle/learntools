@@ -1,0 +1,20 @@
+# NB: All macros are bracketed with dollar signs and prefixed with an octothorpe. e.g. `#$HIDE$`
+# See also lesson_preprocessor.py (macros correspond to uppercase methods)
+
+# Used at the top of a code cell. Equivalent to the "hide output" / "hide input" buttons in the Kaggle Kernels UI.
+HIDE_INPUT
+HIDE_OUTPUT
+# Hide both input and output
+HIDE
+
+# N in the signatures below is the number of the corresponding lesson (starting from 1)
+TUTORIAL_URL(N)
+EXERCISE_URL(N)
+EXERCISE_FORKING_URL(N)
+# With no argument, we take N to be the current lesson.
+EXERCISE_FORKING_URL
+
+# Some standard boilerplate for beginning and ending exercises/tutorials.
+END_OF_EXERCISES
+EXERCISE_PREAMBLE
+YOURTURN
