@@ -1,0 +1,16 @@
+{
+  "code_file": "script.ipynb",
+  "competition_sources": [],
+  "dataset_sources": [],
+  "enable_gpu": "false",
+  "enable_internet": "true",
+  "id": "colinmorris/4-visualizing-embeddings-with-t-sne",
+  "is_private": "true",
+  "kernel_sources": [
+    "colinmorris/0-movielens-preprocessing",
+    "colinmorris/x3-movielens-spiffy-model"
+  ],
+  "kernel_type": "notebook",
+  "language": "python",
+  "title": "4 Visualizing embeddings with t-sne"
+}
