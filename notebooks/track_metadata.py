@@ -69,7 +69,7 @@ class Notebook(object):
         assert type in ('tutorial', 'exercise', 'extra')
         self.type = type
         if title is None:
-            assert lesson is not None
+            assert lesson is not None, "Title attribute must be set if lesson_idx is absent"
             assert type in ('tutorial', 'exercise'), type
             self.title = '{}{}'.format(
                 'Exercise: ' if type=='exercise' else '',
