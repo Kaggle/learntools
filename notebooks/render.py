@@ -19,10 +19,11 @@ def main():
     cfg = Config()
     cfg.Exporter.preprocessors = ['lesson_preprocessor.LearnLessonPreprocessor']
     exporter = NotebookExporter(config=cfg)
-    resources = {'track_meta': meta}
+    resources = {'track_meta': meta, 'track_cfg': track_cfg}
 
     for nb_meta in meta.notebooks:
         resources['lesson'] = nb_meta.lesson
+        resources['nb_meta'] = nb_meta
         in_path = os.path.join(track, 'partials', nb_meta.filename)
         if CLEAN:
             clean(in_path)

@@ -26,9 +26,9 @@ class TrackMeta(object):
             nb = Notebook(**nb_meta)
             self.notebooks.append(nb)
             type = nb_meta['type']
-            assert type in ('tutorial', 'exercise'), type
-            assert not hasattr(lesson, type)
-            setattr(lesson, type, nb)
+            if type in ('tutorial', 'exercise'):
+                assert not hasattr(lesson, type)
+                setattr(lesson, type, nb)
         self._resolve_kernel_deps()
 
     @classmethod
@@ -66,7 +66,7 @@ class Notebook(object):
             ):
         self.filename = filename
         self.stem, _ = os.path.splitext(os.path.basename(filename))
-        assert type in ('tutorial', 'exercise')
+        assert type in ('tutorial', 'exercise', 'extra')
         self.type = type
         if title is None:
             assert lesson is not None
@@ -102,13 +102,13 @@ class Notebook(object):
                 language='python',
                 is_private=not cfg.get('public', not dev),
                 code_file="../../rendered/" + self.filename,
-                enable_gpu="false",
+                enable_gpu=False,
                 # Enable internet in development mode so we can pip install learntools
                 enable_internet=dev,
                 kernel_type='notebook',
                 title=self.title,
-                dataset_sources=self.dataset_sources,
-                kernel_sources=self.kernel_sources,
+                dataset_sources=sorted(self.dataset_sources),
+                kernel_sources=sorted(self.kernel_sources),
                 competition_sources=[],
                 )
 

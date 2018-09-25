@@ -2,8 +2,9 @@ import sys
 import re
 import logging
 import os
+import subprocess
 
-import nbformat as nbf
+import nbformat
 from nbconvert.preprocessors import Preprocessor
 import traitlets
 from box import Box
@@ -62,6 +63,10 @@ class Lesson:
             raise ValueError("Lesson number {} is the first. No prev lesson.".format(self.num))
         return self._prev
 
+def get_git_branch():
+    return subprocess.check_output(["git", "symbolic-ref", "--short", "HEAD"])\
+            .decode('utf8').strip()
+
 class LearnLessonPreprocessor(Preprocessor):
 
     # This gets set directly (to a list of lesson dicts) in track's 
@@ -74,11 +79,57 @@ class LearnLessonPreprocessor(Preprocessor):
         self.track = resources['track_meta']
         # TODO: May need to catch an exception here in case of nbs that have no associated lesson
         self.lesson = resources['lesson']
+        track_cfg = resources['track_cfg']
+        nb_meta = resources['nb_meta']
 
         # NB: Previously aborted at this point if this notebook didn't belong to a lesson.
         for i, cell in enumerate(nb.cells):
             nb.cells[i] = self.process_cell(cell)
+        # NB: There may be some cases where we need to access learntools in a tutorial
+        # or ancillary notebook as well. Could encode this in track_meta, or if we wanted
+        # to be really clever, could look for learntools imports in code cells.
+        if track_cfg.get('development', False) and nb_meta.type == 'exercise':
+            self.pip_install_lt_hack(nb)
         return nb, resources
+    
+    def pip_install_lt_hack(self, nb):
+        branch = get_git_branch()
+        pkg = 'git+https://github.com/Kaggle/learntools.git@{}'.format(branch)
+        self.pip_install_hack(nb, [pkg])
+
+    def pip_install_hack(self, nb, pkgs):
+        if not pkgs:
+            return
+        extra_cells = []
+        for pkg in pkgs:
+            extra_cells.append(self.pip_install_cell(pkg))
+
+        # NB: Workaround for 'read-only file sytem' issue when pip installing.
+        # Hopefully at some point this becomes easier.
+        syspath_lines = [
+                'import sys\n',
+                "sys.path.append('/kaggle/working')",
+        ]
+        syspath_cell = self.make_code_cell(source=syspath_lines)
+        extra_cells.append(syspath_cell)
+        nb.cells = extra_cells + nb.cells
+
+    @classmethod
+    def pip_install_cell(cls, pkg_spec):
+        cmd = '!pip install -U -t /kaggle/working/ {}'.format(pkg_spec)
+        return cls.make_code_cell(source=[cmd])
+
+    @staticmethod
+    def make_code_cell(**kwargs):
+        defaults = dict(
+                cell_type="code",
+                execution_count=None,
+                metadata={},
+                source=[],
+                outputs=[],
+                )
+        defaults.update(kwargs)
+        return nbformat.from_dict(defaults)
 
     def process_cell(self, cell):
         pattern = r'#\$([^$]+)\$'

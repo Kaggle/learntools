@@ -1,10 +1,15 @@
 import logging
+import subprocess
 
 import nbformat
 
 from lesson_preprocessor import LearnLessonPreprocessor
 
 PIP_INSTALL_HACK = True
+
+def get_branch():
+    return subprocess.check_output(["git", "symbolic-ref", "--short", "HEAD"])\
+            .decode('utf8').strip()
 
 class EmbeddingsLessonPreprocessor(LearnLessonPreprocessor):
 
@@ -17,7 +22,9 @@ class EmbeddingsLessonPreprocessor(LearnLessonPreprocessor):
         nb, resources = super().preprocess(nb, resources)
         extra_pkgs = []
         if lt_meta['type'] == 'exercise':
-            extra_pkgs.append('git+https://github.com/Kaggle/learntools.git@embeddings-v2')
+            # A little bit fragile. Might be safer to just put the branch name in the config file.
+            branch = get_branch()
+            extra_pkgs.append('git+https://github.com/Kaggle/learntools.git@{}'.format(branch))
         if lesson_ix == 2:
             extra_pkgs.append('gensim')
         self.pip_install_hack(nb, extra_pkgs)
