@@ -30,4 +30,5 @@ def main():
         clean_nb(nb)
         nbf.write(nb, nbpath)
 
-main()
+if __name__ == '__main__':
+    main()
