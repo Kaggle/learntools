@@ -82,11 +82,11 @@ class Notebook(object):
         # TODO: warning if scriptid = default value of 1?
         return 'https://www.kaggle.com/kernels/fork/{}'.format(self.scriptid)
 
-    def kernel_metadata(self):
+    def kernel_metadata(self, cfg):
         return dict(
                 id=self.slug,
                 language='python',
-                is_private='true',
+                is_private=not cfg.get('public', False),
                 code_file="../../rendered/" + self.filename,
                 enable_gpu="false",
                 enable_internet="false",
