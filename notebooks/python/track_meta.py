@@ -25,5 +25,10 @@ _exercise_scriptids = [1275163, 1275158, 1275165, 1275173,
 _exs = [dict(lesson_idx=i, scriptid=sid, type='exercise', filename='ex_{}.ipynb'.format(i+1)) 
         for i, sid in enumerate(_exercise_scriptids)
         ]
-notebooks = _tuts + _exs
 
+_exs[0]['title'] = 'Exercise: Syntax, Variables, and Numbers'
+_exs[3]['title'] = 'Exercise: Lists'
+_exs[6]['title'] = 'Exercise: Working with External Libraries'
+
+
+notebooks = _tuts + _exs

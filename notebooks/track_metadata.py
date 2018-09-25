@@ -1,5 +1,7 @@
 import os
 
+import titlecase
+
 def slugify(title, author):
     s = title.replace('(', '').replace(')', '').replace(',', '').replace(':', '').lower()
     tokens = s.split()
@@ -60,7 +62,7 @@ class Notebook(object):
             assert type in ('tutorial', 'exercise'), type
             self.title = '{}{}'.format(
                 'Exercise: ' if type=='exercise' else '',
-                lesson.topic.capitalize()
+                titlecase.titlecase(lesson.topic)
                 )
         else:
             self.title = title
