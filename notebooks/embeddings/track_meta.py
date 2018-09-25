@@ -9,6 +9,10 @@ lessons = [
         dict(topic='visualizing embeddings with t-SNE',),
 ]
 
+# TODO: a foolish consistency. Remove this hack later. (Unfortunately tricky to change a kernel's slug through kernels API once set)
+for i, lsn in enumerate(lessons):
+    lsn['topic'] = '{} {}'.format(i+1, lsn['topic'])
+
 _tut_names = ['embeddings', 'factorization', 'gensim', 'tsne']
 _tuts = [dict(lesson_idx=i, type='tutorial', 
                 filename='{}-{}.ipynb'.format(i+1, name))
@@ -66,5 +70,7 @@ _ancillaries = [
             kernel_sources = [_common_kernel_source_slug],
         )
 ]
+for nb in _ancillaries:
+    nb['type'] = 'extra'
 
 notebooks = _tuts + _exs + _ancillaries
