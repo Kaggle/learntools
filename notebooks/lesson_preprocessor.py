@@ -7,7 +7,6 @@ import nbformat as nbf
 from nbconvert.preprocessors import Preprocessor
 import traitlets
 from box import Box
-import utils
 
 DEBUG = 0
 if DEBUG:
