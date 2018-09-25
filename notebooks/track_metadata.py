@@ -29,6 +29,7 @@ class TrackMeta(object):
             assert type in ('tutorial', 'exercise'), type
             assert not hasattr(lesson, type)
             setattr(lesson, type, nb)
+        self._resolve_kernel_deps()
 
     @classmethod
     def from_module(cls, module):
@@ -38,6 +39,16 @@ class TrackMeta(object):
         matches = [nb for nb in self.notebooks if nb.filename == fname]
         assert len(matches) <= 1, fname
         return matches[0]
+
+    def _resolve_kernel_deps(self):
+        """Resolve any inter-kernel data dependencies which are encoded using
+        notebook filenames to their corresponding slugs.
+        """
+        for nb in self.notebooks:
+            for i, dep in enumerate(nb.kernel_sources):
+                if dep.endswith('.ipynb'):
+                    referent = self.get_notebook(dep)
+                    nb.kernel_sources[i] = referent.slug
     
 
 class Lesson(object):
@@ -85,13 +96,15 @@ class Notebook(object):
         return 'https://www.kaggle.com/kernels/fork/{}'.format(self.scriptid)
 
     def kernel_metadata(self, cfg):
+        dev = cfg.get('development', False)
         return dict(
                 id=self.slug,
                 language='python',
-                is_private=not cfg.get('public', False),
+                is_private=not cfg.get('public', not dev),
                 code_file="../../rendered/" + self.filename,
                 enable_gpu="false",
-                enable_internet="false",
+                # Enable internet in development mode so we can pip install learntools
+                enable_internet=dev,
                 kernel_type='notebook',
                 title=self.title,
                 dataset_sources=self.dataset_sources,

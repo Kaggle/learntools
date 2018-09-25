@@ -72,21 +72,9 @@ class LearnLessonPreprocessor(Preprocessor):
     
     # NB: This is the only overridden Preprocessor method. All other methods are custom.
     def preprocess(self, nb, resources):
-        # NB: resources is dict-like with keys:
-        #   - config_dir
-        #   - output_files_dir, output_extension
-        #   - metadata, inner dict-like w/ keys name, path, modified_date
-        #   - unique_key
-        path = resources['metadata']['path']
-        suff = '/partials'
-        assert path.endswith(suff), path
-        track_path = path[:-len(suff)]
-        track = utils.get_track_meta(track_path)
-        self.track = track
-        nb_fname = resources['metadata']['name'] + '.ipynb'
-        nb_meta = track.get_notebook(nb_fname)
+        self.track = resources['track_meta']
         # TODO: May need to catch an exception here in case of nbs that have no associated lesson
-        self.lesson = nb_meta.lesson
+        self.lesson = resources['lesson']
 
         # NB: Previously aborted at this point if this notebook didn't belong to a lesson.
         for i, cell in enumerate(nb.cells):
