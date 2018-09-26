@@ -1,0 +1,4 @@
+titlecase
+nbformat
+nbconvert
+PyYAML
