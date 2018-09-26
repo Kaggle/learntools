@@ -1,4 +1,3 @@
-import sys
 import re
 import logging
 import os
@@ -6,8 +5,6 @@ import subprocess
 
 import nbformat
 from nbconvert.preprocessors import Preprocessor
-import traitlets
-from box import Box
 
 DEBUG = 0
 if DEBUG:
@@ -18,71 +15,23 @@ IGNORE_UNKNOWN_MACROS = 0
 class UnrecognizedMacroException(Exception):
     pass
 
-def wrap_lessons(lesson_dicts):
-    """Given a list of lesson dicts (as set in nbconvert_config.py), return a list
-    of Lesson objects wrapping those dicts.
-    """
-    res = [Lesson(d, i) for i, d in enumerate(lesson_dicts)]
-    for i, lesson in enumerate(res):
-        if i > 0:
-            lesson._prev = res[i-1]
-            lesson.first = False
-        else:
-            lesson.first = True
-        if i < len(res)-1:
-            lesson._next = res[i+1]
-            lesson.last = False
-        else:
-            lesson.last = True
-    return res
-
-class Lesson:
-    def __init__(self, d, idx):
-        self.num = idx+1
-        for k, v in d.items():
-            if isinstance(v, dict):
-                v = Box(v)
-            setattr(self, k, v)
-
-    @property
-    def exercise_forking_url(self):
-        return 'https://www.kaggle.com/kernels/fork/{}'.format(self.exercise.scriptid)
-
-    @property
-    def tutorial_url(self):
-        return 'https://www.kaggle.com/{}'.format(self.tutorial.slug)
-
-    @property
-    def next(self):
-        if self.last:
-            raise ValueError("Lesson number {} is the last. No next lesson.".format(self.num))
-        return self._next
-    @property
-    def prev(self):
-        if self.first:
-            raise ValueError("Lesson number {} is the first. No prev lesson.".format(self.num))
-        return self._prev
-
 def get_git_branch():
+    """Return the current git branch as a string"""
     return subprocess.check_output(["git", "symbolic-ref", "--short", "HEAD"])\
             .decode('utf8').strip()
 
 class LearnLessonPreprocessor(Preprocessor):
-
-    # This gets set directly (to a list of lesson dicts) in track's 
-    # nbconvert_config.py file. This code is insane.
-    # TODO: deprecate me
-    lessons_metadata = traitlets.List().tag(config=True)
     
     # NB: This is the only overridden Preprocessor method. All other methods are custom.
     def preprocess(self, nb, resources):
+        # See render.py for how resources as populated.
         self.track = resources['track_meta']
-        # TODO: May need to catch an exception here in case of nbs that have no associated lesson
+        # May be None for notebooks with type='extra'
         self.lesson = resources['lesson']
+        # Corresponds to track_config.yaml
         track_cfg = resources['track_cfg']
         nb_meta = resources['nb_meta']
 
-        # NB: Previously aborted at this point if this notebook didn't belong to a lesson.
         for i, cell in enumerate(nb.cells):
             nb.cells[i] = self.process_cell(cell)
         # NB: There may be some cases where we need to access learntools in a tutorial
@@ -93,11 +42,15 @@ class LearnLessonPreprocessor(Preprocessor):
         return nb, resources
     
     def pip_install_lt_hack(self, nb):
+        """pip install learntools @ the present branch when running on Kernels"""
         branch = get_git_branch()
         pkg = 'git+https://github.com/Kaggle/learntools.git@{}'.format(branch)
         self.pip_install_hack(nb, [pkg])
 
     def pip_install_hack(self, nb, pkgs):
+        """Insert some cells at the top of this notebook that pip install the given
+        packages to /kaggle/working, then add that directory to sys.path.
+        """
         if not pkgs:
             return
         extra_cells = []
@@ -132,6 +85,7 @@ class LearnLessonPreprocessor(Preprocessor):
         return nbformat.from_dict(defaults)
 
     def process_cell(self, cell):
+        # Find all things that look like macros
         pattern = r'#\$([^$]+)\$'
         src = cell['source']
         macros = re.finditer(pattern, src)
@@ -162,6 +116,13 @@ class LearnLessonPreprocessor(Preprocessor):
         return cell
 
     def expand_macro(self, macro, cell):
+        """Expand the given macro string (or apply it to the given cell, if 
+        it's side-effecty), by looking up and calling the corresponding 
+        LessonPreprocessor method.
+        """
+        # TODO: The fact that some macros expand to some text, and some just have 
+        # some effect on their cell leads to some awkwardness. Could be nice to 
+        # delineate syntactically. e.g. #$HIDE!$
         args = []
         if macro.endswith(')'):
             macro, argstr = macro[:-1].split('(')
@@ -185,6 +146,9 @@ class LearnLessonPreprocessor(Preprocessor):
         self.HIDE_OUTPUT(cell)
 
     def YOURTURN(self, **kwargs):
+        """Some boilerplate text to be used at the end of a tutorial notebook, to
+        lead into the corresponding exercise.
+        """
         return """# Your turn!
 
 Head over to [the Exercises notebook]({}) to get some hands-on practice working with {}.""".format(
@@ -230,7 +194,7 @@ When you're ready to continue, [click here]({}) to continue on to the next tutor
         )
         return res
 
-        # Alternative formulation (used on days 5 and 6):
+        # Alternative formulation (used on days 5 and 6 of Python challenge):
         # Want feedback on your code? To share it with others or ask for help, you'll need to make it public. Save a version of your notebook that shows your current work by hitting the "Commit & Run" button. Once your notebook is finished running, go to the Settings tab in the panel to the left (you may have to expand it by hitting the [<] button next to the "Commit & Run" button) and set the "Visibility" dropdown to "Public".
 
 

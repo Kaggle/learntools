@@ -6,6 +6,7 @@ import nbformat as nbf
 
 BAD_CELL_METADATA_KEYS = { '_uuid', '_cell_guid', }
 
+# TODO: this should probably be set on a per-track basis in track_config.yaml
 CLEAR_OUTPUT = 0
 
 def clean(nb_path):
@@ -14,6 +15,8 @@ def clean(nb_path):
     nbf.write(nb, nb_path)
 
 def clean_nb(nb):
+    """Modify given NotebookNode in place to normalize/strip some extraneous metadata.
+    """
     nb['metadata']['language_info']['version'] = '3.6.5'
     for cell in nb.cells:
         if cell['cell_type'] == 'code':

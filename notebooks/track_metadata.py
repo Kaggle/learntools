@@ -3,16 +3,30 @@ import os
 import titlecase
 
 def slugify(title, author):
+    # NB: This was hacked together ad-hoc and probably still has some holes where it doesn't agree with Kernels logic.
     s = title.replace('(', '').replace(')', '').replace(',', '').replace(':', '').lower()
     tokens = s.split()
     return author + '/' + '-'.join(tokens)
 
 class TrackMeta(object):
+    """Wrapper around the metadata lists/dictionaries defined per-track in track_meta.py
+    This class (and the Lesson/Notebook classes it wraps its members in) do the following:
+    - fill in default values
+    - validate
+    - add some derived properties and a bit of logic
+
+    The most important properties of a TrackMeta object are:
+    - lessons: a list of Lesson objects
+    - notebooks: a list of Notebook objects
+    """
 
     def __init__(self, track, lessons_meta, nbs_meta):
         self.track = track
         self.lessons = [Lesson(**lmeta) for lmeta in lessons_meta]
+        # Add convenience next/prev pointers to lessons
         for lesson, next_lesson in zip(self.lessons, self.lessons[1:]):
+            # TODO: Add next/prev getters to raise custom message for attempts
+            # to access next of last lesson etc. for clarity
             lesson.next = next_lesson
             next_lesson.prev = lesson
         self.notebooks = []
@@ -27,7 +41,7 @@ class TrackMeta(object):
             self.notebooks.append(nb)
             type = nb_meta['type']
             if type in ('tutorial', 'exercise'):
-                assert not hasattr(lesson, type)
+                assert not hasattr(lesson, type), "Can't have two {}s in one lesson".format(type)
                 setattr(lesson, type, nb)
         self._resolve_kernel_deps()
 
@@ -36,6 +50,7 @@ class TrackMeta(object):
         return cls(module.track, module.lessons, module.notebooks)
 
     def get_notebook(self, fname):
+        """Look up a Notebook object by its filename."""
         matches = [nb for nb in self.notebooks if nb.filename == fname]
         assert len(matches) <= 1, fname
         return matches[0]
@@ -52,10 +67,6 @@ class TrackMeta(object):
     
 
 class Lesson(object):
-    """
-    - topic
-    - next/prev?
-    """
     def __init__(self, topic):
         self.topic = topic
 
@@ -96,11 +107,17 @@ class Notebook(object):
         return 'https://www.kaggle.com/kernels/fork/{}'.format(self.scriptid)
 
     def kernel_metadata(self, cfg):
+        """Return a python dictionary corresponding to an appropriate kernel-metadata.json
+        file for pushing this notebook using the Kernels API.
+        (cfg is a dictionary of config information, as specific in track_config.yaml)
+        """
         dev = cfg.get('development', False)
         return dict(
                 id=self.slug,
                 language='python',
                 is_private=not cfg.get('public', not dev),
+                # Path is relative to where kernel-metadata.json file will be written, which is
+                #   notebooks/<track>/pushables/<notebook-identifier>/kernel-metadata.json
                 code_file="../../rendered/" + self.filename,
                 enable_gpu=False,
                 # Enable internet in development mode so we can pip install learntools
