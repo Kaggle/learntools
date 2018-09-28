@@ -5,21 +5,21 @@ The 'notebook pipeline' in this directory is a pseudo templating system with kag
 To start a new track (i.e. a themed sequence of notebooks such as are found on the Kaggle Learn homepage, or in Kaggle Learn Challenges) called "spam", run `new_track.sh spam`. This will create a `spam/` subdirectory, with the following contents:
 
 ```
-partials/
+raw/
 rendered/
-pushables/
+kernels_api_metadata/
 __init__.py
 track_meta.py
 track_config.yaml
 ```
 
-`partials/` is where the notebooks you author should go. These will be straightforward ipynb notebooks which (perhaps with some setup such as downloading necessary datasets, installing libraries, and careful path manipulation) may be runnable locally. However, they're *also* recipes for generating ipynb notebooks.
+`raw/` is where the notebooks you author should go. These will be straightforward ipynb notebooks which (perhaps with some setup such as downloading necessary datasets, installing libraries, and careful path manipulation) may be runnable locally. However, they're *also* recipes for generating ipynb notebooks.
 
-`rendered/` is where the notebooks generated from the `partials/` recipes go. These are what get synced to Kaggle Kernels. You should not edit these directly (treat them as build products).
+`rendered/` is where the notebooks generated from the `raw/` recipes go. These are what get synced to Kaggle Kernels. You should not edit these directly (treat them as build products).
 
-`pushables/` contains `kernel-metadata.json` files for syncing notebooks to Kaggle Kernels via the API.
+`kernels_api_metadata/` contains `kernel-metadata.json` files for syncing notebooks to Kaggle Kernels via the API.
 
-`track_meta.py` defines some metadata, mostly about the notebooks you'll be syncing. A notebook in the `partials/` subdirectory will only be rendered (and have a `kernel-metadata.json` file generated) if it has an entry in `track_meta.py`. (This means you're welcome to put as many throwaway testing notebooks as you like in `partials` without worrying about them breaking anything.)
+`track_meta.py` defines some metadata, mostly about the notebooks you'll be syncing. A notebook in the `raw/` subdirectory will only be rendered (and have a `kernel-metadata.json` file generated) if it has an entry in `track_meta.py`. (This means you're welcome to put as many throwaway testing notebooks as you like in `raw` without worrying about them breaking anything.)
 See `examples/example_track/track_meta.py` for an exhaustively commented example.
 
 `track_config.yaml` is much shorter. Whereas `track_meta.py` deals with the "what", this deals with the "how". 
@@ -28,22 +28,22 @@ See `examples/example_track/track_meta.py` for an exhaustively commented example
 
 ## Step 0.5: Cleaning
 
-`clean.py` normalizes and strips some crufty ipynb metadata from notebook files in `partials/`. This is just for the sake of shorter, more readable diffs. 
+`clean.py` normalizes and strips some crufty ipynb metadata from notebook files in `raw/`. This is just for the sake of shorter, more readable diffs. 
 This step is performed automatically when running `render.py`, so you normally need not worry about it. You may want to run `clean.py` manually if you're committing changes without a render.
 
 ## Step 1: Rendering
 
-`render.py` translates notebooks in `partials/` to publishable notebooks in `rendered/`.
+`render.py` translates notebooks in `raw/` to publishable notebooks in `rendered/`.
 The logic for this step mostly lives in `lesson_preprocessor.py`. Most of its work is in expanding macros which look like `#$HIDE_OUTPUT$`, or `#$EXERCISE_URL(2)$`. See MACROS.txt for a listing of available macros.
 
 ## Step 2: Kernel metadata generation
 
-The Kaggle Kernels API requires a `kernel-metadata.json` file for any kernel being pushed to the site. `prepare_push.py` generates these in the `pushables` subdirectory. 
+The Kaggle Kernels API requires a `kernel-metadata.json` file for any kernel being pushed to the site. `prepare_push.py` generates these in the `kernels_api_metadata` subdirectory. 
 
 ## Step 3: Pushing
 
 Use the Kaggle CLI like so:
 
-    kaggle k push -p examples/example_track/pushables/tut1-hello
+    kaggle k push -p examples/example_track/kernels_api_metadata/tut1-hello
     
 (Script for pushing *en masse* to come)

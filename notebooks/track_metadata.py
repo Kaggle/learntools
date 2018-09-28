@@ -117,7 +117,7 @@ class Notebook(object):
                 language='python',
                 is_private=not cfg.get('public', not dev),
                 # Path is relative to where kernel-metadata.json file will be written, which is
-                #   notebooks/<track>/pushables/<notebook-identifier>/kernel-metadata.json
+                #   notebooks/<track>/kernels_api_metadata/<notebook-identifier>/kernel-metadata.json
                 code_file="../../rendered/" + self.filename,
                 enable_gpu=False,
                 # Enable internet in development mode so we can pip install learntools

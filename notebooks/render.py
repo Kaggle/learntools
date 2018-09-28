@@ -18,7 +18,7 @@ CLEAN = 1
 
 def nb_path_to_track(path):
     dirname = os.path.dirname(path)
-    suff = '/partials'
+    suff = '/raw'
     assert dirname.endswith(suff), dirname
     return dirname[:-len(suff)]
 
@@ -37,7 +37,7 @@ def render_track(track, nb_path_whitelist=None):
     resources = {'track_meta': meta, 'track_cfg': track_cfg}
 
     for nb_meta in meta.notebooks:
-        in_path = os.path.join(track, 'partials', nb_meta.filename)
+        in_path = os.path.join(track, 'raw', nb_meta.filename)
         if nb_path_whitelist and in_path not in nb_path_whitelist:
             continue
         resources['lesson'] = nb_meta.lesson
@@ -60,7 +60,7 @@ if __name__ == '__main__':
                 " All notebooks referred to in that track's metadata will be rendered."
                 )
             )
-    parser.add_argument("partials", metavar="partial", nargs="*",
+    parser.add_argument("raw", nargs="*",
             help=("An explicit list of notebook files to be rendered. Mutually"
                 " exclusive with track argument."
                 )
@@ -72,8 +72,8 @@ if __name__ == '__main__':
             level=(logging.DEBUG if args.verbose else logging.INFO)
             )
 
-    if args.partials or args.track.endswith('.ipynb'):
-        partials = [args.track] + args.partials
-        render_notebooks(partials)
+    if args.raw or args.track.endswith('.ipynb'):
+        raw = [args.track] + args.raw
+        render_notebooks(raw)
     else:
         render_track(args.track)
