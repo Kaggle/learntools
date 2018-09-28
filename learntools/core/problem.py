@@ -181,7 +181,13 @@ class EqualityCheckProblem(CodingProblem):
         for var, val, default in zip(
                 self.injectable_vars, args, self._default_values
                 ):
-            if val != default:
+            try:
+                neq = val != default
+            except:
+                # If we get an exception comparing the actual value to the expected,
+                # we can reasonably infer they're not equal.
+                neq = True
+            if neq:
                 return
         # It'd be kind of odd if a EqualityCheckProblem didn't have any associated
         # vars, but I guess it's not worth raising a fuss over...
@@ -199,7 +205,8 @@ class FunctionProblem(CodingProblem):
     # List of (input, expected_output) pairs, where input may be a scalar or tuple of args.
     _test_cases = []
     
-    def check_whether_attempted(self, fn):
+    @classmethod
+    def check_whether_attempted(cls, fn):
         # Not sure if inspect.getsource() will work reliably? Seems like it does
         # work okay with ipython notebooks. 
         def dummy(): 

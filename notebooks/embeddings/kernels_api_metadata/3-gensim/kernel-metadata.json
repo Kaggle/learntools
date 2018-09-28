@@ -1,0 +1,16 @@
+{
+  "code_file": "../../rendered/3-gensim.ipynb",
+  "competition_sources": [],
+  "dataset_sources": [],
+  "enable_gpu": false,
+  "enable_internet": true,
+  "id": "colinmorris/3-exploring-embeddings-with-gensim",
+  "is_private": true,
+  "kernel_sources": [
+    "colinmorris/0-movielens-preprocessing",
+    "colinmorris/x3-movielens-spiffy-model"
+  ],
+  "kernel_type": "notebook",
+  "language": "python",
+  "title": "3 Exploring Embeddings With Gensim"
+}

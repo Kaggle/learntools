@@ -1,24 +1,49 @@
-Somewhat experimental setup for tracking canonical versions of Learn notebooks in version control.
+The 'notebook pipeline' in this directory is a pseudo templating system with kaggle kernels API integration.
 
-`partials/python/` contains 'templates' for all the notebooks in the Python track (with `tut_1.ipynb` being the first tutorial notebook, `ex_1.ipynb` being the corresponding exercise notebook, etc.). This is where notebook editing should happen.
+## Directory structure
 
-These notebooks contain some 'macros' in the source of some cells, such as `#$END_OF_EXERCISE$` or `#$EXERCISE_URL(4)$`. These get replaced (see `lesson_preprocessor.py`) when rendering the final notebook. To render some notebooks (writing them to the `rendered/` subdirectory), use `render.sh`. e.g.
+To start a new track (i.e. a themed sequence of notebooks such as are found on the Kaggle Learn homepage, or in Kaggle Learn Challenges) called "spam", run `new_track.sh spam`. This will create a `spam/` subdirectory, with the following contents:
 
-    render.sh partials/python/*.ipynb
+```
+raw/
+rendered/
+kernels_api_metadata/
+__init__.py
+track_meta.py
+track_config.yaml
+```
 
-When you're ready to sync changes to the site, run `prepare_push.py`, passing the name of the track to prepare (e.g. `prepare_push.py python`). This will create a directory structure in a subdirectory `pushables` which is amenable to the Kernels API.
+`raw/` is where the notebooks you author should go. These will be straightforward ipynb notebooks which (perhaps with some setup such as downloading necessary datasets, installing libraries, and careful path manipulation) may be runnable locally. However, they're *also* recipes for generating ipynb notebooks.
 
-To push a particular notebook, do something like...
+`rendered/` is where the notebooks generated from the `raw/` recipes go. These are what get synced to Kaggle Kernels. You should not edit these directly (treat them as build products).
 
-    cd pushables/python/ex_4
-    kaggle k push -p .
+`kernels_api_metadata/` contains `kernel-metadata.json` files for syncing notebooks to Kaggle Kernels via the API.
 
-(NB: Should be possible to do in just one step like...
+`track_meta.py` defines some metadata, mostly about the notebooks you'll be syncing. A notebook in the `raw/` subdirectory will only be rendered (and have a `kernel-metadata.json` file generated) if it has an entry in `track_meta.py`. (This means you're welcome to put as many throwaway testing notebooks as you like in `raw` without worrying about them breaking anything.)
+See `examples/example_track/track_meta.py` for an exhaustively commented example.
 
-    kaggle k push -p pushables/python/ex_4
+`track_config.yaml` is much shorter. Whereas `track_meta.py` deals with the "what", this deals with the "how". 
+
+# Pipeline steps
+
+## Step 0.5: Cleaning
+
+`clean.py` normalizes and strips some crufty ipynb metadata from notebook files in `raw/`. This is just for the sake of shorter, more readable diffs. 
+This step is performed automatically when running `render.py`, so you normally need not worry about it. You may want to run `clean.py` manually if you're committing changes without a render.
+
+## Step 1: Rendering
+
+`render.py` translates notebooks in `raw/` to publishable notebooks in `rendered/`.
+The logic for this step mostly lives in `lesson_preprocessor.py`. Most of its work is in expanding macros which look like `#$HIDE_OUTPUT$`, or `#$EXERCISE_URL(2)$`. See MACROS.txt for a listing of available macros.
+
+## Step 2: Kernel metadata generation
+
+The Kaggle Kernels API requires a `kernel-metadata.json` file for any kernel being pushed to the site. `prepare_push.py` generates these in the `kernels_api_metadata` subdirectory. 
+
+## Step 3: Pushing
+
+Use the Kaggle CLI like so:
+
+    kaggle k push -p examples/example_track/kernels_api_metadata/tut1-hello
     
-But API currently has some issues when run on a directory other than pwd.)
-
-The ipynbs in the `pushables` subdir set up by `prepare_push.py` are symlinks to the corresponding files in `rendered/` so you generally shouldn't have to run `prepare_push.py` again unless you add another notebook, or change a notebook's metadata in a way that would affect `kernel-metadata.json` (i.e. changing the title or slug).
-
-Note: currently keeping `rendered/` notebooks under version control. At first this seemed like a bad idea, because in some sense they're "build products", and redundant wrt the template notebooks. However, I think it's really useful to be able to see the diff of a rendered notebook from the previous rendered version before pushing, as an assurance/sanity check.
+(Script for pushing *en masse* to come)
