@@ -1,0 +1,17 @@
+{
+  "id": "dansbecker/building-models-from-convolutions",
+  "id_no": 519709,
+  "title": "Building Models from Convolutions",
+  "code_file": "../../nbs/tut2_building_models_from_convolutions.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": false,
+  "enable_internet": false,
+  "keywords": [
+    "learn"
+  ],
+  "dataset_sources": [],
+  "kernel_sources": [],
+  "competition_sources": []
+}
