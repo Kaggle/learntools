@@ -1,0 +1,17 @@
+{
+  "id": "dansbecker/intro-to-deep-learning-and-computer-vision",
+  "id_no": 519711,
+  "title": "Intro to Deep Learning and Computer Vision",
+  "code_file": "../../nbs/tut1_intro.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": false,
+  "enable_internet": false,
+  "keywords": [
+    "learn"
+  ],
+  "dataset_sources": [],
+  "kernel_sources": [],
+  "competition_sources": []
+}

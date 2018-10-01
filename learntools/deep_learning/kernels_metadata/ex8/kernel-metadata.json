@@ -1,0 +1,21 @@
+{
+  "id": "dansbecker/exercise-dropout-and-strides-for-larger-models",
+  "id_no": 663261,
+  "title": "Exercise: Dropout and Strides For Larger Models",
+  "code_file": "../../nbs/ex8_dropout_strides.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": false,
+  "enable_internet": false,
+  "keywords": [
+    "learn"
+  ],
+  "dataset_sources": [
+    "zalando-research/fashionmnist"
+  ],
+  "kernel_sources": [],
+  "competition_sources": [
+    "digit-recognizer"
+  ]
+}

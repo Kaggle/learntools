@@ -1,0 +1,20 @@
+{
+  "id": "dansbecker/exercise-using-transfer-learning",
+  "id_no": 532365,
+  "title": "Exercise: Using Transfer Learning",
+  "code_file": "../../nbs/ex4_transfer_learning.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": false,
+  "enable_internet": false,
+  "keywords": [
+    "learn"
+  ],
+  "dataset_sources": [
+    "keras/resnet50",
+    "dansbecker/dogs-gone-sideways"
+  ],
+  "kernel_sources": [],
+  "competition_sources": []
+}

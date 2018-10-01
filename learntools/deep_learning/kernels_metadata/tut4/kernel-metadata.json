@@ -1,0 +1,20 @@
+{
+  "id": "dansbecker/transfer-learning",
+  "id_no": 523046,
+  "title": "Transfer Learning",
+  "code_file": "../../nbs/tut4_transfer_learning.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": false,
+  "enable_internet": false,
+  "keywords": [
+    "learn"
+  ],
+  "dataset_sources": [
+    "keras/resnet50",
+    "dansbecker/urban-and-rural-photos"
+  ],
+  "kernel_sources": [],
+  "competition_sources": []
+}

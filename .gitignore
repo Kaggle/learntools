@@ -108,3 +108,5 @@ ENV/
 
 # Submission files which are output of nbs
 *submission.csv
+
+*.jpg
