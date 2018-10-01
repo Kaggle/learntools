@@ -1,0 +1,17 @@
+{
+  "id": "dansbecker/a-deeper-understanding-of-deep-learning",
+  "id_no": 528800,
+  "title": "A Deeper Understanding of Deep Learning",
+  "code_file": "../../nbs/tut6_deep_understanding.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": false,
+  "enable_internet": false,
+  "keywords": [
+    "learn"
+  ],
+  "dataset_sources": [],
+  "kernel_sources": [],
+  "competition_sources": []
+}
