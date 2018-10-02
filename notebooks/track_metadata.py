@@ -121,6 +121,8 @@ class Notebook(object):
                 code_file="../../rendered/" + self.filename,
                 enable_gpu=False,
                 # Enable internet in development mode so we can pip install learntools
+                # TODO: Actually, probably only needs to be turned on if we're in
+                # development mode AND this is an exercise kernel.
                 enable_internet=dev,
                 kernel_type='notebook',
                 title=self.title,
