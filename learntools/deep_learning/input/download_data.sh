@@ -1,5 +1,5 @@
-kaggle competitions download dog-breed-identification -p ./dog_breed_identification -f train.zip
-unzip ./dog_breed_identification/train.zip -d ./dog_breed_identification/
+kaggle competitions download dog-breed-identification -p ./dog-breed-identification -f train.zip
+unzip ./dog-breed-identification/train.zip -d ./dog-breed-identification/
 rm ./dog-breed-identification/train.zip
 
 kaggle datasets download keras/resnet50 -p resnet50
