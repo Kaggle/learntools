@@ -2,9 +2,20 @@ import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
 
-def load_my_image(fname = '/kaggle/input/dog-breed-identification/train/0246f44bb123ce3f91c939861eb97fb7.jpg'):
+
+def visualize_conv(image, conv):
+    conv_array = np.array(conv)
+    vertical_padding = conv_array.shape[0] - 1
+    horizontal_padding = conv_array.shape[1] - 1
+    conv_out = scale_for_display(apply_conv_to_image(conv, image))
+    show(np.hstack([image[:-vertical_padding, :-horizontal_padding], conv_out]), False)
+
+########## CODE BELOW THIS LINE WAS USED IN PRE-LEARNTOOLS KERNELS ############
+############################# MODIFY WITH CARE ################################
+
+def load_my_image(fname = '../input/dog-breed-identification/train/0246f44bb123ce3f91c939861eb97fb7.jpg'):
     '''returns array containing greyscale values for supplied file (at thumbnail size)'''
-    image_color = Image.open(fname).resize((90, 125), Image.ANTIALIAS)
+    image_color = Image.open(fname).resize((135, 188), Image.ANTIALIAS)
     image_grayscale = image_color.convert('L')
     image_array = np.asarray(image_grayscale)
     return(image_array)
@@ -47,10 +58,6 @@ def scale_for_display(image):
 def apply_conv_to_image(conv, image):
     '''Applies conv (supplied as list of lists) to image (supplied as numpy array). Returns output array'''
     assert(type(image) == np.ndarray)
-    print("----------------------------")
-    print("Filter: ")
-    print(np.array(conv))
-    print_hints(conv)
     image_height, image_width = image.shape
     conv_array = np.array(conv)
     conv_height, conv_width = conv_array.shape
