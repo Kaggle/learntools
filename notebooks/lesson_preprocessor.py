@@ -6,6 +6,8 @@ import subprocess
 import nbformat
 from nbconvert.preprocessors import Preprocessor
 
+from macro_processing import MacroProcessor
+
 DEBUG = 0
 if DEBUG:
     logging.basicConfig(level=logging.DEBUG)
@@ -32,8 +34,15 @@ class LearnLessonPreprocessor(Preprocessor):
         track_cfg = resources['track_cfg']
         nb_meta = resources['nb_meta']
 
-        for i, cell in enumerate(nb.cells):
-            nb.cells[i] = self.process_cell(cell)
+        macroer = MacroProcessor(track_cfg)
+
+        new_cells = []
+        for cell in nb.cells:
+            c = self.process_cell(cell)
+            c = c and macroer.process_cell(c)
+            if c is not None:
+                new_cells.append(c)
+        nb.cells = new_cells
         # NB: There may be some cases where we need to access learntools in a tutorial
         # or ancillary notebook as well. Could encode this in track_meta, or if we wanted
         # to be really clever, could look for learntools imports in code cells.
@@ -87,6 +96,10 @@ class LearnLessonPreprocessor(Preprocessor):
     def process_cell(self, cell):
         # Find all things that look like macros
         pattern = r'#\$([^$]+)\$'
+        # This is one big string. It occurs to me that this is actually kind of weird
+        # given that inspecting the ipynb file format, source seems to be a list of 
+        # strings, 1 per line (this is also what's expected by nbformat.from_dict).
+        # I have no idea why this disagreement exists.
         src = cell['source']
         macros = re.finditer(pattern, src)
         newsrc = ''
@@ -132,6 +145,7 @@ class LearnLessonPreprocessor(Preprocessor):
             raise UnrecognizedMacroException("Don't know how to handle the macro with name: {}".format(macro))
         return macro_method(*args, cell=cell)
 
+    # TODO: Should consider separating macro logic out into separate module/class.
     def EXERCISE_FORKING_URL(self, **kwargs):
         return self.lesson.exercise.forking_url
 
