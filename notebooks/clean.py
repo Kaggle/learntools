@@ -8,7 +8,9 @@ import nbformat as nbf
 BAD_CELL_METADATA_KEYS = { '_uuid', '_cell_guid', }
 
 # TODO: this should probably be set on a per-track basis in track_config.yaml. Or possibly on a per-notebook basis?
-CLEAR_OUTPUT = 0
+# Might also want to consider some middle-ground where we strip only the most obnoxious output (e.g. image/png base64 data, 
+# rich (html/table) output beyond a certain size, etc.
+CLEAR_OUTPUT = 1
 
 def clean(nb_path):
     nb = nbf.read(nb_path, 4)
