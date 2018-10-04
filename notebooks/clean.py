@@ -1,12 +1,13 @@
 import sys
 import os
 import re
+import argparse
 
 import nbformat as nbf
 
 BAD_CELL_METADATA_KEYS = { '_uuid', '_cell_guid', }
 
-# TODO: this should probably be set on a per-track basis in track_config.yaml
+# TODO: this should probably be set on a per-track basis in track_config.yaml. Or possibly on a per-notebook basis?
 CLEAR_OUTPUT = 0
 
 def clean(nb_path):
@@ -27,7 +28,16 @@ def clean_nb(nb):
             cell.get('metadata', {}).pop(k, None)
 
 def main():
-    nbs = sys.argv[1:]
+    parser = argparse.ArgumentParser(description=("Clean all raw notebooks under "
+        "a given track, normalizing or removing extraneous metadata."),
+        )
+    parser.add_argument('track')
+    args = parser.parse_args()
+    rawdir = os.path.join(args.track, 'raw')
+    nbs = [ os.path.join(rawdir, path)
+            for path in os.listdir(rawdir) 
+            if path.endswith('.ipynb')
+            ]
     for nbpath in nbs:
         nb = nbf.read(nbpath, 4)
         clean_nb(nb)
