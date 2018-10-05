@@ -62,7 +62,7 @@ class MacroProcessor(object):
         # will probably become useful in other cases in the future.
         def transform(arg):
             if arg == 'PROD':
-                return not self.cfg['development']
+                return not self.cfg.get('testing', False)
             else:
                 return arg
         return map(transform, args)
