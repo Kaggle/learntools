@@ -32,7 +32,8 @@ What happens if we run something like `kv.most_similar(positive=['Legally Blonde
         v0 = sim[0]
         assert isinstance(v0, tuple), "Expected `legally_impossible` to be a list of tuples"
         titles, sims = zip(*sim)
-        assert 'Miss Congeniality' in sims, "Expected `legally_impossible` to include movie *Miss Congeniality*"
+        # TODO: Maybe more robust to inject kv and call most_similar on it ourselves to get expected value
+        assert 'Miss Congeniality' in titles, "Expected `legally_impossible` to include movie *Miss Congeniality*"
 
 class CalculateNorms(CodingProblem):
     _var = 'norms'
@@ -74,7 +75,15 @@ class NormColumn(CodingProblem):
 
 class NormPatterns(ThoughtExperiment):
 
-    _solution = 'TODO'
+    _solution = (
+'''We have some movies whose embeddinging norms are 0 or very close to it - they also seem to be among the movies with the fewest ratings in the dataset.
+This is consistent with what we'd expect from a model trained with an L2 weight penalty on embeddings - there's a cost to increasing an embedding's size.
+Memorizing some properties of an obscure movie that only occurs once or twice in the dataset won't do much to decrease our overall error - so it's not worth 
+paying the regularization cost.
+
+On the other hand, the movies with the biggest embeddings are *not* necessarily the ones with the most ratings in the dataset. There's a strong trend of very
+low average ratings in the list. Can you think of why this would be?
+''')
 
 VectorLengths = MultipartProblem(CalculateNorms, NormColumn, NormPatterns)
 

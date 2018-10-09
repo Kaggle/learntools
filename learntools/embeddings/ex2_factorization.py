@@ -26,27 +26,26 @@ class RecommendFunction(CodingProblem):
 
     def check(self, recommend, model):
         uid = 26556
-        recc = recommend(model, uid, 3)
+        recc = recommend(model, uid, n=3)
         assert_has_columns(recc, ['movieId', 'predicted_rating'])
-        best = recc.iloc[0]
-        assert best.movieId == 21770, ("Expected top recommendeded movie id to be {}, "
-                "but was {} (for model=`model`, uid=`26556`)".format(21770, best.movieId))
-        assert best.predicted_rating > 8
+        assert_len(recc, 3, "result of calling `recommend` with `n=3`")
+        # Could check sortedness, but not really an explicit requirement.
+        # Erring on the side of false-correct judgements over false-incorrect.
+        # Particulars of preloaded model may drift so dangerous to peg correctness
+        # to specific model behaviour.
+        # TODO: Could compare against behaviour of model.predict(), or test with
+        # another dummy model having simple, predictable behaviour that we control.
 
 class PredictionSanityCheck(ThoughtExperiment):
     _solution = (
-'''I'm going to claim that these recommended movies are **bad**. In terms of genre and themes, our top picks seem like poor fits. User 26556 has pretty mature tastes - they like Hitchcock, classic James Bond, and Leslie Nielsen comedies. But our top pick for them, *McKenna Shoots for the Stars*, seems squarely aimed at pre-teen girls.
-
-Though I had to google the title to discover that fact. In fact, I didn't recognize any of the films in our top-5 recommendations. And that speaks to the biggest problem with our recommendations: they're **super obscure**. Our top 5 recommendations only have a total of 9 reviews between them in the whole dataset. We barely know anything about these movies - how can we be so confident that user 26556 is going to love them?
-
-This is similar to the problem we encountered in the previous exercise, where our model confidently assigned extreme bias values to movies with only a tiny number of reviews.
+'''I'm going to claim that these recommended movies are **bad**. In terms of genre and themes, our top picks don't seem like a great fit. But the most notable issue is that our top recommended movies are super-obscure, having only a handful of ratings each across the dataset. We just don't know much about these movies, so how can we be so confident that our target user will like them?
 
 > **Aside:** You may have noticed another problem, which becomes very obvious when we look at the movies with 
 the highest (or lowest) predicted scores: sometimes our model predicts values outside the allowable
 range of 0.5-5 stars. For the purposes of recommendation, this is actually no problem: we only care about ranking
 movies, not about the absolute values of their predicted scores. But this is still an interesting problem
 to consider. How could we prevent our model from incurring needless errors by making predictions outside
-the allowable range? Should we? If you have ideas, head over to [this forum thread](TODO) to discuss.)''')
+the allowable range? Should we?''')
 
 class FixingObscurity(ThoughtExperiment):
     _solution = (
@@ -70,9 +69,6 @@ class RecommendNonObscure(CodingProblem):
         uid = 26556
         recc = recommend(model, uid, 3)
         assert_has_columns(recc, ['movieId', 'predicted_rating'])
-        best = recc.iloc[0]
-        assert best.movieId == 18811
-        assert best.predicted_rating < 6
 
 class L2Intro(ThoughtExperiment):
     _solution = (
