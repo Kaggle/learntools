@@ -9,6 +9,9 @@ expander macros. Eventually, would like to move all macro stuff here (and in
 modules like line_macros.py)
 """
 
+class RmCellException(Exception):
+    pass
+
 class MacroProcessor(object):
 
     def __init__(self, cfg):
@@ -16,9 +19,32 @@ class MacroProcessor(object):
 
     def process_cell(self, cell):
         src = cell['source']
+        try:
+            self.apply_cell_macros(src)
+        except RmCellException:
+            return None # Indicator to remove this cell from nb
         src = self.apply_line_macros(src)
         cell['source'] = src
         return cell
+
+    def apply_cell_macros(self, src):
+        cell_macro_pattern = r'#%%(.+)%%\s*$'
+        topline = src.split('\n')[0]
+        match = re.match(cell_macro_pattern, topline)
+        if match:
+            # TODO: Quick hack for now (only current cell-level macros in use
+            # are RM and RM_IF). Later, should break out into per-macro functions,
+            # as in line_macros.py
+            name, args = self._parse_inner_macro_string(match.group(1))
+            if name == 'RM':
+                raise RmCellException
+            elif name == 'RM_IF':
+                assert len(args) == 1
+                if args[0]:
+                    raise RmCellException
+            else:
+                assert False, "Unrecognized cell-level macro name: {}".format(name)
+
 
     def apply_line_macros(self, src):
         # NB: + is greedy, so macro names can still include underscores.
@@ -65,7 +91,7 @@ class MacroProcessor(object):
                 return not self.cfg.get('testing', False)
             else:
                 return arg
-        return map(transform, args)
+        return list(map(transform, args))
 
 
 

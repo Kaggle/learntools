@@ -29,3 +29,8 @@ def UNCOMMENT(line):
     assert re.match(r'\s*#', line), "Can't uncomment line:{!r}".format(line)
     return line.replace('#', '', 1)
 
+
+def UNCOMMENT_IF(line, cond):
+    if cond:
+        return UNCOMMENT(line)
+    return line
