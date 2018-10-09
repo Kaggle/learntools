@@ -19,7 +19,13 @@ class YearPlot(ThoughtExperiment):
 
 The distribution of year of release does seem to follow some distinct gradients, but the pattern is not global.
 
-Using a colormap that passes through several hues (such as 'brg', or 'cubehelix') can make it easier to identify regions associated with specific eras - using a qualitative colormap (such as 'Set2') exaggerates this effect even further. 
+Using a colormap that passes through several hues (such as 'brg', or 'cubehelix') can make it easier to identify regions associated with specific eras:
+
+```python
+pts = ax.scatter(df.x, df.y, c=c, cmap='cubehelix')
+```
+
+Using a qualitative colormap (such as 'Set2') exaggerates this effect even further. 
 
 Simple sequential colormaps that use only one or two colors (e.g. 'Oranges', 'YlGn') are more effective at showing overall patterns from old to new.
 """)
