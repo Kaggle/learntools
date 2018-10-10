@@ -25,7 +25,7 @@ Feature requests / Nice-to-haves
     - and/or some easy way to raise unattempted inside a custom checking fn? (I think, as the code is currently structured, the check function is somehow past the point of no return for declaring unattempted)
 - For CodingProblem and its subclasses, I really like the idea of some declarative API around the variables of interest to be injected from the calling runtime.
     - Goals:
-        - Abolish ugliness of parallel `_vars`, and `_default_values` attributes (and `_expected_values` any other per-var list attrs) 
+        - Abolish ugliness of parallel `_vars`, and `_default_values` attributes (and `_expected_values` any other per-var list attrs)
         - Plug holes in attemptedness-checking logic (see previous top-level bullet)
         - Right now any CodingProblem which isn't an `EqualityCheckProblem` or `FunctionProblem` requires custom `check()` method logic. And there are a lot of problems in this bucket. Would like to be rare for problem implementer to implement `check()`, because it's kind of tedious and error-prone.
     - For a given variable, could potentially specify...
@@ -38,3 +38,4 @@ Feature requests / Nice-to-haves
             - this thing is equal to x (subsuming `EqualityCheckProblem`)
             - this thing is equal to one of {x, y, z}
             - fallback: some lambda to be applied to this thing, which, say, returns either True or (False, err msg)?
+- emit warning when `tutorial_id` not set in `bind_exercises`

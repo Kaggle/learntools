@@ -94,7 +94,7 @@ def injected(method):
     args in CodingProblem subclasses.
 
     Injected methods may also receive additional, explicit, user-supplied arguments.
-    They should come before any injected args.
+    They should come after any injected args.
     """
     @functools.wraps(method)
     def wrapped(self, *args, **kwargs):
