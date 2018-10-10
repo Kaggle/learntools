@@ -4,13 +4,13 @@
   "dataset_sources": [],
   "enable_gpu": false,
   "enable_internet": true,
-  "id": "colinmorris/4-visualizing-embeddings-with-t-sne",
+  "id": "colinmorris/visualizing-embeddings-with-t-sne",
   "is_private": true,
   "kernel_sources": [
-    "colinmorris/0-movielens-preprocessing",
-    "colinmorris/x3-movielens-spiffy-model"
+    "colinmorris/movielens-preprocessing",
+    "colinmorris/movielens-spiffy-model"
   ],
   "kernel_type": "notebook",
   "language": "python",
-  "title": "4 Visualizing Embeddings With T-Sne"
+  "title": "Visualizing Embeddings With t-SNE"
 }

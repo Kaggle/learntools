@@ -6,10 +6,10 @@
   ],
   "enable_gpu": false,
   "enable_internet": true,
-  "id": "colinmorris/0-movielens-preprocessing",
+  "id": "colinmorris/movielens-preprocessing",
   "is_private": true,
   "kernel_sources": [],
   "kernel_type": "notebook",
   "language": "python",
-  "title": "0 movielens preprocessing"
+  "title": "MovieLens Preprocessing"
 }

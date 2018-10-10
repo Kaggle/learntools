@@ -4,12 +4,12 @@
   "dataset_sources": [],
   "enable_gpu": false,
   "enable_internet": true,
-  "id": "colinmorris/x2-movielens-factorization-r12n",
+  "id": "colinmorris/regularized-movielens-factorization-model",
   "is_private": true,
   "kernel_sources": [
-    "colinmorris/0-movielens-preprocessing"
+    "colinmorris/movielens-preprocessing"
   ],
   "kernel_type": "notebook",
   "language": "python",
-  "title": "x2 movielens factorization r12n"
+  "title": "Regularized MovieLens factorization model"
 }
