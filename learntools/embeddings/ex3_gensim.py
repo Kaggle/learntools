@@ -56,7 +56,8 @@ class CalculateNorms(CodingProblem):
                 " was {}").format(exp_shape, n_movies, shape)
         norm0 = norms[0]
         exp = 2.0208979
-        assert math.isclose(norm0, exp, rel_tol=1e-3), ("Expected `norms[0]` to be"
+        # Setting very generous rel_tol because of variability in training.
+        assert math.isclose(norm0, exp, rel_tol=.5), ("Expected `norms[0]` to be"
                 " approximately {}. Actual value: {}.").format(exp, norm0)
 
 class NormColumn(CodingProblem):
@@ -68,7 +69,7 @@ class NormColumn(CodingProblem):
         assert_has_columns(df, ['norm'], 'all_movies_df')
         exp = 1.623779
         jum = df.loc[1, 'norm']
-        assert math.isclose(exp, df.loc[1, 'norm'], rel_tol=1e-3), (
+        assert math.isclose(exp, df.loc[1, 'norm'], rel_tol=.5), (
                 "Expected norm column for movie 'Jumanji' to be {}"
                 ". Was actually {}").format(exp, jum)
 
