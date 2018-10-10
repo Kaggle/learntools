@@ -169,6 +169,13 @@ Head over to [the Exercises notebook]({}) to get some hands-on practice working 
         self.lesson.exercise.forking_url, self.lesson.topic,
         )
 
+    def TUT_BETA_NOTE(self, jot_id, **kwargs):
+        form_url = 'https://form.jotform.com/{}'.format(jot_id)
+        return """### P.S...
+
+This course is still in beta, so I'd love to get your feedback. If you have a moment to [fill out a super-short survey about this lesson]({}), I'd greatly appreciate it. You can also leave public feedback in the comments below, or on the [Learn Forum](https://www.kaggle.com/learn-forum).
+""".format(form_url)
+
     def EXERCISE_SETUP(self, **kwargs):
         # Standard setup code. Not currently used. Maybe should be.
         pass
