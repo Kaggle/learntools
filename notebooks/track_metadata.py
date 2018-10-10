@@ -29,6 +29,9 @@ class TrackMeta(object):
             # to access next of last lesson etc. for clarity
             lesson.next = next_lesson
             next_lesson.prev = lesson
+        # Set first/last flags
+        self.lessons[0].first = True
+        self.lessons[-1].last = True
         self.notebooks = []
         for nb_meta in nbs_meta:
             nb_meta = nb_meta.copy()
@@ -69,6 +72,8 @@ class TrackMeta(object):
 class Lesson(object):
     def __init__(self, topic):
         self.topic = topic
+        self.first = False
+        self.last = False
 
 class Notebook(object):
 

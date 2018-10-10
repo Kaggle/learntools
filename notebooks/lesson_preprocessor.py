@@ -38,6 +38,10 @@ class LearnLessonPreprocessor(Preprocessor):
 
         new_cells = []
         for cell in nb.cells:
+            # XXX: Kind of hacky implementation.
+            src = cell['source']
+            if src.strip() == '#%%RM_BELOW%%':
+                break
             c = self.process_cell(cell)
             c = c and macroer.process_cell(c)
             if c is not None:
@@ -217,6 +221,26 @@ When you're ready to continue, [click here]({}) to continue on to the next tutor
 
         # Alternative formulation (used on days 5 and 6 of Python challenge):
         # Want feedback on your code? To share it with others or ask for help, you'll need to make it public. Save a version of your notebook that shows your current work by hitting the "Commit & Run" button. Once your notebook is finished running, go to the Settings tab in the panel to the left (you may have to expand it by hitting the [<] button next to the "Commit & Run" button) and set the "Visibility" dropdown to "Public".
+
+    def END_OF_EMB_EXERCISE(self, jot_id, **kwargs):
+        form_url = 'https://form.jotform.com/{}'.format(jot_id)
+        txt = """
+---
+That's the end of this exercise. How'd it go? If you have any questions, be sure to post them on the [forums](https://www.kaggle.com/learn-forum).
+
+**P.S.** This course is still in beta, so I'd love to get your feedback. If you have a moment to [fill out a super-short survey about this exercise]({form_url}), I'd greatly appreciate it.
+""".format(form_url=form_url)
+        if not self.lesson.last:
+            next = self.lesson.next
+            kg = """
+# Keep going
+
+When you're ready to continue, [click here]({}) to continue on to the next tutorial on {}.
+""".format(
+        next.tutorial.url, next.topic,
+        )
+            txt += kg
+        return txt
 
 
 
