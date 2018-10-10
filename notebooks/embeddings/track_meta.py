@@ -15,8 +15,7 @@ _tuts = [dict(lesson_idx=i, type='tutorial',
         for i, name in enumerate(_tut_names)
         ]
 
-# TODO: scriptids
-_exercise_scriptids = [1 for _ in range(len(lessons))]
+_exercise_scriptids = [1598432, 1598589, 1598893, 1599029]
 _exs = [dict(lesson_idx=i, type='exercise', scriptid=sid,
             filename='{}-exercises.ipynb'.format(i+1)) 
         for i, sid in enumerate(_exercise_scriptids)
