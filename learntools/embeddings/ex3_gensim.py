@@ -92,7 +92,7 @@ qvars = bind_exercises(globals(), [
     VectorAddition,
     VectorLengths
     ],
-    tutorial_id=-1,
+    tutorial_id=151,
     var_format='part{n}',
 )
 __all__ = list(qvars)

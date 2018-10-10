@@ -193,7 +193,7 @@ qvars = bind_exercises(globals(), [
     EmbeddingSizeInvestigation,
     BigBiasProblem,
     ],
-    tutorial_id=-1,
+    tutorial_id=149,
     var_format='part{n}',
 )
 __all__ = list(qvars)
