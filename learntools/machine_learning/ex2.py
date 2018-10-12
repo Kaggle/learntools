@@ -22,7 +22,7 @@ class HomeDescription(EqualityCheckProblem):
     max_year_built = 2010
     min_home_age = datetime.datetime.now().year - max_year_built
     _expected = [10517, min_home_age]
-    _hint = 'Run the describe command. Lot size is in the column called LotArea. Also look at YearBuilt'
+    _hint = 'Run the describe command. Lot size is in the column called LotArea. Also look at YearBuilt. Remember to round lot size '
     _solution = CS(
 """# using data read from home_data.describe()
 avg_lot_size = 10517
