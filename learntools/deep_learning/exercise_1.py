@@ -7,12 +7,12 @@ from learntools.core.richtext import CodeSolution as CS
 from learntools.core.problem import *
 
 class VerticalLineDetector(CodingProblem):
-    _vars = ['original_image', 'vertical_line_conv']
+    _vars = ['vertical_line_conv']
     _hint = ("Use `print(home_data.columns)`. The column you want is at the end "
             "of the list. Use the dot notation to pull out this column from the DataFrame")
     _solution = CS('')
 
-    def check(self, original_image, conv):
+    def check(self, conv):
         assert (isinstance(conv, list) or isinstance(conv, np.ndarray)), \
                ("The input format should be a list of lists")
         assert (conv[0][0] == conv[1][0]), \
