@@ -3,9 +3,9 @@
   "competition_sources": [],
   "dataset_sources": [],
   "enable_gpu": false,
-  "enable_internet": true,
+  "enable_internet": false,
   "id": "colinmorris/exercise-matrix-factorization",
-  "is_private": true,
+  "is_private": false,
   "kernel_sources": [
     "colinmorris/matrix-factorization",
     "colinmorris/movielens-preprocessing",
