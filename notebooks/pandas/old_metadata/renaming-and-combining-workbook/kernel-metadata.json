@@ -1,0 +1,22 @@
+{
+  "language": "python",
+  "kernel_type": "notebook",
+  "enable_gpu": false,
+  "kernel_sources": [],
+  "code_file": "renaming-and-combining-workbook.ipynb",
+  "title": "Renaming and combining workbook",
+  "id": "residentmario/renaming-and-combining-workbook",
+  "dataset_sources": [
+    "residentmario/things-on-reddit",
+    "zynicide/wine-reviews",
+    "open-powerlifting/powerlifting-database",
+    "residentmario/advanced-pandas-exercises"
+  ],
+  "competition_sources": [],
+  "id_no": 638064,
+  "enable_internet": false,
+  "is_private": false,
+  "keywords": [
+    "tutorial"
+  ]
+}

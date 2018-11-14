@@ -1,0 +1,22 @@
+{
+  "kernel_type": "notebook",
+  "code_file": "creating-reading-and-writing-workbook.ipynb",
+  "enable_internet": false,
+  "kernel_sources": [],
+  "is_private": false,
+  "competition_sources": [],
+  "title": "Creating, reading, and writing workbook",
+  "id": "residentmario/creating-reading-and-writing-workbook",
+  "enable_gpu": false,
+  "dataset_sources": [
+    "nolanbconaway/pitchfork-data",
+    "zynicide/wine-reviews",
+    "residentmario/advanced-pandas-exercises",
+    "jpmiller/publicassistance"
+  ],
+  "id_no": 587970,
+  "language": "python",
+  "keywords": [
+    "tutorial"
+  ]
+}

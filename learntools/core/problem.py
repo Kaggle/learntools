@@ -8,9 +8,11 @@ import math
 import numbers
 import functools
 
+import pandas as pd
+
 from learntools.core.richtext import *
 from learntools.core.exceptions import NotAttempted, Uncheckable, UserlandExceptionIncorrect
-from learntools.core import utils
+from learntools.core import utils, asserts
 
 # TODO: I'm sure there's a more elegant way to do this.
 # Some kind of decorator on top of property?
@@ -149,7 +151,7 @@ class EqualityCheckProblem(CodingProblem):
         if len(self.injectable_vars) == 1:
             # Don't wrap length-1 lists (i.e. assume that ex[0] is the expected value
             # of our single variable of interest, rather than ex itself)
-            if isinstance(ex, list) and len(ex) == 1:
+            if (isinstance(ex, list) or isinstance(ex, tuple)) and len(ex) == 1:
                 return ex
             else:
                 return [ex]
@@ -162,11 +164,18 @@ class EqualityCheckProblem(CodingProblem):
                     var, repr(actual))
 
     def assert_equal(self, var, actual, expected):
+        # We default to == comparison, but have special cases for certain data types.
         if isinstance(expected, float):
             assert isinstance(actual, numbers.Number), \
                 "Expected `{}` to be a number, but had value `{!r}` (type = `{}`)".format(
                     var, actual, type(actual).__name__)
             check = math.isclose(actual, expected, rel_tol=1e-06)
+        elif isinstance(expected, pd.DataFrame):
+            asserts.assert_df_equals(actual, expected, var)
+            return
+        elif isinstance(expected, pd.Series):
+            asserts.assert_series_equals(actual, expected, var)
+            return
         else:
             check = actual == expected
         assert check, self.failure_message(var, actual, expected)
@@ -187,6 +196,12 @@ class EqualityCheckProblem(CodingProblem):
                 # If we get an exception comparing the actual value to the expected,
                 # we can reasonably infer they're not equal.
                 neq = True
+            # If the actual value is an ndarray or DataFrame or something, the result of != may
+            # be something more complicated than a bool. If this is the case, let's assume the
+            # actual value differs from the default. (Default values will probably never be anything
+            # as complicated an ndarray/df/series anyways)
+            if not isinstance(neq, bool):
+                return
             if neq:
                 return
         # It'd be kind of odd if a EqualityCheckProblem didn't have any associated

@@ -1,0 +1,19 @@
+{
+  "id_no": 582111,
+  "competition_sources": [],
+  "kernel_sources": [],
+  "is_private": false,
+  "language": "python",
+  "dataset_sources": [
+    "zynicide/wine-reviews"
+  ],
+  "kernel_type": "notebook",
+  "id": "residentmario/indexing-selecting-assigning-reference",
+  "enable_gpu": false,
+  "keywords": [
+    "tutorial"
+  ],
+  "enable_internet": false,
+  "title": "Indexing, selecting, assigning reference",
+  "code_file": "indexing-selecting-assigning-reference.ipynb"
+}
