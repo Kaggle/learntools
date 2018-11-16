@@ -39,3 +39,4 @@ Feature requests / Nice-to-haves
             - this thing is equal to one of {x, y, z}
             - fallback: some lambda to be applied to this thing, which, say, returns either True or (False, err msg)?
 - emit warning when `tutorial_id` not set in `bind_exercises`
+- `show_solution_on_correct` should be opt-in (rather than defaulting on for questions with non-CodeSolution solns)

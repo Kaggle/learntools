@@ -39,6 +39,9 @@ def assert_file_exists(path):
 def assert_df_equals(actual, exp, name=None):
     actual_name = name or "dataframe"
     assert_isinstance(pd.DataFrame, **{actual_name: actual, "_expected_value": exp})
+    actual_name = '`{}`'.format(name) if name else "dataframe"
+    assert len(actual) == len(exp), "Expected {} to have length {} but was actually {}".format(
+        actual_name, len(exp), len(actual))
     # Only verify that the first n records match - I guess this could be slow if 
     # our dataframes have hundreds of thousands of rows. This *could* bite us, though
     # it seems unlikely to cause a false negative.
@@ -65,6 +68,9 @@ def assert_series_equals(actual, exp, name=None):
     # TODO: Actually, maybe name should be mandatory for these functions?
     actual_name = name or 'series'
     assert_isinstance(pd.Series, **{actual_name: actual, "_expected_value": exp})
+    actual_name = '`{}`'.format(name) if name else "series"
+    assert len(actual) == len(exp), "Expected {} to have length {} but was actually {}".format(
+        actual_name, len(exp), len(actual))
     lim = 100
     actual_sub = actual.head(lim)
     exp_sub = exp.head(lim)
@@ -72,7 +78,6 @@ def assert_series_equals(actual, exp, name=None):
     if eq:
         return
     # We now they're unequal, now just need to explain why
-    actual_name = '`{}`'.format(name) if name else "series"
     assert actual.name == exp.name, "Expected {} to have name=`{}` not `{}`".format(
             actual_name, exp.name, actual.name)
     # TODO: More checks

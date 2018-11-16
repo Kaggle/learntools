@@ -9,10 +9,11 @@ import numbers
 import functools
 
 import pandas as pd
+import numpy as np
 
 from learntools.core.richtext import *
 from learntools.core.exceptions import NotAttempted, Uncheckable, UserlandExceptionIncorrect
-from learntools.core import utils, asserts
+from learntools.core import utils, asserts, constants
 
 # TODO: I'm sure there's a more elegant way to do this.
 # Some kind of decorator on top of property?
@@ -176,6 +177,8 @@ class EqualityCheckProblem(CodingProblem):
         elif isinstance(expected, pd.Series):
             asserts.assert_series_equals(actual, expected, var)
             return
+        elif isinstance(actual, np.ndarray) or isinstance(expected, np.ndarray):
+            check = np.array_equal(actual, expected)
         else:
             check = actual == expected
         assert check, self.failure_message(var, actual, expected)
@@ -185,10 +188,20 @@ class EqualityCheckProblem(CodingProblem):
             self.assert_equal(var, actual, expected)
 
     def check_whether_attempted(self, *args):
+        varnames = self.injectable_vars
+        def _raise_not_attempted():
+            raise NotAttempted("You need to update the code that creates"
+                    " variable{} {}".format('s' if len(varnames) > 1 else '',
+                        ', '.join(map(utils.backtickify, varnames))))
+        # First, check whether any vars have placeholder values
+        for (var, val) in zip(varnames, args):
+            # NB: Yoda condition to ensure that it's PlaceholderValue's __eq__ that gets called.
+            if constants.PLACEHOLDER == val:
+                _raise_not_attempted()
         if not hasattr(self, '_default_values'):
             return
         for var, val, default in zip(
-                self.injectable_vars, args, self._default_values
+                varnames, args, self._default_values
                 ):
             try:
                 neq = val != default
@@ -207,10 +220,7 @@ class EqualityCheckProblem(CodingProblem):
         # It'd be kind of odd if a EqualityCheckProblem didn't have any associated
         # vars, but I guess it's not worth raising a fuss over...
         if len(args):
-            vars = self.injectable_vars
-            raise NotAttempted("You need to update the code that creates"
-                    " variable{} {}".format('s' if len(vars) > 1 else '',
-                        ', '.join(map(utils.backtickify, vars))))
+            _raise_not_attempted()
 
 
 class FunctionProblem(CodingProblem):

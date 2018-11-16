@@ -1,0 +1,11 @@
+
+- None of the lessons seem to cover modifying dataframes, which is pretty important.
+    - Adding a column to a dataframe
+    - Inplace operations like resetting index, dropping null values, renaming
+- Would benefit from at least one example where index labels aren't just range(n)
+- Why are we setting max rows to display to 5 in each workbook?
+- How many records have condition X?
+- Would be fun to change up the format of questions sometimes. e.g.
+    - Give them a broken pandas expression and have them fix it
+    - Write a function that works with arbitrary dataframes/serieses
+    - 'pepper' questions

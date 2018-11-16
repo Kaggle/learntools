@@ -1,5 +1,7 @@
 track = dict(
-    author_username='residentmario',
+    # Create shadow (private) notebooks under my username for now for testing
+    author_username='colinmorris',
+    #author_username='residentmario',
 )
 
 lessons = []
@@ -20,9 +22,12 @@ renaming-and-combining-workbook
 method-chaining-reference
 method-chaining-workbook""".split()
 
+import os; import json
 def _make_notebook(slug, type_, lesson_idx):
     # XXX
-    path = os.path.join('old_metadata', slug, 'kernel_metadata.json')
+    # I guess this is most likely to be run from the notebooks directory, so
+    # make path relative to that.
+    path = os.path.join('pandas', 'old_metadata', slug, 'kernel-metadata.json')
     with open(path) as f:
         ex = json.load(f)
 
@@ -51,26 +56,4 @@ for i in range(0, len(SLUGS), 2):
     for slug, type_ in zip(slugs, type_order):
         nb = _make_notebook(slug, type_, lesson_idx)
         notebooks.append(nb)
-
-lessons = [
-        dict(
-            topic='example',
-            ),
-]
-
-notebooks = [
-    dict(
-        filename='tut1.ipynb',
-        lesson_idx=0,
-        type='tutorial',
-        scriptid=1,
-        ),
-    dict(
-        filename='ex1.ipynb',
-        lesson_idx=0,
-        type='exercise',
-        scriptid=1,
-        ),
-]
-
 
