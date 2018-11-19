@@ -1,3 +1,7 @@
+import numpy as np
+from numpy import newaxis
+import matplotlib.pyplot as plt
+
 from learntools.core.utils import bind_exercises
 from learntools.core.problem_factories import simple_problem
 from learntools.core.richtext import CodeSolution as CS
@@ -31,24 +35,24 @@ def predict_sequences_multiple(model, data, window_size, prediction_len):
 
 class PlotSirajStockModel(CodingProblem):
     # test are on train_X and val_y. If these are right, others will be right too.
-    _vars = ["siraj_model", "X_test"]
+    _vars = ["siraj_model", "X_test", "y_test"]
     _hint = ("")
     _solution = CS("""
     """)
 
-    def check(self, siraj_model, X_test):
+    def check(self, siraj_model, X_test, y_test):
         print("Predicted path at various points in time for siraj_model")
         siraj_predictions = predict_sequences_multiple(siraj_model, X_test, 50, 50)
         plot_results_multiple(siraj_predictions, y_test, 50)
 
 class PlotMyStockModel(CodingProblem):
     # test are on train_X and val_y. If these are right, others will be right too.
-    _vars = ["my_model", "X_test"]
+    _vars = ["my_model", "X_test", "y_test"]
     _hint = ("")
     _solution = CS("""
     """)
 
-    def check(self, my_model, X_test):
+    def check(self, my_model, X_test, y_test):
         print("Predicted path at various points in time for my_model")
         my_predictions = predict_sequences_multiple(my_model, X_test, 50, 50)
         plot_results_multiple(my_predictions, y_test, 50)
