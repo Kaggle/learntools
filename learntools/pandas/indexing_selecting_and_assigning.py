@@ -75,18 +75,6 @@ class RowColSelect2(EqualityCheckProblem):
 cols = ['country', 'variety']
 df = reviews.head(100).loc[:,cols]""")
 
-class NMissingPrices(EqualityCheckProblem):
-    _var = 'missing_prices'
-    _expected = (
-            pd.isnull(reviews.price).sum(),
-    )
-    _solution = CS("""\
-missing_price_reviews = reviews[reviews.price.isnull()]
-missing_prices = len(missing_price_reviews)
-# Cute alternative solution: if we sum a boolean series, True is treated as 1 and False as 0
-missing_prices = reviews.price.isnull().sum()
-""")
-
 class ItalianWines(EqualityCheckProblem):
     _var = 'italian_wines'
     _expected = (
@@ -116,7 +104,6 @@ qvars = bind_exercises(globals(), [
     RowColSelect,
     RowColSelect2,
     ItalianWines,
-    NMissingPrices,
     TopOceanicWines,
     ],
     tutorial_id=-1,
