@@ -1,0 +1,15 @@
+{
+  "id": "crawford/time-series-modeling",
+  "id_no": 2096487,
+  "title": "Time Series modeling",
+  "code_file": "../../nbs/tut2_time_series_modeling.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": false,
+  "enable_internet": false,
+  "keywords": [],
+  "dataset_sources": [],
+  "kernel_sources": [],
+  "competition_sources": []
+}
