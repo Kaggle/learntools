@@ -129,6 +129,19 @@ class CodingProblem(Problem):
     def injectable_vars(self) -> List[str]:
         return optionally_plural_property(self, '_var')
 
+    def check_whether_attempted(self, *args):
+        # TODO: copy-paste from EqualityCheckProblem.check_whether_attempted
+        varnames = self.injectable_vars
+        def _raise_not_attempted():
+            raise NotAttempted("You need to update the code that creates"
+                    " variable{} {}".format('s' if len(varnames) > 1 else '',
+                        ', '.join(map(utils.backtickify, varnames))))
+        # First, check whether any vars have placeholder values
+        for (var, val) in zip(varnames, args):
+            # NB: Yoda condition to ensure that it's PlaceholderValue's __eq__ that gets called.
+            if constants.PLACEHOLDER == val:
+                _raise_not_attempted()
+
 
 class EqualityCheckProblem(CodingProblem):
     """A problem which is considered solved iff some user-defined variables 
