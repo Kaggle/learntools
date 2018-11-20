@@ -9,3 +9,4 @@
     - Give them a broken pandas expression and have them fix it
     - Write a function that works with arbitrary dataframes/serieses
     - 'pepper' questions
+- is `Series.isin` covered? That's really useful.
