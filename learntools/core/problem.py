@@ -177,6 +177,7 @@ class EqualityCheckProblem(CodingProblem):
         return "Incorrect value for variable `{}`: `{}`".format(
                     var, repr(actual))
 
+    # TODO: Move this logic to asserts.py
     def assert_equal(self, var, actual, expected):
         # We default to == comparison, but have special cases for certain data types.
         if isinstance(expected, float):
