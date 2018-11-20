@@ -28,6 +28,7 @@ class ReviewsPerCountry(EqualityCheckProblem):
     _expected = reviews.country.value_counts()
     _solution = CS('reviews_per_country = reviews.country.value_counts()')
 
+# TODO: This is an exact dupe of something shown in reference notebook
 class CenteredPrice(EqualityCheckProblem):
     _var = 'centered_price'
     _expected = reviews.price - reviews.price.mean()
@@ -51,6 +52,7 @@ n_fruity = reviews.description.map(lambda desc: "fruity" in desc).sum()
 descriptor_counts = pd.Series([n_trop, n_fruity], index=['tropical', 'fruity'])''')
 
 class StarRatings(EqualityCheckProblem):
+    # TODO: hint
     _var = 'star_ratings'
 
     _solution = CS("""\

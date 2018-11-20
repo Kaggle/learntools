@@ -87,12 +87,12 @@ class TopOceanicWines(EqualityCheckProblem):
     cols = ['country', 'variety']
     _expected = reviews[
                 (reviews.country.isin(['Australia', 'New Zealand']))
-                & (reviews.points >= 98)
+                & (reviews.points >= 95)
     ]
     _solution = CS("""\
 top_oceania_wines = reviews[
     (reviews.country.isin(['Australia', 'New Zealand']))
-    & (reviews.points >= 98)
+    & (reviews.points >= 95)
 ]""")
 
 qvars = bind_exercises(globals(), [

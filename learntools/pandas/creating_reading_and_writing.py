@@ -11,7 +11,6 @@ class FruitDfCreation(EqualityCheckProblem):
     _expected = (
             pd.DataFrame([[30, 21]], columns=['Apples', 'Bananas']),
     )
-    _default_values = (None,)
     # TODO: This is a case where it would be nice to have a helper for creating 
     # a solution with multiple alternatives.
     _solution = CS(
@@ -20,7 +19,6 @@ class FruitDfCreation(EqualityCheckProblem):
 
 class FruitSalesDfCreation(EqualityCheckProblem):
     _var = 'fruit_sales'
-    _default_values = (None,)
     _expected = (
             pd.DataFrame([[35, 21], [41, 34]], columns=['Apples', 'Bananas'],
                 index=['2017 Sales', '2018 Sales']),
@@ -30,27 +28,30 @@ class FruitSalesDfCreation(EqualityCheckProblem):
                 index=['2017 Sales', '2018 Sales'])""",
             )
 
-class RecipeSeriesCreation(EqualityCheckProblem):
+class RecipeSeriesCreation(CodingProblem):
     _var = 'ingredients'
-    _default_values = (None,)
     quantities = ['4 cups', '1 cup', '2 large', '1 can']
     items = ['Flour', 'Milk', 'Eggs', 'Spam']
     recipe = pd.Series(quantities, index=items, name='Dinner')
-    _expected = (
-            recipe,
-            )
     _solution = CS("""\
 quantities = ['4 cups', '1 cup', '2 large', '1 can']
 items = ['Flour', 'Milk', 'Eggs', 'Spam']
 recipe = pd.Series(quantities, index=items, name='Dinner')""")
 
+    def check(self, ings):
+        assert_series_equals(ings, self.recipe)
+        assert ings.name == self.recipe.name, ("Expected `ingredients` to have"
+                " `name={!r}`, but was actually `{!r}`").format(
+                        self.recipe.name, ings.name)
+
+
 class ReadWineCsv(EqualityCheckProblem):
     _var = 'reviews'
-    _default_values = (None,)
-    _expected = (
-            pd.read_csv('../input/wine-reviews/winemag-data_first150k.csv'),
+    # TODO: Hint about index_col
+    _expected = pd.read_csv('../input/wine-reviews/winemag-data_first150k.csv', index_col=0)
+    _solution = CS(
+    "reviews = pd.read_csv('../input/wine-reviews/winemag-data_first150k.csv', index_col=0)"
     )
-    _solution = CS("reviews = pd.read_csv('../input/wine-reviews/winemag-data_first150k.csv')")
 
 class SaveAnimalsCsv(CodingProblem):
 
@@ -66,7 +67,6 @@ class SaveAnimalsCsv(CodingProblem):
 
 class ReadPitchforkSql(EqualityCheckProblem):
     _var = 'music_reviews'
-    _default_values = (None,)
     # TODO: Is loading expected values expensive here? May want to do it on-demand 
     # when check is first called, rather than on import
     conn = sqlite3.connect("../input/pitchfork-data/database.sqlite")

@@ -10,3 +10,5 @@
     - Write a function that works with arbitrary dataframes/serieses
     - 'pepper' questions
 - is `Series.isin` covered? That's really useful.
+- iterating over dfs/series (I know, anathema to pandas purists, but sometimes it's just the path of least resistance)
+- reset_index/set_index could use a slightly more in-depth treatment
