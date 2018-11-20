@@ -8,9 +8,12 @@ import math
 import numbers
 import functools
 
+import pandas as pd
+import numpy as np
+
 from learntools.core.richtext import *
 from learntools.core.exceptions import NotAttempted, Uncheckable, UserlandExceptionIncorrect
-from learntools.core import utils
+from learntools.core import utils, asserts, constants
 
 # TODO: I'm sure there's a more elegant way to do this.
 # Some kind of decorator on top of property?
@@ -126,6 +129,19 @@ class CodingProblem(Problem):
     def injectable_vars(self) -> List[str]:
         return optionally_plural_property(self, '_var')
 
+    def check_whether_attempted(self, *args):
+        # TODO: copy-paste from EqualityCheckProblem.check_whether_attempted
+        varnames = self.injectable_vars
+        def _raise_not_attempted():
+            raise NotAttempted("You need to update the code that creates"
+                    " variable{} {}".format('s' if len(varnames) > 1 else '',
+                        ', '.join(map(utils.backtickify, varnames))))
+        # First, check whether any vars have placeholder values
+        for (var, val) in zip(varnames, args):
+            # NB: Yoda condition to ensure that it's PlaceholderValue's __eq__ that gets called.
+            if constants.PLACEHOLDER == val:
+                _raise_not_attempted()
+
 
 class EqualityCheckProblem(CodingProblem):
     """A problem which is considered solved iff some user-defined variables 
@@ -149,7 +165,7 @@ class EqualityCheckProblem(CodingProblem):
         if len(self.injectable_vars) == 1:
             # Don't wrap length-1 lists (i.e. assume that ex[0] is the expected value
             # of our single variable of interest, rather than ex itself)
-            if isinstance(ex, list) and len(ex) == 1:
+            if (isinstance(ex, list) or isinstance(ex, tuple)) and len(ex) == 1:
                 return ex
             else:
                 return [ex]
@@ -161,12 +177,22 @@ class EqualityCheckProblem(CodingProblem):
         return "Incorrect value for variable `{}`: `{}`".format(
                     var, repr(actual))
 
+    # TODO: Move this logic to asserts.py
     def assert_equal(self, var, actual, expected):
+        # We default to == comparison, but have special cases for certain data types.
         if isinstance(expected, float):
             assert isinstance(actual, numbers.Number), \
                 "Expected `{}` to be a number, but had value `{!r}` (type = `{}`)".format(
                     var, actual, type(actual).__name__)
             check = math.isclose(actual, expected, rel_tol=1e-06)
+        elif isinstance(expected, pd.DataFrame):
+            asserts.assert_df_equals(actual, expected, var)
+            return
+        elif isinstance(expected, pd.Series):
+            asserts.assert_series_equals(actual, expected, var)
+            return
+        elif isinstance(actual, np.ndarray) or isinstance(expected, np.ndarray):
+            check = np.array_equal(actual, expected)
         else:
             check = actual == expected
         assert check, self.failure_message(var, actual, expected)
@@ -176,10 +202,20 @@ class EqualityCheckProblem(CodingProblem):
             self.assert_equal(var, actual, expected)
 
     def check_whether_attempted(self, *args):
+        varnames = self.injectable_vars
+        def _raise_not_attempted():
+            raise NotAttempted("You need to update the code that creates"
+                    " variable{} {}".format('s' if len(varnames) > 1 else '',
+                        ', '.join(map(utils.backtickify, varnames))))
+        # First, check whether any vars have placeholder values
+        for (var, val) in zip(varnames, args):
+            # NB: Yoda condition to ensure that it's PlaceholderValue's __eq__ that gets called.
+            if constants.PLACEHOLDER == val:
+                _raise_not_attempted()
         if not hasattr(self, '_default_values'):
             return
         for var, val, default in zip(
-                self.injectable_vars, args, self._default_values
+                varnames, args, self._default_values
                 ):
             try:
                 neq = val != default
@@ -187,15 +223,18 @@ class EqualityCheckProblem(CodingProblem):
                 # If we get an exception comparing the actual value to the expected,
                 # we can reasonably infer they're not equal.
                 neq = True
+            # If the actual value is an ndarray or DataFrame or something, the result of != may
+            # be something more complicated than a bool. If this is the case, let's assume the
+            # actual value differs from the default. (Default values will probably never be anything
+            # as complicated an ndarray/df/series anyways)
+            if not isinstance(neq, bool):
+                return
             if neq:
                 return
         # It'd be kind of odd if a EqualityCheckProblem didn't have any associated
         # vars, but I guess it's not worth raising a fuss over...
         if len(args):
-            vars = self.injectable_vars
-            raise NotAttempted("You need to update the code that creates"
-                    " variable{} {}".format('s' if len(vars) > 1 else '',
-                        ', '.join(map(utils.backtickify, vars))))
+            _raise_not_attempted()
 
 
 class FunctionProblem(CodingProblem):

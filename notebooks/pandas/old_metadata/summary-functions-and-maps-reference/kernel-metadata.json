@@ -1,0 +1,19 @@
+{
+  "kernel_sources": [],
+  "competition_sources": [],
+  "code_file": "summary-functions-and-maps-reference.ipynb",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "keywords": [
+    "tutorial"
+  ],
+  "dataset_sources": [
+    "zynicide/wine-reviews"
+  ],
+  "enable_internet": false,
+  "language": "python",
+  "title": "Summary functions and maps reference",
+  "id_no": 595033,
+  "enable_gpu": false,
+  "id": "residentmario/summary-functions-and-maps-reference"
+}

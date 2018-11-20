@@ -79,6 +79,7 @@ class Notebook(object):
 
     def __init__(self, filename, type, author=None, title=None, lesson=None,
             slug=None, scriptid=1, kernel_sources=(), dataset_sources=(),
+            keywords=(),
             ):
         self.filename = filename
         self.stem, _ = os.path.splitext(os.path.basename(filename))
@@ -102,6 +103,7 @@ class Notebook(object):
         self.scriptid = scriptid
         self.kernel_sources = list(kernel_sources)
         self.dataset_sources = list(dataset_sources)
+        self.keywords = list(keywords)
 
     @staticmethod
     def _topic_to_title(topic):
@@ -150,5 +152,6 @@ class Notebook(object):
                 dataset_sources=sorted(self.dataset_sources),
                 kernel_sources=sorted(self.kernel_sources),
                 competition_sources=[],
+                keywords=sorted(self.keywords),
                 )
 

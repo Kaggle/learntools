@@ -1,0 +1,23 @@
+{
+  "language": "python",
+  "title": "Method chaining workbook",
+  "dataset_sources": [
+    "datasnaek/chess",
+    "nasa/kepler-exoplanet-search-results",
+    "zynicide/wine-reviews",
+    "residentmario/ramen-ratings",
+    "residentmario/advanced-pandas-exercises"
+  ],
+  "kernel_sources": [],
+  "id": "residentmario/method-chaining-workbook",
+  "kernel_type": "notebook",
+  "id_no": 605139,
+  "keywords": [
+    "tutorial"
+  ],
+  "is_private": false,
+  "enable_internet": false,
+  "enable_gpu": false,
+  "competition_sources": [],
+  "code_file": "method-chaining-workbook.ipynb"
+}

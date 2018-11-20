@@ -23,6 +23,7 @@ Feature requests / Nice-to-haves
         - could take out the stuff around _expected, and check_whether_attempted in `EqualityCheckProblem` and turn it into some kind of mixin
     - like, maybe some declarative way to specify attemptedness-checking logic as like, "all these variables have non-default values", "any of these variables have non-default values", "this function is non-empty", etc.
     - and/or some easy way to raise unattempted inside a custom checking fn? (I think, as the code is currently structured, the check function is somehow past the point of no return for declaring unattempted)
+- Unified handling of effect of PlaceholderValues on `check_whether_attempted` outcome.
 - For CodingProblem and its subclasses, I really like the idea of some declarative API around the variables of interest to be injected from the calling runtime.
     - Goals:
         - Abolish ugliness of parallel `_vars`, and `_default_values` attributes (and `_expected_values` any other per-var list attrs)
@@ -39,3 +40,5 @@ Feature requests / Nice-to-haves
             - this thing is equal to one of {x, y, z}
             - fallback: some lambda to be applied to this thing, which, say, returns either True or (False, err msg)?
 - emit warning when `tutorial_id` not set in `bind_exercises`
+- `show_solution_on_correct` should be opt-in (rather than defaulting on for questions with non-CodeSolution solns)
+    - related opt-in behaviour that would be useful: echo *value* on correct (for `EqualityCheckProblem`s)

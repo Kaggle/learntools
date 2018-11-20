@@ -1,0 +1,19 @@
+{
+  "id": "residentmario/data-types-and-missing-data-workbook",
+  "enable_internet": false,
+  "code_file": "data-types-and-missing-data-workbook.ipynb",
+  "kernel_sources": [],
+  "dataset_sources": [
+    "zynicide/wine-reviews"
+  ],
+  "enable_gpu": false,
+  "competition_sources": [],
+  "keywords": [
+    "tutorial"
+  ],
+  "id_no": 598826,
+  "kernel_type": "notebook",
+  "is_private": false,
+  "language": "python",
+  "title": "Data types and missing data workbook"
+}

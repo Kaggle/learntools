@@ -1,0 +1,20 @@
+{
+  "kernel_sources": [],
+  "competition_sources": [],
+  "code_file": "summary-functions-and-maps-workbook.ipynb",
+  "language": "python",
+  "enable_gpu": false,
+  "title": "Summary functions and maps workbook",
+  "kernel_type": "notebook",
+  "keywords": [
+    "tutorial"
+  ],
+  "dataset_sources": [
+    "zynicide/wine-reviews",
+    "residentmario/advanced-pandas-exercises"
+  ],
+  "id_no": 595524,
+  "enable_internet": false,
+  "is_private": false,
+  "id": "residentmario/summary-functions-and-maps-workbook"
+}

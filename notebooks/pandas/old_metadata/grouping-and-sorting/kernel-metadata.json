@@ -1,0 +1,20 @@
+{
+  "dataset_sources": [
+    "zynicide/wine-reviews",
+    "residentmario/advanced-pandas-exercises"
+  ],
+  "id_no": 598715,
+  "enable_internet": false,
+  "keywords": [
+    "tutorial"
+  ],
+  "competition_sources": [],
+  "kernel_sources": [],
+  "title": "Grouping and Sorting",
+  "is_private": false,
+  "enable_gpu": false,
+  "kernel_type": "notebook",
+  "code_file": "grouping-and-sorting.ipynb",
+  "language": "python",
+  "id": "residentmario/grouping-and-sorting"
+}
