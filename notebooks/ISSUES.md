@@ -4,3 +4,4 @@
 - Would be really nice to have some way to write 'testing' exercise notebooks (including debugging cells marked with `#%%RM_IF(PROD)%%` for testing checking code) to separate kernel ids.
     - I think maybe solution is to make dev/testing into flags for render.py (slash prepare_push.py slash some script coordinating both steps) rather than putting them in that config yaml file. Testing flag would write rendered notebooks and metadata files to different subdirectories (and the metadata files would have different ids).
 - can (probably) remove `/kaggle/working` hack from pip install learntools hack.
+- would be useful to have macros like `#!WARN!` that would emit a warning during rendering (or even halt rendering in prod mode?). Basically a way to put down a TODO/XXX with teeth.
