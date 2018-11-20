@@ -1,0 +1,15 @@
+{
+  "id": "crawford/exercise-time-series-modeling",
+  "id_no": 2096013,
+  "title": "Exercise: Time Series Modeling",
+  "code_file": "../../nbs/ex2_time_series_modeling.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": false,
+  "enable_internet": false,
+  "keywords": [],
+  "dataset_sources": [],
+  "kernel_sources": [],
+  "competition_sources": []
+}
