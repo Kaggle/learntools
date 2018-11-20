@@ -88,6 +88,6 @@ qvars = bind_exercises(globals(), [
     SaveAnimalsCsv,
     ReadPitchforkSql,
     ],
-    tutorial_id=-1,
+    tutorial_id=45,
     )
 __all__ = list(qvars)

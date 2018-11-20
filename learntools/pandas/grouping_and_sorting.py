@@ -44,6 +44,6 @@ qvars = bind_exercises(globals(), [
     ReviewerMeanRatings,
     GroupbyCountryVariety,
     ],
-    tutorial_id=-1,
+    tutorial_id=48,
     )
 __all__ = list(qvars)
