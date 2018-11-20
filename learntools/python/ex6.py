@@ -84,6 +84,11 @@ class WordSearch(FunctionProblem):
             "Casinoville?",
     ]
     _test_docs_b = _test_docs_a + ["He bought a casino. That's crazy."]
+    _test_docs_c = [
+            "The Learn Python Challenge Casino has a big casino full of casino games",
+            "They bought a car",
+            "Casinoville",
+    ]
 
     _test_inputs = [
             (_test_docs_a, 'casino'),
@@ -91,6 +96,8 @@ class WordSearch(FunctionProblem):
             (_test_docs_a, 'car'),
             (_test_docs_b, 'crazy'),
             (_test_docs_b, 'bought'),
+            # Test for not double-counting repeated instances within a document
+            (_test_docs_c, 'casino'),
             ([], 'spam'),
     ]
     _test_cases = [
@@ -108,7 +115,7 @@ class MultiWordSearch(FunctionProblem):
             "They bought a car",
             "Casinoville?",
     ]
-    _test_docs_b = _test_docs_a + ["He bought a casino. That's crazy."]
+    _test_docs_b = _test_docs_a + ["He bought a casino. A casino! That's crazy."]
     _test_keywords = [
             [],
             ['casino'],
