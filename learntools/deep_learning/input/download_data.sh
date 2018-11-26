@@ -13,6 +13,6 @@ kaggle datasets download dansbecker/hot-dog-not-hot-dog -p hot-dog-not-hot-dog/s
 kaggle datasets download dansbecker/dogs-gone-sideways -p dogs-gone-sideways --unzip
 unzip dogs-gone-sideways/images.zip -d dogs-gone-sideways/
 
-kaggle datasets download zalando-research/fashionmnist -p fashionmnist
+kaggle datasets download zalando-research/fashionmnist -p fashionmnist --unzip
 
 kaggle competitions download digit-recognizer -p ./digit-recognizer -f train.csv
