@@ -1,7 +1,7 @@
 track = dict(
     # Create shadow (private) notebooks under my username for now for testing
-    author_username='colinmorris',
-    #author_username='residentmario',
+    #author_username='colinmorris',
+    author_username='residentmario',
 )
 
 lessons = []
@@ -30,12 +30,20 @@ def _make_notebook(slug, type_, lesson_idx):
     path = os.path.join('pandas', 'old_metadata', slug, 'kernel-metadata.json')
     with open(path) as f:
         ex = json.load(f)
+    
+    datasets = ex.get('dataset_sources', [])
+    adpan = 'residentmario/advanced-pandas-exercises'
+    # The "advanced pandas exercises" dataset is no longer used, but we'll keep
+    # using it in all exercise workbooks as a hack to make sure they all have 
+    # at least 2 datasets, for consistency of input file paths.
+    if type_ == 'exercise' and adpan not in datasets:
+        datasets.append(adpan)
+        assert len(datasets) >= 2
 
     return dict(
             filename=slug+'.ipynb',
             type=type_,
             lesson_idx=lesson_idx,
-            # TODO: Exclude advanced pandas
             dataset_sources=ex.get('dataset_sources', []),
             keywords=ex.get('keywords', []),
             title=ex['title'],
