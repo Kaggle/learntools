@@ -58,10 +58,10 @@ class FitTransferModel(CodingProblem):
         their_val_dir = fit_stats.validation_data.directory
         their_val_loss = fit_stats.history['val_loss']
         their_num_steps = b.params['steps']
-        assert (their_val_dir == '../input/dogs-gone-sideways/val'),
+        assert (their_val_dir == '../input/dogs-gone-sideways/val'),\
                ("The validation directory should be `../input/dogs-gone-sideways/val`. Yours was {}".format(their_val_dir))
         assert (their_num_steps == 22), ("Should have 22 steps per epoch. You had {}".format(their_num_steps))
-        assert (their_val_loss < 0.4),
+        assert (their_val_loss < 0.4), \
                 ("Your validation loss is {}. It should be around 0.34. Something isn't right".format(their_val_loss))
 
 

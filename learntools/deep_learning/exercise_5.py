@@ -38,6 +38,7 @@ class CodeWithAugmentation(CodingProblem):
     _vars = ['my_new_model', 'train_generator', 'validation_generator',
              'data_generator_with_aug', 'data_generator_no_aug']
 
+    _hint = "The first argument to fit_generator is the generator with the training data"
     _solution = CS(
 """
 train_generator = data_generator_with_aug.flow_from_directory(
