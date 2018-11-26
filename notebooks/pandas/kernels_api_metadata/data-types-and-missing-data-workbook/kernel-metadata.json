@@ -1,0 +1,19 @@
+{
+  "code_file": "../../rendered/data-types-and-missing-data-workbook.ipynb",
+  "competition_sources": [],
+  "dataset_sources": [
+    "residentmario/advanced-pandas-exercises",
+    "zynicide/wine-reviews"
+  ],
+  "enable_gpu": false,
+  "enable_internet": false,
+  "id": "residentmario/data-types-and-missing-data-workbook",
+  "is_private": false,
+  "kernel_sources": [],
+  "kernel_type": "notebook",
+  "keywords": [
+    "tutorial"
+  ],
+  "language": "python",
+  "title": "Data types and missing data workbook"
+}

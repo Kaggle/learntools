@@ -1,0 +1,18 @@
+{
+  "code_file": "../../rendered/grouping-and-sorting-reference.ipynb",
+  "competition_sources": [],
+  "dataset_sources": [
+    "zynicide/wine-reviews"
+  ],
+  "enable_gpu": false,
+  "enable_internet": false,
+  "id": "residentmario/grouping-and-sorting-reference",
+  "is_private": false,
+  "kernel_sources": [],
+  "kernel_type": "notebook",
+  "keywords": [
+    "tutorial"
+  ],
+  "language": "python",
+  "title": "Grouping and sorting reference"
+}

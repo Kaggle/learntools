@@ -1,0 +1,19 @@
+{
+  "code_file": "../../rendered/indexing-selecting-assigning.ipynb",
+  "competition_sources": [],
+  "dataset_sources": [
+    "residentmario/advanced-pandas-exercises",
+    "zynicide/wine-reviews"
+  ],
+  "enable_gpu": false,
+  "enable_internet": false,
+  "id": "residentmario/indexing-selecting-&-assigning",
+  "is_private": false,
+  "kernel_sources": [],
+  "kernel_type": "notebook",
+  "keywords": [
+    "tutorial"
+  ],
+  "language": "python",
+  "title": "Indexing, Selecting & Assigning"
+}
