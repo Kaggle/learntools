@@ -5,11 +5,11 @@
     "grouplens/movielens-20m-dataset"
   ],
   "enable_gpu": false,
-  "enable_internet": true,
-  "id": "colinmorris/0-movielens-preprocessing",
-  "is_private": true,
+  "enable_internet": false,
+  "id": "colinmorris/movielens-preprocessing",
+  "is_private": false,
   "kernel_sources": [],
   "kernel_type": "notebook",
   "language": "python",
-  "title": "0 movielens preprocessing"
+  "title": "MovieLens Preprocessing"
 }

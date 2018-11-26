@@ -1,2 +1,3 @@
-public: false
-development: true
+public: true
+development: false
+testing: false

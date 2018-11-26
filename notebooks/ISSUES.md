@@ -1,0 +1,5 @@
+- Clarify separation of concerns wrt macro processing (see comment at top of `macro_processing.py`)
+- Split out per-macro logic for cell-level (%%) macros
+- Reimplement HIDE macros as cell-level (rather than using 'expander' $ syntax)
+- Would be really nice to have some way to write 'testing' exercise notebooks (including debugging cells marked with `#%%RM_IF(PROD)%%` for testing checking code) to separate kernel ids.
+- can (probably) remove `/kaggle/working` hack from pip install learntools hack.

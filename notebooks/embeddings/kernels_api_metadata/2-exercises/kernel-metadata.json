@@ -3,15 +3,15 @@
   "competition_sources": [],
   "dataset_sources": [],
   "enable_gpu": false,
-  "enable_internet": true,
-  "id": "colinmorris/exercise-2-matrix-factorization",
-  "is_private": true,
+  "enable_internet": false,
+  "id": "colinmorris/exercise-matrix-factorization",
+  "is_private": false,
   "kernel_sources": [
-    "colinmorris/0-movielens-preprocessing",
-    "colinmorris/2-matrix-factorization",
-    "colinmorris/x2-movielens-factorization-r12n"
+    "colinmorris/matrix-factorization",
+    "colinmorris/movielens-preprocessing",
+    "colinmorris/regularized-movielens-factorization-model"
   ],
   "kernel_type": "notebook",
   "language": "python",
-  "title": "Exercise: 2 Matrix Factorization"
+  "title": "Exercise: Matrix Factorization"
 }

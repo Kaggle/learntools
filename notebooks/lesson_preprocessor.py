@@ -6,6 +6,8 @@ import subprocess
 import nbformat
 from nbconvert.preprocessors import Preprocessor
 
+from macro_processing import MacroProcessor
+
 DEBUG = 0
 if DEBUG:
     logging.basicConfig(level=logging.DEBUG)
@@ -32,8 +34,19 @@ class LearnLessonPreprocessor(Preprocessor):
         track_cfg = resources['track_cfg']
         nb_meta = resources['nb_meta']
 
-        for i, cell in enumerate(nb.cells):
-            nb.cells[i] = self.process_cell(cell)
+        macroer = MacroProcessor(track_cfg)
+
+        new_cells = []
+        for cell in nb.cells:
+            # XXX: Kind of hacky implementation.
+            src = cell['source']
+            if src.strip() == '#%%RM_BELOW%%':
+                break
+            c = self.process_cell(cell)
+            c = c and macroer.process_cell(c)
+            if c is not None:
+                new_cells.append(c)
+        nb.cells = new_cells
         # NB: There may be some cases where we need to access learntools in a tutorial
         # or ancillary notebook as well. Could encode this in track_meta, or if we wanted
         # to be really clever, could look for learntools imports in code cells.
@@ -87,6 +100,10 @@ class LearnLessonPreprocessor(Preprocessor):
     def process_cell(self, cell):
         # Find all things that look like macros
         pattern = r'#\$([^$]+)\$'
+        # This is one big string. It occurs to me that this is actually kind of weird
+        # given that inspecting the ipynb file format, source seems to be a list of 
+        # strings, 1 per line (this is also what's expected by nbformat.from_dict).
+        # I have no idea why this disagreement exists.
         src = cell['source']
         macros = re.finditer(pattern, src)
         newsrc = ''
@@ -132,6 +149,7 @@ class LearnLessonPreprocessor(Preprocessor):
             raise UnrecognizedMacroException("Don't know how to handle the macro with name: {}".format(macro))
         return macro_method(*args, cell=cell)
 
+    # TODO: Should consider separating macro logic out into separate module/class.
     def EXERCISE_FORKING_URL(self, **kwargs):
         return self.lesson.exercise.forking_url
 
@@ -154,6 +172,13 @@ class LearnLessonPreprocessor(Preprocessor):
 Head over to [the Exercises notebook]({}) to get some hands-on practice working with {}.""".format(
         self.lesson.exercise.forking_url, self.lesson.topic,
         )
+
+    def TUT_BETA_NOTE(self, jot_id, **kwargs):
+        form_url = 'https://form.jotform.com/{}'.format(jot_id)
+        return """### P.S...
+
+This course is still in beta, so I'd love to get your feedback. If you have a moment to [fill out a super-short survey about this lesson]({}), I'd greatly appreciate it. You can also leave public feedback in the comments below, or on the [Learn Forum](https://www.kaggle.com/learn-forum).
+""".format(form_url)
 
     def EXERCISE_SETUP(self, **kwargs):
         # Standard setup code. Not currently used. Maybe should be.
@@ -196,6 +221,26 @@ When you're ready to continue, [click here]({}) to continue on to the next tutor
 
         # Alternative formulation (used on days 5 and 6 of Python challenge):
         # Want feedback on your code? To share it with others or ask for help, you'll need to make it public. Save a version of your notebook that shows your current work by hitting the "Commit & Run" button. Once your notebook is finished running, go to the Settings tab in the panel to the left (you may have to expand it by hitting the [<] button next to the "Commit & Run" button) and set the "Visibility" dropdown to "Public".
+
+    def END_OF_EMB_EXERCISE(self, jot_id, **kwargs):
+        form_url = 'https://form.jotform.com/{}'.format(jot_id)
+        txt = """
+---
+That's the end of this exercise. How'd it go? If you have any questions, be sure to post them on the [forums](https://www.kaggle.com/learn-forum).
+
+**P.S.** This course is still in beta, so I'd love to get your feedback. If you have a moment to [fill out a super-short survey about this exercise]({form_url}), I'd greatly appreciate it.
+""".format(form_url=form_url)
+        if not self.lesson.last:
+            next = self.lesson.next
+            kg = """
+# Keep going
+
+When you're ready to continue, [click here]({}) to continue on to the next tutorial on {}.
+""".format(
+        next.tutorial.url, next.topic,
+        )
+            txt += kg
+        return txt
 
 
 

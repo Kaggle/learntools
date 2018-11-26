@@ -3,13 +3,13 @@
   "competition_sources": [],
   "dataset_sources": [],
   "enable_gpu": false,
-  "enable_internet": true,
-  "id": "colinmorris/x3-movielens-spiffy-model",
-  "is_private": true,
+  "enable_internet": false,
+  "id": "colinmorris/movielens-spiffy-model",
+  "is_private": false,
   "kernel_sources": [
-    "colinmorris/0-movielens-preprocessing"
+    "colinmorris/movielens-preprocessing"
   ],
   "kernel_type": "notebook",
   "language": "python",
-  "title": "x3 movielens spiffy model"
+  "title": "MovieLens Spiffy Model"
 }

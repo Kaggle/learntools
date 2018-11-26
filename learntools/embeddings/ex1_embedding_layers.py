@@ -6,6 +6,52 @@ from learntools.core.problem import *
 from learntools.core.richtext import *
 from learntools.core.asserts import *
 
+class ChooseEmbeddingVars(CodingProblem):
+    _var = 'embedding_variables'
+    _default_values = [{
+            'stream_id',
+            'user_id',
+            'song_id',
+            'timestamp',
+            'artist_id',
+            'song_duration',
+            'explicit',
+            'user_country',
+        },]
+
+    _solution = (
+"""`user_id`, `song_id`, and `artist_id` all seem like useful features for this problem
+which would be hard to handle without an embedding layer. They're sparse categorical features
+with lots of possible values. Using an embedding layer for `user_country` isn't a bad idea
+either, though we could probably also get away with one-hot encoding it (i.e. treating it
+as 150 binary input variables).
+
+What about the others?
+- `stream_id` is basically just an index column - it won't be useful for prediction
+- `timestamp` and `song_duration` are more or less continuous quantities, not categorical variables. We're better off treating them as numerical inputs (after some preprocessing)
+- `explicit` only has two values. We might as well treat it as a binary input variable.
+""")
+
+    def check(self, evars):
+        required = {'user_id', 'song_id', 'artist_id'}
+        optional = {'user_country'}
+        # TODO: Could be nice to give more fine-grained feedback here. e.g. just
+        # tell them whether they have at least one fpos, and whether they have at least
+        # one fneg.
+        assert evars == required or evars == (required.union(optional))
+
+class EmbeddingSizeInvestigation(ThoughtExperiment):
+
+    _solution = (
+"""Increasing the size of our embeddings increases our model's capacity. As usual, this comes with the benefit of potentially being able to recognize more complex patterns, increasing our accuracy... and the downside that our model might use this power to memorize overly-specific patterns that don't generalize well to unseen data. (Another downside: training will be a bit slower)
+
+In this case, you likely saw that, with 32-d embeddings, our validation error goes down a little (if at all) and our training error goes down a lot - we're overfitting.
+
+What's the optimal size for our movie and user embeddings? As with any hyperparameter, the only way to find out for sure is to experiment. [This TensorFlow tutorial](https://www.tensorflow.org/guide/feature_columns) gives a general rule of thumb for setting the embedding size of a categorical variable: the 4th root of the number of possible values. For our full dataset, this would mean 13-d movie embeddings and 19-d user embeddings. 
+""")
+
+
+
 class WhyBiases(ThoughtExperiment):
     _solution = (
 '''One basic observation is that adding biases gives our model more numbers to tune, and in this
@@ -33,13 +79,19 @@ our biases get added at the very end, our model has a lot less flexibility in ho
 And this can be a good thing. At a high level, we're imposing a prior belief - that some movies
 are intrinsically better or worse than others. This is a form of regularization!''')
 
-BiasIntro = MultipartProblem(WhyBiases, WhatBiases)
-
-class CodingBiases(CodingProblem):
+class CodingBiases(ThoughtExperiment): # TODO: switch back to CodingProblem once checking properly implemented
     """TODO: How to test that they've properly added biases? Should confirm...
     - existence of an additional Embedding layer having movie_id_input as input, and output dimension of 1
     - that the output node (adding out and movie_bias) is unmolested
-    - that the model has been compiled (the fact that they can do this without error basically shows they must have handled the extra dimension problem)
+    - that the model has been compiled (the fact that they can do this without error basically shows they must have handled the extra dimension problem) <- jk, if they didn't flatten, they can still successfully compile. They only hit a problem when they try to train.
+
+    Also, they can put the flatten() after the add instead of before, and that's
+    also totally fine. Yeesh. Okay, maybe reqs are:
+    - model output shape is (None, 1)
+    - movie_bias exists, and is the output of a Layer instance, and if we follow it backward,
+        we pass through an Embedding layer, and end up at movie_id_input
+    And maybe if we find a lambda layer somewhere in movie_bias's ancestry, we 
+    just throw up our arms and say "Ok, hopefully you know what you're doing"
     """
     _vars = ['model_bias']
 
@@ -60,9 +112,13 @@ bias_embedded = keras.layers.Embedding(df.movieId.max()+1, 1, input_length=1, na
                                       )(movie_id_input)
 movie_bias = keras.layers.Flatten()(bias_embedded)
 ```
+
+This is a bit of a hack, in that we're using `keras.layers.Embedding` to implement
+something that is not an "embedding" in any conventional sense. But it's en efficient
+means to an end.
 ''')
 
-    def check(self, model):
+    def TODO_check(self, model):
         # TODO: model topology introspection seems surprisingly tricky
         cfg = model.get_config()
         final = cfg['layers'][-1]
@@ -79,10 +135,11 @@ movie_bias = keras.layers.Flatten()(bias_embedded)
         flat = lookup(flat_bias_name)
         bias_name = flat['inbound_nodes'][0][0][0]
         bias = lookup(bias_name)
-        assert bias['class_name'] == 'Embedding'
+        assert bias['class_name'] == 'Embedding', ("Expected bias to have class Embedding, "
+                "was {}").format(bias['class_name'])
         bc = bias['config']
-        assert bc['input_length'] == 1
-        assert bc['input_dim'] == 16715
+        assert bc['input_length'] == 1, 'Expected bias to have input_length = 1'
+        assert bc['input_dim'] == 16715, 'Expected bias to have input_dim = 16715'
 
 
 class LoadingBiases(CodingProblem):
@@ -125,16 +182,18 @@ with an average rating of 4.95 over 3,000 reviews?
 This is an especially important problem when dealing with sparse categorical data which can often have long tails
 of rare values. We'll talk about an elegant solution to this problem - L2 regularization - in the next lesson.''')
 
+BigBiasProblem = MultipartProblem(
+        WhyBiases, WhatBiases, 
+        CodingBiases, 
+        LoadingBiases, ExploringBiases,
+        )
 
 qvars = bind_exercises(globals(), [
-    BiasIntro,
-    CodingBiases,
-    None,
-    LoadingBiases,
-    ExploringBiases,
-    None, # user biases
+    ChooseEmbeddingVars,
+    EmbeddingSizeInvestigation,
+    BigBiasProblem,
     ],
-    tutorial_id=-1,
+    tutorial_id=149,
     var_format='part{n}',
 )
 __all__ = list(qvars)

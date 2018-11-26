@@ -3,14 +3,14 @@
   "competition_sources": [],
   "dataset_sources": [],
   "enable_gpu": false,
-  "enable_internet": true,
-  "id": "colinmorris/exercise-4-visualizing-embeddings-with-t-sne",
-  "is_private": true,
+  "enable_internet": false,
+  "id": "colinmorris/exercise-visualizing-embeddings-with-t-sne",
+  "is_private": false,
   "kernel_sources": [
-    "colinmorris/0-movielens-preprocessing",
-    "colinmorris/4-visualizing-embeddings-with-t-sne"
+    "colinmorris/movielens-preprocessing",
+    "colinmorris/visualizing-embeddings-with-t-sne"
   ],
   "kernel_type": "notebook",
   "language": "python",
-  "title": "Exercise: 4 Visualizing Embeddings With T-Sne"
+  "title": "Exercise: Visualizing Embeddings With t-SNE"
 }

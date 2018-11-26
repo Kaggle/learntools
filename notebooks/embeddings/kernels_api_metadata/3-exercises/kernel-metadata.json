@@ -3,14 +3,14 @@
   "competition_sources": [],
   "dataset_sources": [],
   "enable_gpu": false,
-  "enable_internet": true,
-  "id": "colinmorris/exercise-3-exploring-embeddings-with-gensim",
-  "is_private": true,
+  "enable_internet": false,
+  "id": "colinmorris/exercise-exploring-embeddings-with-gensim",
+  "is_private": false,
   "kernel_sources": [
-    "colinmorris/0-movielens-preprocessing",
-    "colinmorris/x3-movielens-spiffy-model"
+    "colinmorris/movielens-preprocessing",
+    "colinmorris/movielens-spiffy-model"
   ],
   "kernel_type": "notebook",
   "language": "python",
-  "title": "Exercise: 3 Exploring Embeddings With Gensim"
+  "title": "Exercise: Exploring Embeddings With Gensim"
 }

@@ -32,7 +32,8 @@ What happens if we run something like `kv.most_similar(positive=['Legally Blonde
         v0 = sim[0]
         assert isinstance(v0, tuple), "Expected `legally_impossible` to be a list of tuples"
         titles, sims = zip(*sim)
-        assert 'Miss Congeniality' in sims, "Expected `legally_impossible` to include movie *Miss Congeniality*"
+        # TODO: Maybe more robust to inject kv and call most_similar on it ourselves to get expected value
+        assert 'Miss Congeniality' in titles, "Expected `legally_impossible` to include movie *Miss Congeniality*"
 
 class CalculateNorms(CodingProblem):
     _var = 'norms'
@@ -55,7 +56,8 @@ class CalculateNorms(CodingProblem):
                 " was {}").format(exp_shape, n_movies, shape)
         norm0 = norms[0]
         exp = 2.0208979
-        assert math.isclose(norm0, exp, rel_tol=1e-3), ("Expected `norms[0]` to be"
+        # Setting very generous rel_tol because of variability in training.
+        assert math.isclose(norm0, exp, rel_tol=.5), ("Expected `norms[0]` to be"
                 " approximately {}. Actual value: {}.").format(exp, norm0)
 
 class NormColumn(CodingProblem):
@@ -67,14 +69,22 @@ class NormColumn(CodingProblem):
         assert_has_columns(df, ['norm'], 'all_movies_df')
         exp = 1.623779
         jum = df.loc[1, 'norm']
-        assert math.isclose(exp, df.loc[1, 'norm'], rel_tol=1e-3), (
+        assert math.isclose(exp, df.loc[1, 'norm'], rel_tol=.5), (
                 "Expected norm column for movie 'Jumanji' to be {}"
                 ". Was actually {}").format(exp, jum)
 
 
 class NormPatterns(ThoughtExperiment):
 
-    _solution = 'TODO'
+    _solution = (
+'''We have some movies whose embeddinging norms are 0 or very close to it - they also seem to be among the movies with the fewest ratings in the dataset.
+This is consistent with what we'd expect from a model trained with an L2 weight penalty on embeddings - there's a cost to increasing an embedding's size.
+Memorizing some properties of an obscure movie that only occurs once or twice in the dataset won't do much to decrease our overall error - so it's not worth 
+paying the regularization cost.
+
+On the other hand, the movies with the biggest embeddings are *not* necessarily the ones with the most ratings in the dataset. There's a strong trend of very
+low average ratings in the list. Can you think of why this would be?
+''')
 
 VectorLengths = MultipartProblem(CalculateNorms, NormColumn, NormPatterns)
 
@@ -83,7 +93,7 @@ qvars = bind_exercises(globals(), [
     VectorAddition,
     VectorLengths
     ],
-    tutorial_id=-1,
+    tutorial_id=151,
     var_format='part{n}',
 )
 __all__ = list(qvars)

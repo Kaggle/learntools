@@ -15,5 +15,7 @@ def get_track_meta(track_dir):
 def get_track_config(track_dir):
     cfg_path = os.path.join(track_dir, 'track_config.yaml')
     with open(cfg_path) as f:
+        # TODO: Some wrapper that knows about valid keys and default values. And
+        # maybe with dotted access to keys.
         return yaml.load(f)
 

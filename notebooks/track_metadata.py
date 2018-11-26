@@ -29,6 +29,9 @@ class TrackMeta(object):
             # to access next of last lesson etc. for clarity
             lesson.next = next_lesson
             next_lesson.prev = lesson
+        # Set first/last flags
+        self.lessons[0].first = True
+        self.lessons[-1].last = True
         self.notebooks = []
         for nb_meta in nbs_meta:
             nb_meta = nb_meta.copy()
@@ -69,6 +72,8 @@ class TrackMeta(object):
 class Lesson(object):
     def __init__(self, topic):
         self.topic = topic
+        self.first = False
+        self.last = False
 
 class Notebook(object):
 
@@ -84,7 +89,7 @@ class Notebook(object):
             assert type in ('tutorial', 'exercise'), type
             self.title = '{}{}'.format(
                 'Exercise: ' if type=='exercise' else '',
-                titlecase.titlecase(lesson.topic)
+                self._topic_to_title(lesson.topic),
                 )
         else:
             self.title = title
@@ -97,6 +102,22 @@ class Notebook(object):
         self.scriptid = scriptid
         self.kernel_sources = list(kernel_sources)
         self.dataset_sources = list(dataset_sources)
+
+    @staticmethod
+    def _topic_to_title(topic):
+        """Take a string representing a notebook's topic and return a version appropriate
+        to use as a kernel title (basically, apply title case).
+        """
+        # XXX: Special case. The titlecase module is supposed to be good about
+        # leaving alone acronyms or words with idiosyncratic internal capitalization
+        # (e.g. "eBay"), but it fails on the specific case of "t-SNE", probably because
+        # of the punctuation.
+        if topic.endswith("t-SNE"):
+            base = topic[:topic.rindex(' ')]
+            return titlecase.titlecase(base) + ' t-SNE'
+        else:
+            return titlecase.titlecase(topic)
+        # with initialisms and words with idiosyncratic
 
     @property
     def url(self):
@@ -121,6 +142,8 @@ class Notebook(object):
                 code_file="../../rendered/" + self.filename,
                 enable_gpu=False,
                 # Enable internet in development mode so we can pip install learntools
+                # TODO: Actually, probably only needs to be turned on if we're in
+                # development mode AND this is an exercise kernel.
                 enable_internet=dev,
                 kernel_type='notebook',
                 title=self.title,

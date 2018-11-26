@@ -3,13 +3,13 @@
   "competition_sources": [],
   "dataset_sources": [],
   "enable_gpu": false,
-  "enable_internet": true,
-  "id": "colinmorris/exercise-1-embedding-layers",
-  "is_private": true,
+  "enable_internet": false,
+  "id": "colinmorris/exercise-embedding-layers",
+  "is_private": false,
   "kernel_sources": [
-    "colinmorris/0-movielens-preprocessing"
+    "colinmorris/movielens-preprocessing"
   ],
   "kernel_type": "notebook",
   "language": "python",
-  "title": "Exercise: 1 Embedding Layers"
+  "title": "Exercise: Embedding Layers"
 }

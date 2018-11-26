@@ -3,14 +3,14 @@
   "competition_sources": [],
   "dataset_sources": [],
   "enable_gpu": false,
-  "enable_internet": true,
-  "id": "colinmorris/2-matrix-factorization",
-  "is_private": true,
+  "enable_internet": false,
+  "id": "colinmorris/matrix-factorization",
+  "is_private": false,
   "kernel_sources": [
-    "colinmorris/0-movielens-preprocessing",
-    "colinmorris/1-embedding-layers"
+    "colinmorris/embedding-layers",
+    "colinmorris/movielens-preprocessing"
   ],
   "kernel_type": "notebook",
   "language": "python",
-  "title": "2 Matrix Factorization"
+  "title": "Matrix Factorization"
 }

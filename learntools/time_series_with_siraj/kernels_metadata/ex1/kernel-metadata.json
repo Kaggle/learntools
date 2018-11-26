@@ -1,0 +1,15 @@
+{
+  "id": "crawford/exercise-predicting-stock-prices",
+  "id_no": 2097947,
+  "title": "Exercise: Predicting Stock Prices",
+  "code_file": "../../nbs/ex1_predicting_stock_prices.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": false,
+  "enable_internet": false,
+  "keywords": [],
+  "dataset_sources": [],
+  "kernel_sources": [],
+  "competition_sources": []
+}
