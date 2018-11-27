@@ -75,8 +75,10 @@ def bind_exercises(g, exercises, tutorial_id=-1, start=1, var_format='q{n}'):
             g[varname] = pv
         yield varname
     # Bad sep of concerns, but anyways, have exercise modules also export quad alias
-    # variable as alias for special Placeholder value.
-    yield '____'
+    # variable as alias for special Placeholder value (if it exists in their namespace
+    # i.e. if they imported * from learntools.core)
+    if '____' in g:
+        yield '____'
 
 def format_args(fn, args):
     # I guess technically not portable to other python implementations...
