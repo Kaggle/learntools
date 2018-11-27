@@ -5,11 +5,9 @@ import json
 
 import utils
 
-def main():
-    trackname = sys.argv[1]
-    meta = utils.get_track_meta(trackname)
-    cfg = utils.get_track_config(trackname)
-    push_dir = os.path.join(trackname, 'kernels_api_metadata')
+def create_metadata_files_for_cfg(trackname, cfg, meta):
+    tag = cfg['tag']
+    push_dir = os.path.join(trackname, tag, 'kernels_api_metadata')
     for nb in meta.notebooks:
         dest_dir = os.path.join(push_dir, nb.stem)
         os.makedirs(dest_dir, exist_ok=True)
@@ -17,5 +15,11 @@ def main():
         kernel_meta = nb.kernel_metadata(cfg)
         with open(dest_path, 'w') as f:
             json.dump(kernel_meta, f, indent=2, sort_keys=True)
+
+def main():
+    trackname = sys.argv[1]
+    for cfg in utils.get_track_configs(trackname):
+        meta = utils.get_track_meta(trackname, cfg)
+        create_metadata_for_cfg(trackname, cfg, meta)
 
 main()

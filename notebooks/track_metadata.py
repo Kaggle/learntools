@@ -20,7 +20,7 @@ class TrackMeta(object):
     - notebooks: a list of Notebook objects
     """
 
-    def __init__(self, track, lessons_meta, nbs_meta):
+    def __init__(self, track, lessons_meta, nbs_meta, cfg):
         self.track = track
         self.lessons = [Lesson(**lmeta) for lmeta in lessons_meta]
         # Add convenience next/prev pointers to lessons
@@ -33,9 +33,10 @@ class TrackMeta(object):
         self.lessons[0].first = True
         self.lessons[-1].last = True
         self.notebooks = []
+        author = cfg.get('author', track['author_username'])
         for nb_meta in nbs_meta:
             nb_meta = nb_meta.copy()
-            nb_meta.setdefault('author', track['author_username'])
+            nb_meta.setdefault('author', author)
             lesson_idx = nb_meta.pop('lesson_idx', None)
             if lesson_idx is not None:
                 lesson = self.lessons[lesson_idx]
@@ -49,8 +50,8 @@ class TrackMeta(object):
         self._resolve_kernel_deps()
 
     @classmethod
-    def from_module(cls, module):
-        return cls(module.track, module.lessons, module.notebooks)
+    def from_module(cls, module, cfg):
+        return cls(module.track, module.lessons, module.notebooks, cfg)
 
     def get_notebook(self, fname):
         """Look up a Notebook object by its filename."""

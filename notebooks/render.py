@@ -22,20 +22,15 @@ def nb_path_to_track(path):
     assert dirname.endswith(suff), dirname
     return dirname[:-len(suff)]
 
-def render_notebooks(nbpaths):
-    tracks = list(map(nb_path_to_track, nbpaths))
-    track = tracks[0]
-    assert all(t == track for t in tracks), "All notebooks to be rendered must be in same track."
-    render_track(track, nbpaths)
-
-def render_track(track, nb_path_whitelist=None):
-    meta = utils.get_track_meta(track)
-    track_cfg = utils.get_track_config(track)
+def render_track(track, track_cfg):
+    meta = utils.get_track_meta(track, track_cfg)
     cfg = Config()
     cfg.Exporter.preprocessors = ['lesson_preprocessor.LearnLessonPreprocessor']
     exporter = NotebookExporter(config=cfg)
     resources = {'track_meta': meta, 'track_cfg': track_cfg}
 
+    outdir = os.path.join(track, track_cfg['tag'], 'rendered')
+    os.makedirs(outdir, exist_ok=True)
     for nb_meta in meta.notebooks:
         in_path = os.path.join(track, 'raw', nb_meta.filename)
         if nb_path_whitelist and in_path not in nb_path_whitelist:
@@ -45,24 +40,18 @@ def render_track(track, nb_path_whitelist=None):
         if CLEAN:
             clean(in_path)
         nb, _ = exporter.from_filename(in_path, resources)
-        out_path = os.path.join(track, 'rendered', nb_meta.filename)
+        out_path = os.path.join(outdir, nb_meta.filename)
         with open(out_path, 'w') as f:
             f.write(nb)
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description=("Preprocess notebooks, "
-        "writing publication-ready ipynbs to <track>/rendered/"),
-        usage="%(prog)s (track | {0} [{0} ...])".format('partial'),
-        )
-    # These arguments are a convenient fiction
+    parser = argparse.ArgumentParser(description=("Preprocess notebooks"))
+    # TODO: Maybe default behaviour should be to render under *all* configs?
+    parser.add_argument("--config", help="Tag associated with a yaml config file (default: default)", 
+            default="default")
     parser.add_argument("track",
             help=("The path to a track. e.g. 'python', or 'examples/example_track'."
                 " All notebooks referred to in that track's metadata will be rendered."
-                )
-            )
-    parser.add_argument("raw", nargs="*",
-            help=("An explicit list of notebook files to be rendered. Mutually"
-                " exclusive with track argument."
                 )
             )
     parser.add_argument("-v", "--verbose", action='store_true',)
@@ -72,8 +61,5 @@ if __name__ == '__main__':
             level=(logging.DEBUG if args.verbose else logging.INFO)
             )
 
-    if args.raw or args.track.endswith('.ipynb'):
-        raw = [args.track] + args.raw
-        render_notebooks(raw)
-    else:
-        render_track(args.track)
+    cfg = utils.get_track_config(args.track, args.config)
+    render_track(args.track, cfg)
