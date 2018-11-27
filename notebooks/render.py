@@ -33,8 +33,6 @@ def render_track(track, track_cfg):
     os.makedirs(outdir, exist_ok=True)
     for nb_meta in meta.notebooks:
         in_path = os.path.join(track, 'raw', nb_meta.filename)
-        if nb_path_whitelist and in_path not in nb_path_whitelist:
-            continue
         resources['lesson'] = nb_meta.lesson
         resources['nb_meta'] = nb_meta
         if CLEAN:
@@ -46,9 +44,8 @@ def render_track(track, track_cfg):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=("Preprocess notebooks"))
-    # TODO: Maybe default behaviour should be to render under *all* configs?
-    parser.add_argument("--config", help="Tag associated with a yaml config file (default: default)", 
-            default="default")
+    parser.add_argument("-c", "--config", help="Tag associated with a yaml config file (default: all configs)", 
+            default=None)
     parser.add_argument("track",
             help=("The path to a track. e.g. 'python', or 'examples/example_track'."
                 " All notebooks referred to in that track's metadata will be rendered."
@@ -61,5 +58,9 @@ if __name__ == '__main__':
             level=(logging.DEBUG if args.verbose else logging.INFO)
             )
 
-    cfg = utils.get_track_config(args.track, args.config)
-    render_track(args.track, cfg)
+    if args.config:
+        cfgs = [utils.get_track_config(args.track, args.config)]
+    else:
+        cfgs = utils.get_track_configs(args.track)
+    for cfg in cfgs:
+        render_track(args.track, cfg)

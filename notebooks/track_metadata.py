@@ -4,7 +4,7 @@ import titlecase
 
 def slugify(title, author):
     # NB: This was hacked together ad-hoc and probably still has some holes where it doesn't agree with Kernels logic.
-    s = title.replace('(', '').replace(')', '').replace(',', '').replace(':', '').lower()
+    s = title.replace('(', '').replace(')', '').replace(',', '').replace(':', '').replace('&', '').lower()
     tokens = s.split()
     return author + '/' + '-'.join(tokens)
 
@@ -41,12 +41,13 @@ class TrackMeta(object):
             if lesson_idx is not None:
                 lesson = self.lessons[lesson_idx]
                 nb_meta['lesson'] = lesson
-            nb = Notebook(**nb_meta)
+            nb = Notebook(cfg, **nb_meta)
             self.notebooks.append(nb)
             type = nb_meta['type']
             if type in ('tutorial', 'exercise'):
                 assert not hasattr(lesson, type), "Can't have two {}s in one lesson".format(type)
                 setattr(lesson, type, nb)
+        self._set_scriptids(cfg)
         self._resolve_kernel_deps()
 
     @classmethod
@@ -58,6 +59,21 @@ class TrackMeta(object):
         matches = [nb for nb in self.notebooks if nb.filename == fname]
         assert len(matches) <= 1, fname
         return matches[0]
+
+    def _set_scriptids(self, cfg):
+        """Each yaml config file may give rise to a separate set of kernels, hence
+        for tracks with multiple configs, exercise scriptids may be specified in 
+        the config file.
+        """
+        try:
+            ids = cfg['exercise_scriptids']
+        except KeyError:
+            # Specifying scriptids is optional.
+            return
+        assert len(ids) == len(self.lessons)
+        for lesson, scriptid in zip(self.lessons, ids):
+            ex = lesson.exercise
+            ex.scriptid = scriptid
 
     def _resolve_kernel_deps(self):
         """Resolve any inter-kernel data dependencies which are encoded using
@@ -71,6 +87,17 @@ class TrackMeta(object):
     
 
 class Lesson(object):
+    """Instance variables:
+    - topic
+    - first: bool
+    - last: bool
+    - tutorial: Notebook
+    - exercise: Notebook
+
+    Note that the last two attributes are set outside the constructor and may
+    be ommitted (sometimes a lesson is just a tutorial with no exercise or vice
+    versa)
+    """
     def __init__(self, topic):
         self.topic = topic
         self.first = False
@@ -78,10 +105,11 @@ class Lesson(object):
 
 class Notebook(object):
 
-    def __init__(self, filename, type, author=None, title=None, lesson=None,
+    def __init__(self, cfg, filename, type, author=None, title=None, lesson=None,
             slug=None, scriptid=1, kernel_sources=(), dataset_sources=(),
             keywords=(),
             ):
+        self.cfg = cfg
         self.filename = filename
         self.stem, _ = os.path.splitext(os.path.basename(filename))
         assert type in ('tutorial', 'exercise', 'extra')
@@ -101,6 +129,13 @@ class Notebook(object):
             self.slug = slugify(self.title, author)
         else:
             self.slug = slug
+        suffix = cfg.get('suffix', 
+                'testing' if cfg.get('testing', False) else ''
+                )
+        if suffix:
+            self.slug += '-' + suffix
+            # Kernels API seems to conk out and 404 if title doesn't match slug :/
+            self.title += ' ' + suffix
         self.scriptid = scriptid
         self.kernel_sources = list(kernel_sources)
         self.dataset_sources = list(dataset_sources)
@@ -141,8 +176,8 @@ class Notebook(object):
                 language='python',
                 is_private=not cfg.get('public', not dev),
                 # Path is relative to where kernel-metadata.json file will be written, which is
-                #   notebooks/<track>/kernels_api_metadata/<notebook-identifier>/kernel-metadata.json
-                code_file="../../rendered/" + self.filename,
+                #   notebooks/<track>/<cfg-tag>/kernels_api_metadata/<notebook-identifier>/kernel-metadata.json
+                code_file="../../rendered/{}".format(self.filename),
                 enable_gpu=False,
                 # Enable internet in development mode so we can pip install learntools
                 # TODO: Actually, probably only needs to be turned on if we're in

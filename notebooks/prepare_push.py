@@ -20,6 +20,6 @@ def main():
     trackname = sys.argv[1]
     for cfg in utils.get_track_configs(trackname):
         meta = utils.get_track_meta(trackname, cfg)
-        create_metadata_for_cfg(trackname, cfg, meta)
+        create_metadata_files_for_cfg(trackname, cfg, meta)
 
 main()
