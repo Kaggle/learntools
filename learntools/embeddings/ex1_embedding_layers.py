@@ -1,10 +1,6 @@
 from tensorflow import keras
 
 from learntools.core import *
-from learntools.core.utils import bind_exercises
-from learntools.core.problem import *
-from learntools.core.richtext import *
-from learntools.core.asserts import *
 
 class ChooseEmbeddingVars(CodingProblem):
     _var = 'embedding_variables'

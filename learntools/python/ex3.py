@@ -4,9 +4,8 @@ from learntools.core import *
 from learntools.core.problem import injected
 from learntools.core.exceptions import Uncheckable
 from learntools.core.utils import format_args
-from learntools.core.richtext import *
+
 from learntools.python.blackjack import BlackJack
-CS = CodeSolution
 
 class SignFunctionProblem(FunctionProblem):
     _var = 'sign'
@@ -122,13 +121,13 @@ class ConciseIsNegative(FunctionProblem):
 
     _hint = ("If the value of the expression `number < 0` is `True`, then we return"
             " `True`. If it's `False`, then we return `False`...")
-    _solution = CodeSolution("return number < 0")
+    _solution = CS("return number < 0")
 
 class AllToppings(FunctionProblem):
     _var = 'wants_all_toppings'
 
     _hint = "You'll need to use the `and` operator."
-    _solution = CodeSolution("return ketchup and mustard and onion")
+    _solution = CS("return ketchup and mustard and onion")
 
     _test_cases = [
             ((True, True, True), True),
@@ -169,7 +168,7 @@ class OneSauce(FunctionProblem):
     _hint = ("There are exactly two ways to set ketchup and mustard to make this"
             " true. What are they?"
             )
-    _solution = CodeSolution("return (ketchup and not mustard) or (mustard and not ketchup)")
+    _solution = CS("return (ketchup and not mustard) or (mustard and not ketchup)")
 
     _test_cases = [
             ((True, True, True), False),

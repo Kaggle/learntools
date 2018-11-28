@@ -1,7 +1,5 @@
 from learntools.core import *
-from learntools.core.richtext import *
-from learntools.core.exceptions import *
-CS = CodeSolution
+from learntools.core.exceptions import Incorrect
 
 class RoundFunctionProblem(FunctionProblem):
     _var = 'round_to_two_places'

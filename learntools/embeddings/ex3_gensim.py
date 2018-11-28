@@ -2,12 +2,7 @@ import math
 
 import numpy as np
 
-from learntools.core import MultipartProblem
-from learntools.core.utils import bind_exercises
-from learntools.core.problem import *
-from learntools.core.richtext import *
-from learntools.core.asserts import *
-CS = CodeSolution
+from learntools.core import *
 
 class VectorAddition(CodingProblem):
     _var = 'legally_impossible'

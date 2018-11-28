@@ -1,7 +1,5 @@
 from learntools.core import *
-from learntools.core.richtext import CodeSolution as CS
 from learntools.core.problem import injected
-
 
 class ExerciseFormatTutorial(EqualityCheckProblem):
     _var = 'color'

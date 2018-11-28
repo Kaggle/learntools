@@ -1,8 +1,6 @@
-from learntools.core.utils import bind_exercises
-from learntools.core.problem import *
-from learntools.core.richtext import *
 import random
-CS = CodeSolution
+
+from learntools.core import *
 
 class EarlyExitDebugging(FunctionProblem):
     _var = 'has_lucky_number'

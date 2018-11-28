@@ -1,8 +1,4 @@
-from learntools.core.utils import bind_exercises
-from learntools.core.problem import *
-from learntools.core.richtext import *
-from learntools.core.asserts import *
-CS = CodeSolution
+from learntools.core import *
 
 import learntools.embeddings.solns.ex2_recommend_function as recc_solution_module
 import learntools.embeddings.solns.ex2_recommend_nonobscure as recc_no_solution_module
