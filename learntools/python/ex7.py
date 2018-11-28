@@ -1,9 +1,6 @@
 import random
 
-from learntools.core.utils import bind_exercises
-from learntools.core.problem import *
-from learntools.core.richtext import *
-CS = CodeSolution
+from learntools.core import *
 
 import learntools.python.solns.jimmygraph as jg_module
 import learntools.python.solns.blackjack_gt as bj_module
@@ -11,7 +8,6 @@ hand_gt_soln = bj_module.blackjack_hand_greater_than
 
 class JimmySlots(ThoughtExperiment):
     _solution = CS.load(jg_module.__file__)
-
 
 class LuigiAnalysis(ThoughtExperiment):
     _hint = ("A couple things to consider:\n\n"

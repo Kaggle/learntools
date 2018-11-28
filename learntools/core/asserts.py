@@ -83,3 +83,5 @@ def assert_series_equals(actual, exp, name=None):
     # TODO: More checks
     assert False, "Incorrect value for {}".format(actual_name)
 
+# For star import purposes, export only names that begin with assert (i.e. our helper fns)
+__all__ = [name for name in dir() if name.startswith('assert')]

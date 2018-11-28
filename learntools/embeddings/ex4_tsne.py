@@ -1,8 +1,4 @@
-from learntools.core.utils import bind_exercises
-from learntools.core.problem import *
-from learntools.core.richtext import *
-from learntools.core.asserts import *
-CS = CodeSolution
+from learntools.core import *
 
 class YearPlot(ThoughtExperiment):
     # TODO: *could* make this a checked coding problem, checking the

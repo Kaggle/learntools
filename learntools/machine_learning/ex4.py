@@ -1,13 +1,9 @@
-from numpy import array
 import pandas as pd
 import sklearn
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeRegressor
-from learntools.core.utils import bind_exercises
-from learntools.core.problem_factories import simple_problem
-from learntools.core.richtext import CodeSolution as CS
-from learntools.core.problem import *
 
+from learntools.core import *
 
 class SplitData(CodingProblem):
     # test are on train_X and val_y. If these are right, others will be right too.

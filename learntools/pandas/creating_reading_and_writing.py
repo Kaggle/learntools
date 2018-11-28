@@ -3,8 +3,6 @@ import sqlite3
 import pandas as pd
 
 from learntools.core import *
-from learntools.core.asserts import *
-from learntools.core.richtext import CodeSolution as CS
 
 class FruitDfCreation(EqualityCheckProblem):
     _var = 'fruits'

@@ -1,11 +1,4 @@
-from numpy import random
-import pandas as pd
-
-from learntools.core.utils import bind_exercises
-from learntools.core.problem_factories import simple_problem
-from learntools.core.richtext import CodeSolution as CS
-from learntools.core.problem import *
-
+from learntools.core import *
 
 class WhichEffectLargerRange(EqualityCheckProblem):
     _var = 'feature_with_bigger_range_of_effects'

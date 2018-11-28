@@ -1,8 +1,6 @@
 import itertools
 
 from learntools.core import *
-from learntools.core.richtext import *
-CS = CodeSolution
 
 import learntools.python.solns.word_search as word_search_module
 word_search = word_search_module.word_search

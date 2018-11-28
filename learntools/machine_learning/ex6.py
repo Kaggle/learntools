@@ -1,13 +1,9 @@
 import numpy as np
-from numpy import array
 import pandas as pd
 import sklearn
 from sklearn.tree import DecisionTreeRegressor
-from learntools.core.utils import bind_exercises
-from learntools.core.problem_factories import simple_problem
-from learntools.core.richtext import CodeSolution as CS
-from learntools.core.problem import *
 
+from learntools.core import *
 
 class CheckRfScore(CodingProblem):
     _var = 'rf_val_mae'

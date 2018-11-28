@@ -1,7 +1,4 @@
-from learntools.core.utils import bind_exercises
-from learntools.core.problem import *
-from learntools.core.richtext import *
-CS = CodeSolution
+from learntools.core import *
 
 # Complete fn that takes a list and returns the second element
 

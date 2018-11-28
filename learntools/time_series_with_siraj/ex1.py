@@ -2,10 +2,7 @@ import numpy as np
 from numpy import newaxis
 import matplotlib.pyplot as plt
 
-from learntools.core.utils import bind_exercises
-from learntools.core.problem_factories import simple_problem
-from learntools.core.richtext import CodeSolution as CS
-from learntools.core.problem import *
+from learntools.core import *
 
 def plot_results_multiple(predicted_data, true_data, prediction_len):
     fig = plt.figure(facecolor='white')
