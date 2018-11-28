@@ -107,7 +107,7 @@ class Notebook(object):
 
     def __init__(self, cfg, filename, type, author=None, title=None, lesson=None,
             slug=None, scriptid=1, kernel_sources=(), dataset_sources=(),
-            keywords=(),
+            competition_sources=(), keywords=(),
             ):
         self.cfg = cfg
         self.filename = filename
@@ -139,6 +139,7 @@ class Notebook(object):
         self.scriptid = scriptid
         self.kernel_sources = list(kernel_sources)
         self.dataset_sources = list(dataset_sources)
+        self.competition_sources = list(competition_sources)
         self.keywords = list(keywords)
 
     @staticmethod
@@ -186,8 +187,8 @@ class Notebook(object):
                 kernel_type='notebook',
                 title=self.title,
                 dataset_sources=sorted(self.dataset_sources),
+                competition_sources=sorted(self.competition_sources),
                 kernel_sources=sorted(self.kernel_sources),
-                competition_sources=[],
                 keywords=sorted(self.keywords),
                 )
 
