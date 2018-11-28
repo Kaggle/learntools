@@ -21,4 +21,4 @@ The following sub-packages correspond to courses that are live at https://www.ka
 ## Deprecated
 
 - `advanced_pandas`: Old checking code for the Pandas course (predating the existence of `learntools.core` infrastructure)
-- `ml_insights`: Previous name used (during the 4-day-challenge launch) for what is now `ml_explainability`
+- `ml_insights`: Previous name used (during the 4-day-challenge launch) for what is now `ml_explainability` (this is just a symlink to `ml_explainability`)
