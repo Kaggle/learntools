@@ -1,5 +1,8 @@
 pipeline {
     agent { label 'ephemeral-linux' }
+    options {
+        disableConcurrentBuilds()
+    }
     environment {
         GIT_COMMIT_SHORT = sh(returnStdout: true, script:"git rev-parse --short=7 HEAD").trim()
         GIT_COMMIT_SUBJECT = sh(returnStdout: true, script:"git log --format=%s -n 1 HEAD").trim()
