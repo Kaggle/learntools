@@ -29,12 +29,12 @@ pipeline {
         }
     }
 
-    // post {
-    //     failure {
-    //         slackSend color: 'danger', message: "*<${env.BUILD_URL}console|${JOB_NAME} failed>* ${GIT_COMMIT_SUMMARY}", channel: env.SLACK_CHANNEL
-    //     }        
-    //     aborted {
-    //         slackSend color: 'warning', message: "*<${env.BUILD_URL}console|${JOB_NAME} aborted>* ${GIT_COMMIT_SUMMARY}", channel: env.SLACK_CHANNEL
-    //     }
-    // }
+    post {
+        failure {
+            slackSend color: 'danger', message: "*<${env.BUILD_URL}console|${JOB_NAME} failed>* ${GIT_COMMIT_SUMMARY}", channel: env.SLACK_CHANNEL
+        }        
+        aborted {
+            slackSend color: 'warning', message: "*<${env.BUILD_URL}console|${JOB_NAME} aborted>* ${GIT_COMMIT_SUMMARY}", channel: env.SLACK_CHANNEL
+        }
+    }
 }
