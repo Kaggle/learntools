@@ -32,6 +32,7 @@ class LearnLessonPreprocessor(Preprocessor):
         self.lesson = resources['lesson']
         # Corresponds to track_config.yaml
         track_cfg = resources['track_cfg']
+        self.cfg = track_cfg
         nb_meta = resources['nb_meta']
 
         macroer = MacroProcessor(track_cfg)
@@ -204,6 +205,10 @@ This course is still in beta, so I'd love to get your feedback. If you have a mo
                 )
 
     def END_OF_EXERCISE(self, forum_cta=1, **kwargs):
+        # In "daily challenge" mode, the end of the exercise should not point to
+        # the next lesson (they have to wait a day to start the next lesson)
+        if self.cfg.get('daily'):
+            return ''
         # Don't use this macro for the very last exercise
         next = self.lesson.next
         res = ''
