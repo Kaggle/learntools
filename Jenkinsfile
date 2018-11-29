@@ -1,0 +1,31 @@
+pipeline {
+    agent { label 'ephemeral-linux' }
+    environment {
+        GIT_COMMIT_SHORT = sh(returnStdout: true, script:"git rev-parse --short=7 HEAD").trim()
+        GIT_COMMIT_SUBJECT = sh(returnStdout: true, script:"git log --format=%s -n 1 HEAD").trim()
+        GIT_COMMIT_AUTHOR = sh(returnStdout: true, script:"git log --format='%an' -n 1 HEAD").trim()
+        GIT_COMMIT_SUMMARY = "`<https://github.com/Kaggle/docker-python/commit/${GIT_COMMIT}|${GIT_COMMIT_SHORT}>` ${GIT_COMMIT_SUBJECT} - ${GIT_COMMIT_AUTHOR}"
+        SLACK_CHANNEL = "#learn"
+    }
+
+    stages {
+        stage('Initialize Test Environment') {
+            // TODO(rosbo): Fetch necessary datasets
+        }
+        stage('Tests') {
+            sh '''#!/bin/bash
+                set -exo pipefail
+                ./test.sh
+            '''
+        }
+    }
+
+    // post {
+    //     failure {
+    //         slackSend color: 'danger', message: "*<${env.BUILD_URL}console|${JOB_NAME} failed>* ${GIT_COMMIT_SUMMARY}", channel: env.SLACK_CHANNEL
+    //     }        
+    //     aborted {
+    //         slackSend color: 'warning', message: "*<${env.BUILD_URL}console|${JOB_NAME} aborted>* ${GIT_COMMIT_SUMMARY}", channel: env.SLACK_CHANNEL
+    //     }
+    // }
+}
