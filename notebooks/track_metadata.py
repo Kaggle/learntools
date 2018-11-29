@@ -2,11 +2,16 @@ import os
 
 import titlecase
 
-def slugify(title, author):
+def slug_munge(s):
     # NB: This was hacked together ad-hoc and probably still has some holes where it doesn't agree with Kernels logic.
-    s = title.replace('(', '').replace(')', '').replace(',', '').replace(':', '').replace('&', '').lower()
+    forbidden_chars = r'(),:&'
+    lookup = {ord(c): None for c in forbidden_chars}
+    s = s.translate(lookup).lower()
     tokens = s.split()
-    return author + '/' + '-'.join(tokens)
+    return '-'.join(tokens)
+
+def slugify(title, author):
+    return author + '/' + slug_munge(title)
 
 class TrackMeta(object):
     """Wrapper around the metadata lists/dictionaries defined per-track in track_meta.py
@@ -133,7 +138,7 @@ class Notebook(object):
                 'testing' if cfg.get('testing', False) else ''
                 )
         if suffix:
-            self.slug += '-' + suffix
+            self.slug += '-' + slug_munge(suffix)
             # Kernels API seems to conk out and 404 if title doesn't match slug :/
             self.title += ' ' + suffix
         self.scriptid = scriptid
