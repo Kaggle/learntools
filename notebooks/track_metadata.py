@@ -1,4 +1,5 @@
 import os
+import logging
 
 import titlecase
 
@@ -78,8 +79,18 @@ class TrackMeta(object):
         except KeyError:
             # Specifying scriptids is optional.
             return
-        assert len(ids) == len(self.lessons)
+        assert len(ids) <= len(self.lessons)
+        if len(ids) < len(self.lessons):
+            tail = len(self.lessons) - len(ids)
+            logging.warn("Config with tag {} specified {} exercise scriptids, but has {}"
+                    " lessons. Ignoring last {} lesson{}".format(
+                        cfg['tag'], len(ids), len(self.lessons), tail, '' if tail==1 else 's'
+                        ))
         for lesson, scriptid in zip(self.lessons, ids):
+            # Some ids may be set to None, in which case we do nothing for that lesson.
+            # (Typically this means there is no exercise nb for that lesson)
+            if scriptid is None:
+                continue
             ex = lesson.exercise
             ex.scriptid = scriptid
 
