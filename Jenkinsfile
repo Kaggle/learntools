@@ -11,7 +11,9 @@ pipeline {
     stages {
         stage('Initialize Test Environment') {
             steps {
-                // TODO(rosbo): Fetch necessary datasets
+                sh '''#!/bin/bash
+                # TODO(rosbo): Fetch necessary datasets
+                '''
             }
         }
         stage('Tests') {
