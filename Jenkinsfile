@@ -5,18 +5,22 @@ pipeline {
         GIT_COMMIT_SUBJECT = sh(returnStdout: true, script:"git log --format=%s -n 1 HEAD").trim()
         GIT_COMMIT_AUTHOR = sh(returnStdout: true, script:"git log --format='%an' -n 1 HEAD").trim()
         GIT_COMMIT_SUMMARY = "`<https://github.com/Kaggle/docker-python/commit/${GIT_COMMIT}|${GIT_COMMIT_SHORT}>` ${GIT_COMMIT_SUBJECT} - ${GIT_COMMIT_AUTHOR}"
-        SLACK_CHANNEL = "#learn"
+        SLACK_CHANNEL = "#learnops"
     }
 
     stages {
         stage('Initialize Test Environment') {
-            // TODO(rosbo): Fetch necessary datasets
+            steps {
+                // TODO(rosbo): Fetch necessary datasets
+            }
         }
         stage('Tests') {
-            sh '''#!/bin/bash
-                set -exo pipefail
-                ./test.sh
-            '''
+            steps {
+                sh '''#!/bin/bash
+                    set -exo pipefail
+                    ./test.sh
+                '''
+            }
         }
     }
 
