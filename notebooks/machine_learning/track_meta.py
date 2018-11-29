@@ -4,8 +4,9 @@ track = dict(
 )
 
 lessons = [
-        dict(topic='How Models Work'),
-        dict(topic='Explore Your Data')
+        dict(topic='how models work'),
+        dict(topic='exploring your data'),
+        dict(topic='building your first machine learning model'),
 ]
 
 notebooks = [
@@ -29,6 +30,21 @@ notebooks = [
         type='exercise',
 	    dataset_sources= ["dansbecker/melbourne-housing-snapshot"],
 	    competition_sources=["home-data-for-ml-course"],
-        scriptid=1258954        
-    )
+        scriptid=1258954,
+    ),
+    dict(
+        filename='tut3.ipynb',
+        lesson_idx=2,
+        type='tutorial',
+	    dataset_sources= ["dansbecker/melbourne-housing-snapshot"],
+	    competition_sources=["home-data-for-ml-course"],
+        ),
+    dict(
+        filename='ex3.ipynb',
+        lesson_idx=2,
+        type='exercise',
+	    dataset_sources= ["dansbecker/melbourne-housing-snapshot"],
+	    competition_sources=["home-data-for-ml-course"],
+        scriptid=1,
+    ),
 ]
