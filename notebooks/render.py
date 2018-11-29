@@ -44,7 +44,7 @@ def render_track(track, track_cfg):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=("Preprocess notebooks"))
-    parser.add_argument("-c", "--config", help="Tag associated with a yaml config file (default: all configs)", 
+    parser.add_argument("-c", "--config", help="Tag associated with a yaml config file (default: all configs)",
             default=None)
     parser.add_argument("track",
             help=("The path to a track. e.g. 'python', or 'examples/example_track'."
@@ -53,7 +53,7 @@ if __name__ == '__main__':
             )
     parser.add_argument("-v", "--verbose", action='store_true',)
     args = parser.parse_args()
-    
+
     logging.basicConfig(
             level=(logging.DEBUG if args.verbose else logging.INFO)
             )
