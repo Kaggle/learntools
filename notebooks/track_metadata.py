@@ -27,6 +27,9 @@ class TrackMeta(object):
 
     def __init__(self, track, lessons_meta, nbs_meta, cfg):
         self.track = track
+        self.course_name = track['course_name']
+        self.course_url = track['course_url']
+
         self.lessons = [Lesson(**lmeta) for lmeta in lessons_meta]
         # Add convenience next/prev pointers to lessons
         for lesson, next_lesson in zip(self.lessons, self.lessons[1:]):
@@ -67,7 +70,7 @@ class TrackMeta(object):
 
     def _set_scriptids(self, cfg):
         """Each yaml config file may give rise to a separate set of kernels, hence
-        for tracks with multiple configs, exercise scriptids may be specified in 
+        for tracks with multiple configs, exercise scriptids may be specified in
         the config file.
         """
         try:
@@ -89,7 +92,7 @@ class TrackMeta(object):
                 if dep.endswith('.ipynb'):
                     referent = self.get_notebook(dep)
                     nb.kernel_sources[i] = referent.slug
-    
+
 
 class Lesson(object):
     """Instance variables:
@@ -134,7 +137,7 @@ class Notebook(object):
             self.slug = slugify(self.title, author)
         else:
             self.slug = slug
-        suffix = cfg.get('suffix', 
+        suffix = cfg.get('suffix',
                 'testing' if cfg.get('testing', False) else ''
                 )
         if suffix:
@@ -196,4 +199,3 @@ class Notebook(object):
                 kernel_sources=sorted(self.kernel_sources),
                 keywords=sorted(self.keywords),
                 )
-

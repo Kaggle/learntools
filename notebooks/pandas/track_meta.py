@@ -1,7 +1,7 @@
 track = dict(
-    # Create shadow (private) notebooks under my username for now for testing
-    #author_username='colinmorris',
     author_username='residentmario',
+    course_name='Pandas',
+    course_url='https://www.kaggle.com/learn/pandas'
 )
 
 lessons = []
@@ -30,11 +30,11 @@ def _make_notebook(slug, type_, lesson_idx):
     path = os.path.join('pandas', 'old_metadata', slug, 'kernel-metadata.json')
     with open(path) as f:
         ex = json.load(f)
-    
+
     datasets = ex.get('dataset_sources', [])
     adpan = 'residentmario/advanced-pandas-exercises'
     # The "advanced pandas exercises" dataset is no longer used, but we'll keep
-    # using it in all exercise workbooks as a hack to make sure they all have 
+    # using it in all exercise workbooks as a hack to make sure they all have
     # at least 2 datasets, for consistency of input file paths.
     if type_ == 'exercise' and adpan not in datasets:
         datasets.append(adpan)
@@ -64,4 +64,3 @@ for i in range(0, len(SLUGS), 2):
     for slug, type_ in zip(slugs, type_order):
         nb = _make_notebook(slug, type_, lesson_idx)
         notebooks.append(nb)
-

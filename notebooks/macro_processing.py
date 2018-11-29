@@ -5,7 +5,7 @@ import line_macros
 """
 TODO: Separation of concerns between LessonPreprocessor and MacroProcessor is
 muddled. For historical reasons, LessonPreprocessor currently owns the logic for
-expander macros. Eventually, would like to move all macro stuff here (and in 
+expander macros. Eventually, would like to move all macro stuff here (and in
 modules like line_macros.py)
 """
 
@@ -84,11 +84,13 @@ class MacroProcessor(object):
         return macro, self._transform_macro_args(args)
 
     def _transform_macro_args(self, args):
-        # Right now this is highly dumb and specific to one narrow case, but it
-        # will probably become useful in other cases in the future.
         def transform(arg):
             if arg == 'PROD':
                 return not self.cfg.get('testing', False)
+            if arg == 'DAILY':
+                return self.cfg.get('daily', False)
+            if arg == 'NOTDAILY':
+                return not self.cfg.get('daily', False)
             else:
                 return arg
         return list(map(transform, args))

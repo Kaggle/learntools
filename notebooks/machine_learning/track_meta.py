@@ -7,7 +7,7 @@ track = dict(
 
 lessons = [ {'topic': topic_name} for topic_name in
                     ['How Models Work',
-                    'Explore Your Data',
+                    'Basic Data Exploration',
                     'Your First Machine Learning Model',
                     'Model Validation',
                     'Underfitting and Overfitting',
