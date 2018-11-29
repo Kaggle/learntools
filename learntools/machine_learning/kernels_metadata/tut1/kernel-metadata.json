@@ -1,11 +1,21 @@
-{"title": "How Models Work",
+{
   "id": "dansbecker/how-models-work",
+  "id_no": 400732,
+  "title": "How Models Work",
   "code_file": "../../nbs/tut1.ipynb",
   "language": "python",
   "kernel_type": "notebook",
-  "dataset_sources": ["dansbecker/melbourne-housing-snapshot"],
-  "competition_sources": ["home-data-for-ml-course"],
+  "is_private": false,
   "enable_gpu": false,
   "enable_internet": false,
-  "is_private": false
+  "keywords": [
+    "learn"
+  ],
+  "dataset_sources": [
+    "dansbecker/melbourne-housing-snapshot"
+  ],
+  "kernel_sources": [],
+  "competition_sources": [
+    "home-data-for-ml-course"
+  ]
 }
