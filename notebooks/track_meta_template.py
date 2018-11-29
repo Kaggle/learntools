@@ -5,7 +5,8 @@ track = dict(
 
 lessons = [
         dict(
-            topic='example',
+            # By convention, this should be a lowercase noun-phrase.
+            topic='exemplar examples',
             ),
 ]
 
