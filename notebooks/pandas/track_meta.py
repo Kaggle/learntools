@@ -20,14 +20,6 @@ data-types-and-missing-data-workbook
 renaming-and-combining-reference
 renaming-and-combining-workbook""".split()
 
-# Mapping from exercise slugs to extra datasets they require (beyond the baseline wine-reviews
-# dataset used by all notebooks)
-exercise_aux_datasets = {
-        'creating-reading-and-writing-workbook': ['nolanbconaway/pitchfork-data'],
-        'renaming-and-combining-workbook': ['open-powerlifting/powerlifting-database',
-                                    'residentmario/things-on-reddit'],
-}
-
 import os; import json
 def _make_notebook(slug, type_, lesson_idx):
     # XXX
@@ -38,23 +30,19 @@ def _make_notebook(slug, type_, lesson_idx):
         ex = json.load(f)
     
     datasets = ex.get('dataset_sources', [])
-    # The extant metadata included a lot of unused datasets for exercises. Trim
-    # them down.
-    if type_ == 'exercise':
-        # The "advanced pandas exercises" dataset is no longer used, but we'll keep
-        # using it in all exercise workbooks as a hack to make sure they all have 
-        # at least 2 datasets, for consistency of input file paths.
-        adpan = 'residentmario/advanced-pandas-exercises'
-        datasets = [adpan, 'zynicide/wine-reviews']
-        extras = exercise_aux_datasets.get(slug, [])
-        datasets.extend(extras)
+    adpan = 'residentmario/advanced-pandas-exercises'
+    # The "advanced pandas exercises" dataset is no longer used, but we'll keep
+    # using it in all exercise workbooks as a hack to make sure they all have 
+    # at least 2 datasets, for consistency of input file paths.
+    if type_ == 'exercise' and adpan not in datasets:
+        datasets.append(adpan)
         assert len(datasets) >= 2
 
     return dict(
             filename=slug+'.ipynb',
             type=type_,
             lesson_idx=lesson_idx,
-            dataset_sources=datasets,
+            dataset_sources=ex.get('dataset_sources', []),
             keywords=ex.get('keywords', []),
             title=ex['title'],
             scriptid=ex.get('id_no', -1),
