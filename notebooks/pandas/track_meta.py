@@ -18,9 +18,7 @@ grouping-and-sorting
 data-types-and-missing-data-reference
 data-types-and-missing-data-workbook
 renaming-and-combining-reference
-renaming-and-combining-workbook
-method-chaining-reference
-method-chaining-workbook""".split()
+renaming-and-combining-workbook""".split()
 
 import os; import json
 def _make_notebook(slug, type_, lesson_idx):
