@@ -1,0 +1,24 @@
+#!/bin/bash
+
+if [ -d input ]
+then
+    exit 0
+fi
+
+mkdir -p input
+
+# NB: In many cases, notebooks only use one or two files from the dataset. Possible
+# we could save some time/bandwidth using the -f argument to kaggle d download.
+DATASETS="zynicide/wine-reviews nolanbconaway/pitchfork-data open-powerlifting/powerlifting-database residentmario/things-on-reddit jpmiller/publicassistance datasnaek/youtube-new"
+
+for slug in $DATASETS
+do
+    name=`echo $slug | cut -d '/' -f 2`
+    dest="input/$name"
+    mkdir -p $dest
+    kaggle d download -p $dest --unzip $slug
+done
+
+# Setup a shallow symlink for the wine reviews dataset. Some ref notebooks only
+# have the one dataset attached.
+ln -s input/wine-reviews/winemag-data-130k-v2.csv input/
