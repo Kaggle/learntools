@@ -16,14 +16,21 @@ TRACKS="embeddings pandas python"
 for track in $TRACKS
 do
     # Run each step of the rendering pipeline, to make sure it runs without errors.
-    python3 clean.py $track
-    python3 prepare_push.py $track
-    python3 render.py $track
-
-    # TODO: Once basic checks are working we should also do the following here:
-    # - download necessary datasets for this track
-    # - nbconvert execute *all* exercise notebooks for the track
+    # TODO: These fail because the install is in a read-only FS. Should either add
+    # a --dry-run flag to these, or allow specifying a custom output directory.
+    #python3 clean.py $track
+    #python3 prepare_push.py $track
+    #python3 render.py $track
+    echo "pass"
 done
 
 # For now, just run one notebook (which doesn't depend on any datasets)
-jupyter nbconvert --output "$TMP_DIR" --execute "python/raw/ex_2.ipynb"
+jupyter nbconvert --output-dir "$TMP_DIR" --execute "python/raw/ex_2.ipynb"
+
+TESTABLE_NOTEBOOK_TRACKS="pandas"
+for track in $TESTABLE_NOTEBOOK_TRACKS
+do
+    cd $track
+    ./setup_data.sh
+    jupyter nbconvert --output-dir "$TMP_DIR" --execute raw/*.ipynb
+done
