@@ -4,12 +4,14 @@
 set -e
 set -x
 
-# Testing whether initial pwd is writable
-touch test.txt
-
 # path to the notebook/ directory.
 DIR=`dirname "${BASH_SOURCE[0]}"`
-cd $DIR
+# The learntools repo is cloned to a read-only location. Various testing steps involve writing,
+# so copy the whole notebooks directory to a writeable location and work from there.
+WORKING_DIR=`mktemp -d`
+cp -r $DIR $WORKING_DIR
+cd $WORKING_DIR/notebooks
+
 TMP_DIR=`mktemp -d`
 
 # Install packages the notebook pipeline depends on but which aren't installed with the learntools package.
@@ -19,12 +21,9 @@ TRACKS="embeddings pandas python"
 for track in $TRACKS
 do
     # Run each step of the rendering pipeline, to make sure it runs without errors.
-    # TODO: These fail because the install is in a read-only FS. Should either add
-    # a --dry-run flag to these, or allow specifying a custom output directory.
-    #python3 clean.py $track
-    #python3 prepare_push.py $track
-    #python3 render.py $track
-    echo "pass"
+    python3 clean.py $track
+    python3 prepare_push.py $track
+    python3 render.py $track
 done
 
 # For now, just run one notebook (which doesn't depend on any datasets)
