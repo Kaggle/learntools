@@ -6,6 +6,8 @@ set -x
 
 # path to the notebook/ directory.
 DIR=`dirname "${BASH_SOURCE[0]}"`
+# Install learntools branch
+pip3 install $DIR/..
 # The learntools repo is cloned to a read-only location. Various testing steps involve writing,
 # so copy the whole notebooks directory to a writeable location and work from there.
 WORKING_DIR=`mktemp -d`
