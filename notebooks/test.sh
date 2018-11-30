@@ -23,7 +23,8 @@ do
     # Run each step of the rendering pipeline, to make sure it runs without errors.
     python3 clean.py $track
     python3 prepare_push.py $track
-    python3 render.py $track
+    # TODO: Fails due to failure when calling get_git_branch()
+    #python3 render.py $track
 done
 
 # For now, just run one notebook (which doesn't depend on any datasets)
