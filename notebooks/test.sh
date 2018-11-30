@@ -4,6 +4,9 @@
 set -e
 set -x
 
+# Testing whether initial pwd is writable
+touch test.txt
+
 # path to the notebook/ directory.
 DIR=`dirname "${BASH_SOURCE[0]}"`
 cd $DIR
