@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 if [ -d input ]
 then
     exit 0
