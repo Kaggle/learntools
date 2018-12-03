@@ -29,19 +29,23 @@ do
     #python3 render.py $track
 done
 
-# For now, just run one notebook (which doesn't depend on any datasets)
-jupyter nbconvert --output-dir "$TMP_DIR" --execute "python/raw/ex_2.ipynb"
-
-TESTABLE_NOTEBOOK_TRACKS="pandas"
+TESTABLE_NOTEBOOK_TRACKS="python pandas"
 for track in $TESTABLE_NOTEBOOK_TRACKS
 do
     cd $track
-    ./setup_data.sh
+    ! [[ -a setup_data.sh ]] || ./setup_data.sh
     for nb in `ls raw/*.ipynb`
     do
-        # XXX: First pandas reference notebook has a bug (b/120286668), and times out.
-        if [[ $nb =~ "writing-reference" ]]
+        # Skip some known bugs/misbehaving tests
+        if ((
+            # First pandas reference notebook has a bug (b/120286668), and times out.
+            [[ $nb =~ "writing-reference" ]]
+            # First python exercise notebook uses google/tinyquickdraw dataset, which
+            # is 11 GB. Downloading it would probably slow down testing unacceptably.
+            || ( [[ $nb =~ "ex_1" ]] && [[ $track == "python" ]] )
+            ))
         then
+            echo "Warning: skipping $nb in track $track"
             continue
         fi
         jupyter nbconvert --output-dir "$TMP_DIR" --execute $nb
