@@ -17,9 +17,6 @@ pipeline {
         stage('Initialize Test Environment') {
             steps {
                 sh '''#!/bin/bash
-echo $KAGGLE_USERNAME
-echo $KAGGLE_KEY
-echo $KAGGLE_KEY | wc
                 # TODO(rosbo): Fetch necessary datasets
                 '''
             }
