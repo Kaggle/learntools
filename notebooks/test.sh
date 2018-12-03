@@ -37,13 +37,10 @@ do
     for nb in `ls raw/*.ipynb`
     do
         # Skip some known bugs/misbehaving tests
-        if ((
-            # First pandas reference notebook has a bug (b/120286668), and times out.
-            [[ $nb =~ "writing-reference" ]]
-            # First python exercise notebook uses google/tinyquickdraw dataset, which
-            # is 11 GB. Downloading it would probably slow down testing unacceptably.
-            || ( [[ $nb =~ "ex_1" ]] && [[ $track == "python" ]] )
-            ))
+        # First pandas reference notebook has a bug (b/120286668), and times out.
+        # First python exercise notebook uses google/tinyquickdraw dataset, which
+        # is 11 GB. Downloading it would probably slow down testing unacceptably.
+        if [[ $nb =~ "writing-reference" || ( $nb =~ "ex_1" && $track == "python" ) ]]
         then
             echo "Warning: skipping $nb in track $track"
             continue
