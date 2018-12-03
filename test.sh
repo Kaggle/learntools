@@ -4,8 +4,6 @@
 set -e
 set -x
 
-echo "un: $KAGGLE_USERNAME"
-
 docker run --rm -t \
     -e KAGGLE_USERNAME -e KAGGLE_KEY \
     -v $PWD:/input:ro \

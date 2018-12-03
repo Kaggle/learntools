@@ -24,7 +24,6 @@ pipeline {
         stage('Tests') {
             steps {
                 sh '''#!/bin/bash
-echo $KAGGLE_USERNAME
                     set -exo pipefail
                     ./test.sh
                 '''
