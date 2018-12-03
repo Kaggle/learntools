@@ -2,6 +2,8 @@
 
 set -e
 
+echo $KAGGLE_USERNAME
+
 if [ -d input ]
 then
     exit 0
