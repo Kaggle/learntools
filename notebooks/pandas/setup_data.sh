@@ -1,4 +1,6 @@
 #!/bin/bash
+# Download the datasets used in the Pandas notebooks and move them around such that they're available to the notebooks
+# at relative paths (../input/...) that mimic where files would be available in kernels.
 
 set -e
 
