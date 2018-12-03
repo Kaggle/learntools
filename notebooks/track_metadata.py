@@ -1,12 +1,18 @@
 import os
+import logging
 
 import titlecase
 
-def slugify(title, author):
+def slug_munge(s):
     # NB: This was hacked together ad-hoc and probably still has some holes where it doesn't agree with Kernels logic.
-    s = title.replace('(', '').replace(')', '').replace(',', '').replace(':', '').replace('&', '').lower()
+    forbidden_chars = r'(),:&'
+    lookup = {ord(c): None for c in forbidden_chars}
+    s = s.translate(lookup).lower()
     tokens = s.split()
-    return author + '/' + '-'.join(tokens)
+    return '-'.join(tokens)
+
+def slugify(title, author):
+    return author + '/' + slug_munge(title)
 
 class TrackMeta(object):
     """Wrapper around the metadata lists/dictionaries defined per-track in track_meta.py
@@ -22,6 +28,9 @@ class TrackMeta(object):
 
     def __init__(self, track, lessons_meta, nbs_meta, cfg):
         self.track = track
+        self.course_name = track['course_name']
+        self.course_url = track['course_url']
+
         self.lessons = [Lesson(**lmeta) for lmeta in lessons_meta]
         # Add convenience next/prev pointers to lessons
         for lesson, next_lesson in zip(self.lessons, self.lessons[1:]):
@@ -62,7 +71,7 @@ class TrackMeta(object):
 
     def _set_scriptids(self, cfg):
         """Each yaml config file may give rise to a separate set of kernels, hence
-        for tracks with multiple configs, exercise scriptids may be specified in 
+        for tracks with multiple configs, exercise scriptids may be specified in
         the config file.
         """
         try:
@@ -70,8 +79,18 @@ class TrackMeta(object):
         except KeyError:
             # Specifying scriptids is optional.
             return
-        assert len(ids) == len(self.lessons)
+        assert len(ids) <= len(self.lessons)
+        if len(ids) < len(self.lessons):
+            tail = len(self.lessons) - len(ids)
+            logging.warn("Config with tag {} specified {} exercise scriptids, but has {}"
+                    " lessons. Ignoring last {} lesson{}".format(
+                        cfg['tag'], len(ids), len(self.lessons), tail, '' if tail==1 else 's'
+                        ))
         for lesson, scriptid in zip(self.lessons, ids):
+            # Some ids may be set to None, in which case we do nothing for that lesson.
+            # (Typically this means there is no exercise nb for that lesson)
+            if scriptid is None:
+                continue
             ex = lesson.exercise
             ex.scriptid = scriptid
 
@@ -84,7 +103,7 @@ class TrackMeta(object):
                 if dep.endswith('.ipynb'):
                     referent = self.get_notebook(dep)
                     nb.kernel_sources[i] = referent.slug
-    
+
 
 class Lesson(object):
     """Instance variables:
@@ -107,7 +126,7 @@ class Notebook(object):
 
     def __init__(self, cfg, filename, type, author=None, title=None, lesson=None,
             slug=None, scriptid=1, kernel_sources=(), dataset_sources=(),
-            keywords=(),
+            competition_sources=(), keywords=(),
             ):
         self.cfg = cfg
         self.filename = filename
@@ -129,16 +148,17 @@ class Notebook(object):
             self.slug = slugify(self.title, author)
         else:
             self.slug = slug
-        suffix = cfg.get('suffix', 
+        suffix = cfg.get('suffix',
                 'testing' if cfg.get('testing', False) else ''
                 )
         if suffix:
-            self.slug += '-' + suffix
+            self.slug += '-' + slug_munge(suffix)
             # Kernels API seems to conk out and 404 if title doesn't match slug :/
             self.title += ' ' + suffix
         self.scriptid = scriptid
         self.kernel_sources = list(kernel_sources)
         self.dataset_sources = list(dataset_sources)
+        self.competition_sources = list(competition_sources)
         self.keywords = list(keywords)
 
     @staticmethod
@@ -186,8 +206,7 @@ class Notebook(object):
                 kernel_type='notebook',
                 title=self.title,
                 dataset_sources=sorted(self.dataset_sources),
+                competition_sources=sorted(self.competition_sources),
                 kernel_sources=sorted(self.kernel_sources),
-                competition_sources=[],
                 keywords=sorted(self.keywords),
                 )
-

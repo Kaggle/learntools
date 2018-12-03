@@ -23,15 +23,17 @@ def get_git_branch():
             .decode('utf8').strip()
 
 class LearnLessonPreprocessor(Preprocessor):
-    
+
     # NB: This is the only overridden Preprocessor method. All other methods are custom.
     def preprocess(self, nb, resources):
         # See render.py for how resources as populated.
         self.track = resources['track_meta']
+
         # May be None for notebooks with type='extra'
         self.lesson = resources['lesson']
         # Corresponds to track_config.yaml
         track_cfg = resources['track_cfg']
+        self.cfg = track_cfg
         nb_meta = resources['nb_meta']
 
         macroer = MacroProcessor(track_cfg)
@@ -53,7 +55,7 @@ class LearnLessonPreprocessor(Preprocessor):
         if track_cfg.get('development', False) and nb_meta.type == 'exercise':
             self.pip_install_lt_hack(nb)
         return nb, resources
-    
+
     def pip_install_lt_hack(self, nb):
         """pip install learntools @ the present branch when running on Kernels"""
         branch = get_git_branch()
@@ -101,7 +103,7 @@ class LearnLessonPreprocessor(Preprocessor):
         # Find all things that look like macros
         pattern = r'#\$([^$]+)\$'
         # This is one big string. It occurs to me that this is actually kind of weird
-        # given that inspecting the ipynb file format, source seems to be a list of 
+        # given that inspecting the ipynb file format, source seems to be a list of
         # strings, 1 per line (this is also what's expected by nbformat.from_dict).
         # I have no idea why this disagreement exists.
         src = cell['source']
@@ -133,12 +135,12 @@ class LearnLessonPreprocessor(Preprocessor):
         return cell
 
     def expand_macro(self, macro, cell):
-        """Expand the given macro string (or apply it to the given cell, if 
-        it's side-effecty), by looking up and calling the corresponding 
+        """Expand the given macro string (or apply it to the given cell, if
+        it's side-effecty), by looking up and calling the corresponding
         LessonPreprocessor method.
         """
-        # TODO: The fact that some macros expand to some text, and some just have 
-        # some effect on their cell leads to some awkwardness. Could be nice to 
+        # TODO: The fact that some macros expand to some text, and some just have
+        # some effect on their cell leads to some awkwardness. Could be nice to
         # delineate syntactically. e.g. #$HIDE!$
         args = []
         if macro.endswith(')'):
@@ -155,7 +157,7 @@ class LearnLessonPreprocessor(Preprocessor):
 
     def HIDE_INPUT(self, cell):
         cell['metadata']['_kg_hide-input'] = True
-    
+
     def HIDE_OUTPUT(self, cell):
         cell['metadata']['_kg_hide-output'] = True
 
@@ -167,10 +169,10 @@ class LearnLessonPreprocessor(Preprocessor):
         """Some boilerplate text to be used at the end of a tutorial notebook, to
         lead into the corresponding exercise.
         """
-        return """# Your turn!
+        return """# Your Turn
 
-Head over to [the Exercises notebook]({}) to get some hands-on practice working with {}.""".format(
-        self.lesson.exercise.forking_url, self.lesson.topic,
+Try the [hands-on exercise]({}) with {}""".format(
+        self.lesson.exercise.forking_url, self.lesson.topic
         )
 
     def TUT_BETA_NOTE(self, jot_id, **kwargs):
@@ -203,20 +205,43 @@ This course is still in beta, so I'd love to get your feedback. If you have a mo
                 self.lesson.topic, self.lesson.tutorial.url,
                 )
 
-    def END_OF_EXERCISE(self, forum_cta=1, **kwargs):
+    def HEADER(self, **kwargs):
+        # daily users aren't linked back to course main page
+        if self.cfg.get('daily'):
+            return ''
+        else:
+            return """**[{} Course Home Page]({})**
+
+---
+""".format(self.track.course_name, self.track.course_url)
+
+    def FOOTER(self, **kwargs):
+        # daily users aren't linked back to course main page
+        if self.cfg.get('daily'):
+            return ''
+        else:
+            return """---
+**[{} Course Home Page]({})**
+""".format(self.track.course_name, self.track.course_url)
+
+    def KEEP_GOING(self, **kwargs):
+
+        # In "daily challenge" mode, the end of the exercise should not point to
+        # the next lesson (they have to wait a day to start the next lesson)
+        if self.cfg.get('daily'):
+            return "\n**You'll get another email tomorrow so you can keep learning. See you then.**"
         # Don't use this macro for the very last exercise
-        next = self.lesson.next
-        res = ''
-        if int(forum_cta):
-            res += "If you have any questions, be sure to post them on the [forums](https://www.kaggle.com/learn-forum).\n\n"
+        next_lesson = self.lesson.next
+        if hasattr(next_lesson, 'tutorial'):
+            next_url = next_lesson.tutorial.url
+        else:
+            next_url = next_lesson.exercise.forking_url
 
-        res += """Remember that your notebook is private by default, and in order to share it with other people or ask for help with it, you'll need to make it public. First, you'll need to save a version of your notebook that shows your current work by hitting the "Commit & Run" button. (Your work is saved automatically, but versioning your work lets you go back and look at what it was like at the point you saved it. It also let's you share a nice compiled notebook instead of just the raw code.) Then, once your notebook is finished running, you can go to the Settings tab in the panel to the left (you may have to expand it by hitting the [<] button next to the "Commit & Run" button) and setting the "Visibility" dropdown to "Public".
+        res = """# Keep Going
 
-# Keep Going
+You are ready for **[{}]({}).**
+""".format(next_lesson.topic, next_url)
 
-When you're ready to continue, [click here]({}) to continue on to the next tutorial on {}.""".format(
-        next.tutorial.url, next.topic,
-        )
         return res
 
         # Alternative formulation (used on days 5 and 6 of Python challenge):
@@ -231,16 +256,13 @@ That's the end of this exercise. How'd it go? If you have any questions, be sure
 **P.S.** This course is still in beta, so I'd love to get your feedback. If you have a moment to [fill out a super-short survey about this exercise]({form_url}), I'd greatly appreciate it.
 """.format(form_url=form_url)
         if not self.lesson.last:
-            next = self.lesson.next
+            next_lesson = self.lesson.next
             kg = """
 # Keep going
 
 When you're ready to continue, [click here]({}) to continue on to the next tutorial on {}.
 """.format(
-        next.tutorial.url, next.topic,
+        next_lesson.tutorial.url, next_lesson.topic,
         )
             txt += kg
         return txt
-
-
-

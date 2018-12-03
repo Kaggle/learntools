@@ -17,9 +17,11 @@ EXERCISE_FORKING_URL(N)
 EXERCISE_FORKING_URL
 
 # Some standard boilerplate for beginning and ending exercises/tutorials.
-END_OF_EXERCISES
+HEADER
+KEEP_GOING
 EXERCISE_PREAMBLE
 YOURTURN
+FOOTER
 
 ## Line-level macros
 
