@@ -4,6 +4,8 @@
 set -e
 set -x
 
+echo "un: $KAGGLE_USERNAME"
+
 # path to the notebook/ directory.
 DIR=`dirname "${BASH_SOURCE[0]}"`
 # Install learntools branch
