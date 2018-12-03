@@ -48,4 +48,5 @@ do
         fi
         jupyter nbconvert --output-dir "$TMP_DIR" --execute $nb
     done
+    cd ../
 done

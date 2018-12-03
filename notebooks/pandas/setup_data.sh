@@ -25,4 +25,6 @@ done
 
 # Setup a shallow symlink for the wine reviews dataset. Some ref notebooks only
 # have the one dataset attached.
-ln -s input/wine-reviews/winemag-data-130k-v2.csv input/
+cd input
+ln -s wine-reviews/winemag-data-130k-v2.csv .
+cd ..
