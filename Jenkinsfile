@@ -9,12 +9,17 @@ pipeline {
         GIT_COMMIT_AUTHOR = sh(returnStdout: true, script:"git log --format='%an' -n 1 HEAD").trim()
         GIT_COMMIT_SUMMARY = "`<https://github.com/Kaggle/docker-python/commit/${GIT_COMMIT}|${GIT_COMMIT_SHORT}>` ${GIT_COMMIT_SUBJECT} - ${GIT_COMMIT_AUTHOR}"
         SLACK_CHANNEL = "#learnops"
+        KAGGLE_API_JSON = credentials('KAGGLE_API_JSON')
     }
 
     stages {
         stage('Initialize Test Environment') {
             steps {
                 sh '''#!/bin/bash
+                echo $KAGGLE_API_JSON
+                echo $KAGGLE_API_JSON | wc
+                mkdir -p ~/.kaggle
+                mv $KAGGLE_API_JSON ~/.kaggle
                 # TODO(rosbo): Fetch necessary datasets
                 '''
             }
