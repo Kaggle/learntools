@@ -21,6 +21,9 @@ do
     kaggle d download -p $dest --unzip $slug
 done
 
+# Things on reddit is a zip of a zip. Kaggle d --unzip doesn't do a deep unzip, but kernels does
+unzip input/things-on-reddit/top-things.zip -d input/things-on-reddit/top-things
+
 # Setup a shallow symlink for the wine reviews dataset. Some ref notebooks only
 # have the one dataset attached.
 cd input
