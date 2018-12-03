@@ -1,10 +1,10 @@
 # Rendered ipynb files and kernel metadata json files for this config will be saved at notebooks/<track>/<tag>/
-tag: default
-public: false
+tag: prod
+public: true
 # If true, then exercise kernels synced to kaggle will have internet enabled and will begin
 # with a cell that pip installs the current learntools branch. (Useful for testing 
 # notebooks on Kernels without requiring image docker deploy for every learntools change)
-development: true
+development: false
 # By itself, this flag does nothing. But it can be useful to have 'testing' cells in exercise
 # notebooks (testing the checking code on various correct and incorrect solutions) whose 
 # inclusion in the rendered notebook is conditioned on this flag (using a macro like #%%RM_IF(PROD)%%
@@ -12,7 +12,7 @@ development: true
 testing: false
 # A string to append to titles and slugs of kernels generated under this config (so that the generated
 # kernels are pushed to a separate destination from the default config). If testing is true, suffix 
-# defaults to 'testing'. (Spaces and special characters are allowed and will be munged appropriately when appending to slug)
+# defaults to 'testing'
 #suffix: foo
 # Author username usually gets set in track_meta.py. The following optional key will overwrite
 # the author for kernels generated under this particular config. (Example use case: author A
