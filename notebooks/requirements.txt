@@ -2,3 +2,4 @@ titlecase
 nbformat
 nbconvert
 PyYAML
+kaggle
