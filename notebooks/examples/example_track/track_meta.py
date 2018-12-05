@@ -6,6 +6,9 @@ track = dict(
 # and the other having just a tutorial)
 lessons = [
         dict(
+            # By convention, this should be a lowercase noun-phrase. Macros will
+            # use this in constructions like...
+            # > Click here to move on to the next lesson on ${lesson.topic}.
             topic='example things',
             ),
         dict(

@@ -1,5 +1,7 @@
 track = dict(
     author_username='colinmorris',
+    course_name='Embeddings',
+    course_url='https://www.kaggle.com/learn/embeddings'
 )
 
 lessons = [
