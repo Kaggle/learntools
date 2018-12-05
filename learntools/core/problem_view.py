@@ -155,15 +155,15 @@ class ProblemView:
         return Solution(soln)
 
     def _assert_last_outcome(self, outcome):
-        assert self._last_outcome is not None, "No outcome recorded. Did you call check()?"
+        self.check()
         assert self._last_outcome == outcome, ("Expected last outcome to be {}, but was {}".format(
             outcome, self._last_outcome))
 
-    def assert_unattempted(self):
+    def assert_check_unattempted(self):
         self._assert_last_outcome(tracking.OutcomeType.UNATTEMPTED)
 
-    def assert_failed(self):
+    def assert_check_failed(self):
         self._assert_last_outcome(tracking.OutcomeType.FAIL)
 
-    def assert_passed(self):
+    def assert_check_passed(self):
         self._assert_last_outcome(tracking.OutcomeType.PASS)
