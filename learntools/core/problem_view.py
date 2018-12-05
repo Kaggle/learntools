@@ -35,6 +35,9 @@ class ProblemView:
         self.globals = globals_
         self.tutorial_id = tutorial_id
         self.interactions = Counter()
+        # The outcome of the last call to .check (as a tracking.OutcomeType).
+        # Used for notebook testing.
+        self._last_outcome = None
 
     def __getattr__(self, attr):
         """By default, expose methods of the contained Problem object if
@@ -63,6 +66,7 @@ class ProblemView:
        tracking.track(kwargs)
 
     def _track_check(self, outcome, **kwargs):
+        self._last_outcome = outcome
         if outcome == tracking.OutcomeType.PASS:
             kwargs['valueTowardsCompletion'] = self.problem.point_value
         self._track_event(tracking.InteractionType.CHECK, outcomeType=outcome, **kwargs)
@@ -149,3 +153,17 @@ class ProblemView:
         if isinstance(soln, RichText):
             return soln
         return Solution(soln)
+
+    def _assert_last_outcome(self, outcome):
+        self.check()
+        assert self._last_outcome == outcome, ("Expected last outcome to be {}, but was {}".format(
+            outcome, self._last_outcome))
+
+    def assert_check_unattempted(self):
+        self._assert_last_outcome(tracking.OutcomeType.UNATTEMPTED)
+
+    def assert_check_failed(self):
+        self._assert_last_outcome(tracking.OutcomeType.FAIL)
+
+    def assert_check_passed(self):
+        self._assert_last_outcome(tracking.OutcomeType.PASS)
