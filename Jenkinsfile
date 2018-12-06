@@ -10,7 +10,7 @@ pipeline {
         GIT_COMMIT_SUMMARY = "`<https://github.com/Kaggle/docker-python/commit/${GIT_COMMIT}|${GIT_COMMIT_SHORT}>` ${GIT_COMMIT_SUBJECT} - ${GIT_COMMIT_AUTHOR}"
         SLACK_CHANNEL = "#learnops"
         KAGGLE_KEY = credentials('KAGGLE_API_KEY')
-        KAGGLE_USERNAME = 'colinmorris'
+        KAGGLE_USERNAME = 'dansbecker'
     }
 
     stages {
