@@ -1,0 +1,20 @@
+{
+  "id": "dansbecker/exercise-coding-in-tensorflow-and-keras",
+  "id_no": 521452,
+  "title": "Exercise: Coding in TensorFlow and Keras",
+  "code_file": "../../nbs/ex3_programming_tf_and_keras.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": false,
+  "enable_internet": false,
+  "keywords": [],
+  "dataset_sources": [
+    "keras/resnet50",
+    "keras/vgg16",
+    "keras/inceptionv3",
+    "dansbecker/hot-dog-not-hot-dog"
+  ],
+  "kernel_sources": [],
+  "competition_sources": []
+}

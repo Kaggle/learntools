@@ -1,0 +1,19 @@
+{
+  "id": "dansbecker/exercise-modeling-from-scratch",
+  "id_no": 574269,
+  "title": "Exercise: Modeling from Scratch",
+  "code_file": "../../nbs/ex7_from_scratch.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": false,
+  "enable_internet": false,
+  "keywords": [],
+  "dataset_sources": [
+    "zalando-research/fashionmnist"
+  ],
+  "kernel_sources": [],
+  "competition_sources": [
+    "digit-recognizer"
+  ]
+}

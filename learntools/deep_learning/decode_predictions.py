@@ -1,6 +1,6 @@
 import json
 
-def decode_predictions(preds, top=5, class_list_path=None):
+def decode_predictions(preds, top=5, class_list_path='../input/resnet50/imagenet_class_index.json'):
   """Decodes the prediction of an ImageNet model.
   Arguments:
       preds: Numpy tensor encoding a batch of predictions.

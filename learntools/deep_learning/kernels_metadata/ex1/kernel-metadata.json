@@ -1,0 +1,22 @@
+{
+  "id": "dansbecker/exercise-convolutions-for-computer-vision",
+  "id_no": 499266,
+  "title": "Exercise: Convolutions for Computer Vision",
+  "code_file": "../../nbs/ex1_convolutions.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": false,
+  "enable_internet": false,
+  "keywords": [
+    "deep learning",
+    "learn"
+  ],
+  "dataset_sources": [
+    "dansbecker/python-utility-code-for-deep-learning-exercises"
+  ],
+  "kernel_sources": [],
+  "competition_sources": [
+    "dog-breed-identification"
+  ]
+}
