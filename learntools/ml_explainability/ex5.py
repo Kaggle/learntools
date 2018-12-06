@@ -1,9 +1,7 @@
 from numpy import random
 import pandas as pd
 
-from learntools.core.utils import bind_exercises
-from learntools.core.richtext import CodeSolution as CS
-from learntools.core.problem import *
+from learntools.core import *
 
 
 class WhichEffectLargerRange(EqualityCheckProblem):

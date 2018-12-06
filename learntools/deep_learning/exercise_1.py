@@ -2,9 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
 
-from learntools.core.utils import bind_exercises
-from learntools.core.richtext import CodeSolution as CS
-from learntools.core.problem import *
+from learntools.core import *
 
 class VerticalLineDetector(CodingProblem):
     _vars = ['vertical_line_conv']

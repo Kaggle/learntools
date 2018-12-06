@@ -3,9 +3,7 @@ import pandas as pd
 import sklearn
 from sklearn.tree import DecisionTreeRegressor
 
-from learntools.core.utils import bind_exercises
-from learntools.core.richtext import CodeSolution as CS
-from learntools.core.problem import *
+from learntools.core import *
 
 
 class SetTarget(CodingProblem):

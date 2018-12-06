@@ -2,9 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
 
-from learntools.core.utils import bind_exercises
-from learntools.core.richtext import CodeSolution as CS
-from learntools.core.problem import *
+from learntools.core import *
 from tensorflow import keras
 
 class StartSequentialModel(CodingProblem):
@@ -43,9 +41,9 @@ class AddFirstLayer(CodingProblem):
 
     _solution = CS(
 """
-fashion_model.add(Conv2D(12, 
+fashion_model.add(Conv2D(12,
                          activation='relu',
-                         kernel_size=3, 
+                         kernel_size=3,
                          input_shape = (img_rows, img_cols, 1)))
 """
 )
@@ -68,7 +66,7 @@ class AddMoreLayers(CodingProblem):
                ("The number of nodes in your layer doesn't match the number of prediction categories. "
                 "Last layer shape should be (None, 10) but it is ".format(last_layer.output_shape) + \
                 ". Fix this in your code and re-run all model-building cells.")
-        
+
 
     _solution = CS(
 """
@@ -92,12 +90,12 @@ class CompileModel(CodingProblem):
               ("You didn't get the optimizer set correctly. It should be `adam`")
         assert(fashion_model.metrics[0] == 'accuracy'), \
               ("You need to set metrics=['accuracy']")
-        
-               
+
+
 
     _solution = CS(
 """
-fashion_model.compile(loss='categorical_crossentropy', 
+fashion_model.compile(loss='categorical_crossentropy',
                       optimizer='adam',
                       metrics=['accuracy'])
 """
@@ -147,15 +145,15 @@ class CreateNewDLModelFromScratch(CodingProblem):
               ('You have completed all the model building steps correctly, but your validation accuracy '
                'of {} can be improved. Try changing the model to see if you can get a better score'.format(model_val_acc))
 
-    _hint = "Start by copying the code from `fashion_model` and then change layers as you choose. " + \ 
+    _hint = "Start by copying the code from `fashion_model` and then change layers as you choose. " + \
             "You'll develop intuition for what changes are worth making with practice. The next lesson " + \
             "gives a good strategy of building large model and using a special techniques to reduce overfitting."
     _solution = CS(
 """
 second_fashion_model = Sequential()
-second_fashion_model.add(Conv2D(12, 
+second_fashion_model.add(Conv2D(12,
                          activation='relu',
-                         kernel_size=3, 
+                         kernel_size=3,
                          input_shape = (img_rows, img_cols, 1)))
 # Changed kernel sizes to be 2
 second_fashion_model.add(Conv2D(20, activation='relu', kernel_size=2))
@@ -167,7 +165,7 @@ second_fashion_model.add(Dense(100, activation='relu'))
 # It is important not to change the last layer. First argument matches number of classes. Softmax guarantees we get reasonable probabilities
 second_fashion_model.add(Dense(10, activation='softmax'))
 
-second_fashion_model.compile(loss='categorical_crossentropy', 
+second_fashion_model.compile(loss='categorical_crossentropy',
                              optimizer='adam',
                              metrics=['accuracy'])
 

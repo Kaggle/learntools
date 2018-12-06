@@ -7,9 +7,7 @@ from tensorflow.keras.applications.resnet50 import preprocess_input
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 from learntools.deep_learning.decode_predictions import decode_predictions
 
-from learntools.core.utils import bind_exercises
-from learntools.core.richtext import CodeSolution as CS
-from learntools.core.problem import *
+from learntools.core import *
 
 class IsHotDog(CodingProblem):
     _vars = ['is_hot_dog', 'preds']
