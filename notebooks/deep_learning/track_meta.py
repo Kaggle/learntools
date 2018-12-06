@@ -51,7 +51,6 @@ notebooks = [
 	dataset_sources = [
 	    "keras/resnet50",
 	    "keras/vgg16",
-	    "keras/inceptionv3",
 	    "dansbecker/hot-dog-not-hot-dog"
 	  ],
     ),
