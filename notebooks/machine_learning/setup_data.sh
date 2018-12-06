@@ -29,4 +29,7 @@ do
     kaggle competitions download $comp -p $dest
 done
 
+# the last exercise has only 1 dataset, so everything goes in input/ directly
+cp input/home-data-for-ml-course/* input
+
 cd ..
