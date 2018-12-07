@@ -29,6 +29,7 @@ notebooks = [
 	lesson_idx=0,
 	type='exercise',
 	scriptid=499266,
+	dataset_sources = ["keras/resnet50"],
 	competition_sources = ["dog-breed-identification"],
 	),
     dict(
@@ -100,30 +101,30 @@ notebooks = [
     dict(filename='tut7_dl_from_scratch.ipynb',
         lesson_idx=6,
         type='tutorial',
-	competition_sources='digit-recognizer',
+	dataset_sources = ['zalando-research/fashionmnist'],
+	competition_sources=['digit-recognizer'],
         ),
     dict(
         filename='ex7_from_scratch.ipynb',
         lesson_idx=6,
         type='exercise',
         scriptid=574269,
-	competition_sources='digit-recognizer',
+	competition_sources=['digit-recognizer'],
 	dataset_sources = ['zalando-research/fashionmnist'],
         ),
     dict(
         filename='tut8_dropout_and_strides.ipynb',
         lesson_idx=7,
         type='tutorial',
-	competition_sources='digit-recognizer',
+	competition_sources=['digit-recognizer'],
+	dataset_sources = ['zalando-research/fashionmnist'],
         ),
     dict(
         filename='ex8_dropout_strides.ipynb',
         lesson_idx=7,
         type='exercise',
 	scriptid=663261,
-	competition_sources='digit-recognizer',
+	competition_sources=['digit-recognizer'],
         dataset_sources = ['zalando-research/fashionmnist'],
         ),
 ]
-
-

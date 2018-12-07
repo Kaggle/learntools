@@ -40,14 +40,14 @@ class CodeWithAugmentation(CodingProblem):
     _solution = CS(
 """
 train_generator = data_generator_with_aug.flow_from_directory(
-        directory = '../input/dogs-gone-sideways/images/train',
+        directory = '../input/dogs-gone-sideways/train',
         target_size=(image_size, image_size),
         batch_size=12,
         class_mode='categorical')
 
 # Specify which type of ImageDataGenerator above is to load in validation data
 validation_generator = data_generator_no_aug.flow_from_directory(
-        directory = '../input/dogs-gone-sideways/images/val',
+        directory = '../input/dogs-gone-sideways/val',
         target_size=(image_size, image_size),
         class_mode='categorical')
 
