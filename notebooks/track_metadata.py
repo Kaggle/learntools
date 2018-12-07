@@ -190,6 +190,12 @@ class Notebook(object):
         file for pushing this notebook using the Kernels API.
         (cfg is a dictionary of config information, as specific in track_config.yaml)
         """
+        # Pushing a kernel through the API fails if len(title) > 50. (b/120288024)
+        title = self.title
+        if len(title) > 50:
+            title = title[:49]
+            logging.warn("Truncated length {} title. Was: {!r}, Now: {!r}".format(
+                len(self.title), self.title, title))
         dev = cfg.get('development', False)
         return dict(
                 id=self.slug,
@@ -204,7 +210,7 @@ class Notebook(object):
                 # development mode AND this is an exercise kernel.
                 enable_internet=dev,
                 kernel_type='notebook',
-                title=self.title,
+                title=title,
                 dataset_sources=sorted(self.dataset_sources),
                 competition_sources=sorted(self.competition_sources),
                 kernel_sources=sorted(self.kernel_sources),
