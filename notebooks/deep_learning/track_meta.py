@@ -125,6 +125,6 @@ notebooks = [
         type='exercise',
 	scriptid=663261,
 	competition_sources=['digit-recognizer'],
-        dataset_sources = ['zalando-research/fashionmnist'],
+    dataset_sources = ['zalando-research/fashionmnist'],
         ),
 ]
