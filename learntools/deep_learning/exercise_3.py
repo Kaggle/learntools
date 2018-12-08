@@ -37,6 +37,7 @@ class ScoreHotDogModel(CodingProblem):
              "The returned value from your function should be a single number.")
     _solution = CS(
 """
+def calc_accuracy(model, paths_to_hotdog_images, paths_to_other_images):
     # We'll use the counts for denominator of accuracy calculation
     num_hot_dog_images = len(paths_to_hotdog_images)
     num_other_images = len(paths_to_other_images)

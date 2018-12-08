@@ -128,7 +128,7 @@ class CreateNewDLModelFromScratch(CodingProblem):
         assert (first_layer.input_shape == desired_input_shape), \
                ("First layer should have shape {} but instead it is {}. ".format(desired_input_shape, first_layer.input_shape) + useful_text)
         assert (len(fashion_model.layers) > 1), \
-               ("You need more than 1 layer for a reasonable model."))
+               ("Use more than 1 layer for a more accurate model.")
         assert (last_layer.activation.__name__ == 'softmax'), \
                ("Your last layer's activation function should be softmax"
                 "but it is {}. Use softmax to get well-structured probabilities as output".format(last_layer.activation.__name__))
@@ -141,7 +141,7 @@ class CreateNewDLModelFromScratch(CodingProblem):
         assert("val_acc" in second_fashion_model.history.history), \
               ('The way you fit the model did not generate validation accuracy. Specify `validation_split` and compile with metrics=["accuracy"]')
         model_val_acc = second_fashion_model.history.history['val_acc'][-1]
-        assert(model_val_acc > 0.85), \
+        assert(model_val_acc > 0.75), \
               ('You have completed all the model building steps correctly, but your validation accuracy '
                'of {} can be improved. Try changing the model to see if you can get a better score'.format(model_val_acc))
 

@@ -13,6 +13,8 @@ class VerticalLineDetector(CodingProblem):
     def check(self, conv):
         assert (isinstance(conv, list) or isinstance(conv, np.ndarray)), \
                ("The input format should be a list of lists")
+        assert (((len(conv) == 2) and (len(conv[0]) == 2) and (len(conv[1])==2))), \
+                ("vertical_line_conv should be 2 x 2. The dimensions aren't right.")
         assert (conv[0][0] == conv[1][0]), \
                ("Both numbers on the left of the convolution should be the same, to avoid picking up other patterns.")
         assert (conv[0][1] == conv[1][1]), \
@@ -20,12 +22,11 @@ class VerticalLineDetector(CodingProblem):
         assert (np.sign(conv[0][0]) == -1 * np.sign(conv[0][1])), \
                ("The numbers on the left and right should have different signs")
 
-    _hint = "You can use the same numbers that show up in horizontal_line_conv above. Just change where some of them are located."
+    _hint = "Start with horizontal_line_conv above. Just switch the positions of some of the numbers."
     _solution = CS(
 """
 vertical_line_conv = [[1, -1],
                       [1, -1]]
-
 """
 )
 
@@ -46,6 +47,8 @@ In the next lesson, you will see how deep learning models put together many conv
 
 
 def visualize_conv(image, conv):
+    if conv == ____: # user hasn't written code. Return to avoid exception
+        return
     conv_array = np.array(conv)
     vertical_padding = conv_array.shape[0] - 1
     horizontal_padding = conv_array.shape[1] - 1

@@ -14,7 +14,7 @@ set to either True or False"""
 
     _solution = CS(
 """
-num_classes = 2
+num_classes = 2    # First line that was changed
 resnet_weights_path = '../input/resnet50/resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5'
 
 my_new_model = Sequential()
@@ -22,7 +22,7 @@ my_new_model.add(ResNet50(include_top=False, pooling='avg', weights=resnet_weigh
 my_new_model.add(Dense(num_classes, activation='softmax'))
 
 # Indicate whether the first layer should be trained/changed or not.
-my_new_model.layers[0].trainable = False
+my_new_model.layers[0].trainable = False   # Other line that was changed
 """
 )
 
@@ -31,12 +31,13 @@ my_new_model.layers[0].trainable = False
         assert (not my_new_model.layers[0].trainable), \
         ("Layer 0 of your model should not be trainable. It was trained on another dataset, and will be hard to improve.")
 
-class CompileTransferLearningModel(CodingProblem):
-    _vars = ['my_new_model']
-    def check(self, my_new_model):
-        assert ('loss' in dir(my_new_model)), ("You have not compiled your model yet")
-
-    _soluiton = CS("my_new_model.compile(optimizer='sgd', loss='categorical_crossentropy', metrics=['accuracy'])")
+class CompileTransferLearningModel(ThoughtExperiment):
+    _solution = \
+"""
+The compile model doesn't change the values in any convolutions.  In fact, your model has not even 
+received an argument with data yet.  Compile specifies how your model will make updates a later 
+`fit` step where it receives data.  That is the part that will take longer.
+"""
 
 class WhatCompileArgsAffectModel(ThoughtExperiment):
     _solution = \
@@ -54,14 +55,37 @@ class FitTransferModel(CodingProblem):
     _hint = "To get steps_per_epoch, divide the number of images by the batch size."
     def check(self, fit_stats):
         their_val_dir = fit_stats.validation_data.directory
-        their_val_loss = fit_stats.history['val_loss']
-        their_num_steps = b.params['steps']
+        their_val_loss = fit_stats.history['val_loss'][0]
+        their_num_steps = fit_stats.params['steps']
         assert (their_val_dir == '../input/dogs-gone-sideways/val'),\
                ("The validation directory should be `../input/dogs-gone-sideways/val`. Yours was {}".format(their_val_dir))
         assert (their_num_steps == 22), ("Should have 22 steps per epoch. You had {}".format(their_num_steps))
-        assert (their_val_loss < 0.4), \
-                ("Your validation loss is {}. It should be around 0.34. Something isn't right".format(their_val_loss))
+        assert (their_val_loss < 0.5), \
+                ("Your validation loss is {}. It can vary from one run to the next, but it should be lower then that. Something isn't right".format(their_val_loss))
+    _solution = CS(
+"""
+image_size = 224
+data_generator = ImageDataGenerator(preprocess_input)
 
+train_generator = data_generator.flow_from_directory(
+                                        directory=____,
+                                        target_size=(image_size, image_size),
+                                        batch_size=10,
+                                        class_mode='categorical')
+
+validation_generator = data_generator.flow_from_directory(
+                                        directory=____,
+                                        target_size=(image_size, image_size),
+                                        class_mode='categorical')
+
+# fit_stats below saves some statistics describing how model fitting went
+# the key role of the following line is how it changes my_new_model by fitting to data
+fit_stats = my_new_model.fit_generator(train_generator,
+                                       steps_per_epoch=____,
+                                       validation_data=____,
+                                       validation_steps=1)
+"""
+    )
 
 qvars = bind_exercises(globals(), [
     SetTraininableAndNumClasses,
