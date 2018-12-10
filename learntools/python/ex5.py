@@ -147,13 +147,13 @@ class SlotsSurvival(FunctionProblem):
 
     def check(self, fn):
         actual = fn(10, 10, 1000)
-        assert actual == 1.0, "Expected slots_survival_probability(10, 10, 1000) to be 1.0, but was actually {}".format(repr(actual))
+        assert actual == 1.0, "Expected `slots_survival_probability(10, 10, 1000)` to be 1.0, but was actually {}".format(repr(actual))
         
         actual = fn(1, 2, 10000)
-        assert .24 <= actual <= .26, "Expected slots_survival_probability(1, 2, 10000) to be around .25, but was actually {}".format(repr(actual))
+        assert .24 <= actual <= .26, "Expected `slots_survival_probability(1, 2, 10000)` to be around .25, but was actually {}".format(repr(actual))
 
         actual = fn(25, 150, 10000)
-        assert .22 <= actual <= .235, "Expected slots_survival_probability(25, 150, 10000) to be around .228, but was actually {}".format(repr(actual))
+        assert .22 <= actual <= .235, "Expected `slots_survival_probability(25, 150, 10000)` to be around .228, but was actually {}".format(repr(actual))
 
 
 qvars = bind_exercises(globals(), [

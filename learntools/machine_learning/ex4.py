@@ -17,11 +17,11 @@ train_x, val_X, train_y, val_y = train_test_split(X, y, random_state=1)""")
 
         true_train_X, _, _, true_val_y = \
                     [i for i in train_test_split(X, y, random_state=1)]
-        assert train_X.shape == true_train_X.shape, ("Expected train_X to have shape {}. "
-                                                     "Your code produced train_X with shape {}."
+        assert train_X.shape == true_train_X.shape, ("Expected `train_X` to have shape {}. "
+                                                     "Your code produced `train_X` with shape {}."
                                                      ).format(true_train_X.shape, train_X.shape)
-        assert val_y.shape == true_val_y.shape, ("Expected val_y to have shape {}. "
-                                                     "Your code produced val_y with shape {}."
+        assert val_y.shape == true_val_y.shape, ("Expected `val_y` to have shape {}. "
+                                                     "Your code produced `val_y` with shape {}."
                                                      ).format(true_val_y.shape, val_y.shape)
         # Verify they have set the seed correctly, to help with later steps
         assert all(train_X.index == true_train_X.index), "The training data had different rows than expected"
@@ -35,7 +35,7 @@ iowa_model.fit(train_X, train_y)""")
 
     def check(self, iowa_model, train_X, train_y, val_X):
         assert iowa_model.tree_, "You have not fit your model yet."
-        assert iowa_model.random_state == 1, "Ensure you created your model with random_state=1"
+        assert iowa_model.random_state == 1, "Ensure you created your model with `random_state=1`"
         # Fitting this model is cheap. So we do it in check
         correct_model = DecisionTreeRegressor(random_state=1)
         correct_model.fit(train_X, train_y)
@@ -44,9 +44,9 @@ iowa_model.fit(train_X, train_y)""")
         print(expected_pred)
         print(actual_pred)
         assert all(actual_pred == expected_pred), (
-                    "Model was tested by predicting the value of first row training data "
-                    "Expected prediction of {}. Model actually predicted {}"
-                    "Did you set the random_state and pass the right data?").format(expected_pred, actual_pred)
+                    "Model was tested by predicting the value of first row training data. "
+                    "Expected prediction of `{}`. Model actually predicted `{}`. "
+                    "Did you set the `random_state` and pass the right data?").format(expected_pred, actual_pred)
 
 class ValPreds(CodingProblem):
     _vars = ['val_predictions', 'iowa_model', 'val_X']
@@ -57,7 +57,7 @@ class ValPreds(CodingProblem):
         assert val_predictions.size == 365, "`val_predictions` is wrong size. Did you predict with the wrong data?"
         comparison_val_preds = iowa_model.predict(val_X)
         assert all(comparison_val_preds == val_predictions), ("Predictions do not match expectations. "
-                                                             "Did you supply the right data")
+                                                             "Did you supply the right data?")
 
 class MAE(EqualityCheckProblem):
     _var = 'val_mae'
