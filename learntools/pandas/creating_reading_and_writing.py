@@ -31,6 +31,7 @@ class RecipeSeriesCreation(CodingProblem):
     quantities = ['4 cups', '1 cup', '2 large', '1 can']
     items = ['Flour', 'Milk', 'Eggs', 'Spam']
     recipe = pd.Series(quantities, index=items, name='Dinner')
+    _hint = 'Note that the Series must be named `"Dinner"`. Use the `name` keyword-arg when creating your series.'
     _solution = CS("""\
 quantities = ['4 cups', '1 cup', '2 large', '1 can']
 items = ['Flour', 'Milk', 'Eggs', 'Spam']
@@ -45,7 +46,9 @@ recipe = pd.Series(quantities, index=items, name='Dinner')""")
 
 class ReadWineCsv(EqualityCheckProblem):
     _var = 'reviews'
-    # TODO: Hint about index_col
+    _hint = ("Note that the csv file begins with an unnamed column of increasing integers. "
+            "We want this to be used as the index. Check out the description of the `index_col` "
+            "keyword argument in [the docs for `read_csv`](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.read_csv.html)")
     _expected = pd.read_csv('../input/wine-reviews/winemag-data_first150k.csv', index_col=0)
     _solution = CS(
     "reviews = pd.read_csv('../input/wine-reviews/winemag-data_first150k.csv', index_col=0)"
