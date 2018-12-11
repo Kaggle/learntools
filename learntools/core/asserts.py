@@ -21,6 +21,10 @@ def assert_isinstance(cls, **named_things):
     for name, val in named_things.items():
         assert isinstance(val, cls), "Expected {} to have type `{!r}` but had type `{!r}`".format(name, cls, type(val))
 
+def assert_is_one_of(actual, options, name):
+    msg = "Incorrect value for `{}`: `{!r}`".format(name, actual)
+    assert actual in options, msg
+
 def assert_len(thing, exp_len, name):
     actual = len(thing)
     assert actual == exp_len, "Expected {} to have length {}, but was {}".format(
