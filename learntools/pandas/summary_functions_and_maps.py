@@ -18,7 +18,7 @@ class UniqueCountries(CodingProblem):
         # TODO: implement this assert
         #assert_equal_ignoring_order(countries, self.expected_set, self._var)
         assert_len(countries, len(self.expected_set), self._var)
-        assert set(countries) == self.expected_set, ("Incorrect value for"
+        assert set(countries) == self.expected_set, ("Incorrect value for "
                 "`countries`: `{!r}`").format(countries)
 
 class ReviewsPerCountry(EqualityCheckProblem):

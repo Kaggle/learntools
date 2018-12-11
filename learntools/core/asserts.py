@@ -77,9 +77,6 @@ def assert_series_equals(actual, exp, name=None):
     eq = actual_sub.equals(exp_sub)
     if eq:
         return
-    # We now they're unequal, now just need to explain why
-    assert actual.name == exp.name, "Expected {} to have name=`{}` not `{}`".format(
-            actual_name, exp.name, actual.name)
     # TODO: More checks
     assert False, "Incorrect value for {}".format(actual_name)
 
