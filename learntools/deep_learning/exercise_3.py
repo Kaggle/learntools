@@ -64,8 +64,8 @@ def calc_accuracy(model, paths_to_hotdog_images, paths_to_other_images):
         paths_to_hodog_images, paths_to_other_images = get_paths_for_testing()
         acc = calc_accuracy(my_model, paths_to_hodog_images, paths_to_other_images)
         assert (acc is not None), ("Your function did not return a value. It should return the accuracy")
-        assert (acc<=1), ("Your function should return a number between 0 and 1.  Instead it returned {}".format(acc))
-        assert (correct_acc==acc), ("Expected a returned value of {}. Your function returned {}".format(correct_acc, acc))
+        assert (acc<=1), ("Your function should return a number between 0 and 1 (a fraction correct).  Instead it returned {}".format(acc))
+        assert (acc > 0.5) ("Expected a returned value of around {}. Your function returned {}".format(correct_acc, acc))
         print("Larger dataset model accuracy: {}".format(acc))
 
 class TryVGG(CodingProblem):
@@ -81,7 +81,7 @@ vgg16_accuracy = calc_accuracy(vgg16_model, hot_dog_paths, not_hot_dog_paths)
 
     def check(self, vgg16_accuracy, vgg16_model, calc_accuracy):
         assert (len(vgg16_model.layers) == 23), ("It doesn't appear you've loaded vgg16_model correctly")
-        assert (vgg16_accuracy == 1), ("vgg16_accuracy on small dataset was expected "
+        assert (vgg16_accuracy > 0.9), ("vgg16_accuracy on small dataset was expected "
                                        "to be 1 but you had a value of {}".format())
         print("Testing VGG16 on a larger dataset. This can take a few seconds\n\n")
         paths_to_hodog_images, paths_to_other_images = get_paths_for_testing()
