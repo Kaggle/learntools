@@ -1,5 +1,9 @@
 track = dict(
     author_username='colinmorris',
+    # Keys below are all optional
+    course_name='Examples',
+    course_url='https://www.kaggle.com/learn/example',
+    enable_gpu=True, # Default false
 )
 
 # This track consists of two lessons (1 having a tutorial and an exercise,
@@ -26,6 +30,9 @@ notebooks = [
         type='tutorial',
         # This tutorial corresponds to our first lesson (on the topic of 'example things')
         lesson_idx=0,
+        # In addition to setting this at the track level, we can override it
+        # on a per-notebook basis.
+        enable_gpu=False,
         ),
     dict(
         filename='ex1-hello.ipynb',
