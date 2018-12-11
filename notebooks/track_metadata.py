@@ -43,9 +43,11 @@ class TrackMeta(object):
         self.lessons[-1].last = True
         self.notebooks = []
         author = cfg.get('author', track['author_username'])
+        enable_gpu = track.get('enable_gpu', False)
         for nb_meta in nbs_meta:
             nb_meta = nb_meta.copy()
             nb_meta.setdefault('author', author)
+            nb_meta.setdefault('enable_gpu', enable_gpu)
             lesson_idx = nb_meta.pop('lesson_idx', None)
             if lesson_idx is not None:
                 lesson = self.lessons[lesson_idx]
@@ -126,7 +128,7 @@ class Notebook(object):
 
     def __init__(self, cfg, filename, type, author=None, title=None, lesson=None,
             slug=None, scriptid=1, kernel_sources=(), dataset_sources=(),
-            competition_sources=(), keywords=(),
+            competition_sources=(), keywords=(), enable_gpu=False,
             ):
         self.cfg = cfg
         self.filename = filename
@@ -160,6 +162,7 @@ class Notebook(object):
         self.dataset_sources = list(dataset_sources)
         self.competition_sources = list(competition_sources)
         self.keywords = list(keywords)
+        self.enable_gpu = bool(enable_gpu)
 
     @staticmethod
     def _topic_to_title(topic):
@@ -204,7 +207,7 @@ class Notebook(object):
                 # Path is relative to where kernel-metadata.json file will be written, which is
                 #   notebooks/<track>/<cfg-tag>/kernels_api_metadata/<notebook-identifier>/kernel-metadata.json
                 code_file="../../rendered/{}".format(self.filename),
-                enable_gpu=False,
+                enable_gpu=self.enable_gpu,
                 # Enable internet in development mode so we can pip install learntools
                 # TODO: Actually, probably only needs to be turned on if we're in
                 # development mode AND this is an exercise kernel.
