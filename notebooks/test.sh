@@ -37,6 +37,12 @@ done
 TESTABLE_NOTEBOOK_TRACKS="deep_learning python pandas machine_learning"
 for track in $TESTABLE_NOTEBOOK_TRACKS
 do
+    # Running the deep learning notebooks is fairly slow (~10-20 minutes), so only
+    # do it if any of the relevant files have changed between this branch and master.
+    if [[ $track == "deep_learning" ]] && git diff --exit-code master -- $track ../learntools/$track; then
+        echo "No changes affecting deep learning track. Skipping running notebooks."
+        continue
+    fi
     cd $track
     ! [[ -a setup_data.sh ]] || ./setup_data.sh
     for nb in `ls raw/*.ipynb`
