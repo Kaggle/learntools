@@ -6,13 +6,15 @@ set -x
 
 # path to the notebook/ directory.
 DIR=`dirname "${BASH_SOURCE[0]}"`
+# Path to the parent (learntools) dir
+LT=$(readlink -f $DIR/..)
 # Install learntools branch
 pip3 install $DIR/..
 # The learntools repo is cloned to a read-only location. Various testing steps involve writing,
 # so copy the whole notebooks directory to a writeable location and work from there.
 WORKING_DIR=`mktemp -d`
-cp -r $DIR/../../learntools $WORKING_DIR
-cd $WORKING_DIR/learntools/notebooks
+cp -r $LT $WORKING_DIR
+cd $WORKING_DIR/input/notebooks
 
 TMP_DIR=`mktemp -d`
 
