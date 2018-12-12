@@ -19,5 +19,7 @@ kaggle datasets download zalando-research/fashionmnist -p input/fashionmnist --u
 
 kaggle competitions download digit-recognizer -p input/digit-recognizer -f train.csv
 
-kaggle datasets download -d dansbecker/urban-and-rural-photos -p input/urban-and-rural-photos
-unzip input/urban-and-rural-photos/urban-and-rural-photos.zip -d input/urban-and-rural-photos
+kaggle datasets download -d dansbecker/urban-and-rural-photos -p input/urban-and-rural-photos --unzip
+unzip input/urban-and-rural-photos/rural_and_urban_photos.zip -d input/urban-and-rural-photos/
+rm -r input/urban-and-rural-photos/__MACOSX/
+rm input/urban-and-rural-photos/*.zip
