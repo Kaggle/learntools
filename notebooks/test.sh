@@ -30,8 +30,7 @@ do
     # this means that clean.py wasn't run before committing.
     git diff --exit-code --no-color -- $track
     python3 prepare_push.py $track
-    # TODO: Fails due to failure when calling get_git_branch()
-    #python3 render.py $track
+    python3 render.py $track
 done
 
 TESTABLE_NOTEBOOK_TRACKS="deep_learning python pandas machine_learning"
