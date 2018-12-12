@@ -28,7 +28,7 @@ do
     python3 clean.py $track
     # If this fails (i.e. if running clean.py results in changes to the working tree),
     # this means that clean.py wasn't run before committing.
-    git diff --exit-code $track
+    git diff --exit-code --no-color -- $track
     python3 prepare_push.py $track
     # TODO: Fails due to failure when calling get_git_branch()
     #python3 render.py $track
