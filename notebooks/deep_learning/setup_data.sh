@@ -18,3 +18,6 @@ unzip input/dogs-gone-sideways/images.zip -d input/dogs-gone-sideways/
 kaggle datasets download zalando-research/fashionmnist -p input/fashionmnist --unzip
 
 kaggle competitions download digit-recognizer -p input/digit-recognizer -f train.csv
+
+kaggle datasets download -d dansbecker/urban-and-rural-photos -p input/urban-and-rural-photos
+unzip input/urban-and-rural-photos/urban-and-rural-photos.zip -d input/urban-and-rural-photos
