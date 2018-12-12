@@ -21,6 +21,10 @@ def assert_isinstance(cls, **named_things):
     for name, val in named_things.items():
         assert isinstance(val, cls), "Expected {} to have type `{!r}` but had type `{!r}`".format(name, cls, type(val))
 
+def assert_is_one_of(actual, options, name):
+    msg = "Incorrect value for `{}`: `{!r}`".format(name, actual)
+    assert actual in options, msg
+
 def assert_len(thing, exp_len, name):
     actual = len(thing)
     assert actual == exp_len, "Expected {} to have length {}, but was {}".format(
@@ -77,9 +81,6 @@ def assert_series_equals(actual, exp, name=None):
     eq = actual_sub.equals(exp_sub)
     if eq:
         return
-    # We now they're unequal, now just need to explain why
-    assert actual.name == exp.name, "Expected {} to have name=`{}` not `{}`".format(
-            actual_name, exp.name, actual.name)
     # TODO: More checks
     assert False, "Incorrect value for {}".format(actual_name)
 
