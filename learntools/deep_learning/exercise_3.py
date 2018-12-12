@@ -65,7 +65,7 @@ def calc_accuracy(model, paths_to_hotdog_images, paths_to_other_images):
         acc = calc_accuracy(my_model, paths_to_hodog_images, paths_to_other_images)
         assert (acc is not None), ("Your function did not return a value. It should return the accuracy")
         assert (acc<=1), ("Your function should return a number between 0 and 1 (a fraction correct).  Instead it returned {}".format(acc))
-        assert (acc > 0.5) ("Expected a returned value of around {}. Your function returned {}".format(correct_acc, acc))
+        assert (acc > 0.5), ("Expected a returned value of around {}. Your function returned {}".format(correct_acc, acc))
         print("Larger dataset model accuracy: {}".format(acc))
 
 class TryVGG(CodingProblem):
