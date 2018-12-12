@@ -5,7 +5,7 @@ class MultipartProblem:
     
     def __init__(self, *probs):
         self.problems = probs
-        # TODO: This should be ordered.
+        # Mapping from string identifier (e.g. 'a', 'b'...) to ProblemView
         self._prob_map = {}
 
     def _repr_markdown_(self):
