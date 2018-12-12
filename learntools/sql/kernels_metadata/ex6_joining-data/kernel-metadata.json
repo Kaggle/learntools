@@ -1,0 +1,19 @@
+{
+  "id": "dansbecker/joining-data",
+  "id_no": 682119,
+  "title": "Joining Data",
+  "code_file": "../../nbs/ex6_joining-data.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": false,
+  "enable_internet": false,
+  "keywords": [
+    "learn"
+  ],
+  "dataset_sources": [
+    "github/github-repos"
+  ],
+  "kernel_sources": [],
+  "competition_sources": []
+}

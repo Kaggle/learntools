@@ -1,0 +1,19 @@
+{
+  "id": "dansbecker/getting-started-with-sql-and-bigquery",
+  "id_no": 681602,
+  "title": "Getting Started with SQL and BigQuery",
+  "code_file": "../../nbs/ex1_getting-started-with-sql-and-bigquery.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": false,
+  "enable_internet": false,
+  "keywords": [
+    "learn"
+  ],
+  "dataset_sources": [
+    "hacker-news/hacker-news"
+  ],
+  "kernel_sources": [],
+  "competition_sources": []
+}
