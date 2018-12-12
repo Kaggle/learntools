@@ -1,6 +1,54 @@
+"""
+Some assertion helpers used in Problem.check implementations.
+
+TODO: standardize on some conventions for how these helpers are called, and how they
+present information to the user:
+    - When showing actual/expected values, do we use the result of str() or repr()?
+    - When showing types, str or repr?
+    - Should assert helpers always require a name for each thing being checked?
+      Can we assume it's a variable name (and wrap it in backticks), or will it
+      sometimes be something prosaic like "dataframe", or "return value"?
+"""
+
 import os
+import numbers
+import math
 
 import pandas as pd
+import numpy as np
+
+def assert_equal(var, actual, expected, failure_factory=None):
+    """Assert a protean notion of equality specific to the use case of learntools
+    checking. Subclasses of EqualityCheckProblem ultimately use this function
+    in their check method.
+
+    Includes special cases for several types of expected values, including Pandas
+    objects, ndarrays, and floats.
+    """
+    # We default to == comparison, but have special cases for certain data types.
+    if isinstance(expected, float):
+        assert isinstance(actual, numbers.Number), \
+            "Expected `{}` to be a number, but had value `{!r}` (type = `{}`)".format(
+                var, actual, type(actual).__name__)
+        check = math.isclose(actual, expected, rel_tol=1e-06)
+    elif isinstance(expected, pd.DataFrame):
+        asserts.assert_df_equals(actual, expected, var)
+        return
+    elif isinstance(expected, pd.Series):
+        asserts.assert_series_equals(actual, expected, var)
+        return
+    elif isinstance(actual, np.ndarray) or isinstance(expected, np.ndarray):
+        check = np.array_equal(actual, expected)
+    else:
+        check = actual == expected
+    if failure_factory:
+        # This optional kwarg is a bit of a hack, currently only used in the 
+        # Python ex1 favourite color question.
+        failure_message = failure_factory(var, actual, expected)
+    else:
+        failure_message = "Incorrect value for variable `{}`: `{}`".format(
+                var, repr(actual))
+    assert check, failure_message
 
 def assert_has_columns(df, cols, name=None, strict=False):
     df_desc = "dataframe"
