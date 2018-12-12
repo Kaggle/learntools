@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-# TODO: An annoying limitation of abc is that I can't mark an attribute as abstract, only a property.
+# An annoying limitation of abc is that I can't mark an attribute as abstract, only a property.
 # And I don't want to impose on each problem subclass to go to the work of defining a property for stuff like
 # vars, expected.
 # cf. https://stackoverflow.com/questions/43790040/how-to-create-an-abstract-class-attribute-potentially-read-only
@@ -15,7 +15,7 @@ from learntools.core.richtext import *
 from learntools.core.exceptions import NotAttempted, Uncheckable, UserlandExceptionIncorrect
 from learntools.core import utils, asserts, constants
 
-# TODO: I'm sure there's a more elegant way to do this.
+# I'm sure there's a more elegant way to do this.
 # Some kind of decorator on top of property?
 def optionally_plural_property(obj, name):
     single_attr = getattr(obj, name, None)
