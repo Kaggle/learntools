@@ -11,7 +11,7 @@ pip3 install $DIR/..
 # The learntools repo is cloned to a read-only location. Various testing steps involve writing,
 # so copy the whole notebooks directory to a writeable location and work from there.
 WORKING_DIR=`mktemp -d`
-cp -r $DIR/.. $WORKING_DIR
+cp -r $DIR/../../learntools $WORKING_DIR
 cd $WORKING_DIR/learntools/notebooks
 
 TMP_DIR=`mktemp -d`
