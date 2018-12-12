@@ -58,7 +58,13 @@ class LearnLessonPreprocessor(Preprocessor):
 
     def pip_install_lt_hack(self, nb):
         """pip install learntools @ the present branch when running on Kernels"""
-        branch = get_git_branch()
+        try:
+            branch = get_git_branch()
+        except subprocess.CalledProcessError:
+            # This call fails in CI. The reason is unclear, but it's benign enough
+            # that we can just ignore it and forge on.
+            logging.warn("Failed to capture current git branch. Falling back to master.")
+            branch = 'master'
         pkg = 'git+https://github.com/Kaggle/learntools.git@{}'.format(branch)
         self.pip_install_hack(nb, [pkg])
 
