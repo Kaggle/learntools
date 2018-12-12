@@ -1,0 +1,19 @@
+{
+  "id": "dansbecker/order-by",
+  "id_no": 682072,
+  "title": "Order By",
+  "code_file": "../../nbs/ex4_order-by.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": false,
+  "enable_internet": false,
+  "keywords": [
+    "learn"
+  ],
+  "dataset_sources": [
+    "usdot/nhtsa-traffic-fatalities"
+  ],
+  "kernel_sources": [],
+  "competition_sources": []
+}

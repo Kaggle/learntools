@@ -1,0 +1,19 @@
+{
+  "id": "dansbecker/group-by-having-count",
+  "id_no": 682017,
+  "title": "Group By, Having & Count",
+  "code_file": "../../nbs/ex3_group-by-having-count.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": false,
+  "enable_internet": false,
+  "keywords": [
+    "learn"
+  ],
+  "dataset_sources": [
+    "hacker-news/hacker-news"
+  ],
+  "kernel_sources": [],
+  "competition_sources": []
+}
