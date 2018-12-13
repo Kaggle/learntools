@@ -157,11 +157,3 @@ Reminder: you can programmatically execute a bunch of notebooks from the command
 
     jupyter nbconvert --execute --inplace *.ipynb
 
-# TODO
-
-Stuff that should maybe still be documented:
-- `Problem` vs. `ProblemView`. Reasons for separating them. Cases where you need to interact with the latter.
-- Effective use of the 'data source' hack in Kernels for low-latency learntools updates.
-- `problem_factory` syntax 
-- `MultipartProblem`
-- Technical details of globals binding (and gotchas)

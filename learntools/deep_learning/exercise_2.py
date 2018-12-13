@@ -1,3 +1,5 @@
+# This file is used by old notebooks (before DL course was converted to LearnTools)
+
 from IPython.display import Image, display
 
 def visualize_results(images_paths, most_likely_labels):

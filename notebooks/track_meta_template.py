@@ -1,4 +1,4 @@
-# See also examples/example_track/example_meta.py for a longer, commented example
+# See also examples/example_track/track_meta.py for a longer, commented example
 track = dict(
     author_username='',
 )

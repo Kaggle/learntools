@@ -27,10 +27,6 @@ avg_lot_size = 10517
 newest_home_age = 8
 """)
 
-# Shorter syntax equivalent to above
-# from learntools.core.problem_factories import simple_problem
-# hd = simple_problem('HomeDescription', solution='idk', hint='This is a hint')\
-#        .with_expected(avg_lot_size=10516.828, newest_home_age=8)
 
 qvars = bind_exercises(globals(), [
     LoadHomeData,

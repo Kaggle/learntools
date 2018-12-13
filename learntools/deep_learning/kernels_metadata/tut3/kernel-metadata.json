@@ -1,0 +1,23 @@
+{
+  "id": "dansbecker/programming-in-tensorflow-and-keras",
+  "id_no": 519564,
+  "title": "Programming in TensorFlow and Keras",
+  "code_file": "../../nbs/tut3_programming_tf_and_keras.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": false,
+  "enable_internet": false,
+  "keywords": [
+    "learn"
+  ],
+  "dataset_sources": [
+    "keras/resnet50",
+    "dansbecker/python-utility-code-for-deep-learning-exercises",
+    "dansbecker/python-utility-code-for-deep-learning-exercises"
+  ],
+  "kernel_sources": [],
+  "competition_sources": [
+    "dog-breed-identification"
+  ]
+}

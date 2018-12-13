@@ -17,8 +17,8 @@ class UniqueCountries(CodingProblem):
     def check(self, countries):
         # TODO: implement this assert
         #assert_equal_ignoring_order(countries, self.expected_set, self._var)
-        assert_len(countries, len(self.expected_set), self._var)
-        assert set(countries) == self.expected_set, ("Incorrect value for"
+        assert_len(countries, len(self.expected_set), var=self._var)
+        assert set(countries) == self.expected_set, ("Incorrect value for "
                 "`countries`: `{!r}`").format(countries)
 
 class ReviewsPerCountry(EqualityCheckProblem):
@@ -32,12 +32,21 @@ class CenteredPrice(EqualityCheckProblem):
     _expected = reviews.price - reviews.price.mean()
     _solution = CS('centered_price = reviews.price - reviews.price.mean()')
 
-class BargainWine(EqualityCheckProblem):
+class BargainWine(CodingProblem):
     _var = 'bargain_wine'
-    _expected = reviews.loc[(reviews.points / reviews.price).idxmax(), 'title']
     _solution = CS('''\
 bargain_idx = (reviews.points / reviews.price).idxmax()
 bargain_wine = reviews.loc[bargain_idx, 'title']''')
+
+    def check(self, bargain_wine):
+        assert_isinstance(str, bargain_wine, var='bargain_wine')
+        # NB: Hard-coding these rather than calculating them dynamically.
+        # These two wines are tied for best bargain, each having a points-to-price
+        # ratio of 21.5. They'll always get the first one using the idxmax() solution,
+        # but may get the Pinot if they use a different method.
+        bargains = ['Bandit NV Merlot (California)', 'Cramele Recas 2011 UnWineD Pinot Grigio (Viile Timisului)']
+        assert_is_one_of(bargain_wine, bargains, var='bargain_wine')
+
 
 class DescriptorCounts(EqualityCheckProblem):
     _var = 'descriptor_counts'

@@ -1,3 +1,8 @@
+import datetime
+from decimal import Decimal
+import pandas as pd
+import numpy as np
+
 from learntools.core import *
 
 class SummarizeModel(ThoughtExperiment):

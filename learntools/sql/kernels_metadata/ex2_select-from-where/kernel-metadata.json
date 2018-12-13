@@ -1,0 +1,19 @@
+{
+  "id": "dansbecker/select-from-where",
+  "id_no": 681947,
+  "title": "Select, From & Where",
+  "code_file": "../../nbs/ex2_select-from-where.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": false,
+  "enable_internet": false,
+  "keywords": [
+    "learn"
+  ],
+  "dataset_sources": [
+    "open-aq/openaq"
+  ],
+  "kernel_sources": [],
+  "competition_sources": []
+}

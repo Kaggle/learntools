@@ -23,7 +23,8 @@ class RecommendFunction(CodingProblem):
     def check(self, recommend, model):
         uid = 26556
         recc = recommend(model, uid, n=3)
-        assert_has_columns(recc, ['movieId', 'predicted_rating'])
+        assert_has_columns(recc, ['movieId', 'predicted_rating'], 
+                name="return value of `recommend`")
         assert_len(recc, 3, "result of calling `recommend` with `n=3`")
         # Could check sortedness, but not really an explicit requirement.
         # Erring on the side of false-correct judgements over false-incorrect.
@@ -64,7 +65,8 @@ class RecommendNonObscure(CodingProblem):
     def check(self, recommend, model):
         uid = 26556
         recc = recommend(model, uid, 3)
-        assert_has_columns(recc, ['movieId', 'predicted_rating'])
+        assert_has_columns(recc, ['movieId', 'predicted_rating'], 
+                name="return value of `recommend_nonobscure`")
 
 class L2Intro(ThoughtExperiment):
     _solution = (

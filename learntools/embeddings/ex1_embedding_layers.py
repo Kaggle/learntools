@@ -155,8 +155,8 @@ Otherwise, you'll need to figure out what index your bias layer exists at (e.g. 
         EqualityCheckProblem.check_whether_attempted(self, *args)
 
     def check(self, bias_layer):
-        assert_isinstance(keras.layers.Layer, bias_layer=bias_layer)
-        assert_isinstance(keras.layers.Embedding, bias_layer=bias_layer)
+        assert_isinstance(keras.layers.Layer, bias_layer, var='bias_layer')
+        assert_isinstance(keras.layers.Embedding, bias_layer, var='bias_layer')
         exp_shape = (None, 1, 1)
         assert bias_layer.output_shape == exp_shape, ("Expected bias layer to have"
                 " output shape `{}`, but was actually `{}`".format(exp_shape,

@@ -31,13 +31,14 @@ class RecipeSeriesCreation(CodingProblem):
     quantities = ['4 cups', '1 cup', '2 large', '1 can']
     items = ['Flour', 'Milk', 'Eggs', 'Spam']
     recipe = pd.Series(quantities, index=items, name='Dinner')
+    _hint = 'Note that the Series must be named `"Dinner"`. Use the `name` keyword-arg when creating your series.'
     _solution = CS("""\
 quantities = ['4 cups', '1 cup', '2 large', '1 can']
 items = ['Flour', 'Milk', 'Eggs', 'Spam']
 recipe = pd.Series(quantities, index=items, name='Dinner')""")
 
     def check(self, ings):
-        assert_series_equals(ings, self.recipe)
+        assert_series_equals(ings, self.recipe, var=self._var)
         assert ings.name == self.recipe.name, ("Expected `ingredients` to have"
                 " `name={!r}`, but was actually `{!r}`").format(
                         self.recipe.name, ings.name)
@@ -45,7 +46,9 @@ recipe = pd.Series(quantities, index=items, name='Dinner')""")
 
 class ReadWineCsv(EqualityCheckProblem):
     _var = 'reviews'
-    # TODO: Hint about index_col
+    _hint = ("Note that the csv file begins with an unnamed column of increasing integers. "
+            "We want this to be used as the index. Check out the description of the `index_col` "
+            "keyword argument in [the docs for `read_csv`](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.read_csv.html)")
     _expected = pd.read_csv('../input/wine-reviews/winemag-data_first150k.csv', index_col=0)
     _solution = CS(
     "reviews = pd.read_csv('../input/wine-reviews/winemag-data_first150k.csv', index_col=0)"
@@ -61,7 +64,8 @@ class SaveAnimalsCsv(CodingProblem):
         actual = pd.read_csv(path, index_col=0)
         expected = pd.DataFrame({'Cows': [12, 20], 'Goats': [22, 19]}, 
                 index=['Year 1', 'Year 2'])
-        assert_df_equals(actual, expected)
+        assert_df_equals(actual, expected, 
+            name="Dataframe loaded from `cows_and_goats.csv`")
 
 class ReadPitchforkSql(EqualityCheckProblem):
     _var = 'music_reviews'

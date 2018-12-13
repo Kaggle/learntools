@@ -1,7 +1,7 @@
+from numpy import array
 import pandas as pd
 import sklearn
 from sklearn.tree import DecisionTreeRegressor
-
 from learntools.core import *
 
 class BestTreeSize(EqualityCheckProblem):

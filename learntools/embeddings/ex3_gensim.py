@@ -22,7 +22,7 @@ What happens if we run something like `kv.most_similar(positive=['Legally Blonde
 """)
 
     def check(self, sim):
-        assert_isinstance(list, legally_impossible=sim)
+        assert_isinstance(list, sim, var='legally_impossible')
         assert len(sim), "Expected `legally_impossible` to be non-empty"
         v0 = sim[0]
         assert isinstance(v0, tuple), "Expected `legally_impossible` to be a list of tuples"
@@ -43,7 +43,7 @@ class CalculateNorms(CodingProblem):
 
     def check(self, norms):
         n_movies = 26744
-        assert_isinstance(np.ndarray, norms=norms)
+        assert_isinstance(np.ndarray, norms, var='norms')
         shape = norms.shape
         exp_shape = (n_movies,)
         assert shape == exp_shape, ("Expected `norms` to have shape `{}`"
@@ -61,7 +61,7 @@ class NormColumn(CodingProblem):
     _solution = CS("all_movies_df['norm'] = norms")
 
     def check(self, df):
-        assert_has_columns(df, ['norm'], 'all_movies_df')
+        assert_has_columns(df, ['norm'], var='all_movies_df')
         exp = 1.623779
         jum = df.loc[1, 'norm']
         assert math.isclose(exp, df.loc[1, 'norm'], rel_tol=.5), (

@@ -6,32 +6,42 @@ set -x
 
 # path to the notebook/ directory.
 DIR=`dirname "${BASH_SOURCE[0]}"`
+# Path to the parent (learntools) dir
+LT=$(readlink -f $DIR/..)
 # Install learntools branch
 pip3 install $DIR/..
 # The learntools repo is cloned to a read-only location. Various testing steps involve writing,
 # so copy the whole notebooks directory to a writeable location and work from there.
 WORKING_DIR=`mktemp -d`
-cp -r $DIR $WORKING_DIR
-cd $WORKING_DIR/notebooks
+cp -r $LT $WORKING_DIR
+cd $WORKING_DIR/input/notebooks
 
 TMP_DIR=`mktemp -d`
 
 # Install packages the notebook pipeline depends on but which aren't installed with the learntools package.
-pip3 install -r requirements.txt
+pip3 install -q -r requirements.txt
 
-TRACKS="embeddings pandas python"
+TRACKS="deep_learning embeddings pandas python machine_learning"
 for track in $TRACKS
 do
     # Run each step of the rendering pipeline, to make sure it runs without errors.
     python3 clean.py $track
+    # If this fails (i.e. if running clean.py results in changes to the working tree),
+    # this means that clean.py wasn't run before committing.
+    git diff --exit-code --no-color -- $track
     python3 prepare_push.py $track
-    # TODO: Fails due to failure when calling get_git_branch()
-    #python3 render.py $track
+    python3 render.py $track
 done
 
-TESTABLE_NOTEBOOK_TRACKS="python pandas"
+TESTABLE_NOTEBOOK_TRACKS="deep_learning python pandas machine_learning"
 for track in $TESTABLE_NOTEBOOK_TRACKS
 do
+    # Running the deep learning notebooks is fairly slow (~10-20 minutes), so only
+    # do it if any of the relevant files have changed between this branch and master.
+    if [[ $track == "deep_learning" ]] && git diff --exit-code master -- $track ../learntools/$track; then
+        echo "No changes affecting deep learning track. Skipping running notebooks."
+        continue
+    fi
     cd $track
     ! [[ -a setup_data.sh ]] || ./setup_data.sh
     for nb in `ls raw/*.ipynb`
@@ -45,7 +55,7 @@ do
             echo "Warning: skipping $nb in track $track"
             continue
         fi
-        jupyter nbconvert --output-dir "$TMP_DIR" --execute $nb
+        jupyter nbconvert --output-dir "$TMP_DIR" --execute $nb --ExecutePreprocessor.timeout=1000
     done
     cd ../
 done
