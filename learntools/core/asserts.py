@@ -20,7 +20,7 @@ import numpy as np
 def name_or_var(assert_fn):
     """
     Assert helpers marked with this decorator take a "name" argument, which is a
-    markdown string representing the actual value being checked. It may be a generic
+    markdown string describing the actual value being checked. It may be a generic
     name like "dataframe", or a prose description like "the result of calling `circle_area`",
     or a variable name wrapped in backticks.
 
