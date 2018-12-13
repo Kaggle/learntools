@@ -19,7 +19,7 @@ cd $WORKING_DIR/input/notebooks
 TMP_DIR=`mktemp -d`
 
 # Install packages the notebook pipeline depends on but which aren't installed with the learntools package.
-pip3 install -r requirements.txt
+pip3 install -q -r requirements.txt
 
 TRACKS="deep_learning embeddings pandas python machine_learning"
 for track in $TRACKS

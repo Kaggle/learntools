@@ -3,7 +3,6 @@ from . import colors
 def colorify(text, color):
     return '<span style="color:{}">{}</span>'.format(color, text)
 
-# TODO: would probably have made more sense to define this as a mixin?
 class RichText:
     """Crucially this defines methods for both rich and plaintext representations.
     If displayed from a code cell, it will render the nice rich output. If in the console,
@@ -39,7 +38,9 @@ class PrefixedRichText(RichText):
     def _repr_markdown_(self):
         if not self.txt:
             # TODO: hm, this fallback behaviour makes sense for Correct and
-            # TestFailure, but not really for the others.
+            # TestFailure, but not really for the others. For classes like
+            # Hint or Solution, we should probably treat the absence of self.txt
+            # as an error condition.
             return colorify(self.label, self.label_color)
         pre = colorify(self.label+':', self.label_color)
         return pre + ' ' + self.txt
@@ -58,8 +59,8 @@ class Hint(PrefixedRichText):
         # Is this one of a series of hints?
         self.is_multi = n > 1 or not last
         if not last:
-            # TODO: include _varname?
-            # TODO: colorify?
+            # TODO: Would be nice to be able to reference the actual name
+            # associated with the ProblemView, e.g. `q2.hint(2)`
             coda = '\n(For another hint, call `.hint({})`)'.format(n+1)
             txt += coda
         super().__init__(txt)

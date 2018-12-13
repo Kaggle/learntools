@@ -1,21 +1,16 @@
 from abc import ABC, abstractmethod
-# TODO: An annoying limitation of abc is that I can't mark an attribute as abstract, only a property.
+# An annoying limitation of abc is that I can't mark an attribute as abstract, only a property.
 # And I don't want to impose on each problem subclass to go to the work of defining a property for stuff like
 # vars, expected.
 # cf. https://stackoverflow.com/questions/43790040/how-to-create-an-abstract-class-attribute-potentially-read-only
 from typing import List
-import math
-import numbers
 import functools
-
-import pandas as pd
-import numpy as np
 
 from learntools.core.richtext import *
 from learntools.core.exceptions import NotAttempted, Uncheckable, UserlandExceptionIncorrect
 from learntools.core import utils, asserts, constants
 
-# TODO: I'm sure there's a more elegant way to do this.
+# I'm sure there's a more elegant way to do this.
 # Some kind of decorator on top of property?
 def optionally_plural_property(obj, name):
     single_attr = getattr(obj, name, None)
@@ -173,33 +168,11 @@ class EqualityCheckProblem(CodingProblem):
             assert len(ex) == len(self.injectable_vars)
             return ex
 
-    def failure_message(self, var, actual, expected):
-        return "Incorrect value for variable `{}`: `{}`".format(
-                    var, repr(actual))
-
-    # TODO: Move this logic to asserts.py
-    def assert_equal(self, var, actual, expected):
-        # We default to == comparison, but have special cases for certain data types.
-        if isinstance(expected, float):
-            assert isinstance(actual, numbers.Number), \
-                "Expected `{}` to be a number, but had value `{!r}` (type = `{}`)".format(
-                    var, actual, type(actual).__name__)
-            check = math.isclose(actual, expected, rel_tol=1e-06)
-        elif isinstance(expected, pd.DataFrame):
-            asserts.assert_df_equals(actual, expected, var)
-            return
-        elif isinstance(expected, pd.Series):
-            asserts.assert_series_equals(actual, expected, var)
-            return
-        elif isinstance(actual, np.ndarray) or isinstance(expected, np.ndarray):
-            check = np.array_equal(actual, expected)
-        else:
-            check = actual == expected
-        assert check, self.failure_message(var, actual, expected)
-
     def check(self, *args):
         for (var, actual, expected) in zip(self.injectable_vars, args, self.expected):
-            self.assert_equal(var, actual, expected)
+            asserts.assert_equal(actual, expected, var=var,
+                    failure_factory=getattr(self, 'failure_message', None)
+                    )
 
     def check_whether_attempted(self, *args):
         varnames = self.injectable_vars
