@@ -60,8 +60,6 @@ class FitTransferModel(CodingProblem):
         assert (their_val_dir == '../input/dogs-gone-sideways/val'),\
                ("The validation directory should be `../input/dogs-gone-sideways/val`. Yours was {}".format(their_val_dir))
         assert (their_num_steps == 22), ("Should have 22 steps per epoch. You had {}".format(their_num_steps))
-        assert (their_val_loss < 0.6), \
-                ("Your validation loss is {}. It can vary from one run to the next, but it should be lower then that. Something isn't right".format(their_val_loss))
     _solution = CS(
 """
 image_size = 224
