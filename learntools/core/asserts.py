@@ -27,6 +27,17 @@ def name_or_var(assert_fn):
     The latter case is extremely common, so this decorator adds an optional "var" keyword-arg
     to the function. Passing var="foo" is a convenient shorthand for name="`foo`". (If you
     pass a value for "var", you should not also pass a value for "name".)
+
+    Example:
+
+    @name_or_var
+    def assert_negative(actual, name):
+        assert actual < 0, "{} should have been negative, but was actually {}".format(name, actual)
+
+    # The following are all valid calls
+    assert_negative(x, "Bank balance")
+    assert_negative(x, name="`Bank.balance` attribute")
+    assert_negative(x, var="bank_balance") # Equivalent to assert_negative(x, "`bank_balance`")
     """
     @functools.wraps(assert_fn)
     def wrapped(*args, **kwargs):
