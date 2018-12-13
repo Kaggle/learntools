@@ -170,7 +170,7 @@ class EqualityCheckProblem(CodingProblem):
 
     def check(self, *args):
         for (var, actual, expected) in zip(self.injectable_vars, args, self.expected):
-            asserts.assert_equal(var, actual, expected, 
+            asserts.assert_equal(actual, expected, var=var,
                     failure_factory=getattr(self, 'failure_message', None)
                     )
 

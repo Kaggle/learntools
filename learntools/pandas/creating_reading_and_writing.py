@@ -38,7 +38,7 @@ items = ['Flour', 'Milk', 'Eggs', 'Spam']
 recipe = pd.Series(quantities, index=items, name='Dinner')""")
 
     def check(self, ings):
-        assert_series_equals(ings, self.recipe)
+        assert_series_equals(ings, self.recipe, var=self._var)
         assert ings.name == self.recipe.name, ("Expected `ingredients` to have"
                 " `name={!r}`, but was actually `{!r}`").format(
                         self.recipe.name, ings.name)
@@ -64,7 +64,8 @@ class SaveAnimalsCsv(CodingProblem):
         actual = pd.read_csv(path, index_col=0)
         expected = pd.DataFrame({'Cows': [12, 20], 'Goats': [22, 19]}, 
                 index=['Year 1', 'Year 2'])
-        assert_df_equals(actual, expected)
+        assert_df_equals(actual, expected, 
+            name="Dataframe loaded from `cows_and_goats.csv`")
 
 class ReadPitchforkSql(EqualityCheckProblem):
     _var = 'music_reviews'
