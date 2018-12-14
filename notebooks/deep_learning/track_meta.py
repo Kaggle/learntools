@@ -48,6 +48,7 @@ notebooks = [
         filename='ex3_programming_tf_and_keras.ipynb',
         lesson_idx=2,
         type='exercise',
+	enable_gpu=True,
 	scriptid=521452,
 	dataset_sources = [
 	    "keras/resnet50",
@@ -73,6 +74,7 @@ notebooks = [
 	    "keras/resnet50",
 	    "dansbecker/dogs-gone-sideways"
 	  ],
+	enable_gpu=True,
     ),
     dict(
         filename='tut5_data_augmentation.ipynb',
@@ -87,6 +89,7 @@ notebooks = [
         filename='ex5_data_augmentation.ipynb',
         lesson_idx=4,
         type='exercise',
+	enable_gpu=True,
 	scriptid=536195,
        	dataset_sources = [
 	    "keras/resnet50",
@@ -107,6 +110,7 @@ notebooks = [
     dict(
         filename='ex7_from_scratch.ipynb',
         lesson_idx=6,
+	enable_gpu=True,
         type='exercise',
         scriptid=574269,
 	competition_sources=['digit-recognizer'],
@@ -122,6 +126,7 @@ notebooks = [
     dict(
         filename='ex8_dropout_strides.ipynb',
         lesson_idx=7,
+	enable_gpu=True,
         type='exercise',
 	scriptid=663261,
 	competition_sources=['digit-recognizer'],
