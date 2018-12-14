@@ -16,7 +16,7 @@ WORKING_DIR=`mktemp -d`
 cp -r $LT $WORKING_DIR
 cd $WORKING_DIR/input/notebooks
 
-git fetch master
+git fetch origin master
 
 TMP_DIR=`mktemp -d`
 
