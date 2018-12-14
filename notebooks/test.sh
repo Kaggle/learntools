@@ -19,6 +19,7 @@ cd $WORKING_DIR/input/notebooks
 git fetch -v --tags origin master
 git remote -v
 git branch -v
+git diff --exit-code master -- deep_learning
 exit 1
 
 TMP_DIR=`mktemp -d`
