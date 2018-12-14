@@ -17,6 +17,8 @@ cp -r $LT $WORKING_DIR
 cd $WORKING_DIR/input/notebooks
 
 git fetch origin master
+git remote -v
+git branch -v
 
 TMP_DIR=`mktemp -d`
 
