@@ -19,6 +19,7 @@ cd $WORKING_DIR/input/notebooks
 git fetch origin master
 git remote -v
 git branch -v
+exit 1
 
 TMP_DIR=`mktemp -d`
 
