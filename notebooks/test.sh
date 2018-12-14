@@ -16,6 +16,8 @@ WORKING_DIR=`mktemp -d`
 cp -r $LT $WORKING_DIR
 cd $WORKING_DIR/input/notebooks
 
+git fetch master
+
 TMP_DIR=`mktemp -d`
 
 # Install packages the notebook pipeline depends on but which aren't installed with the learntools package.
