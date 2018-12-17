@@ -24,6 +24,14 @@ notebooks = [
 	dataset_source = ["hacker-news/hacker-news"],
         ),
     dict(
+        filename='ex1_intro.ipynb',
+        lesson_idx=0,
+        type='exercise',
+	dataset_source = ["hacker-news/hacker-news",
+			  "chicago/chicago-crime"],
+	scriptid=1058477
+        ),
+    dict(
 	filename='tut2_select.ipynb',
 	lesson_idx=1,
 	type='tutorial',
