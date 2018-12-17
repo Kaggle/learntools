@@ -8,13 +8,10 @@ from traitlets.config import Config
 import nbformat
 from nbconvert import NotebookExporter
 
-import utils
+from nb_utils import utils
 from clean import clean
 
 CLEAN = 1
-
-# TODO: would be nice to do some Make-like shortcuts to avoid processing notebooks
-# whose rendered mtime > their partial mtime (and > the track meta mtime)
 
 def nb_path_to_track(path):
     dirname = os.path.dirname(path)
@@ -25,7 +22,7 @@ def nb_path_to_track(path):
 def render_track(track, track_cfg):
     meta = utils.get_track_meta(track, track_cfg)
     cfg = Config()
-    cfg.Exporter.preprocessors = ['lesson_preprocessor.LearnLessonPreprocessor']
+    cfg.Exporter.preprocessors = ['nb_utils.lesson_preprocessor.LearnLessonPreprocessor']
     exporter = NotebookExporter(config=cfg)
     resources = {'track_meta': meta, 'track_cfg': track_cfg}
 

@@ -6,7 +6,7 @@ import subprocess
 import nbformat
 from nbconvert.preprocessors import Preprocessor
 
-from macro_processing import MacroProcessor
+from nb_utils.macro_processing import MacroProcessor
 
 DEBUG = 0
 if DEBUG:

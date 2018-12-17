@@ -3,7 +3,7 @@ import sys
 import os
 import json
 
-import utils
+from nb_utils import utils
 
 def create_metadata_files_for_cfg(trackname, cfg, meta):
     tag = cfg['tag']

@@ -3,7 +3,7 @@ import os
 
 import yaml
 
-import track_metadata
+from nb_utils import track_metadata
 
 def get_track_meta(track_dir, cfg):
     parts = track_dir.split(os.path.sep)
