@@ -7,7 +7,7 @@ All macro invocations begin with # followed by the macro name bracketed by a del
 
 ## Expanding macros
 
-cf. lesson_preprocessor.py methods
+cf. nb_utils/lesson_preprocessor.py methods
 
 # N in the signatures below is the number of the corresponding lesson (starting from 1)
 TUTORIAL_URL(N)
@@ -25,7 +25,7 @@ FOOTER
 
 ## Line-level macros
 
-cf. line_macros.py
+cf. nb_utils/line_macros.py
 
 (Many of these can also be used as cell-level macros)
 
@@ -41,7 +41,7 @@ Valid conditions:
 
 ## Cell-level macros
 
-cf. macro_processing.py (and lesson_preprocess.py for hide macros)
+cf. nb_utils/macro_processing.py (and nb_utils/lesson_preprocess.py for hide macros)
 
 # Used at the top of a code cell. Equivalent to the "hide output" / "hide input" buttons in the Kaggle Kernels UI.
 HIDE_INPUT

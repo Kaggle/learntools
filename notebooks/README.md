@@ -58,4 +58,5 @@ Use the Kaggle CLI like so:
 
     kaggle k push -p examples/example_track/default/kernels_api_metadata/tut1-hello
     
-(Script for pushing *en masse* to come)
+or use ./pushall.sh as
+    ./pushall deep_learning/prod

@@ -1,6 +1,6 @@
 import re
 
-import line_macros
+from nb_utils import line_macros
 
 """
 TODO: Separation of concerns between LessonPreprocessor and MacroProcessor is
