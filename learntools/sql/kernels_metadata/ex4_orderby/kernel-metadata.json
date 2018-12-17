@@ -1,0 +1,19 @@
+{
+  "id": "dansbecker/exercise-order-by",
+  "id_no": 682087,
+  "title": "Exercise: Order By",
+  "code_file": "exercise-order-by.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": false,
+  "enable_internet": false,
+  "keywords": [
+    "learn"
+  ],
+  "dataset_sources": [
+    "usdot/nhtsa-traffic-fatalities"
+  ],
+  "kernel_sources": [],
+  "competition_sources": []
+}
