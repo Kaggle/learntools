@@ -14,7 +14,7 @@ reviews_written = reviews.groupby('taster_twitter_handle').size()
 ```
 or
 ```python
-reviews.groupby('taster_twitter_handle').taster_twitter_handle.count()
+reviews_written = reviews.groupby('taster_twitter_handle').taster_twitter_handle.count()
 ```
 """
 
