@@ -158,8 +158,13 @@ class LearnLessonPreprocessor(Preprocessor):
         return macro_method(*args, cell=cell)
 
     # TODO: Should consider separating macro logic out into separate module/class.
-    def EXERCISE_FORKING_URL(self, **kwargs):
-        return self.lesson.exercise.forking_url
+    def EXERCISE_FORKING_URL(self, lesson_num=None, **kwargs):
+        if lesson_num is None:
+            return self.lesson.exercise.forking_url
+        else:
+            lesson_idx = int(lesson_num) - 1
+            lesson = self.track.lessons[lesson_idx]
+            return lesson.exercise.forking_url
 
     def HIDE_INPUT(self, cell):
         cell['metadata']['_kg_hide-input'] = True
