@@ -35,14 +35,14 @@ notebooks = [
 	filename='tut2_select.ipynb',
 	lesson_idx=1,
 	type='tutorial',
-	dataset_sources = ["open-aq/openaq"],
+	dataset_sources = ["hacker-news/hacker-news", "open-aq/openaq"],
 	),
     dict(
         filename='ex2_select.ipynb',
         lesson_idx=1,
         type='exercise',
 	scriptid=681989,
-	dataset_sources = ["open-aq/openaq"],
+	dataset_sources = ["hacker-news/hacker-news", "open-aq/openaq"],
         ),
     dict(
         filename='tut3_groupby.ipynb',
