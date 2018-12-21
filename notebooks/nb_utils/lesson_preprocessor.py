@@ -49,7 +49,7 @@ class LearnLessonPreprocessor(Preprocessor):
             if c is not None:
                 new_cells.append(c)
 
-        # Add header and footer for self-passed courses, but not for daily-email notebooks (where it'd be confusing)
+        # Add header and footer for self-paced courses, but not for daily-email notebooks (where it'd be confusing)
         if not self.cfg.get('daily'):
             self.add_header_and_footer(new_cells)
 
@@ -61,14 +61,15 @@ class LearnLessonPreprocessor(Preprocessor):
         return nb, resources
 
     def add_header_and_footer(self, cells):
-        """Returns a list of cells with a header cell first, followed by cells (which is a list), followed by a footer cell"""
-        course_info ="""**[{} Course Home Page]({})**""".format(self.track.course_name, self.track.course_url)
- 
-        header_content = course info + "\n---"
-        footer_content = "---\n" + course_info
-        header_cell = make_cell(cell_type='markdown', source=header_content)
-        footer_cell = make_cell(cell_type='markdown', source=footer_content)
-        return header_cell + cells + footer_cells
+        """Inserts header cell at front of cells and appends footer cell to end. Both new cells have course links"""
+        course_link ="""**[{} Course Home Page]({})**\n\n""".format(self.track.course_name, self.track.course_url)
+        horizontal_line_break = "---\n"
+        header_content = course_link + horizontal_line_break
+        footer_content = horizontal_line_break + course_link
+        header_cell = self.make_cell(cell_type='markdown', source=header_content)
+        footer_cell = self.make_cell(cell_type='markdown', source=footer_content)
+        cells.insert(0, header_cell)
+        cells.append(footer_cell)
 
     def pip_install_lt_hack(self, nb):
         """pip install learntools @ the present branch when running on Kernels"""
@@ -81,7 +82,6 @@ class LearnLessonPreprocessor(Preprocessor):
             branch = 'master'
         pkg = 'git+https://github.com/Kaggle/learntools.git@{}'.format(branch)
         self.pip_install_hack(nb, [pkg])
-
     def pip_install_hack(self, nb, pkgs):
         """Insert some cells at the top of this notebook that pip install the given
         packages to /kaggle/working, then add that directory to sys.path.
@@ -116,10 +116,8 @@ class LearnLessonPreprocessor(Preprocessor):
                 source=[],
                 )
         if cell_type == "code":
-            defaults = dict(
-                    execution_count=None,
-                    outputs=[],
-                    )
+            defaults['execution_count'] = None
+            defaults['outputs'] = []
             
         defaults.update(kwargs)
         return nbformat.from_dict(defaults)
