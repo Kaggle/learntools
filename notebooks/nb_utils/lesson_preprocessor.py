@@ -48,13 +48,28 @@ class LearnLessonPreprocessor(Preprocessor):
             c = c and macroer.process_cell(c)
             if c is not None:
                 new_cells.append(c)
+
+        # Add header and footer for self-paced courses, but not for daily-email notebooks (where it'd be confusing)
+        if not self.cfg.get('daily'):
+            self.add_header_and_footer(new_cells)
+
         nb.cells = new_cells
         # NB: There may be some cases where we need to access learntools in a tutorial
-        # or ancillary notebook as well. Could encode this in track_meta, or if we wanted
-        # to be really clever, could look for learntools imports in code cells.
+        # or ancillary notebook as well. We encode this in track_meta. 
         if track_cfg.get('development', False) and nb_meta.type == 'exercise':
             self.pip_install_lt_hack(nb)
         return nb, resources
+
+    def add_header_and_footer(self, cells):
+        """Inserts header cell at front of cells and appends footer cell to end. Both new cells have course links"""
+        course_link ="""**[{} Course Home Page]({})**\n\n""".format(self.track.course_name, self.track.course_url)
+        horizontal_line_break = "---\n"
+        header_content = course_link + horizontal_line_break
+        footer_content = horizontal_line_break + course_link
+        header_cell = self.make_cell(cell_type='markdown', source=header_content)
+        footer_cell = self.make_cell(cell_type='markdown', source=footer_content)
+        cells.insert(0, header_cell)
+        cells.append(footer_cell)
 
     def pip_install_lt_hack(self, nb):
         """pip install learntools @ the present branch when running on Kernels"""
@@ -67,7 +82,6 @@ class LearnLessonPreprocessor(Preprocessor):
             branch = 'master'
         pkg = 'git+https://github.com/Kaggle/learntools.git@{}'.format(branch)
         self.pip_install_hack(nb, [pkg])
-
     def pip_install_hack(self, nb, pkgs):
         """Insert some cells at the top of this notebook that pip install the given
         packages to /kaggle/working, then add that directory to sys.path.
@@ -84,26 +98,30 @@ class LearnLessonPreprocessor(Preprocessor):
                 'import sys\n',
                 "sys.path.append('/kaggle/working')",
         ]
-        syspath_cell = self.make_code_cell(source=syspath_lines)
+        syspath_cell = self.make_cell(cell_type='code', source=syspath_lines)
         extra_cells.append(syspath_cell)
         nb.cells = extra_cells + nb.cells
 
     @classmethod
     def pip_install_cell(cls, pkg_spec):
         cmd = '!pip install -U -t /kaggle/working/ {}'.format(pkg_spec)
-        return cls.make_code_cell(source=[cmd])
+        return cls.make_cell(cell_type='code', source=[cmd])
 
     @staticmethod
-    def make_code_cell(**kwargs):
+    def make_cell(cell_type, **kwargs):
+        """Returns a NotebookNode object populated with kwargs. cell_type should be either 'markdown' or 'code'"""
         defaults = dict(
-                cell_type="code",
-                execution_count=None,
+                cell_type=cell_type,
                 metadata={},
                 source=[],
-                outputs=[],
                 )
+        if cell_type == "code":
+            defaults['execution_count'] = None
+            defaults['outputs'] = []
+            
         defaults.update(kwargs)
         return nbformat.from_dict(defaults)
+        
 
     def process_cell(self, cell):
         # Find all things that look like macros
@@ -215,25 +233,6 @@ This course is still in beta, so I'd love to get your feedback. If you have a mo
         return """These exercises accompany the tutorial on [{}]({}).""".format(
                 self.lesson.topic, self.lesson.tutorial.url,
                 )
-
-    def HEADER(self, **kwargs):
-        # daily users aren't linked back to course main page
-        if self.cfg.get('daily'):
-            return ''
-        else:
-            return """**[{} Course Home Page]({})**
-
----
-""".format(self.track.course_name, self.track.course_url)
-
-    def FOOTER(self, **kwargs):
-        # daily users aren't linked back to course main page
-        if self.cfg.get('daily'):
-            return ''
-        else:
-            return """---
-**[{} Course Home Page]({})**
-""".format(self.track.course_name, self.track.course_url)
 
     def KEEP_GOING(self, **kwargs):
 
