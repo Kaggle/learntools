@@ -72,7 +72,7 @@ notebooks = [
         lesson_idx=3,
         type='exercise',
 	scriptid=682087,
-	dataset_sources = ["usdot/nhtsa-traffic-fatalities"],
+	dataset_sources = ["usdot/nhtsa-traffic-fatalities", "theworldbank/world-bank-intl-education"],
     ),
     dict(
         filename='tut5_as_with.ipynb',
