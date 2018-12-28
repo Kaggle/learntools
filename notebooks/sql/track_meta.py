@@ -85,7 +85,7 @@ notebooks = [
         lesson_idx=4,
         type='exercise',
 	scriptid=682113,
-       	dataset_sources = ["bigquery/bitcoin-blockchain"],
+       	dataset_sources = ["chicago/chicago-taxi-trips-bq", "bigquery/bitcoin-blockchain"],
  ),
     dict(
         filename='tut6_joining.ipynb',
