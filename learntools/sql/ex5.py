@@ -2,22 +2,81 @@ from learntools.core import *
 
 
 class GetTableName(EqualityCheckProblem):
-    pass
+    _var = 'table_name'
+    _expected = 'taxi_trips'
+    _solution = CS("""
+chicago_taxi_trips.list_tables()
+
+table_name = 'taxi_trips'
+    """)
 
 class WhatsWrongWithData(ThoughtExperiment):
-    pass
+    _solution = \
+"""
+You can see the data by calling `chicago_taxi_trips.head('taxi_trips')`.  
+
+Some trips the top few rows have `trip_seconds` or `trip_miles` values of 0. 
+Other location fields have values of `None`, which could be a problem if we want to use those fields.
+"""
+
 
 class YearDistrib(CodingProblem):
-    pass
+    _var = 'rides_per_year_result'
+    def check(self, results):
+        results.columns = [c.lower() for c in results.columns]
+        assert ('year' in results.columns), ('Your results hould have a `year` column. But your columns are {}'.format(list(results.columns)))
+        assert (2013 in results.year), ('Your year columns did not have the value 2013. That should be in there')
+        first_year_rides = results.query('2013').num_trips[0]
+        assert (first_year_rides == 26870287), ('There should have been 26870287 rides in 2013. But your results showed {}'.format(first_year_rides))
 
-class MonthDistrib(CodingProblem):
-    pass
-
-class TheBigQuery(CodingProblem):
-    # NOTE TO SELF: WORKING IN https://www.kaggle.com/dansbecker/fork-of-getting-started-with-sql-and-bigquery-work/edit
+    _hint = "Start your query with  `SELECT EXTRACT(YEAR FROM trip_start_timestamp) AS year, COUNT(1) num_trips`"
     _solution = CS(
 """
-WITH RelevantRides AS
+rides_per_year_query = \"""SELECT EXTRACT(YEAR FROM trip_start_timestamp) AS year, COUNT(1) num_trips
+                    from `bigquery-public-data.chicago_taxi_trips.taxi_trips`
+                    GROUP BY year
+                    ORDER BY year\"""
+
+rides_per_year_result = chicago_taxi_trips.query_to_pandas_safe(rides_per_year_query)
+"""
+)
+
+class MonthDistrib(CodingProblem):
+    _var = 'rides_per_month_result'
+    def check(self, results):
+        results.columns = [c.lower() for c in results.columns]
+        assert ('month' in results.columns), ('Your results hould have a `month` column. But your columns are {}'.format(list(results.columns)))
+        assert (1 in results.month), ('Your month columns did not have the value 1 in it. That should be in there')
+        jan_rides = results.query('month==1').num_trips[0]
+        assert (jan_rides == 1040262), ('There should have been 1040262 rides in January. But your results showed {}'.format(jan_rides))
+
+    _hint = "Start your query with  `SELECT EXTRACT(YEAR FROM trip_start_timestamp) AS year, COUNT(1) num_trips`"
+    _solution = CS(
+"""
+rides_per_month_query = \"""SELECT EXTRACT(MONTH FROM trip_start_timestamp) AS month, COUNT(1) num_trips
+                    from `bigquery-public-data.chicago_taxi_trips.taxi_trips`
+                    WHERE EXTRACT(YEAR FROM trip_start_timestamp) = 2017
+                    GROUP BY month
+                    ORDER BY month\"""
+
+rides_per_month_result = chicago_taxi_trips.query_to_pandas_safe(rides_per_month_query)
+"""
+)
+
+class TheLongQuery(CodingProblem):
+    _var = 'speeds_result'
+    def check(self, results):
+        results.columns = [c.lower() for c in results.columns]
+        assert('hour_of_day' in results.columns), ("Your results should have an `hour_of_day` column")
+        assert('num_trips' in results.columns), ("Your results should have an `num_trips` column")
+        assert('avg_mph' in results.columns), ("Your results should have an `avg_mph` column")
+        assert(results.shape[0] == 12), ('Should have 12 rows in your results but have {}'.format(results.shape[0]))
+        first_hour_num_trips = speeds_results.query('hour_of_day == 1').num_trips[0]
+        assert(first_hour_num_trips == 427383), ('Hour 1 should have 427383 trips but you have {}'.format(first_hour_num_trips))
+
+    _solution = CS(
+"""
+speeds_query = \"""WITH RelevantRides AS
 (SELECT EXTRACT(HOUR FROM trip_start_timestamp) hour_of_day, trip_miles, trip_seconds
 FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`
 WHERE trip_start_timestamp > '2017-01-01' and trip_start_timestamp < '2017-07-01'
@@ -27,16 +86,35 @@ WHERE trip_start_timestamp > '2017-01-01' and trip_start_timestamp < '2017-07-01
 SELECT hour_of_day, count(1) num_trips, 3600 * SUM(trip_miles) / SUM(trip_seconds) avg_mph
 FROM RelevantRides
 GROUP BY hour_of_day
-ORDER BY hour_of_day
+ORDER BY hour_of_day\"""
+
+speeds_result = chicago_taxi_trips.query_to_pandas_safe(speeds_query, max_gb_scanned=20)
 """
 )
+
+class AllRidesInTheMorning(ThoughtExperiment):
+    _solution = \
+"""
+The results show rides with hours 1-12. But there should results in the afternoon (hours 13-24).
+
+Perhaps the raw data has lost the distinction between AM and PM values.
+
+You can review 200 rows of the raw data with the command `chicago_taxi_trips.head('taxi_trips', num_rows=200)`
+
+You'll see that the timestamps are all in the AM hours (hours are less than or equal to 12.) 
+
+At first you might worry that the data is coming back sorted by time, but the variety of dates suggests that's not the case. 
+
+Part of data science is tracking down exactly this type of problem. If you were in an organization working on this, you could show the evidence you've just collected (e.g. the breakdown of trips by hour) to someone responsible for collecting the data, and help them debug the data collection and storage process using the results you've collected.
+"""
 
 qvars = bind_exercises(globals(), [
     GetTableName,
     WhatsWrongWithData,
     YearDistrib,
     MonthDistrib,
-    TheBigQuery
+    TheLongQuery,
+    AllRidesInTheMorning
     ],
     tutorial_id=81,
     var_format='q_{n}',
