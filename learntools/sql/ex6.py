@@ -1,8 +1,10 @@
 from learntools.core import *
 
 
-class WhichCountries(EqualityCheckProblem):
-    pass
+class ListTables(EqualityCheckProblem):
+    _var = 'list_of_tables'
+    _expected = 
+    _solution = CS('list_of_tables = stackoverflow.list_tables()')
 
 
 qvars = bind_exercises(globals(), [
