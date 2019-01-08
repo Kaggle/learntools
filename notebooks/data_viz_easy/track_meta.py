@@ -1,6 +1,6 @@
 # See also examples/example_track/track_meta.py for a longer, commented example
 track = dict(
-    author_username='',
+    author_username='alexisbcook',
 )
 
 lessons = [
