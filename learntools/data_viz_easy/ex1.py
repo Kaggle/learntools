@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 from learntools.core import *
 
-file_path = '/Users/alexiscook/learntools/learntools/data_viz_easy/input/museum_visitors.csv'
+file_path = '../input/museum_visitors.csv'
 df = pd.read_csv(file_path, index_col="time", parse_dates=True)
 
 class LoadMuseumData(EqualityCheckProblem):
