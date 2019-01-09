@@ -34,36 +34,28 @@ avila_oct18 = 14658
 
 class PlotAll(CodingProblem):
     _var = 'plt'
-    _hint = 'Use `sns.lineplot()`, and set `data=museum_data`.'
+    _hint = 'Use `sns.lineplot()`, and plot one line for each column in the `museum_data` DataFrame.'
     _solution = CS(
 """# Line plot showing the number of visitors to each museum over time
 sns.lineplot(data=museum_data)
 """)
     
     def check(self, passed_plt):
-        main_axis = passed_plt.figure(1).axes[0]
-        legend_labels = main_axis.get_legend_handles_labels()
-        legend_soln = {'america_tropical_interpretive_center', 'firehouse_museum', 'avila_adobe', 'chinese_american_museum'}
         
         assert len(passed_plt.figure(1).axes) > 0, \
-        "Remove the comment, and write code to create the line plot."
-        #assert passed_plt.figure(1).axes[0].get_xlabel() == "time"
+        "After you've written code to create a line plot, `check()` will tell you whether your code is correct."
+        
+        main_axis = passed_plt.figure(1).axes[0]
+        legend_handles = main_axis.get_legend_handles_labels()[0]
+        
+        assert all(isinstance(x, matplotlib.lines.Line2D) for x in legend_handles), \
+        "Is your figure a line plot?  Please use `sns.lineplot()` to generate the lines in your figure."
 
-        assert all(isinstance(x, matplotlib.lines.Line2D) for x in legend_labels[0]), \
-        """Is your figure a line plot?  Please use `sns.lineplot()` to generate the lines in your figure.
-        """
-
-        assert len(legend_labels[0]) == 4, \
-        "Your plot does not seem to have 4 lines (one line for each museum). We detect %d lines." \
-        % len(legend_labels[0])
-
-        assert set(legend_labels[1]) == legend_soln, \
-            """Please ensure that the labels match the titles of the columns. Your figure has the labels: 
-            %s, 
-            but we expect the labels to instead appear as follows: 
-            %s.  
-            """ \
-            % (set(legend_labels[1]), legend_soln)
+        assert len(legend_handles) == 4, \
+        """Your plot does not seem to have 4 lines (one line for each museum). We detect %d lines.
+        Note that we can only detect lines that appear in the legend, so please make sure that your
+        legend has an entry for each line.
+        """ % len(legend_handles)
         
 class PlotAvila(CodingProblem):
     _var = 'plt'
@@ -72,21 +64,36 @@ class PlotAvila(CodingProblem):
 sns.lineplot(data=museum_data.avila_adobe, 
              label='avila_adobe')
 """)
-    _hint = 'Use `sns.lineplot()`.  To plot only the column corresponding to Avila Adobe, set `data=museum_data.avila_adobe`.'
+    _hint = 'Use `sns.lineplot()`.  Plot the `avila_adobe` column in the `museum_data` DataFrame.'
 
     def check(self, passed_plt):
+        
         assert len(passed_plt.figure(1).axes) > 0, \
-        "Remove the comment, and write code to create the line plot."
-        assert all(isinstance(x, matplotlib.lines.Line2D) for x in passed_plt.figure(1).axes[0].get_legend_handles_labels()[0]), \
-        """Is your figure a line plot?  Please use `sns.lineplot()` to generate the lines in your figure.
-        """
-        assert len(passed_plt.figure(1).axes[0].get_legend_handles_labels()[0]) == 1, \
-        "Your plot does not seem to have a single line (for Avila Adobe only). We detect %d lines." \
-        % len(passed_plt.figure(1).axes[0].get_legend_handles_labels()[0])
-        passed_y_vals = passed_plt.figure(1).axes[0].get_legend_handles_labels()[0][0].get_data()[1]
+        "After you've written code to create a line plot, `check()` will tell you whether your code is correct."
+        
+        main_axis = passed_plt.figure(1).axes[0]
+        legend_handles = main_axis.get_legend_handles_labels()[0]
+        
+        assert all(isinstance(x, matplotlib.lines.Line2D) for x in legend_handles), \
+        "Is your figure a line plot?  Please use `sns.lineplot()` to generate the lines in your figure."
+        
+        assert len(legend_handles) == 1, \
+        """Your plot does not seem to have a single line (for Avila Adobe only). We detect %d lines.
+        Note that we can only detect lines that appear in the legend, so please make sure that your
+        legend is nonempty.""" \
+        % len(legend_handles)
+        
+        passed_y_vals = legend_handles[0].get_data()[1]
         soln_y_vals = df.loc[:, 'avila_adobe'].tolist()
-        assert len(passed_y_vals) == len(soln_y_vals), "Did you plot the number of visitors for each provided month in the dataset?  We expected to see data for %d months, but it looks like you only plotted %d months." % (len(soln_y_vals), len(passed_y_vals))
-        assert all(passed_y_vals == soln_y_vals), "Did you plot the correct column in the dataset?  You should plot the number of visitors to Avila Adobe, but it looks like you might have selected a different museum."
+        
+        assert len(passed_y_vals) == len(soln_y_vals), \
+        """Did you plot the number of visitors for each provided month in the dataset?  \
+        We expected to see data for %d months, but it looks like you only plotted %d months.""" \
+        % (len(soln_y_vals), len(passed_y_vals))
+        
+        assert all(passed_y_vals == soln_y_vals), \
+        """Did you plot the correct column in the dataset?  You should plot the number of visitors to \
+        Avila Adobe, but it looks like you might have selected a different museum."""
 
 qvars = bind_exercises(globals(), [
     LoadMuseumData,
