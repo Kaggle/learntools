@@ -3,7 +3,7 @@ from learntools.core import *
 
 
 class ProlificCommenters(EqualityCheckProblem):
-    _var = 'prolific_commenters_query'
+    _var = 'prolific_commenters'
     correct_answer = pd.DataFrame({'author': {0: 'dragonwriter',
   1: None,
   2: 'eru',
@@ -55,28 +55,9 @@ num_deleted_posts = 227736
 """
 )
 
-class AnyAggregationQuery(CodingProblem):
-    _vars = ['my_query', 'my_results']
-    def check(self, query, results):
-        assert (type(query) == str), ("You don't have a valid query")
-        assert ('select' in query.lower()), ("You don't have a valid query. It doesn't even have the word SELECT in it.")
-        assert ('from' in query.lower()), ("You don't have a valid query. It doesn't even have the word FROM in it.")
-        assert (type(results) == pd.DataFrame), ("You haven't successfully executed a query to get results in `my_results`")
-    _solution = CS(\
-"""
-my_query = \"""SELECT author, MIN(time_ts) first_comment, MAX(time_ts) last_comment
-            FROM `bigquery-public-data.hacker_news.comments`
-            GROUP BY author
-        \"""
-hacker_news.query_to_pandas_safe(my_query)
-"""
-)
-
-
-
 qvars = bind_exercises(globals(), [
     ProlificCommenters,
-
+    NumDeletedPosts,
     ],
     tutorial_id=79,
     var_format='q_{n}',

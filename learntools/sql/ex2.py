@@ -1,8 +1,10 @@
+import pandas as pd
+
 from learntools.core import *
 
 
 class WhichCountries(CodingProblem):
-    _vars = ['query', 'results']
+    _vars = ['first_query', 'first_results']
     def check(self, query, results):
         assert ("`bigquery-public-data.openaq.global_air_quality`" in query), \
                ('Your query should be pulling data FROM `bigquery-public-data.openaq.global_air_quality`')
@@ -21,15 +23,15 @@ class WhichCountries(CodingProblem):
 
     _solution = CS(\
 """
-query = \"""SELECT country
-            FROM `bigquery-public-data.openaq.global_air_quality`
-            WHERE unit != "ppm"
+first_query = \"""SELECT country
+                  FROM `bigquery-public-data.openaq.global_air_quality`
+                  WHERE unit != "ppm"
         \"""
 
 # Or to get each country just once, you could use
-query = \"""SELECT DISTINCT country
-            FROM `bigquery-public-data.openaq.global_air_quality`
-            WHERE unit != "ppm"
+first_query = \"""SELECT DISTINCT country
+                  FROM `bigquery-public-data.openaq.global_air_quality`
+                  WHERE unit != "ppm"
         \"""
 """
     )
@@ -37,7 +39,7 @@ query = \"""SELECT DISTINCT country
 
 
 class ZeroPollution(CodingProblem):
-    _vars = ['zero_pollution_query', 'zero_pollution_resuls']
+    _vars = ['zero_pollution_query', 'zero_pollution_results']
     def check(self, query, results):
         assert (type(query) == str), ("You don't have a valid query yet. Try again")
         assert ('select' in query.lower()), ("You don't have a valid query yet. Try again")
@@ -52,13 +54,13 @@ class ZeroPollution(CodingProblem):
     _solution = CS( \
 """
 zero_pollution_query = \"""SELECT country
-            FROM `bigquery-public-data.openaq.global_air_quality`
-            WHERE unit != "ppm"
-        \"""
+                           FROM `bigquery-public-data.openaq.global_air_quality`
+                           WHERE unit != "ppm"
+\"""
 
 zero_pollution_results = open_aq.query_to_pandas_safe(zero_pollution_query)
 """
-    )
+)
 
 qvars = bind_exercises(globals(), [
     WhichCountries,

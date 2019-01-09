@@ -35,8 +35,9 @@ class IdentifyFieldsForPlotting(CodingProblem):
     def check(self, fields_for_plotting):
         assert (type(fields_for_plotting) is list), "fields_for_plotting should be a list"
         assert (len(fields_for_plotting) == 2), "fields for plotting should have exactly two strings. Your answer had {}".format(len(fields_for_plotting))
-        
-        lower_case_fields = [lower(i) for i in fields_for_plotting]
+        assert (type(fields_for_plotting[0] == str), "The first item in fields_for_plotting should be a string")
+        assert (type(fields_for_plotting[1] == str), "The second item in fields_for_plotting should be a string")
+        lower_case_fields = [i.lower() for i in fields_for_plotting]
         if ('x_coordinate' in lower_case_fields) and ('y_coordinate' in lower_case_fields):
             print("latitude and longitude would be better and more standard than the x_coordinate and y_coordinate, but this might work.")
         else:

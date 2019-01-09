@@ -96,7 +96,7 @@ notebooks = [
     dict(filename='ex6_joining.ipynb',
         lesson_idx=5,
         type='exercise',
-	dataset_sources = ["github/github-repos"],
+	dataset_sources = ["stackoverflow/stackoverflow"],
 	scriptid=682118,
         ),
 ]
