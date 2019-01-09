@@ -5,14 +5,14 @@ import matplotlib.pyplot as plt
 
 from learntools.core import *
 
-file_path = '../input/museum_visitors.csv'
-df = pd.read_csv(file_path, index_col="time", parse_dates=True)
+filepath = '../input/museum_visitors.csv'
+df = pd.read_csv(filepath, index_col="time", parse_dates=True)
 
 class LoadMuseumData(EqualityCheckProblem):
     _var = 'museum_data'
     _expected = df
     _hint = "Use the `pd.read_csv()` function"
-    _solution = CS('museum_data = pd.read_csv(museum_file_path)')
+    _solution = CS('museum_data = pd.read_csv(museum_filepath, index_col="time", parse_dates=True)')
     
 class ReviewData(EqualityCheckProblem):
     _vars = ['ca_museum_jul18', 'avila_oct18']
