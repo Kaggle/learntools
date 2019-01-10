@@ -1,7 +1,6 @@
 import pandas as pd
 import matplotlib
 import seaborn as sns
-import matplotlib.pyplot as plt
 
 from learntools.core import *
 
@@ -60,7 +59,7 @@ sns.lineplot(data=museum_data)
 class PlotAvila(CodingProblem):
     _var = 'plt'
     _solution = CS(
-"""# PLOT 1: line plot showing the number of visitors to Avila Adobe over time
+"""# Line plot showing the number of visitors to Avila Adobe over time
 sns.lineplot(data=museum_data.avila_adobe, 
              label='avila_adobe')
 """)
@@ -101,7 +100,7 @@ qvars = bind_exercises(globals(), [
     PlotAll, 
     PlotAvila
     ],
-    tutorial_id=118,
+    tutorial_id=-1,
     var_format='step_{n}',
     )
 __all__ = list(qvars)

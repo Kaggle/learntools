@@ -1,13 +1,15 @@
 import pandas as pd
 import matplotlib
 import seaborn as sns
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 from learntools.core import *
 
+ign_data_soln = pd.read_csv('../input/ign.csv', index_col="id")
+
 class LoadIGNData(EqualityCheckProblem):
     _var = 'ign_data'
-    _expected = pd.read_csv('../input/ign.csv', index_col="id")
+    _expected = ign_data_soln
     _hint = "Use the `pd.read_csv()` function"
     _solution = CS('ign_data = pd.read_csv(ign_filepath, index_col="id")')
     
@@ -39,22 +41,29 @@ class PlotMonths(CodingProblem):
 sns.countplot(y=ign_data.release_month)
 """)
     
+    def solution_plot(self):
+        self._view.solution()
+        sns.countplot(y=ign_data_soln.release_month)
+    
     def check(self, passed_plt):
-        pass
+        assert len(passed_plt.figure(1).axes) > 0, \
+        "After you've written code to create a bar plot, `check()` will tell you whether your code is correct."
+        
+        print("Thank you for creating a plot!  To see how your code compares to the official solution, please use the code cell below.")
     
 class LoadIGNScoreData(EqualityCheckProblem):
     _var = 'ign_scores'
     _expected = pd.read_csv('../input/ign_scores.csv', index_col="platform")
     _hint = "Use the `pd.read_csv()` function"
     _solution = CS('ign_scores = pd.read_csv(ign_scores_filepath, index_col="platform")')
-
+    
 qvars = bind_exercises(globals(), [
     LoadIGNData,
     ReviewData, 
     PlotMonths,
     LoadIGNScoreData
     ],
-    tutorial_id=118,
+    tutorial_id=-1,
     var_format='step_{n}',
     )
 __all__ = list(qvars)

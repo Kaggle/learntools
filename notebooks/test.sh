@@ -21,7 +21,7 @@ TMP_DIR=`mktemp -d`
 # Install packages the notebook pipeline depends on but which aren't installed with the learntools package.
 pip3 install -q -r requirements.txt
 
-TRACKS="deep_learning embeddings pandas python machine_learning"
+TRACKS="deep_learning embeddings pandas python machine_learning data_viz_easy"
 for track in $TRACKS
 do
     # Run each step of the rendering pipeline, to make sure it runs without errors.
@@ -33,7 +33,7 @@ do
     python3 render.py $track
 done
 
-TESTABLE_NOTEBOOK_TRACKS="deep_learning python pandas machine_learning"
+TESTABLE_NOTEBOOK_TRACKS="deep_learning python pandas machine_learning data_viz_easy"
 for track in $TESTABLE_NOTEBOOK_TRACKS
 do
     # Running the deep learning notebooks is fairly slow (~10-20 minutes), so only
