@@ -73,6 +73,7 @@ class TheLongQuery(CodingProblem):
         assert('avg_mph' in results.columns), ("Your results should have an `avg_mph` column")
         assert(results.shape[0] == 12), ('Should have 12 rows in your results but have {}'.format(results.shape[0]))
         first_hour_num_trips = results.query('hour_of_day == 1').num_trips[0]
+        assert(first_hour_num_trips != 526723), ('You got most of the query right, but forgot to remove rides with `trip_seconds` or `trip_miles` of 0.')
         assert(first_hour_num_trips == 427383), ('Hour 1 should have 427383 trips but you have {}'.format(first_hour_num_trips))
 
     _solution = CS(
