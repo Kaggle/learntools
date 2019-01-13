@@ -17,7 +17,7 @@ class ProlificCommenters(EqualityCheckProblem):
   10: 'jrockway',
   11: 'anigbrowl',
   12: 'stcredzero'},
- 'NumPosts': {0: 10723,
+ 'numposts': {0: 10723,
   1: 227736,
   2: 10448,
   3: 10557,
