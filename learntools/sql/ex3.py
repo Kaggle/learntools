@@ -33,7 +33,7 @@ class ProlificCommenters(EqualityCheckProblem):
     _expected = correct_answer
     _solution = CS(\
 """
-prolific_commenters_query = \"""SELECT author, COUNT(id) numposts
+prolific_commenters_query = \"""SELECT author, COUNT(id) NumPosts
             FROM `bigquery-public-data.hacker_news.comments`
             GROUP BY author
             HAVING COUNT(id) > 10000

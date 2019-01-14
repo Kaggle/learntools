@@ -14,24 +14,24 @@ class WhichCountries(CodingProblem):
                                'CO', 'CW', 'GB', 'IL', 'MX', 'NP', 'PE',
                                'TH', 'TW', 'US', 'UZ', 'ZA'}
         assert (set(results.country) == correct_results_set), ("You have the wrong set of countries. Check your WHERE clause")
-        assert (len(results.columns) == 1), ("Nice job. You selected the right countries, but you selected other columns too. \
-                                            See if you can select country without other columns")
+        assert (len(results.columns) == 1), ("Nice job. You selected the right countries, but you selected other columns too. "
+                                             "See if you can select country without other columns.")
         if results.shape[0] > 19:
-            print("You got the right countries. Nice job! Some countries showed up many times in the results. To get each country only once \
-                   you can run `SELECT DISTINCT country ...`.  The DISTINCT keyword ensures each column shows up once, which you'll want \
-                   in some cases.")
+            print("You got the right countries. Nice job! Some countries showed up many times in the results. "
+                  "To get each country only once you can run `SELECT DISTINCT country ...`. " 
+                  "The DISTINCT keyword ensures each column shows up once, which you'll want in some cases.")
 
     _solution = CS(\
 """
 first_query = \"""SELECT country
                   FROM `bigquery-public-data.openaq.global_air_quality`
-                  WHERE unit != "ppm"
+                  WHERE unit = "ppm"
         \"""
 
 # Or to get each country just once, you could use
 first_query = \"""SELECT DISTINCT country
                   FROM `bigquery-public-data.openaq.global_air_quality`
-                  WHERE unit != "ppm"
+                  WHERE unit = "ppm"
         \"""
 """
     )
@@ -55,7 +55,7 @@ class ZeroPollution(CodingProblem):
 """
 zero_pollution_query = \"""SELECT country
                            FROM `bigquery-public-data.openaq.global_air_quality`
-                           WHERE unit != "ppm"
+                           WHERE value = 0
 \"""
 
 zero_pollution_results = open_aq.query_to_pandas_safe(zero_pollution_query)

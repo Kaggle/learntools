@@ -25,23 +25,25 @@ class ListSOTables(EqualityCheckProblem):
 class HowToFindExperts(ThoughtExperiment):
     _solution = \
 """
-The `posts_questions` table has a column called `tags` which lists the topics of technologies related to each question.
+`posts_questions` has a column called `tags` which lists the topics/technologies each question is about.
 
-The `posts_answers` table has a column called `parent_id` which identifies the id of the question each answer is responding to.
+`posts_answers` has a column called `parent_id` which identifies the id of the question each answer is responding to.
 `posts_answers` also has an `owner_user_id` column which specifies the user_id that wrote each answer.
 
-You can join these two tables to determine the `tags` for each answer. Then select the `owner_user_id` on answers associated with the desired tag (limiting to the desired tag in a where clause).
+You can join these two tables to determine the `tags` for each answer.
 
-In fact, this is exactly what you will do over the next few questions.
+Then select the `owner_user_id` of the answers on the desired tag.
+
+This is exactly what you will do over the next few questions.
 """
 
 class SelectRightQuestions(CodingProblem):
     _vars = ['questions_query', 'questions_results']
     def check(self, query, results):
         lower_query = query.lower()
-        lower_columns = [c.lower() for c in results.columns]
+        results.columns = [c.lower() for c in results.columns]
         assert ('like \'%bigquery%\'' in lower_query), ('Your `WHERE` clause is not filtering on the bigquery tag correctly')
-        assert ('id' in lower_columns), ('Should have `id` in the response columns. Your column names are {}'.format(results.columns))
+        assert ('id' in results.columns), ('Should have `id` in the response columns. Your column names are {}'.format(results.columns))
         assert (34798244 in results.id.values), ('You seem to be missing some relevant values from the id columns')
         assert (results.shape[1] == 3), ('You should have 3 columns. But you have {}. Your list of columns is'.format(len(results.columns), results.columns))
         assert (results.shape[0] < 20000), ('Your results have too many rows in the response. You may not have the right WHERE clause')
@@ -63,26 +65,25 @@ class FirstJoin(CodingProblem):
     _vars = ['answers_query', 'answers_results']
     def check(self, query, results):
         lower_query = query.lower()
-        lower_columns = [c.lower() for c in results.columns]
+        results.columns = [c.lower() for c in results.columns]
         assert ('like \'%bigquery%\'' in lower_query), ('Your `WHERE` clause is not filtering on the bigquery tag correctly')
         assert ('join' in lower_query), ('Your query does not include a join statement')
-        assert ('answer_id' in lower_columns), ('You should have a column named `answer_id`. Your columns are {}'.format(results.columns))
-        assert (40555703 in results.answer_id.values), ('You seem to be missing some relevant values from the `answer_id` columns')
-        assert (results.shape[0] < 20000), ('Your results have too many rows in the response. You may not have the right WHERE clause')
+        assert ('id' in results.columns), ('You should have a column named `answer_id`. Your columns are {}'.format(results.columns))
+        assert (21592157 in results.id.values), ('You seem to be missing some relevant values from the `answer_id` columns')
+        assert (results.shape[0] < 20000), ('You have {} rows in your results. It should be closer to 10500. You may the wrong WHERE clause')
 
 
     _hint = """Do an inner JOIN between `bigquery-public-data.stackoverflow.posts_questions` and  `bigquery-public-data.stackoverflow.posts_answers`.
-    
+
     You will want to give both of them aliases. Call `post_questions` q and call `posts_answers` a. The `ON` part of your join is `q.id = a.parent_id`
     """
     _solution = CS(\
 """
 answers_query = \"""
-SELECT a.id as answer_id, q.id AS question_id
-FROM `bigquery-public-data.stackoverflow.posts_questions` q
-INNER JOIN `bigquery-public-data.stackoverflow.posts_answers` a
-    ON q.id = a.parent_Id
-WHERE q.tags like '%bigquery%'
+SELECT a.id, a.body, a.owner_user_id
+FROM `bigquery-public-data.stackoverflow.posts_questions` q INNER JOIN `bigquery-public-data.stackoverflow.posts_answers` a
+     ON q.id = a.parent_id
+     WHERE q.tags like '%bigquery%'
 \"""
 """
 )
@@ -104,18 +105,18 @@ bigquery_experts_results = stack_overflow.query_to_pandas_safe(bigquery_experts_
     )
     def check(self, query, results):
         lower_query = query.lower()
-        lower_columns = [c.lower() for c in results.columns]
+        results.columns = [c.lower() for c in results.columns]
         assert ('group by' in lower_query), ('Your query should have a GROUP BY clause')
         assert ('count' in lower_query), ('Your query should have a COUNT in the SELECT statement')
         assert ('%bigquery' in lower_query), ('Your query should have `tags like %bigquery%` in the WHERE clause')
 
-        assert ('user_id' in lower_columns), ('You do not have a `user_id` column in your results')
-        assert ('number_of_answers' in lower_columns), ('You do not have a `number_of_answers` column in your results')
+        assert ('user_id' in results.columns), ('You do not have a `user_id` column in your results')
+        assert ('number_of_answers' in results.columns), ('You do not have a `number_of_answers` column in your results')
         # Correct answer has 2151 rows at time this code was written
         rows_in_result = results.shape[0]
         assert (rows_in_result < 10000), ('Your result has too many rows ({} rows). Something is wrong'.format(rows_in_result))
         assert (rows_in_result > 2000), ('Your result has too few rows ({} rows). Something is wrong'.format(rows_in_result))
-        assert (212435 in bigquery_experts_results.user_id.values), ('Your results did not return the right set of user id\'s.')
+        assert (212435 in results.user_id.values), ('Your results did not return the right set of user id\'s.')
 
 
 class GeneralizeExpertFinder(ThoughtExperiment):
@@ -124,7 +125,7 @@ class GeneralizeExpertFinder(ThoughtExperiment):
 def expert_finder(topic, stack_overflow_helper):
     '''
     Returns a DataFrame with the user_id's who have written stackoverflow answers on topic.
-    
+
     Inputs:
         topic: A string with the topic we are interested
         stack_overflow_helper: A bigquery_helper object that specifies the connection to the stack overflow DB

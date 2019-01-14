@@ -6,7 +6,7 @@ class GetTableName(EqualityCheckProblem):
     _expected = 'taxi_trips'
     _solution = CS("""
 # Find the table name with the following command
-chicago_taxi_trips.list_tables()
+chicago_taxi_helper.list_tables()
 
 table_name = 'taxi_trips'
     """)
@@ -38,7 +38,7 @@ rides_per_year_query = \"""SELECT EXTRACT(YEAR FROM trip_start_timestamp) AS yea
                     GROUP BY year
                     ORDER BY year\"""
 
-rides_per_year_result = chicago_taxi_trips.query_to_pandas_safe(rides_per_year_query)
+rides_per_year_result = chicago_taxi_helper.query_to_pandas_safe(rides_per_year_query)
 """
 )
 
@@ -51,7 +51,7 @@ class MonthDistrib(CodingProblem):
         jan_rides = results.query('month==1').num_trips[0]
         assert (jan_rides == 1040262), ('There should have been 1040262 rides in January. But your results showed {}'.format(jan_rides))
 
-    _hint = "Start your query with  `SELECT EXTRACT(YEAR FROM trip_start_timestamp) AS year, COUNT(1) num_trips`"
+    _hint = "Start your query with  `SELECT EXTRACT(MONTH FROM trip_start_timestamp) AS month, COUNT(1) num_trips`"
     _solution = CS(
 """
 rides_per_month_query = \"""SELECT EXTRACT(MONTH FROM trip_start_timestamp) AS month, COUNT(1) num_trips
@@ -60,7 +60,7 @@ rides_per_month_query = \"""SELECT EXTRACT(MONTH FROM trip_start_timestamp) AS m
                     GROUP BY month
                     ORDER BY month\"""
 
-rides_per_month_result = chicago_taxi_trips.query_to_pandas_safe(rides_per_month_query)
+rides_per_month_result = chicago_taxi_helper.query_to_pandas_safe(rides_per_month_query)
 """
 )
 

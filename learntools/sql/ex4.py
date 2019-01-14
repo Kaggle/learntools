@@ -17,7 +17,7 @@ class EducationSpending(CodingProblem):
 """
 SELECT country_name, AVG(value) avg_ed_spending_pct
 FROM `bigquery-public-data.world_bank_intl_education.international_education`
-WHERE indicator_code = 'SE.XPD.TOTL.GD.ZS' and YEAR >= 2010 and Year<=2017
+WHERE indicator_code = 'SE.XPD.TOTL.GD.ZS' and year >= 2010 and year <= 2017
 GROUP BY country_name
 ORDER BY avg_ed_spending_pct DESC
 """
@@ -29,15 +29,12 @@ class FindInterestingCodes(CodingProblem):
         results.columns = [c.lower() for c in results.columns]
         lower_query = query.lower()
         assert ("having" in lower_query), ('You are missing your `HAVING` clause')
-        assert (results.shape[0] in [44, 49]), ("You have the wrong number of rows in your results.") # 44 or 49 rows acceptable. Depends whether they use > or >=
-        assert (results.num_rows.iloc[0] == 232), ('The top row should have an indicator name of `Population, Total` and `num_rows` should be 232. ' + \
-                                                   'Your top row was {} with {} rows'.format(results.indicator_name.iloc[0], results.num_rows.iloc[0]))
     _hint = "The part before `FROM` is `SELECT indicator_code, indicator_name, COUNT(1) AS num_rows`"
     _solution = CS(\
 """
 code_count_query = \"""SELECT indicator_code, indicator_name, COUNT(1) AS num_rows
             FROM `bigquery-public-data.world_bank_intl_education.international_education`
-            WHERE year=2016
+            WHERE year = 2016
             GROUP BY indicator_name, indicator_code
             HAVING COUNT(1) >= 175
             ORDER by COUNT(1) DESC
