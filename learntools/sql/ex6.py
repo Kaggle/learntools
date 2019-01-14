@@ -20,7 +20,7 @@ class ListSOTables(EqualityCheckProblem):
  'tags',
  'users',
  'votes']
-    _solution = CS('list_of_tables = stackoverflow.list_tables()')
+    _solution = CS('list_of_tables = stack_overflow.list_tables()')
 
 class HowToFindExperts(ThoughtExperiment):
     _solution = \
