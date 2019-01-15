@@ -26,9 +26,6 @@ for track in $TRACKS
 do
     # Run each step of the rendering pipeline, to make sure it runs without errors.
     python3 clean.py $track
-    # If this fails (i.e. if running clean.py results in changes to the working tree),
-    # this means that clean.py wasn't run before committing.
-    git diff --exit-code --no-color -- $track
     python3 prepare_push.py $track
     python3 render.py $track
 done
