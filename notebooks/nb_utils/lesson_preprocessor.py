@@ -34,7 +34,7 @@ class LearnLessonPreprocessor(Preprocessor):
         # Corresponds to track_config.yaml
         track_cfg = resources['track_cfg']
         self.cfg = track_cfg
-        nb_meta = resources['nb_meta']
+        self.nb_meta = resources['nb_meta']
 
         macroer = MacroProcessor(track_cfg)
 
@@ -56,7 +56,7 @@ class LearnLessonPreprocessor(Preprocessor):
         nb.cells = new_cells
         # NB: There may be some cases where we need to access learntools in a tutorial
         # or ancillary notebook as well. We encode this in track_meta. 
-        if track_cfg.get('development', False) and nb_meta.type == 'exercise':
+        if track_cfg.get('development', False) and self.nb_meta.type == 'exercise':
             self.pip_install_lt_hack(nb)
         return nb, resources
 
@@ -82,6 +82,7 @@ class LearnLessonPreprocessor(Preprocessor):
             branch = 'master'
         pkg = 'git+https://github.com/Kaggle/learntools.git@{}'.format(branch)
         self.pip_install_hack(nb, [pkg])
+        
     def pip_install_hack(self, nb, pkgs):
         """Insert some cells at the top of this notebook that pip install the given
         packages to /kaggle/working, then add that directory to sys.path.
@@ -234,6 +235,21 @@ This course is still in beta, so I'd love to get your feedback. If you have a mo
                 self.lesson.topic, self.lesson.tutorial.url,
                 )
 
+
+    def NEXT_NOTEBOOK_URL(self, **kwargs):
+        '''
+        Return link to the next notebook. Use forking link when link to exercise. Use regular/view link for tutorials
+        '''
+        if (self.nb_meta.type == 'tutorial') and hasattr(self.lesson, 'exercise'):
+            return self.lesson.exercise.forking_url
+        else:
+            next_lesson = self.lesson.next
+            if hasattr(self.lesson, 'tutorial'):
+                return next_lesson.tutorial.url
+            else:
+                return next_lesson.exercise.forking_url
+        
+    
     def KEEP_GOING(self, **kwargs):
 
         # In "daily challenge" mode, the end of the exercise should not point to
