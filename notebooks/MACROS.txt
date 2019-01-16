@@ -9,7 +9,10 @@ All macro invocations begin with # followed by the macro name bracketed by a del
 
 cf. nb_utils/lesson_preprocessor.py methods
 
+NEXT_NOTEBOOK_URL
+
 # N in the signatures below is the number of the corresponding lesson (starting from 1)
+# Unless you are referencing a previous lesson, you should typically use NEXT_NOTEBOOK_URL instead
 TUTORIAL_URL(N)
 EXERCISE_URL(N)
 EXERCISE_FORKING_URL(N)
