@@ -1,27 +1,26 @@
 import pandas as pd
-import matplotlib
+#import matplotlib
 import seaborn as sns
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 from learntools.core import *
 
-ign_data_soln = pd.read_csv('../input/ign.csv', index_col="id")
+ign_data_soln = pd.read_csv('../input/ign.csv', index_col="Id")
 
 class LoadIGNData(EqualityCheckProblem):
     _var = 'ign_data'
     _expected = ign_data_soln
     _hint = "Use the `pd.read_csv()` function"
-    _solution = CS('ign_data = pd.read_csv(ign_filepath, index_col="id")')
+    _solution = CS('ign_data = pd.read_csv(ign_filepath, index_col="Id")')
     
 class ReviewData(EqualityCheckProblem):
     _vars = ['dragon_score', 'planet_date']
     _expected = [3, 12]
-    _hint = "Use the `head()` command to print the first 5 rows. \
-    **After printing the first 5 rows**, \
-    each row corresponds to a different game, and game titles can be found in the `title` column. \
-    The score for each game can be found in the `score` column. \
-    The release date for each game can be found in the `release_day` column. \
-    "
+    _hint = ("Use the `head()` command to print the first 5 rows. "
+    "**After printing the first 5 rows**, "
+    "each row corresponds to a different game, and game titles can be found in the `Title` column. "
+    "The score for each game can be found in the `'Score'` column. "
+    "The release date for each game can be found in the `'Release day'` column.")
     _solution = CS(
 """# Print the first five rows of the data
 ign_data.head()
@@ -38,12 +37,20 @@ class PlotMonths(CodingProblem):
     _hint = 'Use `sns.countplot()` and the `release_month` column of the `ign_data` DataFrame.'
     _solution = CS(
 """# Bar plot showing number of games released by month
-sns.countplot(y=ign_data.release_month)
+sns.countplot(y=ign_data['Release month'])
+
+# Set axes labels and title
+plt.xlabel("")
+plt.ylabel("Month")
+plt.title("Number of games released, by month")
 """)
     
     def solution_plot(self):
         self._view.solution()
-        sns.countplot(y=ign_data_soln.release_month)
+        sns.countplot(y=ign_data_soln['Release month'])
+        plt.xlabel("")
+        plt.ylabel("Month")
+        plt.title("Number of games released, by month")
     
     def check(self, passed_plt):
         assert len(passed_plt.figure(1).axes) > 0, \
@@ -53,9 +60,9 @@ sns.countplot(y=ign_data.release_month)
     
 class LoadIGNScoreData(EqualityCheckProblem):
     _var = 'ign_scores'
-    _expected = pd.read_csv('../input/ign_scores.csv', index_col="platform")
+    _expected = pd.read_csv('../input/ign_scores.csv', index_col="Platform")
     _hint = "Use the `pd.read_csv()` function"
-    _solution = CS('ign_scores = pd.read_csv(ign_scores_filepath, index_col="platform")')
+    _solution = CS('ign_scores = pd.read_csv(ign_scores_filepath, index_col="Platform")')
     
 qvars = bind_exercises(globals(), [
     LoadIGNData,
