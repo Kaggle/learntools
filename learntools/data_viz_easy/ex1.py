@@ -26,28 +26,28 @@ class ReviewData(EqualityCheckProblem):
              "number of visitors in October 2018 for each museum can be found in "
              "the row marked `2018-10-01`.")
     _solution = CS(
-        """# Print the last five rows of the data
-        museum_data.tail()
-        # How many visitors did the Chinese American Museum 
-        # receive in July 2018? 
-        ca_museum_jul18 = 2620
-        # In October 2018, how many more visitors did Avila 
-        # Adobe receive than the Firehouse Museum?
-        avila_oct18 = 14658
-        """)
+"""# Print the last five rows of the data
+museum_data.tail()
+# How many visitors did the Chinese American Museum 
+# receive in July 2018? 
+ca_museum_jul18 = 2620
+# In October 2018, how many more visitors did Avila 
+# Adobe receive than the Firehouse Museum?
+avila_oct18 = 14658
+""")
 
 class PlotAll(CodingProblem):
     _var = 'plt'
     _hint = ("Use `sns.lineplot`, and plot one line for each museum in "
              "`museum_data`. (_You can do this in a single line of code!_)")
     _solution = CS(
-        """# Set the width and height of the figure
-        plt.figure(figsize=(12,6))
-        # Line chart showing the number of visitors to each museum over time
-        sns.lineplot(data=museum_data)
-        # Add title
-        plt.title("Monthly Visitors to Los Angeles City Museums")
-        """)
+"""# Set the width and height of the figure
+plt.figure(figsize=(12,6))
+# Line chart showing the number of visitors to each museum over time
+sns.lineplot(data=museum_data)
+# Add title
+plt.title("Monthly Visitors to Los Angeles City Museums")
+""")
     
     def solution_plot(self):
         self._view.solution()
@@ -77,15 +77,15 @@ class PlotAll(CodingProblem):
 class PlotAvila(CodingProblem):
     _var = 'plt'
     _solution = CS(
-        """# Set the width and height of the figure
-        plt.figure(figsize=(12,6))
-        # Add title
-        plt.title("Monthly Visitors to Avila Adobe")
-        # Line chart showing the number of visitors to Avila Adobe over time
-        sns.lineplot(data=museum_data['Avila Adobe'])
-        # Add label for horizontal axis
-        plt.xlabel("Date")
-        """)
+"""# Set the width and height of the figure
+plt.figure(figsize=(12,6))
+# Add title
+plt.title("Monthly Visitors to Avila Adobe")
+# Line chart showing the number of visitors to Avila Adobe over time
+sns.lineplot(data=museum_data['Avila Adobe'])
+# Add label for horizontal axis
+plt.xlabel("Date")
+""")
     _hint = ("Use `sns.lineplot` to plot the `\'Avila Adobe\'` column in "
              "`museum_data`. (_If you like, use `label=` to add the line "
              "to the legend, but this is not necessary!_)")
