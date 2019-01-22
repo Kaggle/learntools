@@ -5,18 +5,18 @@ import matplotlib.pyplot as plt
 
 from learntools.core import *
 
-ign_data_soln = pd.read_csv('../input/ign.csv', index_col="Id")
+df = pd.read_csv('../input/ign.csv', index_col="Id")
 
 class LoadIGNData(EqualityCheckProblem):
     _var = 'ign_data'
-    _expected = ign_data_soln
-    _hint = "Use the `pd.read_csv()` function"
+    _expected = df
+    _hint = "Use `pd.read_csv`, and follow it with **two** pieces of text that are enclosed in parentheses and separated by commas.  (1) The filepath for the dataset is provided in `ign_filepath`.  (2) Use the `\"Id\"` column to label the rows."
     _solution = CS('ign_data = pd.read_csv(ign_filepath, index_col="Id")')
     
 class ReviewData(EqualityCheckProblem):
     _vars = ['dragon_score', 'planet_date']
     _expected = [3, 12]
-    _hint = ("Use the `head()` command to print the first 5 rows. "
+    _hint = ("Use `.head()` to print the first 5 rows. "
     "**After printing the first 5 rows**, "
     "each row corresponds to a different game, and game titles can be found in the `Title` column. "
     "The score for each game can be found in the `'Score'` column. "
@@ -47,7 +47,7 @@ plt.title("Number of games released, by month")
     
     def solution_plot(self):
         self._view.solution()
-        sns.countplot(y=ign_data_soln['Release month'])
+        sns.countplot(y=df['Release month'])
         plt.xlabel("")
         plt.ylabel("Month")
         plt.title("Number of games released, by month")
