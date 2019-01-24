@@ -58,9 +58,7 @@ plt.ylabel("Month")
         plt.title("Number of games released, by month")
     
     def check(self, passed_plt):
-        assert len(passed_plt.figure(1).axes) > 0, \
-        ("After you've written code to create a bar chart, `check()` will tell you whether your code "
-         "is correct.")
+        assert len(passed_plt.figure(1).axes) > 0, "Please write code to create a bar chart."
         
         print("Thank you for creating a chart!  To see how your code compares to the official "
               "solution, please use the code cell below.")
@@ -102,9 +100,7 @@ plt.title("Average Score for Racing Games, by Platform")
         plt.title("Average Score for Racing Games, by Platform")
     
     def check(self, passed_plt):
-        assert len(passed_plt.figure(1).axes) > 0, \
-        ("After you've written code to create a bar chart, `check()` will tell you whether your code "
-         "is correct.")
+        assert len(passed_plt.figure(1).axes) > 0, "Please write code to create a bar chart."
         
         print("Thank you for creating a chart!  To see how your code compares to the official "
               "solution, please use the code cell below.")    
@@ -138,10 +134,8 @@ plt.title("Average Game Score, by Platform and Genre")
         plt.title("Average Game Score, by Platform and Genre")
     
     def check(self, passed_plt):
-        assert len(passed_plt.figure(1).axes) > 0, \
-        ("After you've written code to create a heatmap, `check()` will tell you whether your code "
-         "is correct.")
-        
+        assert len(passed_plt.figure(1).axes) > 0, "Please write code to create a heatmap."
+
         print("Thank you for creating a chart!  To see how your code compares to the official "
               "solution, please use the code cell below.")    
 
