@@ -65,37 +65,21 @@ plt.ylabel("Month")
         print("Thank you for creating a chart!  To see how your code compares to the official "
               "solution, please use the code cell below.")
         
-class ThinkMonths(EqualityCheckProblem):
-    _vars = ['month_most', 'month_least']
-    _expected = [11, 7]
-    _hint = ("Use the bar chart above.  For `month_most`, which month has the longest bar?  For "
-             "`month_least`, which month has the shortest bar?")
-    _solution = CS(
-"""# According to the data, which month has the most 
-# game releases? (Your answer should be a number between 1 and 12.)
-month_most = 11
-# According to the data, which month has the least 
-# game releases? (Your answer should be a number between 1 and 12.)
-month_least = 7
-""")
-    
+class ThinkMonths(ThoughtExperiment):
+    _hint = ("Use the bar chart above.  Which month has the longest bar?")
+    _solution = ("Month 11 (or November) has the most game releases.")
+
 Months = MultipartProblem(PlotMonths, ThinkMonths)
     
-class LoadIGNScoreData(EqualityCheckProblem):
-    _var = 'ign_scores'
-    _expected = pd.read_csv('../input/ign_scores.csv', index_col="Platform")
-    _hint = ("Use `pd.read_csv`, and follow it with **two** pieces of text that "
-             "are enclosed in parentheses and separated by commas.  (1) The "
-             "filepath for the dataset is provided in `ign_scores_filepath`.  (2) Use the "
-             "`\"Platform\"` column to label the rows.")
-    _solution = CS('ign_scores = pd.read_csv(ign_scores_filepath, index_col="Platform")')
+class IGNScoreData(ThoughtExperiment):
+    _hint = ("To answer the first question, compare the **Wii** row (sixth from the bottom) to the "
+             "**Wireless** row.  To answer the second question, compare the **Action** column (the "
+             "first column in the table) to the **Action, Adventure** column.")
+    _solution = ("For the first question, the **Wireless** platform consistently gets higher "
+                 "ratings than the **Wii**, for all game genres.  As for the second question, "
+                 "**Action, Adventure** typically gets higher ratings than **Action**, where the only "
+                 "exception is with the Playstation Vita platform.")
     
-class ThinkIGNScoreData(ThoughtExperiment):
-    _hint = "h"
-    _solution = "s"
-    
-IGNScoreData = MultipartProblem(LoadIGNScoreData, ThinkIGNScoreData)
-
 class PlotRacing(CodingProblem):
     _var = 'plt'
     _hint = "Use `sns.barplot` and the `'Racing'` column of `ign_scores`."
@@ -162,8 +146,12 @@ plt.title("Average Game Score, by Platform and Genre")
               "solution, please use the code cell below.")    
 
 class ThinkHeat(ThoughtExperiment):
-    _hint = "h"
-    _solution = "s"
+    _hint = ("To find the highest average ratings, look for the largest numbers (or lightest boxes) "
+             "in the heatmap.  To find the lowest average ratings, find the smallest numbers (or "
+             "darkest boxes).")
+    _solution = ("**Simulation** games for **Playstation 4** receive the highest average ratings (9.2). "
+                 "**Shooting** and **Fighting** games for **Game Boy Color** receive the lowest average "
+                 "rankings (4.5).") 
     
 Heat = MultipartProblem(PlotHeat, ThinkHeat)
     
