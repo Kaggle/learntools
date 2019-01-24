@@ -29,8 +29,7 @@ notebooks = [
 	lesson_idx=0,
 	type='exercise',
 	scriptid=499266,
-	dataset_sources = ["keras/resnet50"],
-	competition_sources = ["dog-breed-identification"],
+	dataset_sources = ["keras/resnet50", "dansbecker/dog-breed-identification"],
 	),
     dict(
         filename='tut2_building_models_from_convolutions.ipynb',
