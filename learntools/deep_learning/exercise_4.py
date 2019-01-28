@@ -34,8 +34,8 @@ my_new_model.layers[0].trainable = False   # Other line that was changed
 class CompileTransferLearningModel(ThoughtExperiment):
     _solution = \
 """
-The compile model doesn't change the values in any convolutions.  In fact, your model has not even 
-received an argument with data yet.  Compile specifies how your model will make updates a later 
+The compile model doesn't change the values in any convolutions.  In fact, your model has not even
+received an argument with data yet.  Compile specifies how your model will make updates a later
 `fit` step where it receives data.  That is the part that will take longer.
 """
 
@@ -57,8 +57,8 @@ class FitTransferModel(CodingProblem):
         their_val_dir = fit_stats.validation_data.directory
         their_val_loss = fit_stats.history['val_loss'][0]
         their_num_steps = fit_stats.params['steps']
-        assert (their_val_dir == '../input/dogs-gone-sideways/val'),\
-               ("The validation directory should be `../input/dogs-gone-sideways/val`. Yours was {}".format(their_val_dir))
+        assert (their_val_dir == '../input/dogs-gone-sideways/images/val'),\
+               ("The validation directory should be `../input/dogs-gone-sideways/images/val`. Yours was {}".format(their_val_dir))
         assert (their_num_steps == 22), ("Should have 22 steps per epoch. You had {}".format(their_num_steps))
     _solution = CS(
 """
@@ -66,21 +66,21 @@ image_size = 224
 data_generator = ImageDataGenerator(preprocess_input)
 
 train_generator = data_generator.flow_from_directory(
-                                        directory=____,
+                                        directory=../input/dogs-gone-sideways/images/train,
                                         target_size=(image_size, image_size),
                                         batch_size=10,
                                         class_mode='categorical')
 
 validation_generator = data_generator.flow_from_directory(
-                                        directory=____,
+                                        directory="../input/dogs-gone-sideways/images/val",
                                         target_size=(image_size, image_size),
                                         class_mode='categorical')
 
 # fit_stats below saves some statistics describing how model fitting went
 # the key role of the following line is how it changes my_new_model by fitting to data
 fit_stats = my_new_model.fit_generator(train_generator,
-                                       steps_per_epoch=____,
-                                       validation_data=____,
+                                       steps_per_epoch=22,
+                                       validation_data=validation_generator,
                                        validation_steps=1)
 """
     )
