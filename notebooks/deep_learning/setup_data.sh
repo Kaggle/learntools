@@ -12,7 +12,8 @@ unzip -q input/vgg16/vgg16.zip -d input/vgg16/
 
 kaggle datasets download dansbecker/hot-dog-not-hot-dog -p input/hot-dog-not-hot-dog/seefood --unzip
 
-kaggle datasets download dansbecker/dogs-gone-sideways -p input/dogs-gone-sideways 
+kaggle datasets download dansbecker/dogs-gone-sideways -p input/dogs-gone-sideways --unzip
+mkdir input/dogs-gone-sideways/images
 unzip -q input/dogs-gone-sideways/images.zip -d input/dogs-gone-sideways/images
 
 kaggle datasets download zalando-research/fashionmnist -p input/fashionmnist --unzip
