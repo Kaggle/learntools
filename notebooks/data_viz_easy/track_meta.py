@@ -8,8 +8,9 @@ track = dict(
 lessons = [{'topic': topic_name} for topic_name in
             ['Introduction and Line Plots',
             'Bar Plots and Heatmaps',
-            'Scatter Plots and Distributions',
-            'Customizing Options',
+            'Scatter Plots',
+            'Distributions',
+            'Choosing Plot Types and Customizing Style',
             'Final Project',]
             ]
 
@@ -62,6 +63,16 @@ notebooks = [
     dict(
         filename='ex5.ipynb',
         lesson_idx=4,
+        type='exercise',
+        ),
+    dict(
+        filename='tut6.ipynb',
+        lesson_idx=5,
+        type='tutorial',
+        ),
+    dict(
+        filename='ex6.ipynb',
+        lesson_idx=5,
         type='exercise',
         ),
 ]
