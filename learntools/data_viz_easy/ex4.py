@@ -122,8 +122,8 @@ class ThinkThreshold(ThoughtExperiment):
     _hint = ("Take a look at the KDE plot, and use the legend to tell the difference between malignant and benign tumors.  Does "
              "the curve for malignant tumors appear to the right (at higher values) or to the left (at lower values) of "
              "the curve for benign tumors?")
-    _solution = ("Malignant tumors tend to have higher values for `'Radius (worst)'`.  This is something that we'd like a "
-                 "machine learning algorithm to learn for itself when studying the data!")
+    _solution = ("Malignant tumors tend to have higher values for `'Radius (worst)'`.  This is something that we'd like an "
+                 "intelligent algorithm to learn for itself when studying the data!")
 
 Threshold = MultipartProblem(PlotThreshold, ThinkThreshold)
     
