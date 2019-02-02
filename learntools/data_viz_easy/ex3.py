@@ -177,7 +177,9 @@ sns.swarmplot(x=candy_data['chocolate'], y=candy_data['winpercent'])
 class ThinkSwarm(ThoughtExperiment):
     _hint = ("Which plot communicates more information?  In general, it's good practice to "
              "use the simplest plot that tells the entire story of interest.")
-    _solution = ("...")
+    _solution = ("In this case, the categorical scatter plot from **Step 7** is the more appropriate "
+                 "plot. While both plots tell the desired story, the plot from **Step 6** conveys far "
+                 "more information that could distract from the main point.")
     
 Swarm = MultipartProblem(PlotSwarm, ThinkSwarm)
 
