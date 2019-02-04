@@ -24,7 +24,7 @@ class HomeDescription(EqualityCheckProblem):
     _solution = CS(
 """# using data read from home_data.describe()
 avg_lot_size = 10517
-newest_home_age = 8
+newest_home_age = 9
 """)
 
 
