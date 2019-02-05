@@ -1,8 +1,8 @@
 # See also examples/example_track/example_meta.py for a longer, commented example
 track = dict(
     author_username='dansbecker',
-    course_name='Machine Learning',
-    course_url='https://www.kaggle.com/learn/machine-learning'
+    course_name='Machine Learning Explainability',
+    course_url='https://www.kaggle.com/learn/machine-learning-explainability'
 )
 
 lessons = [ {'topic': topic_name} for topic_name in

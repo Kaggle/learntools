@@ -1,5 +1,5 @@
 # Rendered ipynb files and kernel metadata json files for this config will be saved at notebooks/<track>/<tag>/
-tag: default
+tag: prod
 public: true
 # If true, then exercise kernels synced to kaggle will have internet enabled and will begin
 # with a cell that pip installs the current learntools branch. (Useful for testing 
