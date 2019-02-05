@@ -62,7 +62,7 @@ eli5.show_weights(perm2, feature_names = features_2)
         assert np.allclose(perm_obj.feature_importances_,
                           np.array([0.06128774,  0.08575455, 0.07350467,
                                     0.07330853,  0.57827417, 0.44671882]),
-                          rtol=0.1)
+                          rtol=0.1), "That's not right. Check that you set the right seed and used the right data"
 
 class ScaleUpFeatureMagnitude(ThoughtExperiment):
     _solution = """

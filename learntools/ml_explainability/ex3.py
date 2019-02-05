@@ -55,7 +55,7 @@ class ReadPDPContour(CodingProblem):
     def check(self, savings):
         if type(savings) == str:
             savings = Decimal(dollars.strip('$'))
-        assert (savings > 13) and (savings < 17)
+        assert ((savings > 13) and (savings < 17)), "Your answer should be about 15. Not {}".format(savings)
 
 class MakePDPWithAbsFeatures(CodingProblem):
     _var = 'pdp_dist'

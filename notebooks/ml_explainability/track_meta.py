@@ -37,7 +37,7 @@ notebooks = [
         type='tutorial'
     ),
     dict(
-        filename='ex3_partial_plots..ipynb',
+        filename='ex3_partial_plots.ipynb',
         lesson_idx=2,
         type='exercise',
         scriptid=1637380
