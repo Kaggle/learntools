@@ -63,6 +63,8 @@ class MakePredictions(CodingProblem):
         # This step is just checking that they can make predictions.
         # If we want to check model is correct, do it in fitting step.
         ground_truth = iowa_model.predict(X)
+        assert ground_truth.shape[0] != 5, ("Your prediction results had 5 rows. They should have 1460. "
+                                            "Did you call predict on the head() of the data rather than all of the data?")
         assert ground_truth.shape == predictions.shape, ("Your predictions are "
                     "shape {}. Expected shape {}").format(predictions.shape,  ground_truth.shape)
         assert all(predictions == ground_truth), ("Expected {} but got predictions {}").format(ground_truth, preds)
