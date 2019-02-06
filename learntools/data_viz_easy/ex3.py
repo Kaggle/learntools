@@ -86,8 +86,8 @@ sns.regplot(x=candy_data['sugarpercent'], y=candy_data['winpercent'])
 class ThinkBlueReg(ThoughtExperiment):
     _hint = ("Does the regression line have a positive or negative slope?")
     _solution = ("Since the regression line has a slightly positive slope, this tells us that there "
-                 "is a slightly positive correlation between `'winpercent'` and `'sugarpercent'`, and "
-                 "people have a slight preference for candies containing relatively more sugar.")
+                 "is a slightly positive correlation between `'winpercent'` and `'sugarpercent'`. "
+                 "Thus, people have a slight preference for candies containing relatively more sugar.")
 
 BlueReg = MultipartProblem(PlotBlueReg, ThinkBlueReg)
 
