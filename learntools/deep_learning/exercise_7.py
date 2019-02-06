@@ -56,7 +56,7 @@ class AddMoreLayers(CodingProblem):
         last_layer = fashion_model.layers[-1]
         useful_text = "Use `fashion_model.summary()` to see your current model architecture."
         assert (len(layers) == 6), \
-               ("You should have 6 layers, but actually have {}. " + useful_text)
+               ("You should have 6 layers, but actually have {}. ".format(useful_text) + useful_text)
         assert (type(fashion_model.layers[3]) == keras.layers.Flatten), \
                ("You should have a Flatten layer as the 4th layer. " + useful_text)
         assert (last_layer.activation.__name__ == 'softmax'), \
@@ -90,7 +90,6 @@ class CompileModel(CodingProblem):
               ("You didn't get the optimizer set correctly. It should be `adam`")
         assert(fashion_model.metrics[0] == 'accuracy'), \
               ("You need to set metrics=['accuracy']")
-
 
 
     _solution = CS(

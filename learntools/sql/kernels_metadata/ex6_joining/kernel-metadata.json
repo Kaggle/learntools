@@ -1,0 +1,19 @@
+{
+  "id": "dansbecker/exercise-joining-data",
+  "id_no": 682118,
+  "title": "Exercise: Joining Data",
+  "code_file": "exercise-joining-data.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": false,
+  "enable_internet": false,
+  "keywords": [
+    "learn"
+  ],
+  "dataset_sources": [
+    "github/github-repos"
+  ],
+  "kernel_sources": [],
+  "competition_sources": []
+}
