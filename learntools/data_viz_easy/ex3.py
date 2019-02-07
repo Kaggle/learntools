@@ -54,7 +54,7 @@ sns.scatterplot(x=candy_data['sugarpercent'], y=candy_data['winpercent'])
         
         children = passed_plt.axes().get_children()
         
-        assert [type(i) for i in children[1:5]] == [matplotlib.spines.Spine]*4, \
+        assert all(isinstance(x, matplotlib.spines.Spine) for x in children[1:5]), \
         ("Is your figure a scatter plot? Please use `sns.scatterplot` to generate your figure.")
         
 class ThinkBlueScatter(ThoughtExperiment):

@@ -1,9 +1,11 @@
 import pandas as pd
 import matplotlib
 import seaborn as sns
+import warnings
 
 from learntools.core import *
 
+warnings.filterwarnings("ignore")
 df = pd.read_csv("../input/cancer.csv", index_col="Id")
 df_b = pd.read_csv("../input/cancer_b.csv", index_col="Id")
 df_m = pd.read_csv("../input/cancer_m.csv", index_col="Id")
@@ -102,7 +104,7 @@ class PlotThreshold(CodingProblem):
     _hint = ("Use `sns.kdeplot`, and specify the data and label by using `data=` and `label=`, respectively. You will need to "
              "write two lines of code, corresponding to `cancer_m_data` and `cancer_b_data`.")
     _solution = CS(
-"""# KDE plot for benign and malignant tumors
+"""# KDE plots for benign and malignant tumors
 sns.kdeplot(data=cancer_b_data['Radius (worst)'], shade=True, label="Benign")
 sns.kdeplot(data=cancer_m_data['Radius (worst)'], shade=True, label="Malignant")
 """)
@@ -113,13 +115,16 @@ sns.kdeplot(data=cancer_m_data['Radius (worst)'], shade=True, label="Malignant")
         sns.kdeplot(data=df_m['Radius (worst)'], shade=True, label="Malignant")
     
     def check(self, passed_plt):
-        assert len(passed_plt.figure(1).axes) > 0, "Please write code to create a KDE plot."
+        assert len(passed_plt.figure(1).axes) > 0, "Please write code to create one figure containing two KDE plots."
         
-        print("Thank you for creating a plot!  To see how your code compares to the official "
-              "solution, please use the code cell below.")
+        children = passed_plt.axes().get_children()
+        
+        assert all(isinstance(x, matplotlib.collections.PolyCollection) for x in children[0:2]) \
+        and all(isinstance(x, matplotlib.lines.Line2D) for x in children[2:4]), \
+        "Does your figure show two KDE plots?  Write two lines of code using `sns.kdeplot` to generate your figure."
         
 class ThinkThreshold(ThoughtExperiment):
-    _hint = ("Take a look at the KDE plot, and use the legend to tell the difference between malignant and benign tumors.  Does "
+    _hint = ("Take a look at the KDE plots, and use the legend to tell the difference between malignant and benign tumors.  Does "
              "the curve for malignant tumors appear to the right (at higher values) or to the left (at lower values) of "
              "the curve for benign tumors?")
     _solution = ("Malignant tumors tend to have higher values for `'Radius (worst)'`.  This is something that we'd like an "
