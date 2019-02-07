@@ -1,9 +1,11 @@
 import pandas as pd
 import matplotlib
 import seaborn as sns
+import warnings
 
 from learntools.core import *
 
+warnings.filterwarnings("ignore")
 df = pd.read_csv("../input/candy.csv", index_col="id")
 
 class LoadData(EqualityCheckProblem):
@@ -50,8 +52,10 @@ sns.scatterplot(x=candy_data['sugarpercent'], y=candy_data['winpercent'])
     def check(self, passed_plt):
         assert len(passed_plt.figure(1).axes) > 0, "Please write code to create a scatter plot."
         
-        print("Thank you for creating a plot!  To see how your code compares to the official "
-              "solution, please use the code cell below.")
+        children = passed_plt.axes().get_children()
+        
+        assert [type(i) for i in children[1:5]] == [matplotlib.spines.Spine]*4, \
+        ("Is your figure a scatter plot? Please use `sns.scatterplot` to generate your figure.")
         
 class ThinkBlueScatter(ThoughtExperiment):
     _hint = ("Compare candies with higher sugar content (on the right side of the chart) to candies "
@@ -66,7 +70,7 @@ BlueScatter = MultipartProblem(PlotBlueScatter, ThinkBlueScatter)
 class PlotBlueReg(CodingProblem):
     _var = 'plt'
     _hint = ("Use `sns.regplot`, and set the variables for the x-axis and y-axis "
-        "by using `x=` and `y=`, respectively.")
+             "by using `x=` and `y=`, respectively.")
     _solution = CS(
 """# Scatter plot w/ regression line showing the relationship between 'sugarpercent' and 'winpercent'
 sns.regplot(x=candy_data['sugarpercent'], y=candy_data['winpercent'])
@@ -80,8 +84,11 @@ sns.regplot(x=candy_data['sugarpercent'], y=candy_data['winpercent'])
         assert len(passed_plt.figure(1).axes) > 0, \
         "Please write code to create a scatter plot with a regression line."
         
-        print("Thank you for creating a plot!  To see how your code compares to the official "
-              "solution, please use the code cell below.")
+        children = passed_plt.axes().get_children()
+        
+        assert all(isinstance(x, matplotlib.spines.Spine) for x in children[3:7]), \
+        ("Is your figure a scatter plot with a regression line? "
+         "Please use `sns.regplot` to generate your figure.")
         
 class ThinkBlueReg(ThoughtExperiment):
     _hint = ("Does the regression line have a positive or negative slope?")
@@ -107,9 +114,8 @@ sns.scatterplot(x=candy_data['pricepercent'], y=candy_data['winpercent'], hue=ca
     def check(self, passed_plt):
         assert len(passed_plt.figure(1).axes) > 0, \
         "After you've written code to create a scatter plot, `check()` will tell you whether your code is correct."
-        
-        main_axis = passed_plt.figure(1).axes[0]
-        legend_handles = main_axis.get_legend_handles_labels()[0]
+
+        legend_handles = passed_plt.figure(1).axes[0].get_legend_handles_labels()[0]
         
         assert all(isinstance(x, matplotlib.collections.PathCollection) for x in legend_handles), \
         ("Is your figure a scatter plot?  Please use `sns.scatterplot` to generate your figure.")
@@ -133,8 +139,7 @@ sns.lmplot(x="pricepercent", y="winpercent", hue="chocolate", data=candy_data)
         assert len(passed_plt.figure(1).axes) > 0, \
         "After you've written code to create a scatter plot, `check()` will tell you whether your code is correct."
         
-        main_axis = passed_plt.figure(1).axes[0]
-        legend_handles = main_axis.get_legend_handles_labels()[0]
+        legend_handles = passed_plt.figure(1).axes[0].get_legend_handles_labels()[0]
         
         assert all(isinstance(x, matplotlib.collections.PathCollection) for x in legend_handles), \
         ("Is your figure a scatter plot?  Please use `sns.scatterplot` to generate your figure.")
@@ -171,8 +176,13 @@ sns.swarmplot(x=candy_data['chocolate'], y=candy_data['winpercent'])
     def check(self, passed_plt):
         assert len(passed_plt.figure(1).axes) > 0, "Please write code to create a categorical scatter plot."
         
-        print("Thank you for creating a chart!  To see how your code compares to the official "
-              "solution, please use the code cell below.")
+        children = passed_plt.axes().get_children()
+        
+        assert all(isinstance(x, matplotlib.spines.Spine) for x in children[2:6]), \
+        "Is your figure a categorical scatter plot?  Please use `sns.swarmplot` to generate your figure."
+        
+        assert children[2].get_extents().ymax == -20.10169952441417, \
+        "Do you have `'chocolate'` on the x-axis and `'winpercent'` on the y-axis?" 
         
 class ThinkSwarm(ThoughtExperiment):
     _hint = ("Which plot communicates more information?  In general, it's good practice to "
