@@ -2,107 +2,87 @@ import pandas as pd
 import matplotlib
 import seaborn as sns
 import warnings
+import matplotlib.pyplot as plt
 
 from learntools.core import *
 
 warnings.filterwarnings("ignore")
-df = pd.read_csv("../input/cancer.csv", index_col="Id")
 df_b = pd.read_csv("../input/cancer_b.csv", index_col="Id")
 df_m = pd.read_csv("../input/cancer_m.csv", index_col="Id")
 
 class LoadCancerData(EqualityCheckProblem):
-    _var = 'cancer_data'
-    _expected = df
+    _var = ['cancer_b_data', 'cancer_m_data']
+    _expected = [df_b, df_m]
     _hint = ("Use `pd.read_csv`, and follow it with **two** pieces of text that "
              "are enclosed in parentheses and separated by commas.  (1) The "
-             "filepath for the dataset is provided in `cancer_filepath`.  (2) Use the "
-             "`\"Id\"` column to label the rows.")
-    _solution = CS('cancer_data = pd.read_csv(cancer_filepath, index_col="Id")')
+             "filepath for the dataset is provided in either `cancer_b_filepath` or "
+             "`cancer_m_filepath`.  (2) Use the `\"Id\"` column to label the rows.")
+    _solution = CS("""
+cancer_b_data = pd.read_csv(cancer_b_filepath, index_col="Id")
+cancer_m_data = pd.read_csv(cancer_m_filepath, index_col="Id")
+""")
 
 class ReviewData(EqualityCheckProblem):
-    _vars = ['num_malig', 'mean_radius']
-    _expected = [5, 20.57]
+    _vars = ['max_perim', 'mean_radius']
+    _expected = [87.46, 20.57]
     _hint = ("Use the `head()` command to print the first 5 rows. "
-    "**After printing the first 5 rows**, "
-    "each row corresponds to a different tumor ID. "
-    "The `'Diagnosis'` column is the first column in the dataset. "
-    "The `'Radius (mean)'` column is the second column.")
+             "**After printing the first 5 rows**, "
+             "each row corresponds to a different tumor ID. "
+             "The `'Perimeter (mean)'` column is the fourth column in the dataset. "
+             "The `'Radius (mean)'` column is the second column.")
     _solution = CS(
-"""# Print the first five rows of the data
-cancer_data.head()
-# In the first five rows, how many tumors are malignant?
-num_malig = 5
+"""# Print the first five rows of the (benign) data
+cancer_b_data.head()
+# Print the first five rows of the (malignant) data
+cancer_m_data.head()
+# In the first five rows of the data for benign tumors, what is the
+# largest value for 'Perimeter (mean)'?
+max_perim = 87.46
 # What is the value for 'Radius (mean)' for the tumor with Id 842517?
 mean_radius = 20.57
 """)
 
-class PlotScatter(CodingProblem):
+class PlotHist(CodingProblem):
     _var = 'plt'
-    _hint = ("Use `sns.scatterplot`, and set the variables for the x-axis, y-axis, and color "
-        "of the points by using `x=`, `y=`, and `hue=`, respectively.")
+    _hint = ("Use `sns.distplot`, and set the data and legend label by using "
+             "`a=` and `label=`, respectively. Set `kde=False`. You will need to " 
+             "write two lines of code, corresponding to `cancer_m_data` and "
+             "`cancer_b_data`.")
     _solution = CS(
-"""# Scatter plot showing the relationship between 'Perimeter (mean)', 'Texture (worst)', and 'Diagnosis'
-sns.scatterplot(x=cancer_data['Perimeter (mean)'], y=cancer_data['Texture (worst)'], hue=cancer_data['Diagnosis'])
+"""# Histograms for benign and maligant tumors
+sns.distplot(a=cancer_b_data['Area (mean)'], label="Benign", kde=False)
+sns.distplot(a=cancer_m_data['Area (mean)'], label="Malignant", kde=False)
+plt.legend()
 """)
 
     def solution_plot(self):
         self._view.solution()
-        sns.scatterplot(x=df['Perimeter (mean)'], y=df['Texture (worst)'], hue=df['Diagnosis'])
+        sns.distplot(a=df_b['Area (mean)'], label="Benign", kde=False)
+        sns.distplot(a=df_m['Area (mean)'], label="Malignant", kde=False)
+        plt.legend()
     
     def check(self, passed_plt):
-        assert len(passed_plt.figure(1).axes) > 0, \
-        "After you've written code to create a scatter plot, `check()` will tell you whether your code is correct."
+        assert len(passed_plt.figure(1).axes) > 0, "Please write code to create two histograms."
         
-        main_axis = passed_plt.figure(1).axes[0]
-        legend_handles = main_axis.get_legend_handles_labels()[0]
+        children = passed_plt.axes().get_children()
         
-        assert all(isinstance(x, matplotlib.collections.PathCollection) for x in legend_handles), \
-        ("Is your figure a scatter plot?  Please use `sns.scatterplot` to generate your figure.")
-        
-        assert len(legend_handles) == 3, "Did you color-code the points with the `'Diagnosis'` column?"
-                
-class ThinkScatter(ThoughtExperiment):
-    _hint = ("`'Perimeter (mean)'` is relatively useful if the malignant and benign "
-             "tumors are separated relatively well in the scatter plot, where one type of tumor appears "
-             "mostly on the **right** of the chart, and the other appears mostly on the **left**. "
-             "Likewise, `'Texture (worst)'` is relatively useful if one type of tumor appears mostly "
-             "towards the **top** of the chart, and the other appears mostly towards the **bottom**.")
-    _solution = ("`'Perimeter (mean)'` is the relatively more useful column, since malignant tumors typically have "
-                 "larger values in this column (and therefore appear mostly towards the right of the scatter plot). "
-                 "While there's no perfect threshold that perfectly separates the two types of tumors, "
-                 "the value of this column does provide _some_ indication of how the tumor should be diagnosed. "
-                 "In contrast, `'Texture (worst)'` does not do as good of a job of separating the two types of tumors. "
-                 "(_**Side Note**: In practice,  the most powerful algorithms are able to find patterns in the data "
-                 "that are not immediately visible to humans -- so while it may not initially be obvious to "
-                 "a human eye how `'Texture (worst)'` can be used to classify tumors, the machine learning algorithm may "
-                 "be able to figure it out by studying all of the data to find more complex patterns "
-                 "that involve multiple columns at once!_)")
-    
-Scatter = MultipartProblem(PlotScatter, ThinkScatter)
+        assert all(isinstance(x, matplotlib.patches.Rectangle) for x in children[:31]), \
+        ("Does your figure contain two histograms?  Write two lines of code "
+         "using `sns.distplot` to generate your figure.")
 
-class SwarmPlot(CodingProblem):
-    _var = 'plt'
-    _hint = ("Use `sns.swarmplot`, and set the variables for the x-axis and y-axis "
-        "by using `x=` and `y=`, respectively.")
-    _solution = CS(
-"""# Scatter plot showing the relationship between 'Diagnosis' and 'Perimeter (mean)'
-sns.swarmplot(x=cancer_data['Perimeter (mean)'], y=cancer_data['Diagnosis'])
-""")
-
-    def solution_plot(self):
-        self._view.solution()
-        sns.swarmplot(x=df['Perimeter (mean)'], y=df['Diagnosis'])
+class ThinkHist(ThoughtExperiment):
+    _hint = ("Does the histogram for malignant tumors appear mostly to the left or to the "
+             "right of the histogram for benign tumors?  Which histogram appears wider?")
+    _solution = ("Malignant tumors have higher values for `'Area (mean)'`, on average. "
+                 "Malignant tumors have a larger range of potential values.")
     
-    def check(self, passed_plt):
-        assert len(passed_plt.figure(1).axes) > 0, "Please write code to create a categorical scatter plot."
-        
-        print("Thank you for creating a chart!  To see how your code compares to the official "
-              "solution, please use the code cell below.")
+Hist = MultipartProblem(PlotHist, ThinkHist)
 
 class PlotThreshold(CodingProblem):
     _var = 'plt'
-    _hint = ("Use `sns.kdeplot`, and specify the data and label by using `data=` and `label=`, respectively. You will need to "
-             "write two lines of code, corresponding to `cancer_m_data` and `cancer_b_data`.")
+    _hint = ("Use `sns.kdeplot`, and specify the data and label by using `data=` and `label=`, "
+             "respectively. You will need to write two lines of code, corresponding to "
+             "`cancer_m_data` and `cancer_b_data`.")
     _solution = CS(
 """# KDE plots for benign and malignant tumors
 sns.kdeplot(data=cancer_b_data['Radius (worst)'], shade=True, label="Benign")
@@ -115,28 +95,30 @@ sns.kdeplot(data=cancer_m_data['Radius (worst)'], shade=True, label="Malignant")
         sns.kdeplot(data=df_m['Radius (worst)'], shade=True, label="Malignant")
     
     def check(self, passed_plt):
-        assert len(passed_plt.figure(1).axes) > 0, "Please write code to create one figure containing two KDE plots."
+        assert len(passed_plt.figure(1).axes) > 0, \
+        "Please write code to create one figure containing two KDE plots."
         
         children = passed_plt.axes().get_children()
         
         assert all(isinstance(x, matplotlib.collections.PolyCollection) for x in children[0:2]) \
         and all(isinstance(x, matplotlib.lines.Line2D) for x in children[2:4]), \
-        "Does your figure show two KDE plots?  Write two lines of code using `sns.kdeplot` to generate your figure."
+        ("Does your figure show two KDE plots?  Write two lines of code using "
+         "`sns.kdeplot` to generate your figure.")
         
 class ThinkThreshold(ThoughtExperiment):
-    _hint = ("Take a look at the KDE plots, and use the legend to tell the difference between malignant and benign tumors.  Does "
-             "the curve for malignant tumors appear to the right (at higher values) or to the left (at lower values) of "
-             "the curve for benign tumors?")
-    _solution = ("Malignant tumors tend to have higher values for `'Radius (worst)'`.  This is something that we'd like an "
-                 "intelligent algorithm to learn for itself when studying the data!")
+    _hint = ("Take a look at the KDE plots, and use the legend to tell the difference between "
+             "malignant and benign tumors.  Around a value of 25, which curve appears higher?")
+    _solution = ("The algorithm is more likely to classify the tumor as malignant. This is "
+                 "because the curve for malignant tumors is much higher than the curve for benign "
+                 "tumors around a value of 25 -- and an algorithm that gets high accuracy is likely "
+                 "to make decisions based on this pattern in the data.")
 
 Threshold = MultipartProblem(PlotThreshold, ThinkThreshold)
     
 qvars = bind_exercises(globals(), [
     LoadCancerData,
     ReviewData,
-    Scatter,
-    SwarmPlot,
+    Hist,
     Threshold
     ],
     tutorial_id=-1,
