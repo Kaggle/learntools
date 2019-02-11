@@ -11,7 +11,7 @@ df_b = pd.read_csv("../input/cancer_b.csv", index_col="Id")
 df_m = pd.read_csv("../input/cancer_m.csv", index_col="Id")
 
 class LoadCancerData(EqualityCheckProblem):
-    _var = ['cancer_b_data', 'cancer_m_data']
+    _vars = ['cancer_b_data', 'cancer_m_data']
     _expected = [df_b, df_m]
     _hint = ("Use `pd.read_csv`, and follow it with **two** pieces of text that "
              "are enclosed in parentheses and separated by commas.  (1) The "
