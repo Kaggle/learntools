@@ -1,4 +1,3 @@
-# See also examples/example_track/example_meta.py for a longer, commented example
 track = dict(
     author_username='dansbecker',
     course_name='Deep Learning',
@@ -14,7 +13,7 @@ lessons = [ {'topic': topic_name} for topic_name in
 			'Data Augmentation',
 			'A Deeper Understanding of Deep Learning',
 			'Deep Learning from Scratch',
-			'Dropout and Strides for Larger Models',	
+			'Dropout and Strides for Larger Models',
 			]
             ]
 
@@ -29,7 +28,8 @@ notebooks = [
 	lesson_idx=0,
 	type='exercise',
 	scriptid=499266,
-	dataset_sources = ["keras/resnet50", "dansbecker/dog-breed-identification"],
+	dataset_sources = ["keras/resnet50"],
+    competition_sources = ["dog-breed-identification"],
 	),
     dict(
         filename='tut2_building_models_from_convolutions.ipynb',
