@@ -1,6 +1,6 @@
-mkdir input 
+mkdir input
 
-kaggle datasets download dansbecker/dog-breed-identification -p input/dog-breed-identification -f train.zip
+kaggle competitions download dog-breed-identification -p input/dog-breed-identification -f train.zip
 unzip -q input/dog-breed-identification/train.zip -d input/dog-breed-identification/
 rm input/dog-breed-identification/train.zip
 
