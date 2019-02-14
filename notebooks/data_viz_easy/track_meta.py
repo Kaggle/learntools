@@ -11,7 +11,8 @@ lessons = [{'topic': topic_name} for topic_name in
             'Scatter Plots',
             'Distributions',
             'Choosing Plot Types and Customizing Style',
-            'Final Project',]
+            'Final Project',
+            'Creating Your Own Notebooks']
             ]
 
 notebooks = [
@@ -74,6 +75,11 @@ notebooks = [
         filename='ex6.ipynb',
         lesson_idx=5,
         type='exercise',
+        ),
+    dict(
+        filename='tut7.ipynb',
+        lesson_idx=6,
+        type='tutorial',
         ),
 ]
 

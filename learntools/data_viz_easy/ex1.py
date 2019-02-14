@@ -117,12 +117,12 @@ class ThinkAvila(ThoughtExperiment):
     _hint = ("Look at the early part of each year (around January).  Does the "
              "line chart dip to low values or reach relatively high values?")
     _solution = ("The line chart generally dips to relatively low values around "
-                 "January of each year (and around the fall and winter months), "
-                 "and reaches its highest values in the middle of the year (or, "
-                 "during spring and summer).  Thus, Avila Adobe usually gets more "
-                 "visitors in the spring and summer months.  With this in mind, "
+                 "the early part of each year (in December and January), "
+                 "and reaches its highest values in the middle of the year (especially "
+                 "around May and June).  Thus, Avila Adobe usually gets more "
+                 "visitors in March-August (or the spring and summer months).  With this in mind, "
                  "Avila Adobe could definitely benefit from hiring more seasonal "
-                 "employees to help with the extra work in the spring and summer!")
+                 "employees to help with the extra work in March-August (the spring and summer)!")
         
 Avila = MultipartProblem(PlotAvila, ThinkAvila)
        
