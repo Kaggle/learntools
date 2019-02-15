@@ -1,7 +1,7 @@
 # See also examples/example_track/track_meta.py for a longer, commented example
 track = dict(
     author_username='alexisbcook',
-    course_name='Data Visualization Made Easy',
+    course_name='Data Visualization for All',
     course_url='...'
 )
 
@@ -10,7 +10,7 @@ lessons = [{'topic': topic_name} for topic_name in
             'Bar Plots and Heatmaps',
             'Scatter Plots',
             'Distributions',
-            'Choosing Plot Types and Customizing Style',
+            'Choosing Plot Types and Custom Styles',
             'Final Project',
             'Creating Your Own Notebooks']
             ]
@@ -25,6 +25,7 @@ notebooks = [
         filename='ex1.ipynb',
         lesson_idx=0,
         type='exercise',
+        scriptid=2951524
         ),
     dict(
         filename='tut2.ipynb',
@@ -35,6 +36,7 @@ notebooks = [
         filename='ex2.ipynb',
         lesson_idx=1,
         type='exercise',
+        scriptid=2951537
         ),
     dict(
         filename='tut3.ipynb',
@@ -45,6 +47,7 @@ notebooks = [
         filename='ex3.ipynb',
         lesson_idx=2,
         type='exercise',
+        scriptid=2951535
         ),
     dict(
         filename='tut4.ipynb',
@@ -55,6 +58,7 @@ notebooks = [
         filename='ex4.ipynb',
         lesson_idx=3,
         type='exercise',
+        scriptid=2951534
         ),
     dict(
         filename='tut5.ipynb',
@@ -65,6 +69,7 @@ notebooks = [
         filename='ex5.ipynb',
         lesson_idx=4,
         type='exercise',
+        scriptid=2951538
         ),
     dict(
         filename='tut6.ipynb',
@@ -75,6 +80,7 @@ notebooks = [
         filename='ex6.ipynb',
         lesson_idx=5,
         type='exercise',
+        scriptid=2951523
         ),
     dict(
         filename='tut7.ipynb',
@@ -83,5 +89,6 @@ notebooks = [
         ),
 ]
 
-
+for nb in notebooks:
+    nb['dataset_sources'] = ["alexisbcook/data-for-datavis"]
 
