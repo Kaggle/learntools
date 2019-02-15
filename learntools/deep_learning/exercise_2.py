@@ -1,4 +1,4 @@
-# This file is used by old notebooks (before DL course was converted to LearnTools)
+# This file is used by old notebooks (before DL micro-course was converted to LearnTools)
 
 from IPython.display import Image, display
 

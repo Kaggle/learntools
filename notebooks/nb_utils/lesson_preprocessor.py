@@ -62,7 +62,7 @@ class LearnLessonPreprocessor(Preprocessor):
 
     def add_header_and_footer(self, cells):
         """Inserts header cell at front of cells and appends footer cell to end. Both new cells have course links"""
-        course_link ="""**[{} Course Home Page]({})**\n\n""".format(self.track.course_name, self.track.course_url)
+        course_link ="""**[{} Micro-Course Home Page]({})**\n\n""".format(self.track.course_name, self.track.course_url)
         horizontal_line_break = "---\n"
         header_content = course_link + horizontal_line_break
         footer_content = horizontal_line_break + course_link
