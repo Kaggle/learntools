@@ -1,4 +1,4 @@
-`learntools.core` contains the basic elements of exercise checking, shared across all Learn courses and exercises.
+`learntools.core` contains the basic elements of exercise checking, shared across all Learn micro-courses and exercises.
 
 The remaining sub-packages correspond to Kaggle Learn courses in various stages of development.
 
