@@ -69,7 +69,7 @@ notebooks = [
         filename='ex5.ipynb',
         lesson_idx=4,
         type='exercise',
-        scriptid=2951538
+        scriptid=2959763
         ),
     dict(
         filename='tut6.ipynb',
