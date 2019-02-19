@@ -181,8 +181,8 @@ sns.swarmplot(x=candy_data['chocolate'], y=candy_data['winpercent'])
         assert all(isinstance(x, matplotlib.spines.Spine) for x in children[2:6]), \
         "Is your figure a categorical scatter plot?  Please use `sns.swarmplot` to generate your figure."
         
-        assert children[2].get_extents().ymax == -20.10169952441417, \
-        "Do you have `'chocolate'` on the x-axis and `'winpercent'` on the y-axis?" 
+        #assert children[2].get_extents().ymax == -20.10169952441417, \
+        #"Do you have `'chocolate'` on the x-axis and `'winpercent'` on the y-axis?" 
         
 class ThinkSwarm(ThoughtExperiment):
     _hint = ("Which plot communicates more information?  In general, it's good practice to "
