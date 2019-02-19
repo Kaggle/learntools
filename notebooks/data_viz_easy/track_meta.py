@@ -2,7 +2,7 @@
 track = dict(
     author_username='alexisbcook',
     course_name='Data Visualization for All',
-    course_url='...'
+    course_url='https://www.kaggle.com/learn/data-viz-for-all'
 )
 
 lessons = [{'topic': topic_name} for topic_name in
