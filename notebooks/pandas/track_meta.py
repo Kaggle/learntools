@@ -8,23 +8,23 @@ lessons = []
 notebooks = []
 
 SLUGS = """creating-reading-and-writing-reference
-creating-reading-and-writing-workbook
+creating-reading-and-writing
 indexing-selecting-assigning-reference
 indexing-selecting-assigning
 summary-functions-and-maps-reference
-summary-functions-and-maps-workbook
+summary-functions-and-maps
 grouping-and-sorting-reference
 grouping-and-sorting
 data-types-and-missing-data-reference
-data-types-and-missing-data-workbook
+data-types-and-missing-data
 renaming-and-combining-reference
-renaming-and-combining-workbook""".split()
+renaming-and-combining""".split()
 
 # Mapping from exercise slugs to extra datasets they require (beyond the baseline wine-reviews
 # dataset used by all notebooks)
 exercise_aux_datasets = {
-        'creating-reading-and-writing-workbook': ['nolanbconaway/pitchfork-data'],
-        'renaming-and-combining-workbook': ['open-powerlifting/powerlifting-database',
+        'creating-reading-and-writing': ['nolanbconaway/pitchfork-data'],
+        'renaming-and-combining': ['open-powerlifting/powerlifting-database',
                                     'residentmario/things-on-reddit'],
 }
 
