@@ -4,73 +4,98 @@ track = dict(
     course_url='https://www.kaggle.com/learn/pandas'
 )
 
-lessons = []
-notebooks = []
+lessons = [ {'topic': topic_name} for topic_name in
+                    ['Creating, Reading and Writing',
+                     'Indexing, Selecting & Assigning',
+                     'Summary Functions and Maps',
+                     'Grouping and Sorting',
+                     'Data Types and Missing Data',
+                     'Renaming and Combining']]
+notebooks = [
+    dict(
+        filename='creating-reading-and-writing.ipynb',
+        lesson_idx=0,
+        type='exercise',
+        scriptid=587970,
+        title="Creating, Reading and Writing",
+        ),
+    dict(
+        filename='creating-reading-and-writing-reference.ipynb',
+        lesson_idx=0,
+        type='tutorial',
+        title="Creating, Reading, and Writing reference",
+        ),
+    dict(
+        filename='indexing-selecting-assigning.ipynb',
+        lesson_idx=1,
+        type='exercise',
+        scriptid=587910,
+        title='Indexing, Selecting & Assigning',
+        ),
+    dict(
+        filename='indexing-selecting-assigning-reference.ipynb',
+        lesson_idx=1,
+        type='tutorial',
+        title='Indexing, selecting, assigning reference',
+        ),
+    dict(
+        filename='summary-functions-and-maps.ipynb',
+        lesson_idx=2,
+        type='exercise',
+        scriptid=595524,
+        title='Summary Functions and Maps',
+        ),
+    dict(
+        filename='summary-functions-and-maps-reference.ipynb',
+        lesson_idx=2,
+        type='tutorial',
+        title="Summary functions and maps reference",
+        ),
+    dict(
+        filename='grouping-and-sorting.ipynb',
+        lesson_idx=3,
+        type='exercise',
+        scriptid=598715,
+        title='Grouping and Sorting',
+        ),
+    dict(
+        filename='grouping-and-sorting-reference.ipynb',
+        lesson_idx=3,
+        type='tutorial',
+        title="Grouping and sorting reference",
+        ),
+    dict(
+        filename='data-types-and-missing-data.ipynb',
+        lesson_idx=4,
+        type='exercise',
+        scriptid=598826,
+        title='Data Types and Missing Data',
+        ),
+    dict(
+        filename='data-types-and-missing-data-reference.ipynb',
+        lesson_idx=4,
+        type='tutorial',
+        title='Data types and missing data reference'
+        ),
+    dict(
+        filename='renaming-and-combining.ipynb',
+        lesson_idx=5,
+        type='exercise',
+        scriptid=638064,
+        title='Renaming and Combining',
+        ),
+    dict(
+        filename='renaming-and-combining-reference.ipynb',
+        lesson_idx=5,
+        type='tutorial',
+        title='Renaming and Combining Reference'
+        )
+]
 
-SLUGS = """creating-reading-and-writing-reference
-creating-reading-and-writing-workbook
-indexing-selecting-assigning-reference
-indexing-selecting-assigning
-summary-functions-and-maps-reference
-summary-functions-and-maps-workbook
-grouping-and-sorting-reference
-grouping-and-sorting
-data-types-and-missing-data-reference
-data-types-and-missing-data-workbook
-renaming-and-combining-reference
-renaming-and-combining-workbook""".split()
-
-# Mapping from exercise slugs to extra datasets they require (beyond the baseline wine-reviews
-# dataset used by all notebooks)
-exercise_aux_datasets = {
-        'creating-reading-and-writing-workbook': ['nolanbconaway/pitchfork-data'],
-        'renaming-and-combining-workbook': ['open-powerlifting/powerlifting-database',
-                                    'residentmario/things-on-reddit'],
-}
-
-import os; import json
-def _make_notebook(slug, type_, lesson_idx):
-    # XXX
-    # I guess this is most likely to be run from the notebooks directory, so
-    # make path relative to that.
-    path = os.path.join('pandas', 'old_metadata', slug, 'kernel-metadata.json')
-    with open(path) as f:
-        ex = json.load(f)
-
-    datasets = ex.get('dataset_sources', [])
-    # The extant metadata included a lot of unused datasets for exercises. Trim
-    # them down.
-    if type_ == 'exercise':
-        # The "advanced pandas exercises" dataset is no longer used, but we'll keep
-        # using it in all exercise workbooks as a hack to make sure they all have
-        # at least 2 datasets, for consistency of input file paths.
-        adpan = 'residentmario/advanced-pandas-exercises'
-        datasets = [adpan, 'zynicide/wine-reviews']
-        extras = exercise_aux_datasets.get(slug, [])
-        datasets.extend(extras)
-        assert len(datasets) >= 2
-
-    return dict(
-            filename=slug+'.ipynb',
-            type=type_,
-            lesson_idx=lesson_idx,
-            dataset_sources=datasets,
-            keywords=ex.get('keywords', []),
-            title=ex['title'],
-            scriptid=ex.get('id_no', -1),
-            )
-
-type_order = ['tutorial', 'exercise']
-for i in range(0, len(SLUGS), 2):
-    slugs = SLUGS[i:i+2]
-    slug = slugs[0]
-    suff = '-reference'
-    if slug.endswith(suff):
-        slug = slug[:-len(suff)]
-    topic = slug.replace('-', ' ')
-    lesson = dict(topic=topic)
-    lessons.append(lesson)
-    lesson_idx = len(lessons) - 1
-    for slug, type_ in zip(slugs, type_order):
-        nb = _make_notebook(slug, type_, lesson_idx)
-        notebooks.append(nb)
+for nb in notebooks:
+    nb['dataset_sources'] = ['open-powerlifting/powerlifting-database',
+                             'residentmario/things-on-reddit',
+                             'zynicide/wine-reviews',
+                             'jpmiller/publicassistance',
+                             'datasnaek/youtube-new'
+                             ]
