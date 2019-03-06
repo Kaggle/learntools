@@ -17,30 +17,33 @@ notebooks = [
         lesson_idx=0,
         type='exercise',
         scriptid=587970,
+        title="Creating, Reading and Writing",
         ),
     dict(
         filename='creating-reading-and-writing-reference.ipynb',
         lesson_idx=0,
         type='tutorial',
-        title="Creating, reading, and writing reference",
+        title="Creating, Reading, and Writing reference",
         ),
     dict(
         filename='indexing-selecting-assigning.ipynb',
         lesson_idx=1,
         type='exercise',
         scriptid=587910,
+        title='Indexing, Selecting & Assigning',
         ),
     dict(
         filename='indexing-selecting-assigning-reference.ipynb',
         lesson_idx=1,
         type='tutorial',
-        title='Indexing, selecting, assigning reference'
+        title='Indexing, selecting, assigning reference',
         ),
     dict(
         filename='summary-functions-and-maps.ipynb',
         lesson_idx=2,
         type='exercise',
         scriptid=595524,
+        title='Summary Functions and Maps',
         ),
     dict(
         filename='summary-functions-and-maps-reference.ipynb',
@@ -53,6 +56,7 @@ notebooks = [
         lesson_idx=3,
         type='exercise',
         scriptid=598715,
+        title='Grouping and Sorting',
         ),
     dict(
         filename='grouping-and-sorting-reference.ipynb',
@@ -65,6 +69,7 @@ notebooks = [
         lesson_idx=4,
         type='exercise',
         scriptid=598826,
+        title='Data Types and Missing Data',
         ),
     dict(
         filename='data-types-and-missing-data-reference.ipynb',
@@ -77,21 +82,20 @@ notebooks = [
         lesson_idx=5,
         type='exercise',
         scriptid=638064,
+        title='Renaming and Combining',
         ),
     dict(
         filename='renaming-and-combining-reference.ipynb',
         lesson_idx=5,
         type='tutorial',
-        title='Renaming and combining reference'
+        title='Renaming and Combining Reference'
         )
 ]
 
 for nb in notebooks:
-    nb['dataset_sources'] = ['nolanbconaway/pitchfork-data',
-                             'open-powerlifting/powerlifting-database',
+    nb['dataset_sources'] = ['open-powerlifting/powerlifting-database',
                              'residentmario/things-on-reddit',
-                             'residentmario/advanced-pandas-exercises',
                              'zynicide/wine-reviews',
                              'jpmiller/publicassistance',
                              'datasnaek/youtube-new'
-                             ],
+                             ]
