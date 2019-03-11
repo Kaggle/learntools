@@ -9,11 +9,11 @@ class DealCats(CodingProblem):
         "with the `align()` method. This is just one potential solution - try out other methods by "
         "referencing the tutorial on categorical variables!")
     _solution = CS(
-"""# one-hot encode categorical data
+"""# One-hot encode categorical data
 X_train_1 = pd.get_dummies(X_train)
 X_valid_1 = pd.get_dummies(X_valid)
 
-# ensure columns are in same order in both datasets
+# Ensure columns are in same order in both datasets
 X_train_1, X_valid_1 = X_train_1.align(X_valid_1, join='inner', axis=1)
 """)
     
@@ -35,25 +35,25 @@ class DealMiss(CodingProblem):
     _hint = ("Use `SimpleImputer()`. This is just one potential solution - try out other methods by "
         "referencing the tutorial on missing values!")
     _solution = CS(
-"""# make copy to avoid changing original data (when imputing)
+"""# Make copy to avoid changing original data (when imputing)
 X_train_imp = X_train_1.copy()
 X_valid_imp = X_valid_1.copy()
 
-# get names of columns with missing values
+# Get names of columns with missing values
 X_1 = pd.concat([X_train_1, X_valid_1])
 cols_with_missing = [col for col in X_1.columns if X_1[col].isnull().any()]
 
-# make new columns indicating what will be imputed
+# Make new columns indicating what will be imputed
 for col in cols_with_missing:
     X_train_imp[col + '_was_missing'] = X_train_1[col].isnull()
     X_valid_imp[col + '_was_missing'] = X_valid_1[col].isnull()
     
-# imputation
+# Imputation
 my_imputer = SimpleImputer()
 X_train_2 = pd.DataFrame(my_imputer.fit_transform(X_train_imp))
 X_valid_2 = pd.DataFrame(my_imputer.transform(X_valid_imp))
 
-# imputation removed column names; put them back
+# Imputation removed column names; put them back
 X_train_2.columns = X_train_imp.columns
 X_valid_2.columns = X_valid_imp.columns
 """)

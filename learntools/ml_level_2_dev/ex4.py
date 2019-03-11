@@ -3,39 +3,38 @@ import warnings
 
 from learntools.core import *
 
-class GetScore(CodingProblem):
-    _vars = ['X_train_1', 'X_valid_1']
-    _hint = ("Use `pd.get_dummies()`, and ensure the columns are in the same order in both datasets "
-        "with the `align()` method. This is just one potential solution - try out other methods by "
-        "referencing the tutorial on categorical variables!")
+class GetScore(FunctionProblem):
+    _var = 'get_score'
+    _test_cases = [
+            (10, 19427.64019542396),
+            (20, 18682.264022049276),
+    ]
+    _hint = ("Begin by making a pipeline with the `make_pipeline()` function. Be sure to set the "
+             "value for `n_estimators` in `RandomForestRegressor()` to the value supplied to the "
+             "`get_score` function. Then, use `cross_val_score()` to get the MAE for each fold, "
+             "and take the average. Be sure to set the number of folds to three through the `cv`"
+             "parameter.")
     _solution = CS(
-"""# one-hot encode categorical data
-X_train_1 = pd.get_dummies(X_train)
-X_valid_1 = pd.get_dummies(X_valid)
-
-# ensure columns are in same order in both datasets
-X_train_1, X_valid_1 = X_train_1.align(X_valid_1, join='inner', axis=1)
+"""def get_score(n_estimators):
+    my_pipeline = make_pipeline(SimpleImputer(),
+                                RandomForestRegressor(n_estimators,
+                                                      random_state=0))
+    scores = -1 * cross_val_score(my_pipeline, X, y,
+                                  cv=3,
+                                  scoring='neg_mean_absolute_error')
+    return scores.mean()
 """)
     
-    def check(self, X_train_1, X_valid_1):
-
-        assert not(any((X_train_1.dtypes == 'object').values)), \
-        "It looks like your dataset still contains categorical columns that need to be preprocessed."
-
-        assert len(X_train_1.columns) == len(X_valid_1.columns), \
-        ("Please ensure your training and validation data have the same number of columns. For this, "
-            "you can use the `align()` method.")
-
-        assert all(X_train_1.columns == X_valid_1.columns), \
-        ("Please ensure your training and validation data have the same column ordering. "
-            "For this, you can use the `align()` method.")
-
+    
 class GetDict(CodingProblem):
-    _vars = ['X_train_2', 'X_valid_2']
-    _hint = ("Use `SimpleImputer()`. This is just one potential solution - try out other methods by "
-        "referencing the tutorial on missing values!")
+    _var = 'results'
+    _hint = ("Begin by instantiating the dictionary with `results = {}`. Then loop over the value "
+             "for `n_estimators` that will be plugged into the `get_score()` function, and use the "
+             "result to set the value in the dictionary.")
     _solution = CS(
-"""# make copy to avoid changing original data (when imputing)
+"""results = {}
+for i in range(1,9):
+    results[50*i] = get_score(50*i)
 """)
     
     def check(self, results):
@@ -49,30 +48,39 @@ class GetDict(CodingProblem):
         
         assert list(results.keys()) == [50*i for i in range(1,9)], \
         ("The keys in `results` do not appear to be correct.  Please ensure you have one key for each "
-         "tested value of `n_estimators`.")
+         "of 50, 100, 150, ..., 300, 350, 400.")
+        
+        assert [round(i) for i in list(results.values())] == [18354, 18395, 18289, 18248, 
+                                                              18255, 18275, 18270, 18270], \
+        ("Some of your average MAE scores appear to be incorrect.  Please use the `get_score()` "
+         "function from Step 1 to fill in the dictionary values.")
 
-class BestScore(CodingProblem):
-    _var = 'score'
+class BestEst(CodingProblem):
+    _var = 'n_estimators_best'
     _hint = ("Find the key corresponding to the minimum value in the `results` dictionary "
              "from the previous step.  This will tell you which value for `n_estimators` "
              "gets the lowest average MAE.")
     _solution = CS("n_estimators_best = min(results, key=results.get)")
     
-    def check(self, score):
-        assert score != 100, \
+    def check(self, n_estimators):
+        assert n_estimators < 18000, \
+        ("It looks like you have provided an average MAE value.  Please instead provide a value for "
+         "`n_estimators` that indicates the ideal number of trees to use in the model. Your answer "
+         "should be one of 50, 100, 150, ..., 300, 350, 400.")
+            
+        assert n_estimators in [50*i for i in range(1,9)], \
+        "Your answer should be one of 50, 100, 150, ..., 300, 350, 400."
+        
+        assert n_estimators != 100, \
         ("You should find the value for `n_estimators` with the minimum score, not the maximum score.")
         
-        assert score < 18000, \
-        ("It looks like you have provided an average MAE value.  Please instead provide a value for "
-         "`n_estimators` that indicates the ideal number of trees to use in the model.")
-        
-        assert score == 200, \
+        assert n_estimators == 200, \
         ("Find the key corresponding to the minimum value in the `results` dictionary.")
     
 qvars = bind_exercises(globals(), [
     GetScore,
     GetDict,
-    BestScore
+    BestEst
     ],
     tutorial_id=-1,
     var_format='step_{n}',
