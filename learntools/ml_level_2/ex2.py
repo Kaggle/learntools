@@ -24,24 +24,23 @@ X_train_1, X_valid_1 = X_train_1.align(X_valid_1, join='inner', axis=1)
 
         assert len(X_train_1.columns) == len(X_valid_1.columns), \
         ("Please ensure your training and validation data have the same number of columns. For this, "
-            "you can use the `align()` method.")
+         "you can use the `align()` method.")
 
         assert all(X_train_1.columns == X_valid_1.columns), \
         ("Please ensure your training and validation data have the same column ordering. "
-            "For this, you can use the `align()` method.")
+         "For this, you can use the `align()` method.")
 
 class DealMiss(CodingProblem):
     _vars = ['X_train_2', 'X_valid_2']
     _hint = ("Use `SimpleImputer()`. This is just one potential solution - try out other methods by "
-        "referencing the tutorial on missing values!")
+             "referencing the tutorial on missing values!")
     _solution = CS(
 """# Make copy to avoid changing original data (when imputing)
 X_train_imp = X_train_1.copy()
 X_valid_imp = X_valid_1.copy()
 
 # Get names of columns with missing values
-X_1 = pd.concat([X_train_1, X_valid_1])
-cols_with_missing = [col for col in X_1.columns if X_1[col].isnull().any()]
+cols_with_missing = [col for col in X_train_1.columns if X_train_1[col].isnull().any()]
 
 # Make new columns indicating what will be imputed
 for col in cols_with_missing:
@@ -69,9 +68,9 @@ X_valid_2.columns = X_valid_imp.columns
 
 class Score(CodingProblem):
     _var = 'score'
-    _hint = ("Run the code cell without any changes to get your score, which must be "
-        "less than 18000.  If you do not pass, check out the hints in Step 1 and Step 2 "
-        "to learn one way to preprocess your data for a better score.")
+    _hint = ("Run the code cell without any changes to get your MAE score, which must be "
+             "less than 18000.  If you do not pass, check out the hints in Step 1 and Step 2 "
+             "to learn one way to preprocess your data.")
     _solution = ""
     
     def check(self, score):
