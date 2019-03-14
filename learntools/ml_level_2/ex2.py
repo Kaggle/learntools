@@ -58,13 +58,22 @@ X_valid_2.columns = X_valid_imp.columns
 """)
     
     def check(self, X_train_2, X_valid_2):
+        # check stuff from previous question
+        assert not(any((X_train_2.dtypes == 'object').values)), \
+        ("It looks like your dataset still contains categorical columns that need to be preprocessed.  Did you use "
+         "`X_train_1` and `X_valid_1` as starting points before dealing with missing values?")
+        assert len(X_train_2.columns) == len(X_valid_2.columns), \
+        "Please ensure your training and validation data have the same number of columns."
+        assert all(X_train_2.columns == X_valid_2.columns), \
+        "Please ensure your training and validation data have the same column ordering."
 
         # columns with missing values
-        X_2 = pd.concat([X_train_2, X_valid_2])
-        cols_with_missing = [col for col in X_2.columns if X_2[col].isnull().any()]
-        
-        assert len(cols_with_missing) == 0, \
-        "It looks like your dataset still contains columns with missing data."
+        cols_with_missing_train = [col for col in X_train_2.columns if X_train_2[col].isnull().any()]
+        cols_with_missing_valid = [col for col in X_valid_2.columns if X_valid_2[col].isnull().any()]
+        assert len(cols_with_missing_train) == 0, \
+        "It looks like your training set still contains columns with missing data."
+        assert len(cols_with_missing_valid) == 0, \
+        "It looks like your validation set still contains columns with missing data."
 
 class Score(CodingProblem):
     _var = 'score'
