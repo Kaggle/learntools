@@ -20,9 +20,9 @@ class LoadMuseumData(EqualityCheckProblem):
 class ReviewData(EqualityCheckProblem):
     _vars = ['ca_museum_jul18', 'avila_oct18']
     _expected = [2620, 14658]
-    _hint = ("Use the `tail()` command to print the last five rows. **After "
-             "printing the last five rows**, the number of visitors in July 2018 "
-             "for each museum can be found in the row marked `2018-07-01`, and the "
+    _hint = ("Use the `tail()` command that you learned about in the tutorial to print the "
+             "last five rows. **After printing the last five rows**, the number of visitors "
+             "in July 2018 for each museum can be found in the row marked `2018-07-01`, and the "
              "number of visitors in October 2018 for each museum can be found in "
              "the row marked `2018-10-01`.")
     _solution = CS(

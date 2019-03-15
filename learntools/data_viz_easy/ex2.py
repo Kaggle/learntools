@@ -19,7 +19,7 @@ class LoadIGNData(EqualityCheckProblem):
     _solution = CS('ign_data = pd.read_csv(ign_filepath, index_col="Platform")')
     
 class ReviewData(EqualityCheckProblem):
-    _vars = ['high_score', 'best_genre']
+    _vars = ['high_score', 'worst_genre']
     _expected = [7.759930, 'Simulation']
     _hint = ("Use `ign_data` to print the entire dataset. **After printing the "
              "dataset**, each row corresponds to a different platform, and each "
@@ -33,7 +33,7 @@ high_score = 7.759930
 # On the Playstation Vita platform, which genre has the 
 # lowest average score? Please provide the name of the column, and put your answer 
 # in single quotes (e.g., 'Action', 'Adventure', 'Fighting', etc.)
-best_genre = 'Simulation'
+worst_genre = 'Simulation'
 """)
     
 class PlotRacing(CodingProblem):
