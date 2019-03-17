@@ -13,7 +13,7 @@ class SetTarget(CodingProblem):
     _solution = CS('y = home_data.SalePrice')
 
     def check(self, targ):
-        assert isinstance(targ, pd.Series), ("`home_data` should be a Pandas Series "
+        assert isinstance(targ, pd.Series), ("`y` should be a Pandas Series "
                                              "with the actual data. Your current "
                                              "answer is a `{}`").format(type(targ),)
         true_mean = 180921.19589041095
