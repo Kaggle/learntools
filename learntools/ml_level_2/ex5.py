@@ -1,122 +1,86 @@
 import pandas as pd
-import xgboost
-from xgboost import XGBRegressor
-from sklearn.metrics import mean_absolute_error
-from sklearn.model_selection import train_test_split
+import warnings
 
 from learntools.core import *
-    
-class Model1(CodingProblem):
-    _vars = ['my_model_1', 'predictions_1', 'mae_1']
-    _hint = ("Begin by defining the model with `my_model_1 = XGBRegressor(random_state=0)`.  Then, you can fit "
-             "the model and generate predictions with the `fit()` method and `predict()` method, respectively.")
+
+class GetScore(FunctionProblem):
+    _var = 'get_score'
+    _test_cases = [
+            (10, 19427.64019542396),
+            (20, 18682.264022049276),
+    ]
+    _hint = ("Begin by making a pipeline with the `make_pipeline()` function. Be sure to set the "
+             "value for `n_estimators` in `RandomForestRegressor()` to the value supplied to the "
+             "`get_score` function. Then, use `cross_val_score()` to get the MAE for each fold, "
+             "and take the average. Be sure to set the number of folds to three through the `cv`"
+             "parameter.")
     _solution = CS(
-"""# Define the model
-my_model_1 = XGBRegressor(random_state=0)
-
-# Fit the model
-my_model_1.fit(X_train, y_train)
-
-# Get predictions
-predictions_1 = my_model_1.predict(X_valid)
-
-# Calculate MAE
-mae_1 = mean_absolute_error(predictions_1, y_valid)
-print("Mean Absolute Error:" , mae_1)
+"""def get_score(n_estimators):
+    my_pipeline = make_pipeline(SimpleImputer(),
+                                RandomForestRegressor(n_estimators,
+                                                      random_state=0))
+    scores = -1 * cross_val_score(my_pipeline, X, y,
+                                  cv=3,
+                                  scoring='neg_mean_absolute_error')
+    return scores.mean()
 """)
     
-    def check(self, my_model_1, predictions_1, mae_1):
-        assert type(my_model_1) == xgboost.sklearn.XGBRegressor, \
-        "Please make `my_model_1` an instance of the `XGBRegressor` class in the `xgboost` package."
-        
-        default_params = {'base_score': 0.5, 'booster': 'gbtree', 'colsample_bylevel': 1,
-                          'colsample_bytree': 1, 'gamma': 0, 'learning_rate': 0.1, 'max_delta_step': 0,
-                          'max_depth': 3, 'min_child_weight': 1, 'missing': None, 'n_estimators': 100,
-                          'n_jobs': 1, 'nthread': None, 'objective': 'reg:linear', 'random_state': 0,
-                          'reg_alpha': 0, 'reg_lambda': 1, 'scale_pos_weight': 1, 'seed': None,
-                          'silent': True, 'subsample': 1}
-        assert my_model_1.get_params() == default_params, \
-        "Please instantiate the XGBoost model with default parameters, and set the random seed to 0 (e.g., `my_model_1 = XGBRegressor(random_state=0)`)."
-                
-        assert len(predictions_1) != 1168, \
-        "Please generate predictions on the validation data, not the training data."
-        
-        assert len(predictions_1) == 292, \
-        "Please generate predictions on the validation data."
-        
-        assert round(mae_1) == 16803, \
-        "The value that you've calculated for the MAE is incorrect."
-
-class Model2(CodingProblem):
-    _vars = ['my_model_2', 'predictions_2', 'mae_2']
-    _hint = ("In the official solution to this problem, we chose to increase the number of trees in the model "
-             "(with the `n_estimators` parameter) and decrease the learning rate (with the `learning_rate` parameter).")
+    
+class GetDict(CodingProblem):
+    _var = 'results'
+    _hint = ("Begin by instantiating the dictionary with `results = {}`. Then loop over the value "
+             "for `n_estimators` that will be plugged into the `get_score()` function, and use the "
+             "result to set the value in the dictionary.")
     _solution = CS(
-"""# Define the model
-my_model_2 = XGBRegressor(n_estimators=1000, learning_rate=0.05)
-
-# Fit the model
-my_model_2.fit(X_train, y_train)
-
-# Get predictions
-predictions_2 = my_model_2.predict(X_valid)
-
-# Calculate MAE
-mae_2 = mean_absolute_error(predictions_2, y_valid)
-print("Mean Absolute Error:" , mae_2)
+"""results = {}
+for i in range(1,9):
+    results[50*i] = get_score(50*i)
 """)
     
-    def check(self, my_model_2, predictions_2, mae_2):
-        assert type(my_model_2) == xgboost.sklearn.XGBRegressor, \
-        "Please make `my_model_2` an instance of the `XGBRegressor` class in the `xgboost` package."
+    def check(self, results):
+
+        # columns with missing values
+        assert type(results) == dict, \
+        "`results` does not appear to be a Python dictionary."
         
-        assert len(predictions_2) != 1168, \
-        "Please generate predictions on the validation data, not the training data."
+        assert len(results) == 8, \
+        "`results` should have 8 entries, one for each tested value of `n_estimators`."
         
-        assert len(predictions_2) == 292, \
-        "Please generate predictions on the validation data."
+        assert list(results.keys()) == [50*i for i in range(1,9)], \
+        ("The keys in `results` do not appear to be correct.  Please ensure you have one key for each "
+         "of 50, 100, 150, ..., 300, 350, 400.")
         
-        assert round(mae_2) < 16803, \
-        ("You must specify the parameters in `my_model_2` so that it attains lower MAE than the "
-         "model in `my_model_1`.")
+        assert [round(i) for i in list(results.values())] == [18354, 18395, 18289, 18248, 
+                                                              18255, 18275, 18270, 18270], \
+        ("Some of your average MAE scores appear to be incorrect.  Please use the `get_score()` "
+         "function from Step 1 to fill in the dictionary values.")
 
-class Model3(CodingProblem):
-    _vars = ['my_model_3', 'predictions_3', 'mae_3']
-    _hint = ("In the official solution for this problem, we chose to greatly decrease the number of trees "
-             "in the model by tinkering with the `n_estimators` parameter.")
-    _solution = CS(
-"""# Define the model
-my_model_3 = XGBRegressor(n_estimators=1)
-
-# Fit the model
-my_model_3.fit(X_train, y_train)
-
-# Get predictions
-predictions_3 = my_model_3.predict(X_valid)
-
-# Calculate MAE
-mae_3 = mean_absolute_error(predictions_3, y_valid)
-print("Mean Absolute Error:" , mae_3)
-""")
+class BestEst(CodingProblem):
+    _var = 'n_estimators_best'
+    _hint = ("Find the key corresponding to the minimum value in the `results` dictionary "
+             "from the previous step.  This will tell you which value for `n_estimators` "
+             "gets the lowest average MAE.")
+    _solution = CS("n_estimators_best = min(results, key=results.get)")
     
-    def check(self, my_model_3, predictions_3, mae_3):
-        assert type(my_model_3) == xgboost.sklearn.XGBRegressor, \
-        "Please make `my_model_3` an instance of the `XGBRegressor` class in the `xgboost` package."
+    def check(self, n_estimators):
+        assert n_estimators < 18000, \
+        ("It looks like you have provided an average MAE value.  Please instead provide a value for "
+         "`n_estimators` that indicates the ideal number of trees to use in the model. Your answer "
+         "should be one of 50, 100, 150, ..., 300, 350, 400.")
+            
+        assert n_estimators in [50*i for i in range(1,9)], \
+        "Your answer should be one of 50, 100, 150, ..., 300, 350, 400."
         
-        assert len(predictions_3) != 1168, \
-        "Please generate predictions on the validation data, not the training data."
+        assert n_estimators != 100, \
+        ("You should find the value for `n_estimators` with the minimum score, not the maximum score.")
         
-        assert len(predictions_3) == 292, \
-        "Please generate predictions on the validation data."
-        
-        assert round(mae_3) > 16803, \
-        ("You must specify the parameters in `my_model_3` so that it attains higher MAE than the "
-         "model in `my_model_1`.")
-
+        assert n_estimators == 200, \
+        ("Find the key corresponding to the minimum value in the `results` dictionary.")
+    
 qvars = bind_exercises(globals(), [
-    Model1,
-    Model2,
-    Model3
+    GetScore,
+    GetDict,
+    BestEst
     ],
     tutorial_id=-1,
     var_format='step_{n}',
