@@ -202,7 +202,7 @@ qvars = bind_exercises(globals(), [
     ColorReg,
     Swarm
     ],
-    tutorial_id=-1,
+    tutorial_id=189,
     var_format='step_{n}',
     )
 __all__ = list(qvars)

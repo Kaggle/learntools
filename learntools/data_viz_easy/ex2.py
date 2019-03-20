@@ -139,7 +139,7 @@ qvars = bind_exercises(globals(), [
     Racing,
     Heat
     ],
-    tutorial_id=-1,
+    tutorial_id=187,
     var_format='step_{n}',
     )
 __all__ = list(qvars)
