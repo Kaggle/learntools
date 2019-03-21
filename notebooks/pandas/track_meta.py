@@ -97,5 +97,6 @@ for nb in notebooks:
                              'residentmario/things-on-reddit',
                              'zynicide/wine-reviews',
                              'jpmiller/publicassistance',
-                             'datasnaek/youtube-new'
+                             'datasnaek/youtube-new',
+                             'nolanbconaway/pitchfork-data',
                              ]
