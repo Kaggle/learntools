@@ -64,8 +64,10 @@ my_new_model.fit_generator(
                ("train_generator is using the wrong ImageDataGenerator")
         assert (validation_generator.image_data_generator is data_generator_no_aug), \
                ("validation_generator is using the wrong ImageDataGenerator")
-        assert (my_new_model.history.validation_data is validation_generator), \
-               ("You have the wrong validation generator")
+        # TODO: Check they used the right validation generator. The following
+        # check worked in previous versions of TF but then broke.
+        # assert (my_new_model.history.validation_data is validation_generator), \
+        #       ("You have the wrong validation generator")
 
 
 class DidAugmentationHelp(ThoughtExperiment):

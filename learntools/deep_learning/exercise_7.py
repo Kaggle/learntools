@@ -84,10 +84,11 @@ class CompileModel(CodingProblem):
     def check(self, fashion_model):
         assert (fashion_model.optimizer is not None), \
                ("You don't have an optimizer set. Did you run `fashion_model.compile` with an optimizer argument")
-        optimizer_name = fashion_model.optimizer._tf_api_names[0]
-        correct_optimizer_name = 'keras.optimizers.Adam'
-        assert(optimizer_name == correct_optimizer_name), \
-              ("You didn't get the optimizer set correctly. It should be `adam`")
+        # TODO: Fix check that they used Adam optimizer. This broke in a TF update
+        # optimizer_name = fashion_model.optimizer._tf_api_names[0]
+        # correct_optimizer_name = 'keras.optimizers.Adam'
+        # assert(optimizer_name == correct_optimizer_name), \
+        #       ("You didn't get the optimizer set correctly. It should be `adam`")
         assert(fashion_model.metrics[0] == 'accuracy'), \
               ("You need to set metrics=['accuracy']")
 

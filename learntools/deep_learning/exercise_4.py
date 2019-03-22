@@ -51,14 +51,15 @@ clearer in an upcoming lesson (called A Deeper Understanding of Deep Learning).
 """
 
 class FitTransferModel(CodingProblem):
-    _vars = ['fit_stats']
+    _vars = ['fit_stats', 'validation_generator']
     _hint = "To get steps_per_epoch, divide the number of images by the batch size."
-    def check(self, fit_stats):
-        their_val_dir = fit_stats.validation_data.directory
+    def check(self, fit_stats, validation_generator):
+        their_val_dir = validation_generator.directory
         their_val_loss = fit_stats.history['val_loss'][0]
         their_num_steps = fit_stats.params['steps']
-        assert (their_val_dir == '../input/dogs-gone-sideways/images/val'),\
-               ("The validation directory should be `../input/dogs-gone-sideways/images/val`. Yours was {}".format(their_val_dir))
+        correct_val_dir = '../input/dogs-gone-sideways/images/val'
+        assert (their_val_dir == correct_val_dir),\
+               ("The validation directory should be `{}`. Yours was `{}`".format(correct_val_dir, their_val_dir))
         assert (their_num_steps == 22), ("Should have 22 steps per epoch. You had {}".format(their_num_steps))
     _solution = CS(
 """
