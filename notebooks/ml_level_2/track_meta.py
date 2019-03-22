@@ -12,8 +12,7 @@ lessons = [ {'topic': topic_name} for topic_name in
                     'Pipelines',             #4
                     'Cross-Validation',      #5
                     'XGBoost',               #6
-                    'Ensembles',             #7
-                    'Data Leakage',]         #8
+                    'Data Leakage',]         #7
             ]
 
 notebooks = [
@@ -89,16 +88,6 @@ notebooks = [
     dict(
         filename='ex7.ipynb',
         lesson_idx=6,
-        type='exercise',
-        scriptid=-1
-        ),
-    dict(filename='tut8.ipynb',
-        lesson_idx=7,
-        type='tutorial'
-        ),
-    dict(
-        filename='ex8.ipynb',
-        lesson_idx=7,
         type='exercise',
         scriptid=-1
         ),
