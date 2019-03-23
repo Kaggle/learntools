@@ -6,26 +6,19 @@ from sklearn.model_selection import train_test_split
 
 from learntools.core import *
     
-class Model1(CodingProblem):
-    _vars = ['my_model_1', 'predictions_1', 'mae_1']
-    _hint = ("Begin by defining the model with `my_model_1 = XGBRegressor(random_state=0)`.  Then, you can fit "
-             "the model and generate predictions with the `fit()` method and `predict()` method, respectively.")
+class Model1A(CodingProblem):
+    _var = 'my_model_1'
+    _hint = ("Begin by defining the model with `my_model_1 = XGBRegressor(random_state=0)`. "
+             "Then, you can fit the model with the `fit()` method.")
     _solution = CS(
 """# Define the model
 my_model_1 = XGBRegressor(random_state=0)
 
 # Fit the model
 my_model_1.fit(X_train, y_train)
-
-# Get predictions
-predictions_1 = my_model_1.predict(X_valid)
-
-# Calculate MAE
-mae_1 = mean_absolute_error(predictions_1, y_valid)
-print("Mean Absolute Error:" , mae_1)
 """)
     
-    def check(self, my_model_1, predictions_1, mae_1):
+    def check(self, my_model_1):
         assert type(my_model_1) == xgboost.sklearn.XGBRegressor, \
         "Please make `my_model_1` an instance of the `XGBRegressor` class in the `xgboost` package."
         
@@ -36,17 +29,47 @@ print("Mean Absolute Error:" , mae_1)
                           'reg_alpha': 0, 'reg_lambda': 1, 'scale_pos_weight': 1, 'seed': None,
                           'silent': True, 'subsample': 1}
         assert my_model_1.get_params() == default_params, \
-        "Please instantiate the XGBoost model with default parameters, and set the random seed to 0 (e.g., `my_model_1 = XGBRegressor(random_state=0)`)."
-                
+        ("Please instantiate the XGBoost model with default parameters, and set the random seed "
+         "to 0 (e.g., `my_model_1 = XGBRegressor(random_state=0)`).")
+        
+        assert my_model_1._Booster is not None, \
+        "Please fit the model to the training data."
+        
+class Model1B(CodingProblem):
+    _var = 'predictions_1'
+    _hint = ("Use the `predict()` method to generate validation predictions.")
+    _solution = CS(
+"""# Get predictions
+predictions_1 = my_model_1.predict(X_valid)
+""")
+    
+    def check(self, predictions_1):                
         assert len(predictions_1) != 1168, \
         "Please generate predictions on the validation data, not the training data."
         
         assert len(predictions_1) == 292, \
         "Please generate predictions on the validation data."
         
-        assert round(mae_1) == 16803, \
-        "The value that you've calculated for the MAE is incorrect."
+        assert round(predictions_1[0]) == 237696, \
+        ("Are you sure that you used the training data to train the model?" 
+         "Your validation predictions seem incorrect.")
 
+class Model1C(CodingProblem):
+    _var = 'mae_1'
+    _hint = ("The `mean_absolute_error` function should take the predictions in `predictions_1` "
+             "and the validation target in `y_valid` as arguments.")
+    _solution = CS(
+"""# Calculate MAE
+mae_1 = mean_absolute_error(predictions_1, y_valid)
+print("Mean Absolute Error:" , mae_1)
+""")
+    
+    def check(self, mae_1):
+        assert round(mae_1) == 16803, \
+        "The value that you've calculated for the MAE is incorrect."        
+        
+Model1 = MultipartProblem(Model1A, Model1B, Model1C)  
+    
 class Model2(CodingProblem):
     _vars = ['my_model_2', 'predictions_2', 'mae_2']
     _hint = ("In the official solution to this problem, we chose to increase the number of trees in the model "
