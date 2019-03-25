@@ -5,6 +5,9 @@ from PIL import Image
 from learntools.core import *
 from tensorflow import keras
 
+import tensorflow as tf
+
+print("Using TensorFlow version {}".format(tf.__version__))
 class StartSequentialModel(CodingProblem):
     _vars = ['fashion_model']
 
