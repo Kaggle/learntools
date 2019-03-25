@@ -132,9 +132,6 @@ class CreateNewDLModelFromScratch(CodingProblem):
                ("First layer should have shape {} but instead it is {}. ".format(desired_input_shape, first_layer.input_shape) + useful_text)
         assert (len(second_fashion_model.layers) > 1), \
                ("Use more than 1 layer for a more accurate model.")
-        assert (last_layer.activation.__name__ == 'softmax'), \
-               ("Your last layer's activation function should be softmax"
-                "but it is {}. Use softmax to get well-structured probabilities as output".format(last_layer.activation.__name__))
         assert (last_layer.output_shape == (None, 10)), \
                ("The number of nodes in your layer doesn't match the number of prediction categories.")
         assert (second_fashion_model.optimizer is not None), \
