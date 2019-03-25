@@ -4,20 +4,20 @@ from learntools.core import *
 
 class InvestigateEquality(EqualityCheckProblem):
     _vars = ['num_rows', 'num_cols_with_missing', 'tot_missing']
-    _expected = [1021, 3, 248]
+    _expected = [1168, 3, 276]
     _hint = ("Use the output of `X_train.shape` to get the number of rows and columns in "
              "the training data.  The `missing_val_count_by_column` Series has an entry "
              "for each column in the data, and the output above prints the number of "
              "missing entries for each column with at least one missing entry.")
     _solution = CS(
 """# How many rows are in the training data?
-num_rows = 1021
+num_rows = 1168
 
 # How many columns in the training data have missing values?
 num_cols_with_missing = 3
 
 # How many missing entries are contained in all of the training data?
-tot_missing = 248
+tot_missing = 212 + 6 + 58
 """)
     
 class InvestigateThought(ThoughtExperiment):
