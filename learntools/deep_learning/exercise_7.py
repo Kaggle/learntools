@@ -5,6 +5,9 @@ from PIL import Image
 from learntools.core import *
 from tensorflow import keras
 
+import tensorflow as tf
+
+print("Using TensorFlow version {}".format(tf.__version__))
 class StartSequentialModel(CodingProblem):
     _vars = ['fashion_model']
 
@@ -82,20 +85,23 @@ class CompileModel(CodingProblem):
     _vars = ['fashion_model']
 
     def check(self, fashion_model):
-        assert (fashion_model.optimizer is not None), \
-               ("You don't have an optimizer set. Did you run `fashion_model.compile` with an optimizer argument")
-        # TODO: Fix check that they used Adam optimizer. This broke in a TF update
+        # TODO: Re-enable everything in this check after we are settled on TF 2.x
+        # Ran into a bunch of problems here while API's were changing
+        # assert (fashion_model.optimizer is not None), \
+        #       ("You don't have an optimizer set. Did you run `fashion_model.compile` with an optimizer argument")
+
         # optimizer_name = fashion_model.optimizer._tf_api_names[0]
         # correct_optimizer_name = 'keras.optimizers.Adam'
         # assert(optimizer_name == correct_optimizer_name), \
         #       ("You didn't get the optimizer set correctly. It should be `adam`")
-        n_metrics = len(fashion_model.metrics)
-        assert (n_metrics == 1), \
-               ("You should have a list with 1 item for the metric argument. You had {}".format(n_metrics))
-        metric = fashion_model.metrics[0]
+        # n_metrics = len(fashion_model.metrics)
+        # assert (n_metrics == 1), \
+        #       ("You should have a list with 1 item for the metric argument. You had {}".format(n_metrics))
+        # metric = fashion_model.metrics[0]
         # First criterion is for older versions of tf. Second is for later versions
-        assert ((metric == 'accuracy') or (metric._name == 'acc')), \
-              ("You need to set metrics=['accuracy']")
+        # assert ((metric == 'accuracy') or (metric._name == 'acc')), \
+        #       ("You need to set metrics=['accuracy']")
+        pass
     _solution = CS(
 """
 fashion_model.compile(loss='categorical_crossentropy',
@@ -132,9 +138,6 @@ class CreateNewDLModelFromScratch(CodingProblem):
                ("First layer should have shape {} but instead it is {}. ".format(desired_input_shape, first_layer.input_shape) + useful_text)
         assert (len(second_fashion_model.layers) > 1), \
                ("Use more than 1 layer for a more accurate model.")
-        assert (last_layer.activation.__name__ == 'softmax'), \
-               ("Your last layer's activation function should be softmax"
-                "but it is {}. Use softmax to get well-structured probabilities as output".format(last_layer.activation.__name__))
         assert (last_layer.output_shape == (None, 10)), \
                ("The number of nodes in your layer doesn't match the number of prediction categories.")
         assert (second_fashion_model.optimizer is not None), \
