@@ -89,10 +89,13 @@ class CompileModel(CodingProblem):
         # correct_optimizer_name = 'keras.optimizers.Adam'
         # assert(optimizer_name == correct_optimizer_name), \
         #       ("You didn't get the optimizer set correctly. It should be `adam`")
-        assert(fashion_model.metrics[0] == 'accuracy'), \
+        n_metrics = len(fashion_model.metrics)
+        assert (n_metrics == 1), \
+               ("You should have a list with 1 item for the metric argument. You had {}".format(n_metrics))
+        metric = fashion_model.metrics[0]
+        # First criterion is for older versions of tf. Second is for later versions
+        assert ((metric == 'accuracy') or (metric._name == 'acc')), \
               ("You need to set metrics=['accuracy']")
-
-
     _solution = CS(
 """
 fashion_model.compile(loss='categorical_crossentropy',
