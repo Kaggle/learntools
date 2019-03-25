@@ -9,16 +9,17 @@ class GetScore(FunctionProblem):
             (10, 19427.64019542396),
             (20, 18682.264022049276),
     ]
-    _hint = ("Begin by making a pipeline with the `make_pipeline()` function. Be sure to set the "
-             "value for `n_estimators` in `RandomForestRegressor()` to the value supplied to the "
+    _hint = ("Begin by making a pipeline with the `Pipeline` class. Be sure to set the "
+             "value for `n_estimators` in `RandomForestRegressor()` to the argument supplied to the "
              "`get_score` function. Then, use `cross_val_score()` to get the MAE for each fold, "
              "and take the average. Be sure to set the number of folds to three through the `cv`"
              "parameter.")
     _solution = CS(
 """def get_score(n_estimators):
-    my_pipeline = make_pipeline(SimpleImputer(),
-                                RandomForestRegressor(n_estimators,
-                                                      random_state=0))
+    my_pipeline = Pipeline(steps=[
+        ('preprocessor', SimpleImputer()),
+        ('model', RandomForestRegressor(n_estimators, random_state=0))
+    ])
     scores = -1 * cross_val_score(my_pipeline, X, y,
                                   cv=3,
                                   scoring='neg_mean_absolute_error')

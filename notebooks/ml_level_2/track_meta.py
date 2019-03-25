@@ -95,8 +95,9 @@ notebooks = [
 
 for nb in notebooks:
     nb['competition_sources'] = ["home-data-for-ml-course"]
-    nb['dataset_sources'] = ["dansbecker/melbourne-housing-snapshot"]
+    nb['dataset_sources'] = ["dansbecker/melbourne-housing-snapshot", 
+                             "dansbecker/aer-credit-card-data"]
 
-    # ex7 is special case with only comp dataset, to allow submission from kernel
-    if nb['filename'] == 'ex7.ipynb':
+    # exercises are special case with only comp dataset, to allow submission from kernel
+    if "ex" in nb['filename']:
         nb['dataset_sources'] = []
