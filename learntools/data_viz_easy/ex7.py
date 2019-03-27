@@ -5,11 +5,17 @@ import pandas
 from learntools.core import *
 
 class AttachData(CodingProblem):
+    
     def check(self):
-        assert len(os.listdir('../input')) > 0, \
+        dirName = '../input'
+        
+        assert len(os.listdir(dirName)) > 0, \
         "Please attach a dataset and run this code cell again to get credit!"  
         
-        assert any([file.endswith(".csv") for file in os.listdir("../input")]), \
+        listOfFiles = list()
+        for (dirpath, dirnames, filenames) in os.walk(dirName):
+            listOfFiles += [os.path.join(dirpath, file) for file in filenames]
+        assert any([file.endswith(".csv") for file in listOfFiles]), \
         "Please upload a dataset that contains a CSV file."
         
 class Filepath(CodingProblem):
