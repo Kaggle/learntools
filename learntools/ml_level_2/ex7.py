@@ -1,17 +1,41 @@
 from learntools.core import *
 
-class WeatherIsLeakage(ThoughtExperiment):
-    _hint = (
+class DataScienceOfShoelaces(ThoughtExperiment):
+    _solution = (
     """
-
+    answer here
     """)
+
+class RevengeOfShoelaces(ThoughtExperiment):
+    _solution = (
+    """
+    answer here
+    """)
+
+class CryptoWealthJK(ThoughtExperiment):
+    _solution = (
+    """
+    answer here
+    """)
+
+class WeatherIsLeakage(ThoughtExperiment):
+    _solution = (
+    """
+    answer here
+    """)
+
+class PreventingInfections(ThoughtExperiment):
     _solution = (
     """
     answer here
     """)
 
 qvars = bind_exercises(globals(), [
-    WeatherIsLeakage
+    DataScienceOfShoelaces,
+    RevengeOfShoelaces,
+    CryptoWealthJK,
+    WeatherIsLeakage,
+    PreventingInfections,
     ],
     tutorial_id=-1,
     var_format='step_{n}',
