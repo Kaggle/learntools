@@ -25,7 +25,7 @@ notebooks = [
         filename='ex1.ipynb',
         lesson_idx=0,
         type='exercise',
-        scriptid=-1
+        scriptid=3370272
     ),
     dict(
         filename='tut2.ipynb',
@@ -36,7 +36,7 @@ notebooks = [
         filename='ex2.ipynb',
         lesson_idx=1,
         type='exercise',
-        scriptid=-1
+        scriptid=3370280
     ),
     dict(
         filename='tut3.ipynb',
@@ -47,7 +47,7 @@ notebooks = [
         filename='ex3.ipynb',
         lesson_idx=2,
         type='exercise',
-        scriptid=-1
+        scriptid=3370279
     ),
     dict(
         filename='tut4.ipynb',
@@ -58,7 +58,7 @@ notebooks = [
         filename='ex4.ipynb',
         lesson_idx=3,
         type='exercise',
-        scriptid=-1
+        scriptid=3370278
     ),
     dict(
         filename='tut5.ipynb',
@@ -69,7 +69,7 @@ notebooks = [
         filename='ex5.ipynb',
         lesson_idx=4,
         type='exercise',
-        scriptid=-1
+        scriptid=3370281
         ),
     dict(filename='tut6.ipynb',
         lesson_idx=5,
@@ -79,7 +79,7 @@ notebooks = [
         filename='ex6.ipynb',
         lesson_idx=5,
         type='exercise',
-        scriptid=-1
+        scriptid=3370271
         ),
     dict(filename='tut7.ipynb',
         lesson_idx=6,
@@ -89,7 +89,7 @@ notebooks = [
         filename='ex7.ipynb',
         lesson_idx=6,
         type='exercise',
-        scriptid=-1
+        scriptid=3370270
         ),
 ]
 
