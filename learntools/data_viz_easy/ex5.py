@@ -45,7 +45,7 @@ mean_radius = 20.57
 class PlotHist(CodingProblem):
     _var = 'plt'
     _hint = ("Use `sns.distplot`, and set the data and legend label by using "
-             "`a=` and `label=`, respectively. Set `kde=False`. You will need to " 
+             "`a=` and `label=`, respectively. Set `kde=False`. You will need to "
              "write two lines of code, corresponding to `cancer_m_data` and "
              "`cancer_b_data`.")
     _solution = CS(
@@ -60,12 +60,12 @@ plt.legend()
         sns.distplot(a=df_b['Area (mean)'], label="Benign", kde=False)
         sns.distplot(a=df_m['Area (mean)'], label="Malignant", kde=False)
         plt.legend()
-    
+
     def check(self, passed_plt):
         assert len(passed_plt.figure(1).axes) > 0, "Please write code to create two histograms."
-        
+
         children = passed_plt.axes().get_children()
-        
+
         assert all(isinstance(x, matplotlib.patches.Rectangle) for x in children[:31]), \
         ("Does your figure contain two histograms?  Write two lines of code "
          "using `sns.distplot` to generate your figure.")
@@ -75,7 +75,7 @@ class ThinkHist(ThoughtExperiment):
              "right of the histogram for benign tumors?  Which histogram appears wider?")
     _solution = ("Malignant tumors have higher values for `'Area (mean)'`, on average. "
                  "Malignant tumors have a larger range of potential values.")
-    
+
 Hist = MultipartProblem(PlotHist, ThinkHist)
 
 class PlotThreshold(CodingProblem):
@@ -93,18 +93,18 @@ sns.kdeplot(data=cancer_m_data['Radius (worst)'], shade=True, label="Malignant")
         self._view.solution()
         sns.kdeplot(data=df_b['Radius (worst)'], shade=True, label="Benign")
         sns.kdeplot(data=df_m['Radius (worst)'], shade=True, label="Malignant")
-    
+
     def check(self, passed_plt):
         assert len(passed_plt.figure(1).axes) > 0, \
         "Please write code to create one figure containing two KDE plots."
-        
+
         children = passed_plt.axes().get_children()
-        
+
         assert all(isinstance(x, matplotlib.collections.PolyCollection) for x in children[0:2]) \
         and all(isinstance(x, matplotlib.lines.Line2D) for x in children[2:4]), \
         ("Does your figure show two KDE plots?  Write two lines of code using "
          "`sns.kdeplot` to generate your figure.")
-        
+
 class ThinkThreshold(ThoughtExperiment):
     _hint = ("Take a look at the KDE plots, and use the legend to tell the difference between "
              "malignant and benign tumors.  Around a value of 25, which curve appears higher?")
@@ -114,14 +114,14 @@ class ThinkThreshold(ThoughtExperiment):
                  "to make decisions based on this pattern in the data.")
 
 Threshold = MultipartProblem(PlotThreshold, ThinkThreshold)
-    
+
 qvars = bind_exercises(globals(), [
     LoadCancerData,
     ReviewData,
     Hist,
     Threshold
     ],
-    tutorial_id=193,
+    tutorial_id=191,
     var_format='step_{n}',
     )
 __all__ = list(qvars)
