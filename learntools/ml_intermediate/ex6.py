@@ -5,7 +5,34 @@ from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
 
 from learntools.core import *
-    
+
+# Load the data
+X = pd.read_csv('../input/train.csv', index_col='Id')
+X_test_full = pd.read_csv('../input/test.csv', index_col='Id')
+X.dropna(axis=0, subset=['SalePrice'], inplace=True)
+y = X.SalePrice
+X.drop(['SalePrice'], axis=1, inplace=True)
+X_train_full, X_valid_full, y_train, y_valid = train_test_split(X, y, train_size=0.8, test_size=0.2,
+                                                                random_state=0)
+low_cardinality_cols = [cname for cname in X_train_full.columns if X_train_full[cname].nunique() < 10 and
+                        X_train_full[cname].dtype == "object"]
+numeric_cols = [cname for cname in X_train_full.columns if X_train_full[cname].dtype in ['int64', 'float64']]
+my_cols = low_cardinality_cols + numeric_cols
+X_train = X_train_full[my_cols].copy()
+X_valid = X_valid_full[my_cols].copy()
+X_test = X_test_full[my_cols].copy()
+X_train = pd.get_dummies(X_train)
+X_valid = pd.get_dummies(X_valid)
+X_test = pd.get_dummies(X_test)
+X_train, X_valid = X_train.align(X_valid, join='left', axis=1)
+X_train, X_test = X_train.align(X_test, join='left', axis=1)
+
+# Define and train basic model
+basic_model = XGBRegressor(random_state=0)
+basic_model.fit(X_train, y_train)
+basic_predictions = basic_model.predict(X_valid)
+basic_mae = mean_absolute_error(basic_predictions, y_valid)
+
 class Model1A(CodingProblem):
     _var = 'my_model_1'
     _hint = ("Begin by defining the model with `my_model_1 = XGBRegressor(random_state=0)`. "
@@ -17,24 +44,18 @@ my_model_1 = XGBRegressor(random_state=0)
 # Fit the model
 my_model_1.fit(X_train, y_train)
 """)
-    
+
     def check(self, my_model_1):
         assert type(my_model_1) == xgboost.sklearn.XGBRegressor, \
         "Please make `my_model_1` an instance of the `XGBRegressor` class in the `xgboost` package."
-        
-        default_params = {'base_score': 0.5, 'booster': 'gbtree', 'colsample_bylevel': 1,
-                          'colsample_bytree': 1, 'gamma': 0, 'learning_rate': 0.1, 'max_delta_step': 0,
-                          'max_depth': 3, 'min_child_weight': 1, 'missing': None, 'n_estimators': 100,
-                          'n_jobs': 1, 'nthread': None, 'objective': 'reg:linear', 'random_state': 0,
-                          'reg_alpha': 0, 'reg_lambda': 1, 'scale_pos_weight': 1, 'seed': None,
-                          'silent': True, 'subsample': 1}
-        assert my_model_1.get_params() == default_params, \
+
+        assert my_model_1.get_params() == basic_model.get_params(), \
         ("Please instantiate the XGBoost model with default parameters, and set the random seed "
          "to 0 (e.g., `my_model_1 = XGBRegressor(random_state=0)`).")
-        
+
         assert my_model_1._Booster is not None, \
         "Please fit the model to the training data."
-        
+
 class Model1B(CodingProblem):
     _var = 'predictions_1'
     _hint = ("Use the `predict()` method to generate validation predictions.")
@@ -42,16 +63,16 @@ class Model1B(CodingProblem):
 """# Get predictions
 predictions_1 = my_model_1.predict(X_valid)
 """)
-    
-    def check(self, predictions_1):                
+
+    def check(self, predictions_1):
         assert len(predictions_1) != 1168, \
         "Please generate predictions on the validation data, not the training data."
-        
+
         assert len(predictions_1) == 292, \
         "Please generate predictions on the validation data."
-        
-        assert round(predictions_1[0]) == 237696, \
-        ("Are you sure that you used the training data to train the model?" 
+
+        assert round(predictions_1[0]) == round(basic_predictions[0]), \
+        ("Are you sure that you used the training data to train the model?"
          "Your validation predictions seem incorrect.")
 
 class Model1C(CodingProblem):
@@ -63,13 +84,13 @@ class Model1C(CodingProblem):
 mae_1 = mean_absolute_error(predictions_1, y_valid)
 print("Mean Absolute Error:" , mae_1)
 """)
-    
+
     def check(self, mae_1):
-        assert round(mae_1) == 16803, \
-        "The value that you've calculated for the MAE is incorrect."        
-        
-Model1 = MultipartProblem(Model1A, Model1B, Model1C)  
-    
+        assert round(mae_1) == round(basic_mae), \
+        "The value that you've calculated for the MAE is incorrect."
+
+Model1 = MultipartProblem(Model1A, Model1B, Model1C)
+
 class Model2(CodingProblem):
     _vars = ['my_model_2', 'predictions_2', 'mae_2']
     _hint = ("In the official solution to this problem, we chose to increase the number of trees in the model "
@@ -88,18 +109,18 @@ predictions_2 = my_model_2.predict(X_valid)
 mae_2 = mean_absolute_error(predictions_2, y_valid)
 print("Mean Absolute Error:" , mae_2)
 """)
-    
+
     def check(self, my_model_2, predictions_2, mae_2):
         assert type(my_model_2) == xgboost.sklearn.XGBRegressor, \
         "Please make `my_model_2` an instance of the `XGBRegressor` class in the `xgboost` package."
-        
+
         assert len(predictions_2) != 1168, \
         "Please generate predictions on the validation data, not the training data."
-        
+
         assert len(predictions_2) == 292, \
         "Please generate predictions on the validation data."
-        
-        assert round(mae_2) < 16803, \
+
+        assert round(mae_2) < round(basic_mae), \
         ("You must specify the parameters in `my_model_2` so that it attains lower MAE than the "
          "model in `my_model_1`.")
 
@@ -121,18 +142,18 @@ predictions_3 = my_model_3.predict(X_valid)
 mae_3 = mean_absolute_error(predictions_3, y_valid)
 print("Mean Absolute Error:" , mae_3)
 """)
-    
+
     def check(self, my_model_3, predictions_3, mae_3):
         assert type(my_model_3) == xgboost.sklearn.XGBRegressor, \
         "Please make `my_model_3` an instance of the `XGBRegressor` class in the `xgboost` package."
-        
+
         assert len(predictions_3) != 1168, \
         "Please generate predictions on the validation data, not the training data."
-        
+
         assert len(predictions_3) == 292, \
         "Please generate predictions on the validation data."
-        
-        assert round(mae_3) > 16803, \
+
+        assert round(mae_3) > round(basic_mae), \
         ("You must specify the parameters in `my_model_3` so that it attains higher MAE than the "
          "model in `my_model_1`.")
 
@@ -141,7 +162,7 @@ qvars = bind_exercises(globals(), [
     Model2,
     Model3
     ],
-    tutorial_id=-1,
+    tutorial_id=245,
     var_format='step_{n}',
     )
 __all__ = list(qvars)

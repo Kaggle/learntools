@@ -30,7 +30,7 @@ preprocessor = ColumnTransformer(
 # Define model
 model = RandomForestRegressor(n_estimators=100, random_state=0)
 """)
-    
+
     def check(self, numerical_transformer, categorical_transformer, model):
 
         def try_pipeline(transformer):
@@ -39,17 +39,17 @@ model = RandomForestRegressor(n_estimators=100, random_state=0)
                 return True
             except:
                 return False
-        
+
         assert try_pipeline(numerical_transformer) == True, \
         "`numerical_transformer` is not a valid preprocessor."
-        
+
         assert try_pipeline(categorical_transformer) == True, \
         "`categorical_transformer` is not a valid preprocessor."
-        
+
         assert type(model) == sklearn.ensemble.forest.RandomForestRegressor, \
         "Please change `model` to a random forest model with scikit-learn."
-   
-        
+
+
 class YourTurnPredict(CodingProblem):
     _var = 'score'
     _hint = ("Please see the hint from Part A to get some ideas for how to change the "
@@ -57,14 +57,14 @@ class YourTurnPredict(CodingProblem):
     _solution = CS(
 """# Please run the code cell without changes.s
 """)
-    
+
     def check(self, score):
         assert score < 17861, \
         ("Your MAE is too high - please amend `numerical_transformer`, "
          "`categorical_transformer`, and/or `model` from Part A to get better performance.")
 
-YourTurn = MultipartProblem(YourTurnModel, YourTurnPredict)    
-      
+YourTurn = MultipartProblem(YourTurnModel, YourTurnPredict)
+
 class TestPreds(CodingProblem):
     _var = 'preds_test'
     _hint = ("Use the pipeline in `my_pipeline` and the `predict()` method.")
@@ -72,16 +72,16 @@ class TestPreds(CodingProblem):
 """# Preprocessing of test data, fit model
 preds_test = my_pipeline.predict(X_test)
 """)
-    
+
     def check(self, preds_test):
         assert len(preds_test) == 1459, \
         "Did you generate predictions with the test data?"
-    
+
 qvars = bind_exercises(globals(), [
     YourTurn,
     TestPreds
     ],
-    tutorial_id=-1,
+    tutorial_id=241,
     var_format='step_{n}',
     )
 __all__ = list(qvars)
