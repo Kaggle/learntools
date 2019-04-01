@@ -28,57 +28,60 @@ drop_X_valid = X_valid.select_dtypes(exclude=['object'])
         assert not(any((drop_X_valid.dtypes == 'object').values)), \
         "You still need to encode some of the categorical columns in your validation data."
 
-        assert len(drop_X_train.columns) == len(drop_X_valid.columns), \
-        ("Please ensure your training and validation data have the same number of columns.")
+        assert drop_X_train.shape[1] == 33, \
+        ("`drop_X_train` should have 33 columns.")
 
-        assert all(drop_X_train.columns == drop_X_valid.columns), \
-        ("Please ensure your training and validation data have the same columns.  You should drop "
-         "the same columns in both.")
-
-class DealMiss(CodingProblem):
-    _vars = ['X_train_2', 'X_valid_2']
-    _hint = ("Use `SimpleImputer()`. This is just one potential solution - try out other methods by "
-             "referencing the tutorial on missing values!")
-    _solution = CS(
-"""# Make copy to avoid changing original data (when imputing)
-X_train_imp = X_train_1.copy()
-X_valid_imp = X_valid_1.copy()
-
-# Get names of columns with missing values
-cols_with_missing = [col for col in X_train_1.columns if X_train_1[col].isnull().any()]
-
-# Make new columns indicating what will be imputed
-for col in cols_with_missing:
-    X_train_imp[col + '_was_missing'] = X_train_1[col].isnull()
-    X_valid_imp[col + '_was_missing'] = X_valid_1[col].isnull()
+        assert drop_X_valid.shape[1] == 33, \
+        ("`drop_X_valid` should have 33 columns.")
+            
+class LabelA(ThoughtExperiment):
+    _hint = ("Are there any values that appear in the validation data but not in the training data?")
+    _solution = ("Fitting a label encoder to a column in the training data creates a corresponding "
+                 "integer-valued label for each unique value **that appears in the training data**. In "
+                 "the case that the validation data contains values that don't also appear in the "
+                 "training data, the encoder will throw an error, because these values won't have an "
+                 "integer assigned to them.  Notice that the `'Condition2'` "
+                 "column in the validation data contains the values `'RRAn'` and `'RRNn'`, but these "
+                 "don't appear in the training data -- thus, if we try to use a label encoder with "
+                 "scikit-learn, the code will throw an error.")
     
-# Imputation
-my_imputer = SimpleImputer()
-X_train_2 = pd.DataFrame(my_imputer.fit_transform(X_train_imp))
-X_valid_2 = pd.DataFrame(my_imputer.transform(X_valid_imp))
+class LabelB(CodingProblem):
+    _vars = ['label_X_train', 'label_X_valid']
+    _hint = ("Use the `LabelEncoder` class from scikit-learn. You should only encode the columns in "
+             "`good_label_cols`.")
+    _solution = CS(
+"""# Drop categorical columns that will not be encoded
+label_X_train = X_train.drop(bad_label_cols, axis=1)
+label_X_valid = X_valid.drop(bad_label_cols, axis=1)
 
-# Imputation removed column names; put them back
-X_train_2.columns = X_train_imp.columns
-X_valid_2.columns = X_valid_imp.columns
+# Apply label encoder 
+label_encoder = LabelEncoder()
+for col in set(good_label_cols):
+    label_X_train[col] = label_encoder.fit_transform(X_train[col])
+    label_X_valid[col] = label_encoder.transform(X_valid[col])
 """)
     
-    def check(self, X_train_2, X_valid_2):
-        # check stuff from previous question
-        assert not(any((X_train_2.dtypes == 'object').values)), \
-        ("It looks like your dataset still contains categorical columns that need to be preprocessed.  Did you use "
-         "`X_train_1` and `X_valid_1` as starting points before dealing with missing values?")
-        assert len(X_train_2.columns) == len(X_valid_2.columns), \
-        "Please ensure your training and validation data have the same number of columns."
-        assert all(X_train_2.columns == X_valid_2.columns), \
-        "Please ensure your training and validation data have the same column ordering."
+    def check(self, label_X_train, label_X_valid):
+        
+        assert type(label_X_train) == pd.core.frame.DataFrame, \
+        "`label_X_train` is not a pandas DataFrame."
+        
+        assert type(label_X_valid) == pd.core.frame.DataFrame, \
+        "`label_X_valid` is not a pandas DataFrame."
 
-        # columns with missing values
-        cols_with_missing_train = [col for col in X_train_2.columns if X_train_2[col].isnull().any()]
-        cols_with_missing_valid = [col for col in X_valid_2.columns if X_valid_2[col].isnull().any()]
-        assert len(cols_with_missing_train) == 0, \
-        "It looks like your training set still contains columns with missing data."
-        assert len(cols_with_missing_valid) == 0, \
-        "It looks like your validation set still contains columns with missing data."
+        assert not(any((label_X_train.dtypes == 'object').values)), \
+        "You still need to encode some of the categorical columns in your training data."
+        
+        assert not(any((label_X_valid.dtypes == 'object').values)), \
+        "You still need to encode some of the categorical columns in your validation data."
+        
+        assert label_X_train.shape[1] == 45, \
+        "`label_X_train` should have 45 columns."
+        
+        assert label_X_valid.shape[1] == 45, \
+        "`label_X_valid` should have 45 columns."
+        
+Label = MultipartProblem(LabelA, LabelB)
 
 class CardinalityA(EqualityCheckProblem):
     _vars = ['high_cardinality_numcols', 'num_cols_neighborhood']
@@ -111,6 +114,8 @@ OH_entries_added = 1e4*100 - 1e4
 # replacing the column with a label encoding?
 label_entries_added = 0
 """)
+    
+Cardinality = MultipartProblem(CardinalityA, CardinalityB)
 
 class OneHot(CodingProblem):
     _vars = ['OH_X_train', 'OH_X_valid']
@@ -157,11 +162,10 @@ OH_X_valid = pd.concat([num_X_valid, OH_cols_valid], axis=1)
         assert len(OH_X_valid.columns) == 155, \
         "`OH_X_valid` should have 155 columns."
     
-Cardinality = MultipartProblem(CardinalityA, CardinalityB)
     
 qvars = bind_exercises(globals(), [
     Drop,
-    DealMiss,
+    Label,
     Cardinality, 
     OneHot
     ],
