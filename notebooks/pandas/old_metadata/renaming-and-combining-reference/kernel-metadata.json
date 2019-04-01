@@ -1,0 +1,20 @@
+{
+  "dataset_sources": [
+    "zynicide/wine-reviews",
+    "datasnaek/youtube-new"
+  ],
+  "id_no": 636767,
+  "is_private": false,
+  "kernel_type": "notebook",
+  "kernel_sources": [],
+  "language": "python",
+  "keywords": [
+    "tutorial"
+  ],
+  "enable_internet": false,
+  "competition_sources": [],
+  "enable_gpu": false,
+  "title": "Renaming and combining reference",
+  "code_file": "renaming-and-combining-reference.ipynb",
+  "id": "residentmario/renaming-and-combining-reference"
+}

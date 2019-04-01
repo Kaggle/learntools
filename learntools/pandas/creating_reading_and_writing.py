@@ -1,5 +1,7 @@
 import sqlite3
+
 import pandas as pd
+
 from learntools.core import *
 
 class FruitDfCreation(EqualityCheckProblem):
@@ -7,7 +9,7 @@ class FruitDfCreation(EqualityCheckProblem):
     _expected = (
             pd.DataFrame([[30, 21]], columns=['Apples', 'Bananas']),
     )
-    # TODO: This is a case where it would be nice to have a helper for creating
+    # TODO: This is a case where it would be nice to have a helper for creating 
     # a solution with multiple alternatives.
     _hint = 'Use the `pd.DataFrame` constructor to create the DataFrame.'
     _solution = CS(
@@ -63,15 +65,15 @@ class SaveAnimalsCsv(CodingProblem):
         path = 'cows_and_goats.csv'
         assert_file_exists(path)
         actual = pd.read_csv(path, index_col=0)
-        expected = pd.DataFrame({'Cows': [12, 20], 'Goats': [22, 19]},
+        expected = pd.DataFrame({'Cows': [12, 20], 'Goats': [22, 19]}, 
                 index=['Year 1', 'Year 2'])
-        assert_df_equals(actual, expected,
+        assert_df_equals(actual, expected, 
             name="Dataframe loaded from `cows_and_goats.csv`")
 
 class ReadPitchforkSql(EqualityCheckProblem):
-    # TODO: Remove this question. It's been removed from notebooks
-    _counts_for_points = False
     _var = 'music_reviews'
+    # TODO: Is loading expected values expensive here? May want to do it on-demand 
+    # when check is first called, rather than on import
     conn = sqlite3.connect("../input/pitchfork-data/database.sqlite")
     _expected = (
         pd.read_sql_query("SELECT * FROM artists", conn),

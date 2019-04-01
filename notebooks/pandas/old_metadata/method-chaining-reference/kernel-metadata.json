@@ -1,0 +1,20 @@
+{
+  "title": "Method chaining reference",
+  "enable_internet": false,
+  "id": "residentmario/method-chaining-reference",
+  "keywords": [
+    "tutorial"
+  ],
+  "enable_gpu": false,
+  "id_no": 604944,
+  "kernel_type": "notebook",
+  "kernel_sources": [],
+  "dataset_sources": [
+    "zynicide/wine-reviews",
+    "residentmario/ramen-ratings"
+  ],
+  "is_private": false,
+  "language": "python",
+  "competition_sources": [],
+  "code_file": "method-chaining-reference.ipynb"
+}

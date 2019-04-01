@@ -1,0 +1,22 @@
+{
+  "keywords": [
+    "tutorial"
+  ],
+  "language": "python",
+  "dataset_sources": [
+    "nolanbconaway/pitchfork-data",
+    "rtatman/188-million-us-wildfires",
+    "zynicide/wine-reviews",
+    "jpmiller/publicassistance"
+  ],
+  "id": "residentmario/creating-reading-and-writing-reference",
+  "enable_internet": false,
+  "kernel_type": "notebook",
+  "code_file": "creating-reading-and-writing-reference.ipynb",
+  "enable_gpu": false,
+  "title": "Creating, reading, and writing reference",
+  "id_no": 550418,
+  "is_private": false,
+  "competition_sources": [],
+  "kernel_sources": []
+}

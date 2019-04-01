@@ -6,7 +6,7 @@ track = dict(
 
 lessons = [ {'topic': topic_name} for topic_name in
                     [
-		 	'Intro to DL for Computer Vision',
+		 	'Intro to Deep Learning and Computer Vision',
 			'Building Models from Convolutions',
 			'TensorFlow programming',
 			'Transfer Learning',

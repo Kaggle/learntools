@@ -1,0 +1,19 @@
+{
+  "title": "Data types and missing data reference",
+  "enable_internet": false,
+  "competition_sources": [],
+  "id": "residentmario/data-types-and-missing-data-reference",
+  "is_private": false,
+  "id_no": 598827,
+  "language": "python",
+  "kernel_sources": [],
+  "code_file": "data-types-and-missing-data-reference.ipynb",
+  "dataset_sources": [
+    "zynicide/wine-reviews"
+  ],
+  "keywords": [
+    "tutorial"
+  ],
+  "kernel_type": "notebook",
+  "enable_gpu": false
+}

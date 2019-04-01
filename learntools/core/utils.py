@@ -5,10 +5,12 @@ def backtickify(s):
 
 quantum_of_bonus = 1/37
 
+# TODO: Maybe this factory should be a class method of ProblemView or something?
 def instantiate_probview(prob_cls, tutorial_id, value_per_problem):
     # TODO: Bleh, circular import...
     from learntools.core import problem_view as pv
     from learntools.core.globals_binder import binder
+    # NB: May eventually have some subclasses for this?
     viewer_cls = pv.ProblemView
     prob = prob_cls()
     if prob._counts_for_points:
@@ -34,12 +36,12 @@ def bind_exercises(g, exercises, tutorial_id=-1, start=1, var_format='q{n}'):
     Embed those variable assignments in the given namespace, and yield the names of
     all the new variables.
 
-    Elements of exercises may also be None as a placeholder, in which case the
+    Elements of exercises may also be None as a placeholder, in which case the 
     corresponding variable in the sequence is skipped over. e.g. [SpamProblem, None,
     EggsProblem], will generate variables q1 and q3.
     """
-    denom = sum(
-            (getattr(prob, '_counts_for_points', False) and not prob._bonus)
+    denom = sum( 
+            (getattr(prob, '_counts_for_points', False) and not prob._bonus) 
             for prob in exercises
             )
     try:
