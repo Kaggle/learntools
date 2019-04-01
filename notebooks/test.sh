@@ -30,7 +30,7 @@ do
     python3 render.py $track
 done
 
-TESTABLE_NOTEBOOK_TRACKS="deep_learning python pandas machine_learning data_viz_easy"
+TESTABLE_NOTEBOOK_TRACKS="python pandas machine_learning data_viz_easy"
 for track in $TESTABLE_NOTEBOOK_TRACKS
 do
     # Running the deep learning notebooks is fairly slow (~10-20 minutes), so only
