@@ -5,6 +5,33 @@ from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
 
 from learntools.core import *
+
+# Load the data
+X = pd.read_csv('../input/train.csv', index_col='Id')
+X_test_full = pd.read_csv('../input/test.csv', index_col='Id')
+X.dropna(axis=0, subset=['SalePrice'], inplace=True)
+y = X.SalePrice              
+X.drop(['SalePrice'], axis=1, inplace=True)
+X_train_full, X_valid_full, y_train, y_valid = train_test_split(X, y, train_size=0.8, test_size=0.2,
+                                                                random_state=0)
+low_cardinality_cols = [cname for cname in X_train_full.columns if X_train_full[cname].nunique() < 10 and 
+                        X_train_full[cname].dtype == "object"]
+numeric_cols = [cname for cname in X_train_full.columns if X_train_full[cname].dtype in ['int64', 'float64']]
+my_cols = low_cardinality_cols + numeric_cols
+X_train = X_train_full[my_cols].copy()
+X_valid = X_valid_full[my_cols].copy()
+X_test = X_test_full[my_cols].copy()
+X_train = pd.get_dummies(X_train)
+X_valid = pd.get_dummies(X_valid)
+X_test = pd.get_dummies(X_test)
+X_train, X_valid = X_train.align(X_valid, join='left', axis=1)
+X_train, X_test = X_train.align(X_test, join='left', axis=1)
+
+# Define and train basic model
+basic_model = XGBRegressor(random_state=0)
+basic_model.fit(X_train, y_train)
+basic_predictions = basic_model.predict(X_valid)
+basic_mae = mean_absolute_error(basic_predictions, y_valid)
     
 class Model1A(CodingProblem):
     _var = 'my_model_1'
@@ -22,13 +49,7 @@ my_model_1.fit(X_train, y_train)
         assert type(my_model_1) == xgboost.sklearn.XGBRegressor, \
         "Please make `my_model_1` an instance of the `XGBRegressor` class in the `xgboost` package."
         
-        default_params = {'base_score': 0.5, 'booster': 'gbtree', 'colsample_bylevel': 1,
-                          'colsample_bytree': 1, 'gamma': 0, 'learning_rate': 0.1, 'max_delta_step': 0,
-                          'max_depth': 3, 'min_child_weight': 1, 'missing': None, 'n_estimators': 100,
-                          'n_jobs': 1, 'nthread': None, 'objective': 'reg:linear', 'random_state': 0,
-                          'reg_alpha': 0, 'reg_lambda': 1, 'scale_pos_weight': 1, 'seed': None,
-                          'silent': True, 'subsample': 1}
-        assert my_model_1.get_params() == default_params, \
+        assert my_model_1.get_params() == basic_model.get_params(), \
         ("Please instantiate the XGBoost model with default parameters, and set the random seed "
          "to 0 (e.g., `my_model_1 = XGBRegressor(random_state=0)`).")
         
@@ -50,7 +71,7 @@ predictions_1 = my_model_1.predict(X_valid)
         assert len(predictions_1) == 292, \
         "Please generate predictions on the validation data."
         
-        assert round(predictions_1[0]) == 237696, \
+        assert round(predictions_1[0]) == round(basic_predictions[0]), \
         ("Are you sure that you used the training data to train the model?" 
          "Your validation predictions seem incorrect.")
 
@@ -65,7 +86,7 @@ print("Mean Absolute Error:" , mae_1)
 """)
     
     def check(self, mae_1):
-        assert round(mae_1) == 16803, \
+        assert round(mae_1) == round(basic_mae), \
         "The value that you've calculated for the MAE is incorrect."        
         
 Model1 = MultipartProblem(Model1A, Model1B, Model1C)  
@@ -99,7 +120,7 @@ print("Mean Absolute Error:" , mae_2)
         assert len(predictions_2) == 292, \
         "Please generate predictions on the validation data."
         
-        assert round(mae_2) < 16803, \
+        assert round(mae_2) < round(basic_mae), \
         ("You must specify the parameters in `my_model_2` so that it attains lower MAE than the "
          "model in `my_model_1`.")
 
@@ -132,7 +153,7 @@ print("Mean Absolute Error:" , mae_3)
         assert len(predictions_3) == 292, \
         "Please generate predictions on the validation data."
         
-        assert round(mae_3) > 16803, \
+        assert round(mae_3) > round(basic_mae), \
         ("You must specify the parameters in `my_model_3` so that it attains higher MAE than the "
          "model in `my_model_1`.")
 
