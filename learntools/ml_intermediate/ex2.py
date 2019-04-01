@@ -19,7 +19,7 @@ num_cols_with_missing = 3
 # How many missing entries are contained in all of the training data?
 tot_missing = 212 + 6 + 58
 """)
-    
+
 class InvestigateThought(ThoughtExperiment):
     _hint = ("Does the dataset have a lot of missing values, or just a few?  Would we lose much "
              "information if we completely ignored the columns with missing entries?")
@@ -28,7 +28,7 @@ class InvestigateThought(ThoughtExperiment):
                  "we can expect that dropping columns is unlikely to yield good results.  This is "
                  "because we'd be throwing away a lot of valuable data, and so imputation will likely "
                  "perform better.")
-    
+
 Investigate = MultipartProblem(InvestigateEquality, InvestigateThought)
 
 class DropMissing(CodingProblem):
@@ -37,44 +37,44 @@ class DropMissing(CodingProblem):
              "these columns in both the training and validation data with the `drop()` method.")
     _solution = CS(
 """# Get names of columns with missing values
-cols_with_missing = [col for col in X_train.columns 
+cols_with_missing = [col for col in X_train.columns
                      if X_train[col].isnull().any()]
 
 # Drop columns in training and validation data
 reduced_X_train = X_train.drop(cols_with_missing, axis=1)
 reduced_X_valid = X_valid.drop(cols_with_missing, axis=1)
 """)
-    
+
     def check(self, reduced_X_train, reduced_X_valid):
         assert type(reduced_X_train) == pd.core.frame.DataFrame, \
         "`reduced_X_train` is not a pandas DataFrame."
-        
+
         assert type(reduced_X_valid) == pd.core.frame.DataFrame, \
         "`reduced_X_valid` is not a pandas DataFrame."
-        
+
         assert len([col for col in reduced_X_train.columns
                     if reduced_X_train[col].isnull().any()]) == 0, \
         "`reduced_X_train` still contains missing values."
-        
+
         assert len([col for col in reduced_X_valid.columns
                     if reduced_X_valid[col].isnull().any()]) == 0, \
         "`reduced_X_valid` still contains missing values."
-        
+
         assert reduced_X_train.shape == (1168, 33), \
         "`reduced_X_train` should have shape (1168, 33)."
-        
+
         assert reduced_X_valid.shape == (292, 33), \
         "`reduced_X_train` should have shape (292, 33)."
-        
+
         cols_with_missing = ['LotFrontage', 'MasVnrArea', 'GarageYrBlt']
         assert all([col not in reduced_X_train.columns for col in cols_with_missing]), \
         ("Your training data contains some column names that should have been dropped from "
          "the original dataset.")
-        
+
         assert all([col not in reduced_X_valid.columns for col in cols_with_missing]), \
         ("Your validation data contains some column names that should have been dropped from "
          "the original dataset.")
-        
+
 class ImputeCode(CodingProblem):
     _vars = ['imputed_X_train', 'imputed_X_valid']
     _hint = ("Begin by defining an instance of the `SimpleImputer()` class.  Then, use the imputer "
@@ -90,41 +90,41 @@ imputed_X_valid = pd.DataFrame(my_imputer.transform(X_valid))
 imputed_X_train.columns = X_train.columns
 imputed_X_valid.columns = X_valid.columns
 """)
-    
+
     def check(self, imputed_X_train, imputed_X_valid):
         assert type(imputed_X_train) == pd.core.frame.DataFrame, \
         "`imputed_X_train` is not a pandas DataFrame."
-        
+
         assert type(imputed_X_valid) == pd.core.frame.DataFrame, \
         "`imputed_X_valid` is not a pandas DataFrame."
-        
+
         assert len([col for col in imputed_X_train.columns
                     if imputed_X_train[col].isnull().any()]) == 0, \
         "`imputed_X_train` still contains missing values."
-        
+
         assert len([col for col in imputed_X_valid.columns
                     if imputed_X_valid[col].isnull().any()]) == 0, \
         "`imputed_X_valid` still contains missing values."
-        
+
         assert imputed_X_train.shape == (1168, 36), \
         "`imputed_X_train` should have shape (1168, 36)."
-        
+
         assert imputed_X_valid.shape == (292, 36), \
         "`imputed_X_train` should have shape (292, 36)."
-        
+
         assert 'LotFrontage' in imputed_X_train.columns, \
         "Did you put the column names back in `imputed_X_train`?"
-       
+
         assert 'LotFrontage' in imputed_X_valid.columns, \
         "Did you put the column names back in `imputed_X_valid`?"
-        
+
         assert round(imputed_X_train['LotFrontage'].mean()) == 70, \
         "Did you impute with the mean value along each column?"
-        
+
         assert round(imputed_X_valid['LotFrontage'].mean()) != 72, \
         ("Did you fit the transform to the validation data?  Please instead fit the transform "
          "to the training data, and then use the fitted transform to impute the values in the "
-         "validation data.") 
+         "validation data.")
 
 class ImputeThought(ThoughtExperiment):
     _hint = ("Did removing missing values yield a larger or smaller MAE than imputation? "
@@ -160,31 +160,31 @@ final_X_valid = pd.DataFrame(final_imputer.transform(X_valid))
 final_X_train.columns = X_train.columns
 final_X_valid.columns = X_valid.columns
 """)
-    
+
     def check(self, final_X_train, final_X_valid):
         assert type(final_X_train) == pd.core.frame.DataFrame, \
         "`final_X_train` is not a pandas DataFrame."
-        
+
         assert type(final_X_valid) == pd.core.frame.DataFrame, \
         "`final_X_valid` is not a pandas DataFrame."
-        
+
         assert len([col for col in final_X_train.columns
                     if final_X_train[col].isnull().any()]) == 0, \
         "`final_X_train` still contains missing values."
-        
+
         assert len([col for col in final_X_valid.columns
                     if final_X_valid[col].isnull().any()]) == 0, \
         "`final_X_valid` still contains missing values."
-        
+
         assert final_X_train.shape[1] == final_X_valid.shape[1], \
         "`final_X_train` and `final_X_valid` do not have the same number of columns."
-        
+
         assert len(final_X_train) == 1168, \
         "`final_X_train` should have 1168 rows (one for each entry in `y_train`)."
-        
+
         assert len(final_X_valid) == 292, \
         "`final_X_valid` should have 292 rows (one for each entry in `y_valid`)."
-    
+
 class PredsCodeB(CodingProblem):
     _vars = ['final_X_test', 'preds_test']
     _hint = ("After preprocessing the test data, you can get the model's predictions by using `model.predict()`.")
@@ -195,11 +195,11 @@ final_X_test = pd.DataFrame(final_imputer.transform(X_test))
 # Get test predictions
 preds_test = model.predict(final_X_test)
 """)
-    
+
     def check(self, final_X_test, preds_test):
         assert type(final_X_test) == pd.core.frame.DataFrame, \
         "`final_X_test` is not a pandas DataFrame."
-        
+
         assert len([col for col in final_X_test.columns
                     if final_X_test[col].isnull().any()]) == 0, \
         "`final_X_test` still contains missing values."
@@ -208,14 +208,14 @@ preds_test = model.predict(final_X_test)
         "`final_X_test` should have 1459 rows (one for each row in `X_test`)."
 
 PredsCode = MultipartProblem(PredsCodeA, PredsCodeB)
-    
+
 qvars = bind_exercises(globals(), [
     Investigate,
     DropMissing,
     Impute,
     PredsCode
     ],
-    tutorial_id=-1,
+    tutorial_id=237,
     var_format='step_{n}',
     )
 __all__ = list(qvars)

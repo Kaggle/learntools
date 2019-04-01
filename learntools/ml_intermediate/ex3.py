@@ -13,18 +13,18 @@ class Drop(CodingProblem):
 drop_X_train = X_train.select_dtypes(exclude=['object'])
 drop_X_valid = X_valid.select_dtypes(exclude=['object'])
 """)
-    
+
     def check(self, drop_X_train, drop_X_valid):
-        
+
         assert type(drop_X_train) == pd.core.frame.DataFrame, \
         "`drop_X_train` is not a pandas DataFrame."
-        
+
         assert type(drop_X_valid) == pd.core.frame.DataFrame, \
         "`drop_X_valid` is not a pandas DataFrame."
 
         assert not(any((drop_X_train.dtypes == 'object').values)), \
         "You still need to encode some of the categorical columns in your training data."
-        
+
         assert not(any((drop_X_valid.dtypes == 'object').values)), \
         "You still need to encode some of the categorical columns in your validation data."
 
@@ -33,7 +33,7 @@ drop_X_valid = X_valid.select_dtypes(exclude=['object'])
 
         assert drop_X_valid.shape[1] == 33, \
         ("`drop_X_valid` should have 33 columns.")
-            
+
 class LabelA(ThoughtExperiment):
     _hint = ("Are there any values that appear in the validation data but not in the training data?")
     _solution = ("Fitting a label encoder to a column in the training data creates a corresponding "
@@ -44,7 +44,7 @@ class LabelA(ThoughtExperiment):
                  "column in the validation data contains the values `'RRAn'` and `'RRNn'`, but these "
                  "don't appear in the training data -- thus, if we try to use a label encoder with "
                  "scikit-learn, the code will throw an error.")
-    
+
 class LabelB(CodingProblem):
     _vars = ['label_X_train', 'label_X_valid']
     _hint = ("Use the `LabelEncoder` class from scikit-learn. You should only encode the columns in "
@@ -54,33 +54,33 @@ class LabelB(CodingProblem):
 label_X_train = X_train.drop(bad_label_cols, axis=1)
 label_X_valid = X_valid.drop(bad_label_cols, axis=1)
 
-# Apply label encoder 
+# Apply label encoder
 label_encoder = LabelEncoder()
 for col in set(good_label_cols):
     label_X_train[col] = label_encoder.fit_transform(X_train[col])
     label_X_valid[col] = label_encoder.transform(X_valid[col])
 """)
-    
+
     def check(self, label_X_train, label_X_valid):
-        
+
         assert type(label_X_train) == pd.core.frame.DataFrame, \
         "`label_X_train` is not a pandas DataFrame."
-        
+
         assert type(label_X_valid) == pd.core.frame.DataFrame, \
         "`label_X_valid` is not a pandas DataFrame."
 
         assert not(any((label_X_train.dtypes == 'object').values)), \
         "You still need to encode some of the categorical columns in your training data."
-        
+
         assert not(any((label_X_valid.dtypes == 'object').values)), \
         "You still need to encode some of the categorical columns in your validation data."
-        
+
         assert label_X_train.shape[1] == 45, \
         "`label_X_train` should have 45 columns."
-        
+
         assert label_X_valid.shape[1] == 45, \
         "`label_X_valid` should have 45 columns."
-        
+
 Label = MultipartProblem(LabelA, LabelB)
 
 class CardinalityA(EqualityCheckProblem):
@@ -92,11 +92,11 @@ class CardinalityA(EqualityCheckProblem):
 # have cardinality greater than 10?
 high_cardinality_numcols = 3
 
-# How many columns are needed to one-hot encode the 
+# How many columns are needed to one-hot encode the
 # 'Neighborhood' variable in the training data?
 num_cols_neighborhood = 25
 """)
-    
+
 class CardinalityB(EqualityCheckProblem):
     _vars = ['OH_entries_added', 'label_entries_added']
     _expected = [990000, 0]
@@ -106,7 +106,7 @@ class CardinalityB(EqualityCheckProblem):
              "Then, to obtain how many entries are **added** to the dataset, subtract the number "
              "of entries in the original column.")
     _solution = CS(
-"""# How many entries are added to the dataset by 
+"""# How many entries are added to the dataset by
 # replacing the column with a one-hot encoding?
 OH_entries_added = 1e4*100 - 1e4
 
@@ -114,12 +114,12 @@ OH_entries_added = 1e4*100 - 1e4
 # replacing the column with a label encoding?
 label_entries_added = 0
 """)
-    
+
 Cardinality = MultipartProblem(CardinalityA, CardinalityB)
 
 class OneHot(CodingProblem):
     _vars = ['OH_X_train', 'OH_X_valid']
-    _hint = ("Begin by applying the one-hot encoder to the low cardinality columns in the " 
+    _hint = ("Begin by applying the one-hot encoder to the low cardinality columns in the "
              "training and validation data in `X_train[low_cardinality_cols]` and "
              "`X_valid[low_cardinality_cols]`, respectively.")
     _solution = CS(
@@ -141,35 +141,35 @@ OH_X_train = pd.concat([num_X_train, OH_cols_train], axis=1)
 OH_X_valid = pd.concat([num_X_valid, OH_cols_valid], axis=1)
 
 """)
-    
+
     def check(self, OH_X_train, OH_X_valid):
-        
+
         assert type(OH_X_train) == pd.core.frame.DataFrame, \
         "`OH_X_train` is not a pandas DataFrame."
-        
+
         assert type(OH_X_valid) == pd.core.frame.DataFrame, \
         "`OH_X_valid` is not a pandas DataFrame."
 
         assert not(any((OH_X_train.dtypes == 'object').values)), \
         "You still need to encode some of the categorical columns in your training data."
-        
+
         assert not(any((OH_X_valid.dtypes == 'object').values)), \
         "You still need to encode some of the categorical columns in your validation data."
-        
+
         assert len(OH_X_train.columns) == 155, \
         "`OH_X_train` should have 155 columns."
-        
+
         assert len(OH_X_valid.columns) == 155, \
         "`OH_X_valid` should have 155 columns."
-    
-    
+
+
 qvars = bind_exercises(globals(), [
     Drop,
     Label,
-    Cardinality, 
+    Cardinality,
     OneHot
     ],
-    tutorial_id=-1,
+    tutorial_id=239,
     var_format='step_{n}',
     )
 __all__ = list(qvars)
