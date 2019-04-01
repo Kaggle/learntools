@@ -10,7 +10,7 @@ fi
 
 mkdir -p input
 
-DATASETS="dansbecker/melbourne-housing-snapshot "
+DATASETS="dansbecker/melbourne-housing-snapshot dansbecker/aer-credit-card-data"
 
 for slug in $DATASETS
 do
