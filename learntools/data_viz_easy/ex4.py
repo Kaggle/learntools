@@ -2,124 +2,205 @@ import pandas as pd
 import matplotlib
 import seaborn as sns
 import warnings
-import matplotlib.pyplot as plt
 
 from learntools.core import *
 
 warnings.filterwarnings("ignore")
-df_b = pd.read_csv("../input/cancer_b.csv", index_col="Id")
-df_m = pd.read_csv("../input/cancer_m.csv", index_col="Id")
+df = pd.read_csv("../input/candy.csv", index_col="id")
 
-class LoadCancerData(EqualityCheckProblem):
-    _vars = ['cancer_b_data', 'cancer_m_data']
-    _expected = [df_b, df_m]
+class LoadData(EqualityCheckProblem):
+    _var = 'candy_data'
+    _expected = df
     _hint = ("Use `pd.read_csv`, and follow it with **two** pieces of text that "
              "are enclosed in parentheses and separated by commas.  (1) The "
-             "filepath for the dataset is provided in either `cancer_b_filepath` or "
-             "`cancer_m_filepath`.  (2) Use the `\"Id\"` column to label the rows.")
-    _solution = CS("""
-cancer_b_data = pd.read_csv(cancer_b_filepath, index_col="Id")
-cancer_m_data = pd.read_csv(cancer_m_filepath, index_col="Id")
-""")
+             "filepath for the dataset is provided in `candy_filepath`.  (2) Use the "
+             "`\"id\"` column to label the rows.")
+    _solution = CS('candy_data = pd.read_csv(candy_filepath, index_col="id")')
 
 class ReviewData(EqualityCheckProblem):
-    _vars = ['max_perim', 'mean_radius']
-    _expected = [87.46, 20.57]
+    _vars = ['more_popular', 'more_sugar']
+    _expected = ['3 Musketeers', 'Air Heads']
     _hint = ("Use the `head()` command to print the first 5 rows. "
-             "**After printing the first 5 rows**, "
-             "each row corresponds to a different tumor ID. "
-             "The `'Perimeter (mean)'` column is the fourth column in the dataset. "
-             "The `'Radius (mean)'` column is the second column.")
+    "**After printing the first 5 rows**, "
+    "each row corresponds to a different candy. "
+    "The `'winpercent'` column indicates the popularity of the candy. "
+    "The `'sugarpercent'` column has the amount of sugar in the candy.")
     _solution = CS(
-"""# Print the first five rows of the (benign) data
-cancer_b_data.head()
-# Print the first five rows of the (malignant) data
-cancer_m_data.head()
-# In the first five rows of the data for benign tumors, what is the
-# largest value for 'Perimeter (mean)'?
-max_perim = 87.46
-# What is the value for 'Radius (mean)' for the tumor with Id 842517?
-mean_radius = 20.57
+"""# Print the first five rows of the data
+candy_data.head()
+# Which candy was more popular with survey respondents:
+# '3 Musketeers' or 'Almond Joy'?
+more_popular = '3 Musketeers'
+# Which candy has higher sugar content: 'Air Heads'
+# or 'Baby Ruth'?
+more_sugar = 'Air Heads'
 """)
-
-class PlotHist(CodingProblem):
+    
+class PlotBlueScatter(CodingProblem):
     _var = 'plt'
-    _hint = ("Use `sns.distplot`, and set the data and legend label by using "
-             "`a=` and `label=`, respectively. Set `kde=False`. You will need to " 
-             "write two lines of code, corresponding to `cancer_m_data` and "
-             "`cancer_b_data`.")
+    _hint = ("Use `sns.scatterplot`, and set the variables for the x-axis and y-axis "
+        "by using `x=` and `y=`, respectively.")
     _solution = CS(
-"""# Histograms for benign and maligant tumors
-sns.distplot(a=cancer_b_data['Area (mean)'], label="Benign", kde=False)
-sns.distplot(a=cancer_m_data['Area (mean)'], label="Malignant", kde=False)
-plt.legend()
+"""# Scatter plot showing the relationship between 'sugarpercent' and 'winpercent'
+sns.scatterplot(x=candy_data['sugarpercent'], y=candy_data['winpercent'])
 """)
 
     def solution_plot(self):
         self._view.solution()
-        sns.distplot(a=df_b['Area (mean)'], label="Benign", kde=False)
-        sns.distplot(a=df_m['Area (mean)'], label="Malignant", kde=False)
-        plt.legend()
+        sns.scatterplot(x=df['sugarpercent'], y=df['winpercent'])
     
     def check(self, passed_plt):
-        assert len(passed_plt.figure(1).axes) > 0, "Please write code to create two histograms."
+        assert len(passed_plt.figure(1).axes) > 0, "Please write code to create a scatter plot."
         
         children = passed_plt.axes().get_children()
         
-        assert all(isinstance(x, matplotlib.patches.Rectangle) for x in children[:31]), \
-        ("Does your figure contain two histograms?  Write two lines of code "
-         "using `sns.distplot` to generate your figure.")
-
-class ThinkHist(ThoughtExperiment):
-    _hint = ("Does the histogram for malignant tumors appear mostly to the left or to the "
-             "right of the histogram for benign tumors?  Which histogram appears wider?")
-    _solution = ("Malignant tumors have higher values for `'Area (mean)'`, on average. "
-                 "Malignant tumors have a larger range of potential values.")
+        assert all(isinstance(x, matplotlib.spines.Spine) for x in children[1:5]), \
+        "Is your figure a scatter plot? Please use `sns.scatterplot` to generate your figure."
+        
+class ThinkBlueScatter(ThoughtExperiment):
+    _hint = ("Compare candies with higher sugar content (on the right side of the chart) to candies "
+             "with lower sugar content (on the left side of the chart). Is one group clearly more "
+             "popular than the other?")
+    _solution = ("The scatter plot does not show a strong correlation between the two variables. "
+                 "Since there is no clear relationship between the two variables, this tells us "
+                 "that sugar content does not play a strong role in candy popularity.")
     
-Hist = MultipartProblem(PlotHist, ThinkHist)
+BlueScatter = MultipartProblem(PlotBlueScatter, ThinkBlueScatter)
 
-class PlotThreshold(CodingProblem):
+class PlotBlueReg(CodingProblem):
     _var = 'plt'
-    _hint = ("Use `sns.kdeplot`, and specify the data and label by using `data=` and `label=`, "
-             "respectively. You will need to write two lines of code, corresponding to "
-             "`cancer_m_data` and `cancer_b_data`.")
+    _hint = ("Use `sns.regplot`, and set the variables for the x-axis and y-axis "
+             "by using `x=` and `y=`, respectively.")
     _solution = CS(
-"""# KDE plots for benign and malignant tumors
-sns.kdeplot(data=cancer_b_data['Radius (worst)'], shade=True, label="Benign")
-sns.kdeplot(data=cancer_m_data['Radius (worst)'], shade=True, label="Malignant")
+"""# Scatter plot w/ regression line showing the relationship between 'sugarpercent' and 'winpercent'
+sns.regplot(x=candy_data['sugarpercent'], y=candy_data['winpercent'])
 """)
 
     def solution_plot(self):
         self._view.solution()
-        sns.kdeplot(data=df_b['Radius (worst)'], shade=True, label="Benign")
-        sns.kdeplot(data=df_m['Radius (worst)'], shade=True, label="Malignant")
+        sns.regplot(x=df['sugarpercent'], y=df['winpercent'])
     
     def check(self, passed_plt):
         assert len(passed_plt.figure(1).axes) > 0, \
-        "Please write code to create one figure containing two KDE plots."
+        "Please write code to create a scatter plot with a regression line."
         
         children = passed_plt.axes().get_children()
         
-        assert all(isinstance(x, matplotlib.collections.PolyCollection) for x in children[0:2]) \
-        and all(isinstance(x, matplotlib.lines.Line2D) for x in children[2:4]), \
-        ("Does your figure show two KDE plots?  Write two lines of code using "
-         "`sns.kdeplot` to generate your figure.")
+        assert all(isinstance(x, matplotlib.spines.Spine) for x in children[3:7]), \
+        ("Is your figure a scatter plot with a regression line? "
+         "Please use `sns.regplot` to generate your figure.")
         
-class ThinkThreshold(ThoughtExperiment):
-    _hint = ("Take a look at the KDE plots, and use the legend to tell the difference between "
-             "malignant and benign tumors.  Around a value of 25, which curve appears higher?")
-    _solution = ("The algorithm is more likely to classify the tumor as malignant. This is "
-                 "because the curve for malignant tumors is much higher than the curve for benign "
-                 "tumors around a value of 25 -- and an algorithm that gets high accuracy is likely "
-                 "to make decisions based on this pattern in the data.")
+class ThinkBlueReg(ThoughtExperiment):
+    _hint = ("Does the regression line have a positive or negative slope?")
+    _solution = ("Since the regression line has a slightly positive slope, this tells us that there "
+                 "is a slightly positive correlation between `'winpercent'` and `'sugarpercent'`. "
+                 "Thus, people have a slight preference for candies containing relatively more sugar.")
 
-Threshold = MultipartProblem(PlotThreshold, ThinkThreshold)
+BlueReg = MultipartProblem(PlotBlueReg, ThinkBlueReg)
+
+class ColorScatter(CodingProblem):
+    _var = 'plt'
+    _hint = ("Use `sns.scatterplot`, and set the variables for the x-axis, y-axis, and color "
+        "of the points by using `x=`, `y=`, and `hue=`, respectively.")
+    _solution = CS(
+"""# Scatter plot showing the relationship between 'pricepercent', 'winpercent', and 'chocolate'
+sns.scatterplot(x=candy_data['pricepercent'], y=candy_data['winpercent'], hue=candy_data['chocolate'])
+""")
+
+    def solution_plot(self):
+        self._view.solution()
+        sns.scatterplot(x=df['pricepercent'], y=df['winpercent'], hue=df['chocolate'])
     
+    def check(self, passed_plt):
+        assert len(passed_plt.figure(1).axes) > 0, \
+        "After you've written code to create a scatter plot, `check()` will tell you whether your code is correct."
+
+        legend_handles = passed_plt.figure(1).axes[0].get_legend_handles_labels()[0]
+        
+        assert all(isinstance(x, matplotlib.collections.PathCollection) for x in legend_handles), \
+        ("Is your figure a scatter plot?  Please use `sns.scatterplot` to generate your figure.")
+        
+        assert len(legend_handles) == 3, "Did you color-code the points with the `'chocolate'` column?"
+
+class PlotColorReg(CodingProblem):
+    _var = 'plt'
+    _hint = ("Use `sns.lmplot`, and set the variables for the x-axis, y-axis, color of the points, "
+             "and the dataset by using `x=`, `y=`, `hue=`, and `data=`, respectively.")
+    _solution = CS(
+"""# Color-coded scatter plot w/ regression lines
+sns.lmplot(x="pricepercent", y="winpercent", hue="chocolate", data=candy_data)
+""")
+
+    def solution_plot(self):
+        self._view.solution()
+        sns.lmplot(x="pricepercent", y="winpercent", hue="chocolate", data=df)
+    
+    def check(self, passed_plt):
+        assert len(passed_plt.figure(1).axes) > 0, \
+        "After you've written code to create a scatter plot, `check()` will tell you whether your code is correct."
+        
+        legend_handles = passed_plt.figure(1).axes[0].get_legend_handles_labels()[0]
+        
+        assert all(isinstance(x, matplotlib.collections.PathCollection) for x in legend_handles), \
+        ("Is your figure a scatter plot?  Please use `sns.scatterplot` to generate your figure.")
+        
+        assert len(legend_handles) == 2, \
+        "Did you color-code the points with the `'chocolate'` column and add two regression lines?" 
+
+class ThinkColorReg(ThoughtExperiment):
+    _hint = "Look at each regression line - do you notice a positive or negative slope?"
+    _solution = ("We'll begin with the regression line for chocolate candies. Since this line has "
+                 "a slightly positive slope, we can say that more expensive chocolate candies tend to "
+                 "be more popular (than relatively cheaper chocolate candies).  Likewise, "
+                 "since the regression line for candies without chocolate has a negative slope, "
+                 "we can say that if candies don't contain chocolate, they tend to be more popular "
+                 "when they are cheaper.  One important note, however, is that the dataset "
+                 "is quite small -- so we shouldn't invest too much trust in these patterns!  To "
+                 "inspire more confidence in the results, we should add more candies to the dataset.")
+
+ColorReg = MultipartProblem(PlotColorReg, ThinkColorReg)
+
+class PlotSwarm(CodingProblem):
+    _var = 'plt'
+    _hint = ("Use `sns.swarmplot`, and set the variables for the x-axis and y-axis "
+        "by using `x=` and `y=`, respectively.")
+    _solution = CS(
+"""# Scatter plot showing the relationship between 'chocolate' and 'winpercent'
+sns.swarmplot(x=candy_data['chocolate'], y=candy_data['winpercent'])
+""")
+
+    def solution_plot(self):
+        self._view.solution()
+        sns.swarmplot(x=df['chocolate'], y=df['winpercent'])
+    
+    def check(self, passed_plt):
+        assert len(passed_plt.figure(1).axes) > 0, "Please write code to create a categorical scatter plot."
+        
+        children = passed_plt.axes().get_children()
+        
+        assert all(isinstance(x, matplotlib.spines.Spine) for x in children[2:6]), \
+        "Is your figure a categorical scatter plot?  Please use `sns.swarmplot` to generate your figure."
+        
+        #assert children[2].get_extents().ymax == -20.10169952441417, \
+        #"Do you have `'chocolate'` on the x-axis and `'winpercent'` on the y-axis?" 
+        
+class ThinkSwarm(ThoughtExperiment):
+    _hint = ("Which plot communicates more information?  In general, it's good practice to "
+             "use the simplest plot that tells the entire story of interest.")
+    _solution = ("In this case, the categorical scatter plot from **Step 7** is the more appropriate "
+                 "plot. While both plots tell the desired story, the plot from **Step 6** conveys far "
+                 "more information that could distract from the main point.")
+    
+Swarm = MultipartProblem(PlotSwarm, ThinkSwarm)
+
 qvars = bind_exercises(globals(), [
-    LoadCancerData,
+    LoadData,
     ReviewData,
-    Hist,
-    Threshold
+    BlueScatter,
+    BlueReg,
+    ColorScatter,
+    ColorReg,
+    Swarm
     ],
     tutorial_id=-1,
     var_format='step_{n}',
