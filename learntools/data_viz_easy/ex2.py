@@ -1,143 +1,136 @@
 import pandas as pd
-import seaborn as sns
 import matplotlib
+import seaborn as sns
 import matplotlib.pyplot as plt
-import warnings
 
 from learntools.core import *
 
-warnings.filterwarnings("ignore")
-df = pd.read_csv('../input/ign_scores.csv', index_col="Platform")
+df = pd.read_csv('../input/museum_visitors.csv', index_col="Date", parse_dates=True)
 
-class LoadIGNData(EqualityCheckProblem):
-    _var = 'ign_data'
+class LoadMuseumData(EqualityCheckProblem):
+    _var = 'museum_data'
     _expected = df
-    _hint = ("Use `pd.read_csv`, and follow it with **two** pieces of text that "
+    _hint = ("Use `pd.read_csv`, and follow it with **three** pieces of text that "
              "are enclosed in parentheses and separated by commas.  (1) The "
-             "filepath for the dataset is provided in `ign_filepath`.  (2) Use the "
-             "`\"Platform\"` column to label the rows.")
-    _solution = CS('ign_data = pd.read_csv(ign_filepath, index_col="Platform")')
+             "filepath for the dataset is provided in `museum_filepath`.  (2) Use "
+             "the `\"Date\"` column to label the rows. (3) Make sure that the row "
+             "labels are recognized as dates.")
+    _solution = CS('museum_data = pd.read_csv(museum_filepath, index_col="Date", parse_dates=True)')
     
 class ReviewData(EqualityCheckProblem):
-    _vars = ['high_score', 'best_genre']
-    _expected = [7.759930, 'Simulation']
-    _hint = ("Use `ign_data` to print the entire dataset. **After printing the "
-             "dataset**, each row corresponds to a different platform, and each "
-             "genre has its own column. The entries contain the average score for each "
-             "combination of genre and platform.")
+    _vars = ['ca_museum_jul18', 'avila_oct18']
+    _expected = [2620, 14658]
+    _hint = ("Use the `tail()` command that you learned about in the tutorial to print the "
+             "last five rows. **After printing the last five rows**, the number of visitors "
+             "in July 2018 for each museum can be found in the row marked `2018-07-01`, and the "
+             "number of visitors in October 2018 for each museum can be found in "
+             "the row marked `2018-10-01`.")
     _solution = CS(
-"""# Print the data
-ign_data
-# What is the highest average score received by PC games, for any platform?
-high_score = 7.759930
-# On the Playstation Vita platform, which genre has the 
-# lowest average score? Please provide the name of the column, and put your answer 
-# in single quotes (e.g., 'Action', 'Adventure', 'Fighting', etc.)
-best_genre = 'Simulation'
+"""# Print the last five rows of the data
+museum_data.tail()
+# How many visitors did the Chinese American Museum 
+# receive in July 2018? 
+ca_museum_jul18 = 2620
+# In October 2018, how many more visitors did Avila 
+# Adobe receive than the Firehouse Museum?
+avila_oct18 = 14658
 """)
-    
-class PlotRacing(CodingProblem):
+
+class PlotAll(CodingProblem):
     _var = 'plt'
-    _hint = "Use `sns.barplot` and the `'Racing'` column of `ign_data`."
+    _hint = ("Use `sns.lineplot`, and plot one line for each museum in "
+             "`museum_data`. (_You can do this in a single line of code!_)")
     _solution = CS(
 """# Set the width and height of the figure
-plt.figure(figsize=(8, 6))
-# Bar chart showing average score for racing games by platform
-sns.barplot(x=ign_data['Racing'], y=ign_data.index)
-# Add label for horizontal axis
-plt.xlabel("")
-# Add label for vertical axis
-plt.title("Average Score for Racing Games, by Platform")
+plt.figure(figsize=(12,6))
+# Line chart showing the number of visitors to each museum over time
+sns.lineplot(data=museum_data)
+# Add title
+plt.title("Monthly Visitors to Los Angeles City Museums")
 """)
     
     def solution_plot(self):
         self._view.solution()
-        plt.figure(figsize=(8, 6))
-        sns.barplot(x=df['Racing'], y=df.index)
-        plt.xlabel("")
-        plt.title("Average Score for Racing Games, by Platform")
-    
+        plt.figure(figsize=(12,6))
+        sns.lineplot(data=df)
+        plt.title("Monthly Visitors to Los Angeles City Museums")
+  
     def check(self, passed_plt):
-        assert len(passed_plt.figure(1).axes) > 0, "Please write code to create a bar chart."
         
-        container = passed_plt.axes().containers[0]
+        assert len(passed_plt.figure(1).axes) > 0, \
+        ("After you've written code to create a line chart, `check()` will tell "
+         "you whether your code is correct.")
         
-        assert type(container) == matplotlib.container.BarContainer, \
-        "Is your figure a bar chart?  Please use `sns.barplot` to generate your figure."
+        main_axis = passed_plt.figure(1).axes[0]
+        legend_handles = main_axis.get_legend_handles_labels()[0]
         
-        children = container.get_children()
-        
-        assert len(children) == 21, \
-        "Your figure doesn't appear to have one bar for each platform."
-        
-        correct_bar_lengths = [7.0425, 6.6571428571428575, 5.897435897435898, 6.85263157894737,
-                               6.9, 6.939622641509434, 6.038636363636365, 6.563636363636364, 
-                               7.032417582417582, 6.773387096774192, 6.585064935064935, 
-                               6.9785714285714295, 7.589999999999999, 6.401960784313727, 6.3, 
-                               5.0116666666666685, 6.898305084745762, 7.021590909090909, 
-                               6.996153846153844, 8.163636363636364, 7.315789473684211]
-        
-        assert [children[i].properties()['bbox'].width for i in range(21)] == correct_bar_lengths, \
-        "Did you select the `'Racing'` column?"
+        assert all(isinstance(x, matplotlib.lines.Line2D) for x in legend_handles), \
+        ("Is your figure a line chart?  Please use `sns.lineplot()` to generate "
+         "the lines in your figure.")
 
-class ThinkRacing(ThoughtExperiment):
-    _hint = ("Check the length of the bar corresponding to the **Wii** platform.  Does it appear to be "
-             "longer than the other bars?  If so, you should expect a Wii game to perform well!")
-    _solution = ("Based on the data, we should not expect a racing game for the Wii platform to receive "
-                 "a high rating.  In fact, on average, racing games for Wii "
-                 "score lower than any other platform.  Xbox One seems to be the best alternative, since "
-                 "it has the highest average ratings.")
-    
-Racing = MultipartProblem(PlotRacing, ThinkRacing)
-
-
-class PlotHeat(CodingProblem):
+        assert len(legend_handles) == 4, \
+        ("Your plot does not seem to have 4 lines (one line for each museum). "
+         "We detect %d lines. Note that we can only detect lines that appear in "
+         "the legend, so please make sure that your legend has an entry for each "
+         "line by using `label=`.") % len(legend_handles)
+        
+class PlotAvila(CodingProblem):
     _var = 'plt'
-    _hint = "Use `sns.heatmap`."
     _solution = CS(
 """# Set the width and height of the figure
-plt.figure(figsize=(10,10))
-# Heatmap showing average game score by platform and genre
-sns.heatmap(ign_data, annot=True)
+plt.figure(figsize=(12,6))
+# Add title
+plt.title("Monthly Visitors to Avila Adobe")
+# Line chart showing the number of visitors to Avila Adobe over time
+sns.lineplot(data=museum_data['Avila Adobe'])
 # Add label for horizontal axis
-plt.xlabel("Genre")
-# Add label for vertical axis
-plt.title("Average Game Score, by Platform and Genre")
+plt.xlabel("Date")
 """)
+    _hint = ("Use `sns.lineplot` to plot the `\'Avila Adobe\'` column in "
+             "`museum_data`. (_If you like, use `label=` to add the line "
+             "to the legend, but this is not necessary!_)")
     
     def solution_plot(self):
         self._view.solution()
-        plt.figure(figsize=(10,10))
-        sns.heatmap(df, annot=True)
-        plt.xlabel("Genre")
-        plt.title("Average Game Score, by Platform and Genre")
-    
+        plt.figure(figsize=(12,6))
+        plt.title("Monthly Visitors to Avila Adobe")
+        sns.lineplot(data=df['Avila Adobe'])
+        plt.xlabel("Date")
+
     def check(self, passed_plt):
-        assert len(passed_plt.figure(1).axes) > 0, "Please write code to create a heatmap."
         
-        children = passed_plt.axes().get_children()
-
-        assert type(children[0]) == matplotlib.collections.QuadMesh, \
-        "Is your figure a heatmap?  Please use `sns.heatmap` to generate your figure."
+        assert len(passed_plt.figure(1).axes) > 0, \
+        ("After you've written code to create a line chart, `check()` will tell "
+         "you whether your code is correct.")
         
-        assert len(children) == 263, \
-        "Did you use all of the data in `ign_data` to create the heatmap?"
-
-class ThinkHeat(ThoughtExperiment):
-    _hint = ("To find the highest average ratings, look for the largest numbers (or lightest boxes) "
-             "in the heatmap.  To find the lowest average ratings, find the smallest numbers (or "
-             "darkest boxes).")
-    _solution = ("**Simulation** games for **Playstation 4** receive the highest average ratings (9.2). "
-                 "**Shooting** and **Fighting** games for **Game Boy Color** receive the lowest average "
-                 "rankings (4.5).") 
-    
-Heat = MultipartProblem(PlotHeat, ThinkHeat)
-    
+        main_axis = passed_plt.figure(1).axes[0]
+        legend_handles = main_axis.get_legend_handles_labels()[0]
+        
+        assert all(isinstance(x, matplotlib.lines.Line2D) for x in legend_handles), \
+        ("Is your figure a line chart?  Please use `sns.lineplot()` to generate "
+         "the lines in your figure.")
+        
+        print("Thank you for creating a line chart!  To see how your code compares "
+              "to the official solution, please use the code cell below.")
+        
+class ThinkAvila(ThoughtExperiment):
+    _hint = ("Look at the early part of each year (around January).  Does the "
+             "line chart dip to low values or reach relatively high values?")
+    _solution = ("The line chart generally dips to relatively low values around "
+                 "the early part of each year (in December and January), "
+                 "and reaches its highest values in the middle of the year (especially "
+                 "around May and June).  Thus, Avila Adobe usually gets more "
+                 "visitors in March-August (or the spring and summer months).  With this in mind, "
+                 "Avila Adobe could definitely benefit from hiring more seasonal "
+                 "employees to help with the extra work in March-August (the spring and summer)!")
+        
+Avila = MultipartProblem(PlotAvila, ThinkAvila)
+       
 qvars = bind_exercises(globals(), [
-    LoadIGNData,
+    LoadMuseumData,
     ReviewData,
-    Racing,
-    Heat
+    PlotAll, 
+    Avila
     ],
     tutorial_id=-1,
     var_format='step_{n}',
