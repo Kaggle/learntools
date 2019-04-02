@@ -7,8 +7,8 @@ track = dict(
 
 lessons = [{'topic': topic_name} for topic_name in
             ['Hello, Seaborn',
-            'Line Plots',
-            'Bar Plots and Heatmaps',
+            'Line Charts',
+            'Bar Charts and Heatmaps',
             'Scatter Plots',
             'Distributions',
             'Choosing Plot Types and Custom Styles',
