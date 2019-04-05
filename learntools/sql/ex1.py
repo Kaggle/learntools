@@ -5,32 +5,45 @@ class CountTables(EqualityCheckProblem):
     _var = 'num_tables'
     _expected = 1
     _hint = \
-"""Run `chicago_crime.list_tables()` in the top cell. Interpret the output to fill in `num_tables`"""
+"""Use the `list_tables()` method to get a list of the tables in the dataset."""
 
     _solution = CS(
 """
-chicago_crime.list_tables()
-num_tables = 1   # also could have done num_tables = len(chicago_crime.list_tables())
+# List all the tables in the "chicago_crime" dataset
+tables = list(client.list_tables(dataset))
+
+# Print number of tables in the dataset
+print(len(tables))
+
+num_tables = 1
 """
 )
 
 class CountTimestampFields(EqualityCheckProblem):
     _var = 'num_timestamp_fields'
     _expected = 2
-    _hint = \
-"""Run `chicago_crime.table_schema('crime')` and count the number of fields with TIMESTAMP type"""
-
+    _hint = ("Begin by fetching the `crime` table. Then take a look at the table schema, and "
+             "check the field type of each column.  How many times does `'TIMESTAMP'` appear?")
     _solution = CS(
 """
-chicago_crime.table_schema('crime')
+# Construct a reference to the "crime" table
+table_ref = dataset_ref.table("crime")
+
+# API request - fetch the table
+table = client.get_table(table_ref)
+
+# Print information on all the columns in the "crime" table in the "chicago_crime" dataset
+print(table.schema)
+
 num_timestamp_fields = 2
 """
 )
 
 class IdentifyFieldsForPlotting(CodingProblem):
     _var = 'fields_for_plotting'
-    _hint = "There are a couple options, but two of the fields are things commonly used to plot on maps. " + \
-            "Both are FLOAT types. Use quotes around the field names in your answer"
+    _hint = ("Look at the table schema.  There are a couple options, but two of the fields are "
+             "things commonly used to plot on maps. "
+             "Both are `'FLOAT'` types. Use quotes around the field names in your answer.")
     _solution = CS("fields_for_plotting = ['latitude', 'longitude']")
     def check(self, fields_for_plotting):
         assert (type(fields_for_plotting) is list), "fields_for_plotting should be a list"
