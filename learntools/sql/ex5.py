@@ -5,8 +5,12 @@ class GetTableName(EqualityCheckProblem):
     _var = 'table_name'
     _expected = 'taxi_trips'
     _solution = CS("""
-# Find the table name with the following command
-chicago_taxi_helper.list_tables()
+# List all the tables in the dataset
+tables = list(client.list_tables(dataset))
+
+# Print names of all tables in the dataset (there is only one!)
+for table in tables:  
+    print(table.table_id)
 
 table_name = 'taxi_trips'
     """)
@@ -14,9 +18,19 @@ table_name = 'taxi_trips'
 class WhatsWrongWithData(ThoughtExperiment):
     _solution = \
 """
-You can see the data by calling `chicago_taxi_trips.head('taxi_trips')`.  
+You can see the data by calling: 
+```python
+# Construct a reference to the "taxi_trips" table
+table_ref = dataset_ref.table("taxi_trips")
 
-Some trips the top few rows have `trip_seconds` or `trip_miles` values of 0. 
+# API request - fetch the table
+table = client.get_table(table_ref)
+
+# Preview the first five lines of the "taxi_trips" table
+client.list_rows(table, max_results=5).to_dataframe()
+```
+
+Some trips in the top few rows have `trip_seconds` or `trip_miles` values of 0. 
 Other location fields have values of `None`. That is a problem if we want to use those fields.
 """
 
@@ -30,15 +44,22 @@ class YearDistrib(CodingProblem):
         first_year_rides = results.query('year == 2013').num_trips[0]
         assert (first_year_rides == 26870287), ('There should have been 26870287 rides in 2013. But your results showed {}'.format(first_year_rides))
 
-    _hint = "Start your query with  `SELECT EXTRACT(YEAR FROM trip_start_timestamp) AS year, COUNT(1) num_trips`"
+    _hint = "Start your query with  `SELECT EXTRACT(YEAR FROM trip_start_timestamp) AS year, COUNT(1) AS num_trips`"
     _solution = CS(
 """
-rides_per_year_query = \"""SELECT EXTRACT(YEAR FROM trip_start_timestamp) AS year, COUNT(1) num_trips
-                    from `bigquery-public-data.chicago_taxi_trips.taxi_trips`
-                    GROUP BY year
-                    ORDER BY year\"""
+rides_per_year_query = \"""
+                       SELECT EXTRACT(YEAR FROM trip_start_timestamp) AS year, 
+                              COUNT(1) AS num_trips
+                       FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`
+                       GROUP BY year
+                       ORDER BY year
+                       \"""
 
-rides_per_year_result = chicago_taxi_helper.query_to_pandas_safe(rides_per_year_query)
+# Set up the query
+rides_per_year_query_job = client.query(rides_per_year_query)
+
+# API request - run the query, and return a pandas DataFrame
+rides_per_year_result = rides_per_year_query_job.to_dataframe()
 """
 )
 
@@ -51,16 +72,23 @@ class MonthDistrib(CodingProblem):
         jan_rides = results.query('month==1').num_trips[0]
         assert (jan_rides == 1040262), ('There should have been 1040262 rides in January. But your results showed {}'.format(jan_rides))
 
-    _hint = "Start your query with  `SELECT EXTRACT(MONTH FROM trip_start_timestamp) AS month, COUNT(1) num_trips`"
+    _hint = "Start your query with `SELECT EXTRACT(MONTH FROM trip_start_timestamp) AS month, COUNT(1) AS num_trips`"
     _solution = CS(
 """
-rides_per_month_query = \"""SELECT EXTRACT(MONTH FROM trip_start_timestamp) AS month, COUNT(1) num_trips
-                    from `bigquery-public-data.chicago_taxi_trips.taxi_trips`
-                    WHERE EXTRACT(YEAR FROM trip_start_timestamp) = 2017
-                    GROUP BY month
-                    ORDER BY month\"""
+rides_per_month_query = \"""
+                        SELECT EXTRACT(MONTH FROM trip_start_timestamp) AS month, 
+                               COUNT(1) AS num_trips
+                        FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`
+                        WHERE EXTRACT(YEAR FROM trip_start_timestamp) = 2017
+                        GROUP BY month
+                        ORDER BY month
+                        \"""
 
-rides_per_month_result = chicago_taxi_helper.query_to_pandas_safe(rides_per_month_query)
+# Set up the query
+rides_per_month_query_job = client.query(rides_per_month_query)
+
+# API request - run the query, and return a pandas DataFrame
+rides_per_month_result = rides_per_month_query_job.to_dataframe()
 """
 )
 
@@ -78,19 +106,34 @@ class TheLongQuery(CodingProblem):
 
     _solution = CS(
 """
-speeds_query = \"""WITH RelevantRides AS
-(SELECT EXTRACT(HOUR FROM trip_start_timestamp) hour_of_day, trip_miles, trip_seconds
-FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`
-WHERE trip_start_timestamp > '2017-01-01' and trip_start_timestamp < '2017-07-01'
-    AND trip_seconds > 0 AND trip_miles > 0
-)
+speeds_query = \"""
+               WITH RelevantRides AS
+               (
+                   SELECT EXTRACT(HOUR FROM trip_start_timestamp) AS hour_of_day, 
+                          trip_miles, 
+                          trip_seconds
+                   FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`
+                   WHERE trip_start_timestamp > '2017-01-01' AND 
+                         trip_start_timestamp < '2017-07-01' AND 
+                         trip_seconds > 0 AND 
+                         trip_miles > 0
+               )
+               SELECT hour_of_day, 
+                      COUNT(1) AS num_trips, 
+                      3600 * SUM(trip_miles) / SUM(trip_seconds) AS avg_mph
+               FROM RelevantRides
+               GROUP BY hour_of_day
+               ORDER BY hour_of_day
+               \"""
 
-SELECT hour_of_day, count(1) num_trips, 3600 * SUM(trip_miles) / SUM(trip_seconds) avg_mph
-FROM RelevantRides
-GROUP BY hour_of_day
-ORDER BY hour_of_day\"""
+# Set up the query
+speeds_query_job = client.query(speeds_query)
 
-speeds_result = chicago_taxi_helper.query_to_pandas_safe(speeds_query, max_gb_scanned=20)
+# API request - run the query, and return a pandas DataFrame
+speeds_result = speeds_query_job.to_dataframe()
+
+# View results
+print(speeds_result)
 """
 )
 
@@ -106,7 +149,7 @@ You can review 200 rows of the raw data with the command `chicago_taxi_trips.hea
 You'll see that the timestamps are all in the AM hours (hours are less than or equal to 12.) 
 
 At first you might worry that the data is coming back sorted by time, but the variety of dates suggests that's not the case. 
-Part of data science is tracking down exactly this type of problem. If you were in an organization working on this, you could show the evidence you've just collected (e.g. the breakdown of trips by hour) to someone responsible for collecting the data, and help them debug the data collection and storage process using the results you've collected.
+Part of data science is tracking down exactly this type of problem. If you were in an organization working on this, you could show the evidence you've just collected (e.g. the breakdown of trips by hour) to someone responsible for collecting the data, and help them debug the data collection and storage process.
 """
 
 
