@@ -23,16 +23,18 @@ class WhichCountries(CodingProblem):
 
     _solution = CS(\
 """
-first_query = \"""SELECT country
-                  FROM `bigquery-public-data.openaq.global_air_quality`
-                  WHERE unit = "ppm"
-        \"""
+first_query = \"""
+              SELECT country
+              FROM `bigquery-public-data.openaq.global_air_quality`
+              WHERE unit = "ppm"
+              \"""
 
 # Or to get each country just once, you could use
-first_query = \"""SELECT DISTINCT country
-                  FROM `bigquery-public-data.openaq.global_air_quality`
-                  WHERE unit = "ppm"
-        \"""
+first_query = \"""
+              SELECT DISTINCT country
+              FROM `bigquery-public-data.openaq.global_air_quality`
+              WHERE unit = "ppm"
+              \"""
 """
     )
 
@@ -47,18 +49,20 @@ class ZeroPollution(CodingProblem):
         assert ('value' in query.lower()), ("You don't have the right WHERE clause yet. Try again")
         assert ('`bigquery-public-data.openaq.global_air_quality`' in query.lower()), \
                ("You should be selecting the data ```FROM `bigquery-public-data.openaq.global_air_quality```s")
-        # this is hard to check. The dataset is dynamically updated and new queries are expensive. use min val as something that should't change
-        assert(results.timestamp.min() == pd.Timestamp('2015-12-02 01:00:00+0000', tz='UTC')), ("The results don't look right. Try again.")
-
+        # this is hard to check. The dataset is dynamically updated and new queries are expensive. use min val as something that shouldn't change
+        assert(results.timestamp.min() == pd.Timestamp('2015-10-24 10:00:00+0000', tz='UTC')), ("The results don't look right. Try again.")
 
     _solution = CS( \
 """
-zero_pollution_query = \"""SELECT country
-                           FROM `bigquery-public-data.openaq.global_air_quality`
-                           WHERE value = 0
-\"""
+zero_pollution_query = \"""
+                       SELECT country
+                       FROM `bigquery-public-data.openaq.global_air_quality`
+                       WHERE value = 0
+                       \"""
 
-zero_pollution_results = open_aq.query_to_pandas_safe(zero_pollution_query)
+query_job = client.query(zero_pollution_query)
+
+zero_pollution_results = query_job.to_dataframe()
 """
 )
 
