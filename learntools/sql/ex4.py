@@ -15,11 +15,14 @@ class EducationSpending(CodingProblem):
     _hint = "The part before `FROM` should be `SELECT country_name, AVG(value) avg_ed_spending_pct`"
     _solution = CS(\
 """
-SELECT country_name, AVG(value) avg_ed_spending_pct
-FROM `bigquery-public-data.world_bank_intl_education.international_education`
-WHERE indicator_code = 'SE.XPD.TOTL.GD.ZS' and year >= 2010 and year <= 2017
-GROUP BY country_name
-ORDER BY avg_ed_spending_pct DESC
+country_spend_pct_query = \"""
+                          SELECT country_name, AVG(value) AS avg_ed_spending_pct
+                          FROM `bigquery-public-data.world_bank_intl_education.international_education`
+                          WHERE indicator_code = 'SE.XPD.TOTL.GD.ZS' and year >= 2010 and year <= 2017
+                          GROUP BY country_name
+                          ORDER BY avg_ed_spending_pct DESC
+                          \"""
+
 """
 )
 
@@ -32,13 +35,14 @@ class FindInterestingCodes(CodingProblem):
     _hint = "The part before `FROM` is `SELECT indicator_code, indicator_name, COUNT(1) AS num_rows`"
     _solution = CS(\
 """
-code_count_query = \"""SELECT indicator_code, indicator_name, COUNT(1) AS num_rows
-            FROM `bigquery-public-data.world_bank_intl_education.international_education`
-            WHERE year = 2016
-            GROUP BY indicator_name, indicator_code
-            HAVING COUNT(1) >= 175
-            ORDER by COUNT(1) DESC
-        \"""
+code_count_query = \"""
+                   SELECT indicator_code, indicator_name, COUNT(1) AS num_rows
+                   FROM `bigquery-public-data.world_bank_intl_education.international_education`
+                   WHERE year = 2016
+                   GROUP BY indicator_name, indicator_code
+                   HAVING COUNT(1) >= 175
+                   ORDER by COUNT(1) DESC
+                   \"""
 """
 )
 
