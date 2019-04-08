@@ -55,7 +55,7 @@ class ZeroPollution(CodingProblem):
     _solution = CS( \
 """
 zero_pollution_query = \"""
-                       SELECT country
+                       SELECT *
                        FROM `bigquery-public-data.openaq.global_air_quality`
                        WHERE value = 0
                        \"""

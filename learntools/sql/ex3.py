@@ -33,11 +33,12 @@ class ProlificCommenters(EqualityCheckProblem):
     _expected = correct_answer
     _solution = CS(\
 """
-prolific_commenters_query = \"""SELECT author, COUNT(id) NumPosts
-            FROM `bigquery-public-data.hacker_news.comments`
-            GROUP BY author
-            HAVING COUNT(id) > 10000
-        \"""
+prolific_commenters_query = \"""
+                            SELECT author, COUNT(1) AS NumPosts
+                            FROM `bigquery-public-data.hacker_news.comments`
+                            GROUP BY author
+                            HAVING COUNT(1) > 10000
+                            \"""
 """ 
 )
 
@@ -46,11 +47,22 @@ class NumDeletedPosts(EqualityCheckProblem):
     _expected = 227736
     _solution = CS(\
 """
-deleted_posts_query = \"""SELECT COUNT(id) num_deleted_posts
-            FROM `bigquery-public-data.hacker_news.comments`
-            WHERE deleted = True
-        \"""
-deleted_posts_results = hacker_news.query_to_pandas_safe(deleted_posts_query)
+# Query to determine how many posts were deleted
+deleted_posts_query = \"""
+                      SELECT COUNT(1) AS num_deleted_posts
+                      FROM `bigquery-public-data.hacker_news.comments`
+                      WHERE deleted = True
+                      \"""
+                      
+# Set up the query
+query_job = client.query(deleted_posts_query)
+
+# API request - run the query, and return a pandas DataFrame
+deleted_posts = query_job.to_dataframe()
+
+# View results
+print(deleted_posts)
+
 num_deleted_posts = 227736
 """
 )
