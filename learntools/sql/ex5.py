@@ -144,7 +144,17 @@ The results show rides with hours 1-12. But there should results in the afternoo
 
 Perhaps the raw data has lost the distinction between AM and PM values.
 
-You can review 200 rows of the raw data with the command `chicago_taxi_trips.head('taxi_trips', num_rows=200)`
+You can review 200 rows of the raw data with the commands: 
+```python
+# Construct a reference to the "taxi_trips" table
+table_ref = dataset_ref.table("taxi_trips")
+
+# API request - fetch the table
+table = client.get_table(table_ref)
+
+# Preview the first five lines of the "taxi_trips" table
+client.list_rows(table, max_results=200).to_dataframe()
+```
 
 You'll see that the timestamps are all in the AM hours (hours are less than or equal to 12.) 
 
