@@ -1,9 +1,22 @@
 from learntools.core import *
+from google.cloud import bigquery
 
+# Setup (0.65s on Kaggle)
+client = bigquery.Client()
+dataset_ref = client.dataset("chicago_crime", project="bigquery-public-data")
+dataset = client.get_dataset(dataset_ref)
+
+# (1) CountTables
+num_tables_answer = len(list(client.list_tables(dataset)))
+
+# (2) CountTimestampFields
+table_ref = dataset_ref.table("crime")
+table = client.get_table(table_ref)
+num_timestamp_fields_answer = [schema.field_type for schema in table.schema].count('TIMESTAMP')
 
 class CountTables(EqualityCheckProblem):
     _var = 'num_tables'
-    _expected = 1
+    _expected = num_tables_answer
     _hint = \
 """Use the `list_tables()` method to get a list of the tables in the dataset."""
 
@@ -21,7 +34,7 @@ num_tables = 1
 
 class CountTimestampFields(EqualityCheckProblem):
     _var = 'num_timestamp_fields'
-    _expected = 2
+    _expected = num_timestamp_fields_answer
     _hint = ("Begin by fetching the `crime` table. Then take a look at the table schema, and "
              "check the field type of each column.  How many times does `'TIMESTAMP'` appear?")
     _solution = CS(

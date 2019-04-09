@@ -1,7 +1,29 @@
 import pandas as pd
+from google.cloud import bigquery
 
 from learntools.core import *
 
+# Setup (2.42s on Kaggle)
+client = bigquery.Client()
+
+# (1) WhichCountries
+first_query = """
+              SELECT country
+              FROM `bigquery-public-data.openaq.global_air_quality`
+              WHERE unit = "ppm"
+              """
+first_query_job = client.query(first_query)
+first_results = first_query_job.to_dataframe()
+correct_results_set = set(first_results.country)
+
+# (2) ZeroPollution
+zero_pollution_query = """
+                       SELECT *
+                       FROM `bigquery-public-data.openaq.global_air_quality`
+                       WHERE value = 0
+                       """
+zero_pollution_query_job = client.query(zero_pollution_query)
+zero_pollution_answer = zero_pollution_query_job.to_dataframe()
 
 class WhichCountries(CodingProblem):
     _vars = ['first_query', 'first_results']
@@ -10,9 +32,6 @@ class WhichCountries(CodingProblem):
                ('Your query should be pulling data FROM `bigquery-public-data.openaq.global_air_quality`')
         lowered_colnames = [c.lower() for c in results.columns]
         assert ('country' in results.columns), ("You didn't select the country columns. Try again.")
-        correct_results_set = {'AE', 'AR', 'AU', 'BH', 'BR', 'CA', 'CL',
-                               'CO', 'CW', 'GB', 'IL', 'MX', 'NP', 'PE',
-                               'TH', 'TW', 'US', 'UZ', 'ZA'}
         assert (set(results.country) == correct_results_set), ("You have the wrong set of countries. Check your WHERE clause")
         assert (len(results.columns) == 1), ("Nice job. You selected the right countries, but you selected other columns too. "
                                              "See if you can select country without other columns.")
@@ -49,8 +68,7 @@ class ZeroPollution(CodingProblem):
         assert ('value' in query.lower()), ("You don't have the right WHERE clause yet. Try again")
         assert ('`bigquery-public-data.openaq.global_air_quality`' in query.lower()), \
                ("You should be selecting the data ```FROM `bigquery-public-data.openaq.global_air_quality```s")
-        # this is hard to check. The dataset is dynamically updated and new queries are expensive. use min val as something that shouldn't change
-        assert(results.timestamp.min() == pd.Timestamp('2015-10-24 10:00:00+0000', tz='UTC')), ("The results don't look right. Try again.")
+        assert(results.equals(zero_pollution_answer)), ("The results don't look right. Try again.")
 
     _solution = CS( \
 """
