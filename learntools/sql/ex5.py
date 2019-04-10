@@ -90,10 +90,10 @@ class YearDistrib(CodingProblem):
     _var = 'rides_per_year_result'
     def check(self, results):
         results.columns = [c.lower() for c in results.columns]
-        assert ('year' in results.columns), ('Your results hould have a `year` column. But your columns are {}.'.format(list(results.columns)))
+        assert ('year' in results.columns), ('Your results should have a `year` column. But your columns are {}.'.format(list(results.columns)))
         assert (results.equals(rides_per_year_answer)), ("The results don't look right. Try again.")
 
-    _hint = "Start your query with  `SELECT EXTRACT(YEAR FROM trip_start_timestamp) AS year, COUNT(1) AS num_trips`."
+    _hint = "Start your query with `SELECT EXTRACT(YEAR FROM trip_start_timestamp) AS year, COUNT(1) AS num_trips`."
     _solution = CS(
 """
 rides_per_year_query = \"""
@@ -116,7 +116,7 @@ class MonthDistrib(CodingProblem):
     _var = 'rides_per_month_result'
     def check(self, results):
         results.columns = [c.lower() for c in results.columns]
-        assert ('month' in results.columns), ('Your results hould have a `month` column. But your columns are {}.'.format(list(results.columns)))
+        assert ('month' in results.columns), ('Your results should have a `month` column. But your columns are {}.'.format(list(results.columns)))
         assert (results.equals(rides_per_month_answer)), ("The results don't look right. Try again.")
 
     _hint = "Start your query with `SELECT EXTRACT(MONTH FROM trip_start_timestamp) AS month, COUNT(1) AS num_trips`."
@@ -189,7 +189,7 @@ print(speeds_result)
 class AllRidesInTheMorning(ThoughtExperiment):
     _solution = \
 """
-The results show rides with hours 1-12. But there should results in the afternoon (hours 13-24).
+The results show rides with hours 1-12. But there should be results in the afternoon (hours 13-24).
 
 Perhaps the raw data has lost the distinction between AM and PM values.
 
