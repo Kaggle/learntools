@@ -1,4 +1,55 @@
+from google.cloud import bigquery
+
 from learntools.core import *
+
+# Setup (4.57s on Kaggle)
+client = bigquery.Client()
+
+# (3) YearDistrib
+rides_per_year_query = """
+                       SELECT EXTRACT(YEAR FROM trip_start_timestamp) AS year, 
+                              COUNT(1) AS num_trips
+                       FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`
+                       GROUP BY year
+                       ORDER BY year
+                       """
+rides_per_year_query_job = client.query(rides_per_year_query)
+rides_per_year_answer = rides_per_year_query_job.to_dataframe()
+
+# (4) MonthDistrib
+rides_per_month_query = """
+                        SELECT EXTRACT(MONTH FROM trip_start_timestamp) AS month, 
+                               COUNT(1) AS num_trips
+                        FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`
+                        WHERE EXTRACT(YEAR FROM trip_start_timestamp) = 2017
+                        GROUP BY month
+                        ORDER BY month
+                        """
+rides_per_month_query_job = client.query(rides_per_month_query)
+rides_per_month_answer = rides_per_month_query_job.to_dataframe()
+
+# (5) TheLongQuery
+speeds_query = """
+               WITH RelevantRides AS
+               (
+                   SELECT EXTRACT(HOUR FROM trip_start_timestamp) AS hour_of_day, 
+                          trip_miles, 
+                          trip_seconds
+                   FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`
+                   WHERE trip_start_timestamp > '2017-01-01' AND 
+                         trip_start_timestamp < '2017-07-01' AND 
+                         trip_seconds > 0 AND 
+                         trip_miles > 0
+               )
+               SELECT hour_of_day, 
+                      COUNT(1) AS num_trips, 
+                      3600 * SUM(trip_miles) / SUM(trip_seconds) AS avg_mph
+               FROM RelevantRides
+               GROUP BY hour_of_day
+               ORDER BY hour_of_day
+               """
+speeds_query_job = client.query(speeds_query)
+speeds_answer = speeds_query_job.to_dataframe()
 
 
 class GetTableName(EqualityCheckProblem):
@@ -39,12 +90,10 @@ class YearDistrib(CodingProblem):
     _var = 'rides_per_year_result'
     def check(self, results):
         results.columns = [c.lower() for c in results.columns]
-        assert ('year' in results.columns), ('Your results hould have a `year` column. But your columns are {}'.format(list(results.columns)))
-        assert (2013 in results.year.values), ('Your year columns did not have the value 2013. That should be in there')
-        first_year_rides = results.query('year == 2013').num_trips[0]
-        assert (first_year_rides == 26870287), ('There should have been 26870287 rides in 2013. But your results showed {}'.format(first_year_rides))
+        assert ('year' in results.columns), ('Your results hould have a `year` column. But your columns are {}.'.format(list(results.columns)))
+        assert (results.equals(rides_per_year_answer)), ("The results don't look right. Try again.")
 
-    _hint = "Start your query with  `SELECT EXTRACT(YEAR FROM trip_start_timestamp) AS year, COUNT(1) AS num_trips`"
+    _hint = "Start your query with  `SELECT EXTRACT(YEAR FROM trip_start_timestamp) AS year, COUNT(1) AS num_trips`."
     _solution = CS(
 """
 rides_per_year_query = \"""
@@ -67,12 +116,10 @@ class MonthDistrib(CodingProblem):
     _var = 'rides_per_month_result'
     def check(self, results):
         results.columns = [c.lower() for c in results.columns]
-        assert ('month' in results.columns), ('Your results hould have a `month` column. But your columns are {}'.format(list(results.columns)))
-        assert (1 in results.month), ('Your month columns did not have the value 1 in it. That should be in there')
-        jan_rides = results.query('month==1').num_trips[0]
-        assert (jan_rides == 1040262), ('There should have been 1040262 rides in January. But your results showed {}'.format(jan_rides))
+        assert ('month' in results.columns), ('Your results hould have a `month` column. But your columns are {}.'.format(list(results.columns)))
+        assert (results.equals(rides_per_month_answer)), ("The results don't look right. Try again.")
 
-    _hint = "Start your query with `SELECT EXTRACT(MONTH FROM trip_start_timestamp) AS month, COUNT(1) AS num_trips`"
+    _hint = "Start your query with `SELECT EXTRACT(MONTH FROM trip_start_timestamp) AS month, COUNT(1) AS num_trips`."
     _solution = CS(
 """
 rides_per_month_query = \"""
@@ -96,13 +143,15 @@ class TheLongQuery(CodingProblem):
     _var = 'speeds_result'
     def check(self, results):
         results.columns = [c.lower() for c in results.columns]
-        assert('hour_of_day' in results.columns), ("Your results should have an `hour_of_day` column")
-        assert('num_trips' in results.columns), ("Your results should have an `num_trips` column")
-        assert('avg_mph' in results.columns), ("Your results should have an `avg_mph` column")
-        assert(results.shape[0] == 12), ('Should have 12 rows in your results but have {}'.format(results.shape[0]))
-        first_hour_num_trips = results.query('hour_of_day == 1').num_trips[0]
-        assert(first_hour_num_trips != 526723), ('You got most of the query right, but forgot to remove rides with `trip_seconds` or `trip_miles` of 0.')
-        assert(first_hour_num_trips == 427383), ('Hour 1 should have 427383 trips but you have {}'.format(first_hour_num_trips))
+        assert('hour_of_day' in results.columns), ("Your results should have an `hour_of_day` column.")
+        assert('num_trips' in results.columns), ("Your results should have an `num_trips` column.")
+        assert('avg_mph' in results.columns), ("Your results should have an `avg_mph` column.")
+        if not results.equals(speeds_answer): # keeping because these checks are awesome. may break
+            assert(results.shape[0] == 12), ('You should have 12 rows in your results but have {}.'.format(results.shape[0]))
+            first_hour_num_trips = results.query('hour_of_day == 1').num_trips[0]
+            assert(first_hour_num_trips != 526723), ('You got most of the query right, but forgot to remove rides with `trip_seconds` or `trip_miles` of 0.')
+        assert (results.equals(speeds_answer)), ("The results don't look right. Try again.")
+        
 
     _solution = CS(
 """
