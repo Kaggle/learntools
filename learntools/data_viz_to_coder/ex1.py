@@ -22,19 +22,6 @@ class LoadFIFAData(EqualityCheckProblem):
              "the `\"Date\"` column to label the rows. (3) Make sure that the row "
              "labels are recognized as dates.")
     _solution = CS('fifa_data = pd.read_csv(fifa_filepath, index_col="Date", parse_dates=True)')
-    
-class ReviewData(EqualityCheckProblem):
-    _var = 'brazil_rank'
-    _expected = 3
-    _hint = ("We print the _first_ five rows of the dataset by writing one line of code as follows: "
-             "(1) begin with the variable containing the dataset (in this case, `fifa_data`), and then "
-             "(2) follow it with `.head()`.")
-    _solution = CS(
-"""# Print the first 5 rows of the data
-fifa_data.head()
-# What was Brazil's ranking (Code: BRA) on December 23, 1993?
-brazil_rank = 3 
-""")
 
 class PlotLine(CodingProblem):
     _var = 'plt'
@@ -82,7 +69,6 @@ Line = MultipartProblem(PlotLine, ThinkLine)
 qvars = bind_exercises(globals(), [
     FeedbackSys,
     LoadFIFAData,
-    ReviewData,
     Line
     ],
     tutorial_id=233,
