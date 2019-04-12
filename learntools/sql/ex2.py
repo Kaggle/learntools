@@ -78,7 +78,7 @@ zero_pollution_query = \"""
                        WHERE value = 0
                        \"""
 
-query_job = client.query(zero_pollution_query)
+query_job = client.query(zero_pollution_query, job_config=safe_config)
 
 zero_pollution_results = query_job.to_dataframe()
 """
