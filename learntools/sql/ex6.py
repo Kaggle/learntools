@@ -91,8 +91,10 @@ questions_query = \"""
                   WHERE tags LIKE '%bigquery%'
                   \"""
 
-# Set up the query
-questions_query_job = client.query(questions_query)
+# Set up the query (cancel the query if it would use too much of 
+# your quota, with the limit set to 1 GB)
+safe_config = bigquery.QueryJobConfig(maximum_bytes_billed=1e9)
+questions_query_job = client.query(questions_query, job_config=safe_config)
 
 # API request - run the query, and return a pandas DataFrame
 questions_results = questions_query_job.to_dataframe()
@@ -127,8 +129,10 @@ answers_query = \"""
                 WHERE q.tags LIKE '%bigquery%'
                 \"""
                 
-# Set up the query
-answers_query_job = client.query(answers_query)
+# Set up the query (cancel the query if it would use too much of 
+# your quota, with the limit set to 1 GB)
+safe_config = bigquery.QueryJobConfig(maximum_bytes_billed=1e9)
+answers_query_job = client.query(answers_query, job_config=safe_config)
 
 # API request - run the query, and return a pandas DataFrame
 answers_results = answers_query_job.to_dataframe()
@@ -149,8 +153,10 @@ bigquery_experts_query = \"""
                          GROUP BY a.owner_user_id
                          \"""
 
-# Set up the query
-bigquery_experts_query_job = client.query(bigquery_experts_query)
+# Set up the query (cancel the query if it would use too much of 
+# your quota, with the limit set to 1 GB)
+safe_config = bigquery.QueryJobConfig(maximum_bytes_billed=1e9)
+bigquery_experts_query_job = client.query(bigquery_experts_query, job_config=safe_config)
 
 # API request - run the query, and return a pandas DataFrame
 bigquery_experts_results = bigquery_experts_query_job.to_dataframe()
@@ -196,8 +202,10 @@ def expert_finder(topic, client):
                GROUP BY a.owner_user_id
                \"""
                
-    # Set up the query      
-    my_query_job = client.query(my_query)
+    # Set up the query (a real service would have good error handling for 
+    # queries that scan too much data)
+    safe_config = bigquery.QueryJobConfig(maximum_bytes_billed=1e9)      
+    my_query_job = client.query(my_query, job_config=safe_config)
     
     # API request - run the query, and return a pandas DataFrame
     results = my_query_job.to_dataframe()
