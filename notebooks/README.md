@@ -38,25 +38,14 @@ If you create further config files (e.g. `testing.yaml`), they will generate the
 
 # Pipeline steps
 
-## Step 0.5: Cleaning
+## Step 1: Prepare Push
 
-`clean.py` normalizes and strips some crufty ipynb metadata from notebook files in `raw/`. This is just for the sake of shorter, more readable diffs. 
-This step is performed automatically when running `render.py`, so you normally need not worry about it. You may want to run `clean.py` manually if you're committing changes without a render.
-
-## Step 1: Rendering
-
-`render.py` translates notebooks in `raw/` to publishable notebooks in `rendered/`.
+`prepare_push.py` translates notebooks in `raw/` to publishable notebooks in `rendered/`.
 The logic for this step mostly lives in `lesson_preprocessor.py`. Most of its work is in expanding macros which look like `#$HIDE_OUTPUT$`, or `#$EXERCISE_URL(2)$`. See MACROS.txt for a listing of available macros.
 
-## Step 2: Kernel metadata generation
+The Kaggle Kernels API requires a `kernel-metadata.json` file for any kernel being pushed to the site. `prepare_push.py` also generates these in the `kernels_api_metadata` subdirectory. 
 
-The Kaggle Kernels API requires a `kernel-metadata.json` file for any kernel being pushed to the site. `prepare_push.py` generates these in the `kernels_api_metadata` subdirectory. 
+## Step 2: Pushing
 
-## Step 3: Pushing
-
-Use the Kaggle CLI like so:
-
-    kaggle k push -p examples/example_track/default/kernels_api_metadata/tut1-hello
-    
-or use ./pushall.sh as
+Use ./pushall.sh as
     ./pushall deep_learning/prod
