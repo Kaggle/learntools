@@ -27,7 +27,6 @@ do
     # Run each step of the rendering pipeline, to make sure it runs without errors.
     python3 clean.py $track
     python3 prepare_push.py $track
-    python3 render.py $track
 done
 
 TESTABLE_NOTEBOOK_TRACKS="python pandas machine_learning data_viz_to_coder ml_intermediate"
