@@ -18,6 +18,12 @@ class OutcomeType(enum.Enum):
     EXCEPTION = 3
     UNATTEMPTED = 4
 
+class QuestionType(enum.Enum):
+    EQUALITYCHECKPROBLEM = 1
+    CODINGPROBLEM = 2
+    FUNCTIONPROBLEM = 3
+    THOUGHTEXPERIMENT = 4
+
 _EVENT_DEFAULTS = dict(
         learnToolsVersion = str(learntools.__version__),
         valueTowardsCompletion = 0.0,
@@ -44,6 +50,11 @@ def track(event):
         # Looks like we need to set some dummy value here (even if this field isn't applicable because this
         # isn't a check event. Setting outcomeType to None/null resulted in 500 errors.)
         event['outcomeType'] = 4
+
+    question_type = event.get('questionType', None)
+    if question_type:
+        assert question_type in QuestionType
+        event['questionType'] = question_type.value
 
     message = dict(jupyterEvent='custom.exercise_interaction',
             data=event)
