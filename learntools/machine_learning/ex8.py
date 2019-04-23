@@ -31,11 +31,21 @@ accuracy = metrics.accuracy_score(val_y, pred_y)
         assert accuracy < 0.99, "Accuracy is too high, did you use the validation data to calculate it?"
         assert accuracy > 0.9, "Accuracy seems too low, did you use the training data for fitting the model?"
 
+class ConfusionMatrixQuestion(ThoughtExperiment):
+    _solution = """
+    The confusion matrix tells us that we're classifying around 82% of the pulsars correctly. The classifier
+    missed 60 pulsars, about 18% of the pulsars in the data, instead classifiying them as noise. However,
+    less than 1% of the noise examples were classified as pulsars. Given the small number of pulsars in the dataset,
+    our classifier is doing pretty well. With some optimization of the model and data itself, it's likely
+    you could improve the true positive rate for the pulsars.
+    """
+
 qvars = bind_exercises(globals(), [
     CheckClassifierFit,
-    CheckClassifierAccuracy
+    CheckClassifierAccuracy,
+    ConfusionMatrixQuestion
     ],
-    tutorial_id=122,
+    tutorial_id=262,
     var_format='step_{n}',
     )
 __all__ = list(qvars)
