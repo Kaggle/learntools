@@ -88,7 +88,8 @@ notebooks = [
         ),
     dict(filename='ex8.ipynb',
         lesson_idx=7,
-        type='exercise'
+        type='exercise',
+        scriptid=3685412
         ),
 ]
 
