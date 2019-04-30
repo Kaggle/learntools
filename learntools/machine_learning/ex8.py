@@ -40,10 +40,18 @@ class ConfusionMatrixQuestion(ThoughtExperiment):
     you could improve the true positive rate for the pulsars.
     """
 
+class UnbalancedClassesQuestion(ThoughtExperiment):
+    _solution = """
+    If your data is 99% noise, then you can easily get 99% accuracy just by classifying everything as noise. If your model
+    is actually working, you'd expect to have an accuracy greater than 99%. It's important to look at the confusion matrix
+    when you have unbalanced classes like this.
+    """
+
 qvars = bind_exercises(globals(), [
     CheckClassifierFit,
     CheckClassifierAccuracy,
-    ConfusionMatrixQuestion
+    ConfusionMatrixQuestion,
+    UnbalancedClassesQuestion
     ],
     tutorial_id=262,
     var_format='step_{n}',
