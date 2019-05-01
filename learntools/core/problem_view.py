@@ -6,7 +6,7 @@ from IPython.display import display
 
 from learntools.core.richtext import *
 from learntools.core.exceptions import *
-from learntools.core.problem import Problem, CodingProblem
+from learntools.core.problem import *
 from learntools.core import colors, tracking
 
 def displayer(fn):
@@ -47,7 +47,7 @@ class ProblemView:
         if not attr.endswith('_') and callable(val):
             return val
         raise AttributeError
-    
+
     @property
     def questionId(self):
         # e.g. '3_MyHardProblem'
@@ -57,20 +57,30 @@ class ProblemView:
         return id
 
     def _track_event(self, interactionType, **kwargs):
-       kwargs['interactionType'] = interactionType
-       problem_fields = dict(
-               learnTutorialId=self.tutorial_id,
-               questionId=self.questionId,
-        )
-       kwargs.update(problem_fields)
-       tracking.track(kwargs)
+        kwargs['interactionType'] = interactionType
+
+        if isinstance(self.problem, EqualityCheckProblem):
+            kwargs['questionType'] = tracking.QuestionType.EQUALITYCHECKPROBLEM
+        elif isinstance(self.problem, CodingProblem):
+            kwargs['questionType'] = tracking.QuestionType.CODINGPROBLEM
+        elif isinstance(self.problem, FunctionProblem):
+            kwargs['questionType'] = tracking.QuestionType.FUNCTIONPROBLEM
+        elif isinstance(self.problem, ThoughtExperiment):
+            kwargs['questionType'] = tracking.QuestionType.THOUGHTEXPERIMENT
+
+        problem_fields = dict(
+                learnTutorialId=self.tutorial_id,
+                questionId=self.questionId,
+            )
+        kwargs.update(problem_fields)
+        tracking.track(kwargs)
 
     def _track_check(self, outcome, **kwargs):
         self._last_outcome = outcome
         if outcome == tracking.OutcomeType.PASS:
             kwargs['valueTowardsCompletion'] = self.problem.point_value
         self._track_event(tracking.InteractionType.CHECK, outcomeType=outcome, **kwargs)
-    
+
     @record
     @displayer
     def check(self):
@@ -100,8 +110,8 @@ class ProblemView:
                     )
             return TestFailure(str(e))
         except Uncheckable as e:
-            msg = str(e) or 'Sorry, no auto-checking available for this question.' 
-            self._track_check(tracking.OutcomeType.EXCEPTION, 
+            msg = str(e) or 'Sorry, no auto-checking available for this question.'
+            self._track_check(tracking.OutcomeType.EXCEPTION,
                 failureMessage=msg,
                 exceptionClass='Uncheckable',
                 trace='',
@@ -112,14 +122,14 @@ class ProblemView:
             return Correct(self.problem.correct_message)
 
     def _get_injected_args(self):
-        names = self.problem.injectable_vars 
+        names = self.problem.injectable_vars
         missing = set(names) - self.globals.keys()
         if len(missing) == 0:
             return self.globals.lookup(names)
         elif len(missing) == len(names):
             # Hm, maybe RichText objects should be raisable? Or is that too much?
             raise NotAttempted("Remember, you must create the following variable{}: {}"\
-                    .format('s' if len(missing) > 1 else '', 
+                    .format('s' if len(missing) > 1 else '',
                         ', '.join('`{}`'.format(v) for v in missing)
                         )
                     )
@@ -128,7 +138,7 @@ class ProblemView:
                     ', '.join('`{}`'.format(v) for v in missing)
                     ))
 
-    
+
     @record
     @displayer
     def hint(self, n=1):
