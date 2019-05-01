@@ -12,7 +12,8 @@ lessons = [ {'topic': topic_name} for topic_name in
                     'Model Validation',
                     'Underfitting and Overfitting',
                     'Random Forests',
-                    'Machine Learning Competitions',]
+                    'Machine Learning Competitions',
+                    'Classification']
             ]
 
 notebooks = [
@@ -81,11 +82,22 @@ notebooks = [
         type='exercise',
         scriptid=1259198
         ),
+    dict(filename='tut8.ipynb',
+        lesson_idx=7,
+        type='tutorial'
+        ),
+    dict(filename='ex8.ipynb',
+        lesson_idx=7,
+        type='exercise',
+        scriptid=3685412
+        ),
 ]
 
 for nb in notebooks:
     nb['competition_sources'] = ["home-data-for-ml-course"]
-    nb['dataset_sources'] = ["dansbecker/melbourne-housing-snapshot"]
+    nb['dataset_sources'] = ["dansbecker/melbourne-housing-snapshot",
+                             "iabhishekofficial/mobile-price-classification",
+                             "pavanraj159/predicting-a-pulsar-star"]
 
     # ex7 is special case with only comp dataset, to allow submission from kernel
     if nb['filename'] == 'ex7.ipynb':
