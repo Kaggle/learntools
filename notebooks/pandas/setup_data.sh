@@ -13,7 +13,7 @@ mkdir -p input
 
 # NB: In many cases, notebooks only use one or two files from the dataset. Possible
 # we could save some time/bandwidth using the -f argument to kaggle d download.
-DATASETS="zynicide/wine-reviews nolanbconaway/pitchfork-data open-powerlifting/powerlifting-database residentmario/things-on-reddit jpmiller/publicassistance datasnaek/youtube-new"
+DATASETS="zynicide/wine-reviews nolanbconaway/pitchfork-data dansbecker/powerlifting-database residentmario/things-on-reddit jpmiller/publicassistance datasnaek/youtube-new"
 
 for slug in $DATASETS
 do
