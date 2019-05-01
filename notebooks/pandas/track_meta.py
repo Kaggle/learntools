@@ -24,7 +24,7 @@ renaming-and-combining-workbook""".split()
 # dataset used by all notebooks)
 exercise_aux_datasets = {
         'creating-reading-and-writing-workbook': ['nolanbconaway/pitchfork-data'],
-        'renaming-and-combining-workbook': ['open-powerlifting/powerlifting-database',
+        'renaming-and-combining-workbook': ['dansbecker/powerliftingdatabase',
                                     'residentmario/things-on-reddit'],
 }
 
