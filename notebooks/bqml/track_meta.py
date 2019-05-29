@@ -1,12 +1,12 @@
 # See also examples/example_track/track_meta.py for a longer, commented example
 track = dict(
-    author_username='',
+    author_username='matleonard',
 )
 
 lessons = [
         dict(
             # By convention, this should be a lowercase noun-phrase.
-            topic='exemplar examples',
+            topic='',
             ),
 ]
 
