@@ -17,7 +17,9 @@ pipeline {
         stage('Initialize Test Environment') {
             steps {
                 sh '''#!/bin/bash
-                # Any extra setup steps go here.
+                    set -exo pipefail
+                    # Ensures the currently released Docker Python image is used.
+                    docker pull gcr.io/kaggle-images/python:latest
                 '''
             }
         }
