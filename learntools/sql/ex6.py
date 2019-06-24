@@ -73,15 +73,19 @@ This is exactly what you will do over the next few questions.
 class SelectRightQuestions(CodingProblem):
     _vars = ['questions_query', 'questions_results']
     def check(self, query, results):
+        # check 1: words appear in query
         lower_query = query.lower()
         results.columns = [c.lower() for c in results.columns]
         assert ('like \'%bigquery%\'' in lower_query), ('Your **WHERE** clause is not filtering on the "bigquery" tag correctly.')
         assert ('id' in results.columns), ('Should have `id` in the columns. Your column names are {}.'.format(results.columns))
+        # check 2: column names
         assert (results.shape[1] == 3), ('You should have 3 columns. But you have {}. Your list of columns is {}.'.format(len(results.columns), results.columns))
-        if not results.equals(questions_answer):
-            assert (34798244 in results.id.values), ('You seem to be missing some relevant values from the `id` column.')
-            assert (results.shape[0] < 20000), ('Your results have too many rows in the response. You may not have the right **WHERE** clause.')
-        assert (results.equals(questions_answer)), ("The results don't look right. Try again.")
+        # check 3: check dataframe length
+        assert(len(results)==len(questions_answer)), ("Your results do not have the correct number of rows.  You may not have the right **WHERE** clause.")
+        # check 4: IDs
+        correct_ids = set(questions_answer['id'])
+        user_ids = set(results['id'])
+        assert (correct_ids == user_ids), ('You do not have the correct values in the `id` column.')
     _hint = 'Your **WHERE** clause should be `WHERE tags LIKE \'%bigquery%\'`.'
     _solution = CS(
 """
