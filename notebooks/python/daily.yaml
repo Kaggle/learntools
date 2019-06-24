@@ -1,0 +1,7 @@
+# Rendered ipynb files and kernel metadata json files for this config will be saved at notebooks/<track>/<tag>/
+tag: daily
+public: true
+development: false
+suffix: "Daily"
+daily: true
+exercise_scriptids: [969424, 934361, 958279, 961685, 961955, 962743, 1164833]
