@@ -67,7 +67,7 @@ deleted_posts_query = \"""
                       \"""
                       
 # Set up the query
-query_job = client.query(deleted_posts_query, job_config=safe_config)
+query_job = client.query(deleted_posts_query)
 
 # API request - run the query, and return a pandas DataFrame
 deleted_posts = query_job.to_dataframe()
