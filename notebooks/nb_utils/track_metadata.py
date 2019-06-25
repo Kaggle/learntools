@@ -144,19 +144,23 @@ class Notebook(object):
                 )
         else:
             self.title = title
+        suffix = cfg.get('suffix',
+                'testing' if cfg.get('testing', False) else ''
+                )
+        if suffix:
+            self.title += ' ' + suffix
+        # kernels has max title length of 50
+        if len(self.title) > 50:
+            long_title = self.title
+            self.title = self.title[:49]
+            logging.warn("Truncated length {} title. Was: {!r}, Now: {!r}".format(
+                len(long_title), long_title, self.title))
         self.lesson = lesson
         if slug is None:
             assert author is not None
             self.slug = slugify(self.title, author)
         else:
             self.slug = slug
-        suffix = cfg.get('suffix',
-                'testing' if cfg.get('testing', False) else ''
-                )
-        if suffix:
-            self.slug += '-' + slug_munge(suffix)
-            # Kernels API seems to conk out and 404 if title doesn't match slug :/
-            self.title += ' ' + suffix
         self.scriptid = scriptid
         self.kernel_sources = list(kernel_sources)
         self.dataset_sources = list(dataset_sources)
@@ -195,10 +199,6 @@ class Notebook(object):
         """
         # Pushing a kernel through the API fails if len(title) > 50. (b/120288024)
         title = self.title
-        if len(title) > 50:
-            title = title[:49]
-            logging.warn("Truncated length {} title. Was: {!r}, Now: {!r}".format(
-                len(self.title), self.title, title))
         dev = cfg.get('development', False)
         return dict(
                 id=self.slug,
