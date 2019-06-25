@@ -39,7 +39,7 @@ class ProlificCommenters(CodingProblem):
         correct_number = prolific_commenters_answer.loc[prolific_commenters_answer['author']==first_author]['NumPosts'].values[0]
         # want this to equal the corresponding NumPosts above
         check_number = results.loc[results['author']==first_author]['NumPosts'].values[0]
-        assert(check_number.equals(correct_number)), ("The results don't look right. Try again.")
+        assert(check_number==correct_number), ("The results don't look right. Try again.")
 
         # check 3: check count > 10000
         assert(all(results['NumPosts'].values>10000)), ("Only select authors with more than 10,000 posts.")
