@@ -10,7 +10,7 @@ fi
 
 mkdir -p input
 
-DATASETS="matleonard/feature-engineering-data dansbecker/nba-shot-logs"
+DATASETS="matleonard/feature-engineering-data kemical/kickstarter-projects"
 
 for slug in $DATASETS
 do

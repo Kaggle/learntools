@@ -13,11 +13,11 @@ lessons = [ {'topic': topic_name} for topic_name in
             ]
 
 notebooks = [
-    # dict(
-    #     filename='tut1.ipynb',
-    #     lesson_idx=0,
-    #     type='tutorial',
-    #     ),
+    dict(
+        filename='tut1.ipynb',
+        lesson_idx=0,
+        type='tutorial',
+        ),
     # dict(
     #     filename='tut2.ipynb',
     #     lesson_idx=1,
@@ -66,4 +66,4 @@ notebooks = [
 
 for nb in notebooks:
     nb['dataset_sources'] = ["matleonard/feature-engineering-data",
-                             "dansbecker/nba-shot-logs"]
+                             "kemical/kickstarter-projects"]
