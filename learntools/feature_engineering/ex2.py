@@ -238,8 +238,7 @@ class LearnSVDEmbeddings(CodingProblem):
             
             # Fit the SVD and store the components
             # Note: these components represent column 2
-            svd.fit(pair_matrix)
-            svd_components_['_'.join([col2, col1])] = pd.DataFrame(svd.components_)
+            svd_components_['_'.join([col1, col2])] = pd.DataFrame(svd.fit_transform(pair_matrix))
 
         assert svd_components.keys() == svd_components_.keys()
 
@@ -268,14 +267,14 @@ class ApplySVDEncoding(CodingProblem):
     """)
 
     def check(self, svd_components, svd_encodings_, clicks):
+        assert svd_encodings_.shape != (2300561, 0), "Please add encoded categorical features to `svd_encodings` dataframe."
         svd_encodings = pd.DataFrame(index=clicks.index)
         for feature in svd_components:
             # Get the feature column the SVD components are encoding
             col = feature.split('_')[0]
 
             ## Use SVD components to encode the categorical features
-            # Need to transpose so .reindex works appropriately
-            feature_components = svd_components[feature].transpose()
+            feature_components = svd_components[feature]
             comp_cols = feature_components.reindex(clicks[col]).set_index(clicks.index)
             
             # Doing this so we know what these features are
