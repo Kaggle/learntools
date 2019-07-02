@@ -43,7 +43,7 @@ bigquery_experts_query = """
 bigquery_experts_query_job = client.query(bigquery_experts_query)
 bigquery_experts_answer = bigquery_experts_query_job.to_dataframe()
 
-
+# (1)
 class ListSOTables(EqualityCheckProblem):
     _var = 'list_of_tables'
     _expected = list_of_tables_answer
@@ -55,6 +55,7 @@ list_of_tables = [table.table_id for table in tables]
 """
 )
 
+# (2)
 class HowToFindExperts(ThoughtExperiment):
     _solution = \
 """
@@ -70,6 +71,7 @@ You can join these two tables to:
 This is exactly what you will do over the next few questions.
 """
 
+# (3)
 class SelectRightQuestions(CodingProblem):
     _vars = ['questions_query', 'questions_results']
     def check(self, query, results):
@@ -105,18 +107,32 @@ questions_results = questions_query_job.to_dataframe()
 """
 )
 
+# (4)
 class FirstJoin(CodingProblem):
     _vars = ['answers_query', 'answers_results']
     def check(self, query, results):
+        # check 1: words appear in query
         lower_query = query.lower()
-        results.columns = [c.lower() for c in results.columns]
         assert ('like \'%bigquery%\'' in lower_query), ('Your **WHERE** clause is not filtering on the "bigquery" tag correctly.')
         assert ('join' in lower_query), ('Your query does not include a **JOIN** statement.')
+        # check 2: column names
+        results.columns = [c.lower() for c in results.columns]
         assert ('id' in results.columns), ('You should have a column named `id`. Your columns are {}.'.format(results.columns))
-        if not results.equals(answers_answer):
-            assert (21592157 in results.id.values), ('You seem to be missing some relevant values from the `id` column.')
-            assert (results.shape[0] < 20000), ('You have {} rows in your results. It should be closer to 10500. You may have the wrong **WHERE** clause.')
-        assert (results.equals(answers_answer)), ("The results don't look right. Try again.")
+        assert ('body' in results.columns), ('You should have a column named `body`. Your columns are {}.'.format(results.columns))
+        assert ('owner_user_id' in results.columns), ('You should have a column named `owner_user_id`. Your columns are {}.'.format(results.columns))
+        # check 3: pulled correct IDs
+        correct_ids = set(answers_answer.id.values)
+        submitted_ids = set(results.id.values)
+        assert (correct_ids == submitted_ids), ('You seem to have the wrong values in the `id` column.')
+        # check 4: check one value from other two columns
+        first_id = answers_answer["id"][0]
+        correct_body = answers_answer[answers_answer["id"] == first_id]["body"][0]
+        submitted_body = results[results["id"] == first_id]["body"][0]
+        correct_owner_user_id = int(answers_answer[answers_answer["id"] == first_id]["owner_user_id"][0])
+        submitted_owner_user_id = int(results[results["id"] == first_id]["owner_user_id"][0])
+        assert (correct_body == submitted_body), ('The values in the `body` column appear to be incorrect.')
+        assert (correct_owner_user_id == submitted_owner_user_id), ('The values in the `owner_user_id` column appear to be incorrect.')
+
     _hint = \
 """
 Do an **INNER JOIN** between `bigquery-public-data.stackoverflow.posts_questions` and `bigquery-public-data.stackoverflow.posts_answers`.
@@ -143,6 +159,7 @@ answers_results = answers_query_job.to_dataframe()
 """
 )
 
+# (5)
 class BigQueryExperts(CodingProblem):
     _vars = ['bigquery_experts_query', 'bigquery_experts_results']
     _hint = "Start with `SELECT a.owner_user_id AS user_id, COUNT(1) AS number_of_answers`"
@@ -167,22 +184,26 @@ bigquery_experts_results = bigquery_experts_query_job.to_dataframe()
 """
 )
     def check(self, query, results):
+        # check 1: words appear in query
         lower_query = query.lower()
-        results.columns = [c.lower() for c in results.columns]
         assert ('group by' in lower_query), ('Your query should have a **GROUP BY** clause.')
         assert ('count' in lower_query), ('Your query should have a **COUNT** in the **SELECT** statement.')
         assert ('%bigquery' in lower_query), ('Your **WHERE** clause is not filtering on the "bigquery" tag correctly.')
+        # check 2: column names
+        results.columns = [c.lower() for c in results.columns]
         assert ('user_id' in results.columns), ('You do not have a `user_id` column in your results.')
         assert ('number_of_answers' in results.columns), ('You do not have a `number_of_answers` column in your results.')
-        if not results.equals(bigquery_experts_answer):
-            # Correct answer has 2151 rows at time this code was written
-            rows_in_result = results.shape[0]
-            assert (rows_in_result < 10000), ('Your result has too many rows ({} rows). Something is wrong'.format(rows_in_result))
-            assert (rows_in_result > 2000), ('Your result has too few rows ({} rows). Something is wrong'.format(rows_in_result))
-            assert (212435 in results.user_id.values), ('Your results did not return the right set of user id\'s.')
-        assert (results.equals(bigquery_experts_answer)), ("The results don't look right. Try again.")
+        # check 3: correct user IDs
+        correct_ids = set(bigquery_experts_answer.user_id.values)
+        submitted_ids = set(results.user_id.values)
+        assert (correct_ids == submitted_ids), ('You seem to have the wrong values in the `user_id` column.')
+        # check 4: check one value from other column
+        first_id = bigquery_experts_answer["user_id"][0]
+        correct_num = int(bigquery_experts_answer[bigquery_experts_answer["user_id"] == first_id]["number_of_answers"][0])
+        submitted_num = int(results[results["user_id"] == first_id]["number_of_answers"][0])
+        assert (correct_num == submitted_num), ('The values in the `number_of_answers` column appear to be incorrect.')
 
-
+# (6)
 class GeneralizeExpertFinder(ThoughtExperiment):
     _solution = CS(
 """
