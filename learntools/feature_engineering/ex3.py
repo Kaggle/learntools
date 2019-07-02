@@ -88,13 +88,13 @@ class LastEventFeature(CodingProblem):
     _hint = "Try using the .diff() method on a time series."
     _solution = CS("""
     def time_diff(series):
-            return series.diff().dt.seconds
+            return series.diff().dt.total_seconds()
     """)
 
     def check(self, student_func, clicks):
 
         def time_diff(series):
-            return series.diff().dt.seconds
+            return series.diff().dt.total_seconds()
 
         sample = clicks[:100000]['click_time']
 
