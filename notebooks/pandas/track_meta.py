@@ -6,57 +6,101 @@ track = dict(
 
 lessons = []
 notebooks = []
+lessons = [ {'topic': topic_name} for topic_name in
+                    ["Creating Reading and Writing",
+                    "indexing-selecting-assigning",
+                    "summary-functions-and-maps",
+                    "grouping-and-sorting",
+                    "data-types-and-missing",
+                    "renaming-and-combining",
+                    ]
+        ]
 
-SLUGS = """creating-reading-and-writing-reference
-creating-reading-and-writing-workbook
-indexing-selecting-assigning-reference
-indexing-selecting-assigning
-summary-functions-and-maps-reference
-summary-functions-and-maps-workbook
-grouping-and-sorting-reference
-grouping-and-sorting
-data-types-and-missing-data-reference
-data-types-and-missing-data-workbook
-renaming-and-combining-reference
-renaming-and-combining-workbook""".split()
+notebooks = [
+    dict(
+        filename='tut_0.ipynb',
+        lesson_idx=0,
+        type='tutorial',
+        scriptid=550418
+        ),
+    dict(
+        filename='ex_0.ipynb',
+        lesson_idx=0,
+        type='exercise',
+        scriptid=587970
+    ),
+    dict(
+        filename='tut_1.ipynb',
+        lesson_idx=1,
+        type='tutorial',
+        scriptid=582111
+    ),
+    dict(
+        filename='ex_1.ipynb',
+        lesson_idx=1,
+        type='exercise',
+        scriptid=587910
+    ),
+    dict(
+        filename='tut_2.ipynb',
+        lesson_idx=2,
+        type='tutorial',
+        scriptid=595033
+    ),
+    dict(
+        filename='ex_2.ipynb',
+        lesson_idx=2,
+        type='exercise',
+        scriptid=595524
+    ),
+    dict(
+        filename='tut_3.ipynb',
+        lesson_idx=3,
+        type='tutorial',
+        scriptid=598164
+        ),
+    dict(
+        filename='ex_3.ipynb',
+        lesson_idx=3,
+        type='exercise',
+        scriptid=598715
+        ),
+    dict(
+        filename='tut_4.ipynb',
+        lesson_idx=4,
+        type='tutorial',
+        scriptid=598826
+        ),
+    dict(
+        filename='ex_4.ipynb',
+        lesson_idx=4,
+        type='exercise',
+        scriptid=598827
+        ),
+    dict(
+        filename='tut_5.ipynb',
+        lesson_idx=5,
+        type='tutorial',
+        scriptid=636767
+        ),
+    dict(
+        filename='ex_5.ipynb',
+        lesson_idx=5,
+        type='exercise',
+        scriptid=638064
+        ),
+]
 
-datasets = ['zynicide/wine-reviews',
-            'nolanbconaway/pitchfork-data',
-            'dansbecker/powerlifting-database',
-            'residentmario/things-on-reddit',
-            'jpmiller/publicassistance',
-            'rtatman/188-million-us-wildfires',
-            'residentmario/ramen-ratings',
-            'datasnaek/chess',
-            'nasa/kepler-exoplanet-search-results',
-            'datasnaek/youtube-new',
-            ]
-
-import os; import json
-def _make_notebook(slug, type_, lesson_idx):
-    path = os.path.join('pandas', 'old_metadata', slug, 'kernel-metadata.json')
-    with open(path) as f:
-        ex = json.load(f)
-    return dict(
-            filename=slug+'.ipynb',
-            type=type_,
-            lesson_idx=lesson_idx,
-            dataset_sources=datasets,
-            title=ex['title'],
-            scriptid=ex.get('id_no', -1),
-            )
-
-type_order = ['tutorial', 'exercise']
-for i in range(0, len(SLUGS), 2):
-    slugs = SLUGS[i:i+2]
-    tut_slug = slugs[0]
-    suff = '-reference'
-    if tut_slug.endswith(suff):
-        tut_slug = slug[:-len(suff)]
-    topic = tut_slug.replace('-', ' ')
-    lesson = dict(topic=topic)
-    lessons.append(lesson)
-    lesson_idx = len(lessons) - 1
-    for slug, type_ in zip(slugs, type_order):
-        nb = _make_notebook(slug, type_, lesson_idx)
-        notebooks.append(nb)
+for nb in notebooks:
+    nb['dataset_sources'] = \
+                ['zynicide/wine-reviews',
+                'nolanbconaway/pitchfork-data',
+                'dansbecker/powerlifting-database',
+                'residentmario/things-on-reddit',
+                'jpmiller/publicassistance',
+                'rtatman/188-million-us-wildfires',
+                'residentmario/ramen-ratings',
+                'datasnaek/chess',
+                'nasa/kepler-exoplanet-search-results',
+                'datasnaek/youtube-new',
+                ]
