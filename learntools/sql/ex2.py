@@ -13,8 +13,7 @@ first_query = """
               WHERE unit = "ppm"
               """
 first_query_job = client.query(first_query)
-first_results = first_query_job.to_dataframe()
-correct_results_set = set(first_results.country)
+first_results_answer = first_query_job.to_dataframe()
 
 # (2) ZeroPollution
 zero_pollution_query = """
@@ -35,10 +34,10 @@ class WhichCountries(CodingProblem):
         lowered_colnames = [c.lower() for c in results.columns]
         assert ('country' in results.columns), ("You didn't select the `country` column. Try again.")
         # check 3: values in dataframe
-        assert (set(results.country) == correct_results_set), ("You have the wrong set of countries. Check your **WHERE** clause.")
+        assert (set(results.country) == set(first_results_answer.country)), ("You have the wrong set of countries. Check your **WHERE** clause.")
         assert (len(results.columns) == 1), ("Nice job. You selected the right countries, but you selected other columns too. "
                                              "See if you can select `country` without other columns.")
-        if results.shape[0] > correct_results_set.shape[0]:
+        if results.shape[0] > first_results_answer.shape[0]:
             print("You got the right countries. Nice job! Some countries showed up many times in the results. "
                   "To get each country only once you can run `SELECT DISTINCT country ...`. " 
                   "The DISTINCT keyword ensures each column shows up once, which you'll want in some cases.")
