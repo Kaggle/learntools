@@ -37,7 +37,7 @@ class WhichCountries(CodingProblem):
         assert (set(results.country) == set(first_results_answer.country)), ("You have the wrong set of countries. Check your **WHERE** clause.")
         assert (len(results.columns) == 1), ("Nice job. You selected the right countries, but you selected other columns too. "
                                              "See if you can select `country` without other columns.")
-        if results.shape[0] > first_results_answer.shape[0]:
+        if len(results) == len(first_results_answer):
             print("You got the right countries. Nice job! Some countries showed up many times in the results. "
                   "To get each country only once you can run `SELECT DISTINCT country ...`. " 
                   "The DISTINCT keyword ensures each column shows up once, which you'll want in some cases.")
