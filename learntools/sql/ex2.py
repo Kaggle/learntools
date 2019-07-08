@@ -86,6 +86,7 @@ zero_pollution_query = \"""
                        WHERE value = 0
                        \"""
 
+safe_config = bigquery.QueryJobConfig(maximum_bytes_billed=10**10)
 query_job = client.query(zero_pollution_query, job_config=safe_config)
 
 zero_pollution_results = query_job.to_dataframe()
