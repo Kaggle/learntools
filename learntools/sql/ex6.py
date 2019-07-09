@@ -121,11 +121,11 @@ class FirstJoin(CodingProblem):
         assert ('body' in results.columns), ('You should have a column named `body`. Your columns are {}.'.format(results.columns))
         assert ('owner_user_id' in results.columns), ('You should have a column named `owner_user_id`. Your columns are {}.'.format(results.columns))
         # check 3: pulled correct IDs
-        correct_ids = set(answers_answer.id.values)
-        submitted_ids = set(results.id.values)
+        correct_ids = set([int(i) for i in answers_answer.id.values if not np.isnan(i)])
+        submitted_ids = set([int(i) for i in results.id.values if not np.isnan(i)])
         assert (correct_ids == submitted_ids), ('You seem to have the wrong values in the `id` column.')
         # check 4: check one value from other two columns
-        first_id = list(answers_results["id"].values)[0]
+        first_id = list(answers_answer["id"].values)[0]
         correct_owner_user_id = int(answers_answer[answers_answer["id"] == first_id]["owner_user_id"])
         submitted_owner_user_id = int(results[results["id"] == first_id]["owner_user_id"])
         assert (correct_owner_user_id == submitted_owner_user_id), ('The values in the `owner_user_id` column appear to be incorrect.')
@@ -191,8 +191,8 @@ bigquery_experts_results = bigquery_experts_query_job.to_dataframe()
         assert ('user_id' in results.columns), ('You do not have a `user_id` column in your results.')
         assert ('number_of_answers' in results.columns), ('You do not have a `number_of_answers` column in your results.')
         # check 3: correct user IDs
-        correct_ids = set(bigquery_experts_answer.user_id.values)
-        submitted_ids = set(results.user_id.values)
+        correct_ids = set([int(i) for i in bigquery_experts_answer.user_id.values if not np.isnan(i)])
+        submitted_ids = set([int(i) for i in results.user_id.values if not np.isnan(i)])
         assert (correct_ids == submitted_ids), ('You seem to have the wrong values in the `user_id` column.')
         # check 4: check one value from other column
         first_id = list(bigquery_experts_answer["user_id"])[0]
