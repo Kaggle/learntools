@@ -42,8 +42,8 @@ class EducationSpending(CodingProblem):
         assert (len(results) == len(country_spending_answer)), ("The results don't look right. Try again.")
         # check 4: check one number
         test_country = country_spending_answer["country_name"][0]
-        correct_number = round(country_spending_answer[country_spending_answer["country_name"] == test_country]["avg_ed_spending_pct"].values[0], 2)
-        submitted_number = round(results[results["country_name"] == test_country]["avg_ed_spending_pct"].values[0], 2)
+        correct_number = float(round(country_spending_answer[country_spending_answer["country_name"] == test_country]["avg_ed_spending_pct"].values[0], 2))
+        submitted_number = float(round(results[results["country_name"] == test_country]["avg_ed_spending_pct"].values[0], 2))
         assert(submitted_number==correct_number), ("The results don't look right. Try again.")
 
     _hint = "The part before `FROM` should be `SELECT country_name, AVG(value) avg_ed_spending_pct`."

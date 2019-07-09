@@ -126,11 +126,8 @@ class FirstJoin(CodingProblem):
         assert (correct_ids == submitted_ids), ('You seem to have the wrong values in the `id` column.')
         # check 4: check one value from other two columns
         first_id = answers_answer["id"][0]
-        correct_body = answers_answer[answers_answer["id"] == first_id]["body"][0]
-        submitted_body = results[results["id"] == first_id]["body"][0]
-        correct_owner_user_id = int(answers_answer[answers_answer["id"] == first_id]["owner_user_id"][0])
-        submitted_owner_user_id = int(results[results["id"] == first_id]["owner_user_id"][0])
-        assert (correct_body == submitted_body), ('The values in the `body` column appear to be incorrect.')
+        correct_owner_user_id = int(answers_answer[answers_answer["id"] == first_id]["owner_user_id"])
+        submitted_owner_user_id = int(results[results["id"] == first_id]["owner_user_id"])
         assert (correct_owner_user_id == submitted_owner_user_id), ('The values in the `owner_user_id` column appear to be incorrect.')
 
     _hint = \
@@ -199,8 +196,8 @@ bigquery_experts_results = bigquery_experts_query_job.to_dataframe()
         assert (correct_ids == submitted_ids), ('You seem to have the wrong values in the `user_id` column.')
         # check 4: check one value from other column
         first_id = bigquery_experts_answer["user_id"][0]
-        correct_num = int(bigquery_experts_answer[bigquery_experts_answer["user_id"] == first_id]["number_of_answers"][0])
-        submitted_num = int(results[results["user_id"] == first_id]["number_of_answers"][0])
+        correct_num = int(bigquery_experts_answer[bigquery_experts_answer["user_id"] == first_id]["number_of_answers"])
+        submitted_num = int(results[results["user_id"] == first_id]["number_of_answers"])
         assert (correct_num == submitted_num), ('The values in the `number_of_answers` column appear to be incorrect.')
 
 # (6)
