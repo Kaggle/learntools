@@ -7,12 +7,12 @@ track = dict(
 lessons = []
 notebooks = []
 lessons = [ {'topic': topic_name} for topic_name in
-                    ["Creating Reading and Writing",
-                    "indexing-selecting-assigning",
-                    "summary-functions-and-maps",
-                    "grouping-and-sorting",
-                    "data-types-and-missing",
-                    "renaming-and-combining",
+                    ["Creating, Reading and Writing",
+                    "Indexing, Selecting & Assigning",
+                    "Summary Functions and Maps",
+                    "Grouping And Sorting",
+                    "Data Types And Missing Values",
+                    "Renaming and Combining",
                     ]
         ]
 
