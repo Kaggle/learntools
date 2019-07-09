@@ -1,5 +1,5 @@
 from google.cloud import bigquery
-
+import numpy as np
 from learntools.core import *
 
 # Setup (7.42s on Kaggle)
