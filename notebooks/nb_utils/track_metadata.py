@@ -81,6 +81,7 @@ class TrackMeta(object):
         except KeyError:
             # Specifying scriptids is optional.
             return
+        # Should be one id per lesson (1 exercise per lesson)
         assert len(ids) <= len(self.lessons)
         if len(ids) < len(self.lessons):
             tail = len(self.lessons) - len(ids)
