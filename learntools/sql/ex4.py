@@ -55,11 +55,24 @@ country_spend_pct_query = \"""
 class FindInterestingCodes(CodingProblem):
     _vars = ['code_count_query', 'code_count_results']
     def check(self, query, results):
-        results.columns = [c.lower() for c in results.columns]
+        # check 1: words appear in query
         lower_query = query.lower()
         assert ("having" in lower_query), ('You are missing your **HAVING** clause.')
         assert ("order" in lower_query), ('You are missing your **ORDER BY** clause.')
-        assert (results.equals(interesting_codes_answer)), ("The results don't look right. Try again.")
+        # check 2: column names
+        assert (set(results.columns) == {'indicator_code', 'indicator_name', 'num_rows'}), ("Your column names are incorrect.  They should be `indicator_code`, `indicator_name`, and `num_rows`.")
+        # check 3: length of dataframes
+        assert (len(results) == len(interesting_codes_answer)), ("The results don't look right. Try again.")
+        # check 4: check one number
+        # get code to check
+        first_code = interesting_codes_answer['indicator_code'][0]
+        # get corresponding value from `num_rows` to check
+        correct_number = interesting_codes_answer[interesting_codes_answer['indicator_code']==first_code]['num_rows'].values[0]
+        # get corresponding value from user submitted dataframe
+        submitted_number = results[results['indicator_code']==first_code]['num_rows'].values[0]
+        # check that value matches in user's dataframe
+        assert(submitted_number==correct_number), ("The results don't look right. Try again.")
+        
     _hint = "The part before `FROM` is `SELECT indicator_code, indicator_name, COUNT(1) AS num_rows`."
     _solution = CS(\
 """

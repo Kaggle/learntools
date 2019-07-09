@@ -9,7 +9,7 @@ DIR=`dirname "${BASH_SOURCE[0]}"`
 # Path to the parent (learntools) dir
 LT=$(readlink -f $DIR/..)
 # Install learntools branch
-pip3 install $DIR/..
+pip install $DIR/..
 # The learntools repo is cloned to a read-only location. Various testing steps involve writing,
 # so copy the whole notebooks directory to a writeable location and work from there.
 WORKING_DIR=`mktemp -d`
@@ -19,7 +19,7 @@ cd $WORKING_DIR/input/notebooks
 TMP_DIR=`mktemp -d`
 
 # Install packages the notebook pipeline depends on but which aren't installed with the learntools package.
-pip3 install -q -r requirements.txt
+pip install -q -r requirements.txt
 
 TRACKS="deep_learning embeddings pandas python machine_learning sql data_viz_to_coder ml_intermediate"
 for track in $TRACKS

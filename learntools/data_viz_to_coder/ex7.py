@@ -9,7 +9,14 @@ class AttachData(CodingProblem):
         assert len(os.listdir('../input')) > 0, \
         "Please attach a dataset and run this code cell again to get credit!"  
         
-        assert any([file.endswith(".csv") for file in os.listdir("../input")]), \
+        # check if CSV file attached to notebook
+        has_csv = False
+        for dirpath, dirnames, filenames in os.walk('../input'):
+            if any([f.endswith(".csv") for f in filenames]):
+                has_csv = True
+                break
+        
+        assert has_csv == True, \
         "Please upload a dataset that contains a CSV file."
         
 class Filepath(CodingProblem):
