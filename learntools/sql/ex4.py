@@ -32,11 +32,19 @@ interesting_codes_answer = code_count_query_job.to_dataframe()
 class EducationSpending(CodingProblem):
     _vars = ['country_spend_pct_query', 'country_spending_results']
     def check(self, query, results):
+        # check 1: query
         lower_query = query.lower()
         assert ('des' in lower_query), ("You should use `DESC` in your **ORDER BY** clause.")
         assert (('2017' in lower_query) or ('2018' in lower_query)), ('You should have `year <= 2017` in your query.')
+        # check 2: column names
         assert ('avg_ed_spending_pct' in [c.lower() for c in results.columns]), ('Your column names were {}. They should include `avg_ed_spending_pct`.'.format(results.columns))
-        assert (results.equals(country_spending_answer)), ("The results don't look right. Try again.")
+        # check 3: length of dataframes
+        assert (len(results) == len(country_spending_answer)), ("The results don't look right. Try again.")
+        # check 4: check one number
+        test_country = country_spending_answer["country_name"][0]
+        correct_number = round(country_spending_answer[country_spending_answer["country_name"] == test_country]["avg_ed_spending_pct"].values[0], 2)
+        submitted_number = round(results[results["country_name"] == test_country]["avg_ed_spending_pct"].values[0], 2)
+        assert(submitted_number==correct_number), ("The results don't look right. Try again.")
 
     _hint = "The part before `FROM` should be `SELECT country_name, AVG(value) avg_ed_spending_pct`."
     _solution = CS(\

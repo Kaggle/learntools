@@ -51,7 +51,7 @@ speeds_query = """
 speeds_query_job = client.query(speeds_query)
 speeds_answer = speeds_query_job.to_dataframe()
 
-
+# (1)
 class GetTableName(EqualityCheckProblem):
     _var = 'table_name'
     _expected = 'taxi_trips'
@@ -66,6 +66,7 @@ for table in tables:
 table_name = 'taxi_trips'
     """)
 
+# (2)
 class WhatsWrongWithData(ThoughtExperiment):
     _solution = \
 """
@@ -85,13 +86,21 @@ Some trips in the top few rows have `trip_seconds` or `trip_miles` values of 0.
 Other location fields have values of `None`. That is a problem if we want to use those fields.
 """
 
-
+# (3)
 class YearDistrib(CodingProblem):
     _var = 'rides_per_year_result'
     def check(self, results):
+        # check 1: column names
         results.columns = [c.lower() for c in results.columns]
         assert ('year' in results.columns), ('Your results should have a `year` column. But your columns are {}.'.format(list(results.columns)))
-        assert (results.equals(rides_per_year_answer)), ("The results don't look right. Try again.")
+        assert ('num_trips' in results.columns), ('Your results should have a `num_trips` column. But your columns are {}.'.format(list(results.columns)))
+        # check 2: length of dataframe
+        assert (len(results) == len(rides_per_year_answer)), ("The results don't look right. Try again.")
+        # check 3: one value in particular
+        year_to_check = rides_per_year_answer["year"][0]
+        correct_number = int(rides_per_year_answer[rides_per_year_answer["year"]==year_to_check]["num_trips"][0])
+        submitted_number = int(results[results["year"]==year_to_check]["num_trips"][0])
+        assert (correct_number == submitted_number), ("The results don't look right. Try again.")
 
     _hint = "Start your query with `SELECT EXTRACT(YEAR FROM trip_start_timestamp) AS year, COUNT(1) AS num_trips`."
     _solution = CS(
@@ -105,8 +114,8 @@ rides_per_year_query = \"""
                        \"""
 
 # Set up the query (cancel the query if it would use too much of 
-# your quota, with the limit set to 1 GB)
-safe_config = bigquery.QueryJobConfig(maximum_bytes_billed=10**9)
+# your quota)
+safe_config = bigquery.QueryJobConfig(maximum_bytes_billed=10**10)
 rides_per_year_query_job = client.query(rides_per_year_query, job_config=safe_config)
 
 # API request - run the query, and return a pandas DataFrame
@@ -114,12 +123,20 @@ rides_per_year_result = rides_per_year_query_job.to_dataframe()
 """
 )
 
+# (4)
 class MonthDistrib(CodingProblem):
     _var = 'rides_per_month_result'
     def check(self, results):
+        # check 1: column names
         results.columns = [c.lower() for c in results.columns]
         assert ('month' in results.columns), ('Your results should have a `month` column. But your columns are {}.'.format(list(results.columns)))
-        assert (results.equals(rides_per_month_answer)), ("The results don't look right. Try again.")
+        # check 2: length of dataframes
+        assert (len(results) == len(rides_per_month_answer)), ("The results don't look right. Try again.")
+        # check 3: one value in particular
+        month_to_check = rides_per_month_answer["month"][0]
+        correct_number = rides_per_month_answer[rides_per_month_answer["month"]==month_to_check].values[0][1]
+        submitted_number = results[results["month"]==month_to_check].values[0][1]
+        assert(correct_number==submitted_number), ("The results don't look right. Try again.")
 
     _hint = "Start your query with `SELECT EXTRACT(MONTH FROM trip_start_timestamp) AS month, COUNT(1) AS num_trips`."
     _solution = CS(
@@ -134,8 +151,8 @@ rides_per_month_query = \"""
                         \"""
 
 # Set up the query (cancel the query if it would use too much of 
-# your quota, with the limit set to 1 GB)
-safe_config = bigquery.QueryJobConfig(maximum_bytes_billed=10**9)
+# your quota)
+safe_config = bigquery.QueryJobConfig(maximum_bytes_billed=10**10)
 rides_per_month_query_job = client.query(rides_per_month_query, job_config=safe_config)
 
 # API request - run the query, and return a pandas DataFrame
@@ -143,6 +160,7 @@ rides_per_month_result = rides_per_month_query_job.to_dataframe()
 """
 )
 
+# (5)
 class TheLongQuery(CodingProblem):
     _var = 'speeds_result'
     def check(self, results):
@@ -187,8 +205,8 @@ speeds_query = \"""
                \"""
 
 # Set up the query (cancel the query if it would use too much of 
-# your quota, with the limit set to 1 GB)
-safe_config = bigquery.QueryJobConfig(maximum_bytes_billed=10**9)
+# your quota)
+safe_config = bigquery.QueryJobConfig(maximum_bytes_billed=10**10)
 speeds_query_job = client.query(speeds_query, job_config=safe_config)
 
 # API request - run the query, and return a pandas DataFrame
