@@ -42,8 +42,8 @@ class EducationSpending(CodingProblem):
         assert (len(results) == len(country_spending_answer)), ("The results don't look right. Try again.")
         # check 4: check one number
         test_country = country_spending_answer["country_name"][0]
-        correct_number = round(country_spending_answer[country_spending_answer["country_name"] == test_country]["avg_ed_spending_pct"].values[0], 2)
-        submitted_number = round(results[results["country_name"] == test_country]["avg_ed_spending_pct"].values[0], 2)
+        correct_number = float(round(country_spending_answer.loc[country_spending_answer["country_name"] == test_country]["avg_ed_spending_pct"].values[0], 2))
+        submitted_number = float(round(results.loc[results["country_name"] == test_country]["avg_ed_spending_pct"].values[0], 2))
         assert(submitted_number==correct_number), ("The results don't look right. Try again.")
 
     _hint = "The part before `FROM` should be `SELECT country_name, AVG(value) avg_ed_spending_pct`."
@@ -75,9 +75,9 @@ class FindInterestingCodes(CodingProblem):
         # get code to check
         first_code = interesting_codes_answer['indicator_code'][0]
         # get corresponding value from `num_rows` to check
-        correct_number = interesting_codes_answer[interesting_codes_answer['indicator_code']==first_code]['num_rows'].values[0]
+        correct_number = interesting_codes_answer.loc[interesting_codes_answer['indicator_code']==first_code]['num_rows'].values[0]
         # get corresponding value from user submitted dataframe
-        submitted_number = results[results['indicator_code']==first_code]['num_rows'].values[0]
+        submitted_number = results.loc[results['indicator_code']==first_code]['num_rows'].values[0]
         # check that value matches in user's dataframe
         assert(submitted_number==correct_number), ("The results don't look right. Try again.")
         

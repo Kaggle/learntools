@@ -34,7 +34,7 @@ class ProlificCommenters(CodingProblem):
         
         # check 2: pick a name. corresponding NumPosts matches solution?
         # get a name to check
-        first_author = prolific_commenters_answer['author'][0]
+        first_author = list(prolific_commenters_answer['author'])[0]
         # get corresponding NumPosts  
         correct_number = prolific_commenters_answer.loc[prolific_commenters_answer['author']==first_author]['NumPosts'].values[0]
         # want this to equal the corresponding NumPosts above

@@ -97,9 +97,9 @@ class YearDistrib(CodingProblem):
         # check 2: length of dataframe
         assert (len(results) == len(rides_per_year_answer)), ("The results don't look right. Try again.")
         # check 3: one value in particular
-        year_to_check = rides_per_year_answer["year"][0]
-        correct_number = int(rides_per_year_answer[rides_per_year_answer["year"]==year_to_check]["num_trips"][0])
-        submitted_number = int(results[results["year"]==year_to_check]["num_trips"][0])
+        year_to_check = list(rides_per_year_answer["year"])[0]
+        correct_number = int(rides_per_year_answer.loc[rides_per_year_answer["year"]==year_to_check]["num_trips"][0])
+        submitted_number = int(results.loc[results["year"]==year_to_check]["num_trips"][0])
         assert (correct_number == submitted_number), ("The results don't look right. Try again.")
 
     _hint = "Start your query with `SELECT EXTRACT(YEAR FROM trip_start_timestamp) AS year, COUNT(1) AS num_trips`."
@@ -133,9 +133,9 @@ class MonthDistrib(CodingProblem):
         # check 2: length of dataframes
         assert (len(results) == len(rides_per_month_answer)), ("The results don't look right. Try again.")
         # check 3: one value in particular
-        month_to_check = rides_per_month_answer["month"][0]
-        correct_number = rides_per_month_answer[rides_per_month_answer["month"]==month_to_check].values[0][1]
-        submitted_number = results[results["month"]==month_to_check].values[0][1]
+        month_to_check = list(rides_per_month_answer["month"])[0]
+        correct_number = rides_per_month_answer.loc[rides_per_month_answer["month"]==month_to_check].values[0][1]
+        submitted_number = results.loc[results["month"]==month_to_check].values[0][1]
         assert(correct_number==submitted_number), ("The results don't look right. Try again.")
 
     _hint = "Start your query with `SELECT EXTRACT(MONTH FROM trip_start_timestamp) AS month, COUNT(1) AS num_trips`."
@@ -172,14 +172,14 @@ class TheLongQuery(CodingProblem):
         # check 2: length of dataframe
         assert(results.shape[0] == speeds_answer.shape[0]), ('You should have {} rows in your results.'.format(speeds_answer.shape[0]))
         # check 3: particular values
-        hour_to_check = speeds_answer['hour_of_day'][0]
+        hour_to_check = list(speeds_answer['hour_of_day'])[0]
         # check first value
-        correct_num_trips = speeds_answer[speeds_answer['hour_of_day'] == hour_to_check]['num_trips'].values[0]
-        user_num_trips = results[results['hour_of_day'] == hour_to_check]['num_trips'].values[0]
+        correct_num_trips = speeds_answer.loc[speeds_answer['hour_of_day'] == hour_to_check]['num_trips'].values[0]
+        user_num_trips = results.loc[results['hour_of_day'] == hour_to_check]['num_trips'].values[0]
         assert(correct_num_trips==user_num_trips), ("The results don't look right. Try again.")
         # check second value
-        correct_avg_mph = round(speeds_answer[speeds_answer['hour_of_day'] == hour_to_check]['avg_mph'].values[0], 3)
-        user_avg_mph = round(results[results['hour_of_day'] == hour_to_check]['avg_mph'].values[0], 3)
+        correct_avg_mph = round(speeds_answer.loc[speeds_answer['hour_of_day'] == hour_to_check]['avg_mph'].values[0], 3)
+        user_avg_mph = round(results.loc[results['hour_of_day'] == hour_to_check]['avg_mph'].values[0], 3)
         assert(correct_avg_mph==user_avg_mph), ("The results don't look right. Try again.")
    
     _solution = CS(
