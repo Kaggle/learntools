@@ -205,16 +205,6 @@ Try the [hands-on exercise]({}) with {}""".format(
         self.lesson.exercise.forking_url, self.lesson.topic
         )
 
-    def TUT_BETA_NOTE(self, jot_id, **kwargs):
-        form_url = 'https://form.jotform.com/{}'.format(jot_id)
-        return """### P.S...
-
-This course is still in beta, so I'd love to get your feedback. If you have a moment to [fill out a super-short survey about this lesson]({}), I'd greatly appreciate it. You can also leave public feedback in the comments below, or on the [Learn Forum](https://www.kaggle.com/learn-forum).
-""".format(form_url)
-
-    def EXERCISE_SETUP(self, **kwargs):
-        # Standard setup code. Not currently used. Maybe should be.
-        pass
 
     def TUTORIAL_URL(self, lesson_num=None, **kwargs):
         if lesson_num is None:
@@ -229,12 +219,6 @@ This course is still in beta, so I'd love to get your feedback. If you have a mo
         lesson_idx = int(lesson_num) - 1
         lesson = self.track.lessons[lesson_idx]
         return lesson.exercise.forking_url
-
-    def EXERCISE_PREAMBLE(self, **kwargs):
-        return """These exercises accompany the tutorial on [{}]({}).""".format(
-                self.lesson.topic, self.lesson.tutorial.url,
-                )
-
 
     def NEXT_NOTEBOOK_URL(self, **kwargs):
         '''
@@ -273,22 +257,4 @@ You are ready for **[{}]({}).**
         # Alternative formulation (used on days 5 and 6 of Python challenge):
         # Want feedback on your code? To share it with others or ask for help, you'll need to make it public. Save a version of your notebook that shows your current work by hitting the "Commit & Run" button. Once your notebook is finished running, go to the Settings tab in the panel to the left (you may have to expand it by hitting the [<] button next to the "Commit & Run" button) and set the "Visibility" dropdown to "Public".
 
-    def END_OF_EMB_EXERCISE(self, jot_id, **kwargs):
-        form_url = 'https://form.jotform.com/{}'.format(jot_id)
-        txt = """
----
-That's the end of this exercise. How'd it go? If you have any questions, be sure to post them on the [forums](https://www.kaggle.com/learn-forum).
 
-**P.S.** This course is still in beta, so I'd love to get your feedback. If you have a moment to [fill out a super-short survey about this exercise]({form_url}), I'd greatly appreciate it.
-""".format(form_url=form_url)
-        if not self.lesson.last:
-            next_lesson = self.lesson.next
-            kg = """
-# Keep going
-
-When you're ready to continue, [click here]({}) to continue on to the next tutorial on {}.
-""".format(
-        next_lesson.tutorial.url, next_lesson.topic,
-        )
-            txt += kg
-        return txt
