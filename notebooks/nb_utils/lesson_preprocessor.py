@@ -55,17 +55,21 @@ class LearnLessonPreprocessor(Preprocessor):
 
         nb.cells = new_cells
         # NB: There may be some cases where we need to access learntools in a tutorial
-        # or ancillary notebook as well. We encode this in track_meta. 
+        # or ancillary notebook as well. We encode this in track_meta.
         if track_cfg.get('development', False) and self.nb_meta.type == 'exercise':
             self.pip_install_lt_hack(nb)
         return nb, resources
 
     def add_header_and_footer(self, cells):
         """Inserts header cell at front of cells and appends footer cell to end. Both new cells have course links"""
-        course_link ="""**[{} Micro-Course Home Page]({})**\n\n""".format(self.track.course_name, self.track.course_url)
+        course_link ="""**[{} Home Page]({})**\n\n""".format(self.track.course_name,
+        self.track.course_url)
         horizontal_line_break = "---\n"
         header_content = course_link + horizontal_line_break
         footer_content = horizontal_line_break + course_link
+
+        forum_cta = """\n\n\n\n*Have questions or comments? Visit the [Learn Discussion forum](https://www.kaggle.com/learn-forum) to chat with other Learners.*"""
+        footer_content += forum_cta
         header_cell = self.make_cell(cell_type='markdown', source=header_content)
         footer_cell = self.make_cell(cell_type='markdown', source=footer_content)
         cells.insert(0, header_cell)
@@ -82,7 +86,7 @@ class LearnLessonPreprocessor(Preprocessor):
             branch = 'master'
         pkg = 'git+https://github.com/Kaggle/learntools.git@{}'.format(branch)
         self.pip_install_hack(nb, [pkg])
-        
+
     def pip_install_hack(self, nb, pkgs):
         """Insert some cells at the top of this notebook that pip install the given
         packages to /kaggle/working, then add that directory to sys.path.
@@ -119,10 +123,10 @@ class LearnLessonPreprocessor(Preprocessor):
         if cell_type == "code":
             defaults['execution_count'] = None
             defaults['outputs'] = []
-            
+
         defaults.update(kwargs)
         return nbformat.from_dict(defaults)
-        
+
 
     def process_cell(self, cell):
         # Find all things that look like macros
@@ -232,8 +236,8 @@ Try the [hands-on exercise]({}) with {}""".format(
                 return next_lesson.tutorial.url
             else:
                 return next_lesson.exercise.forking_url
-        
-    
+
+
     def KEEP_GOING(self, **kwargs):
 
         # In "daily challenge" mode, the end of the exercise should not point to
@@ -256,5 +260,3 @@ You are ready for **[{}]({}).**
 
         # Alternative formulation (used on days 5 and 6 of Python challenge):
         # Want feedback on your code? To share it with others or ask for help, you'll need to make it public. Save a version of your notebook that shows your current work by hitting the "Commit & Run" button. Once your notebook is finished running, go to the Settings tab in the panel to the left (you may have to expand it by hitting the [<] button next to the "Commit & Run" button) and set the "Visibility" dropdown to "Public".
-
-
