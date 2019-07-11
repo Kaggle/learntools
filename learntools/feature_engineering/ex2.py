@@ -1,15 +1,17 @@
+import category_encoders as ce
 import pandas as pd
 
 from learntools.core import *
 
+clicks = pd.read_parquet('../input/feature-engineering-data/baseline_data.pqt')
 
-def get_data_splits(dataframe, valid_fraction=0.1):
+def get_data_splits(valid_fraction=0.1):
     """ Splits a dataframe into train, validation, and test sets. First, orders by 
         the column 'click_time'. Set the size of the validation and test sets with
         the valid_fraction keyword argument.
     """
 
-    dataframe = dataframe.sort_values('click_time')
+    dataframe = clicks.sort_values('click_time')
     valid_rows = int(len(dataframe) * valid_fraction)
     train = dataframe[:-valid_rows * 2]
     # valid size == test size, last two sections of the data
@@ -17,6 +19,8 @@ def get_data_splits(dataframe, valid_fraction=0.1):
     test = dataframe[-valid_rows:]
     
     return train, valid, test
+
+
 
 class LeakageQuestion(ThoughtExperiment):
     _solution = ("You should be calculating the encodings from the training set only. "
@@ -27,13 +31,13 @@ class LeakageQuestion(ThoughtExperiment):
                 )
 
 class CountEncodings(CodingProblem):
-    _vars = ['clicks', 'count_enc', 'train', 'valid']
+    _vars = ['train', 'valid']
     _hint = ("CountEncoder works like scikit-learn classes with a `.fit` method to calculate "
     "counts and a `.transform` method to apply the encoding. You can join two dataframes with the same "
     "index using `.join` and add suffixes to columns names with `.add_suffix`")
     _solution = CS("""
     # Create the count encoder
-    count_enc = CountEncoder()
+    count_enc = CountEncoder(cols=cat_features)
 
     # Learn encoding from the training set
     count_enc.fit(train[cat_features])
@@ -43,9 +47,11 @@ class CountEncodings(CodingProblem):
     valid = valid.join(count_enc.transform(valid[cat_features]).add_suffix('_count'))
     """) 
 
-    def check(self, clicks, count_enc, train_, valid_):
+    def check(self, train_, valid_):
         cat_features = ['ip', 'app', 'device', 'os', 'channel']
-        train, valid, _ = get_data_splits(clicks)
+        count_enc = ce.CountEncoder(cols=cat_features)
+
+        train, valid, test = get_data_splits()
 
         # Learn encoding from the training set
         count_enc.fit(train[cat_features])
