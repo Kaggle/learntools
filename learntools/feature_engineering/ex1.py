@@ -1,12 +1,25 @@
+import pandas as pd
 from sklearn import preprocessing
 
 from learntools.core import *
 
-class TimestampFeatures(CodingProblem):
-    _vars = ['clicks', 'click_data']
+click_data = pd.read_csv('../input/feature-engineering-data/train_sample.csv',
+                         parse_dates=['click_time'])
+
+def timestamp_features_soln():
+    click_times = click_data['click_time']
+    clicks = click_data.assign(day=click_times.dt.day.astype('uint8'),
+                               hour=click_times.dt.hour.astype('uint8'), 
+                               minute=click_times.dt.minute.astype('uint8'),
+                               second=click_times.dt.second.astype('uint8'))
+    return clicks
+
+class TimestampFeatures(EqualityCheckProblem):
+    _var = 'clicks'
     _hint = ("With a timestamp column in a dataframe, you can get access to "
              "datetime attibutes and functions with the `.dt` attribute. For "
              "example `tscolumn.dt.day` will convert a timestamp column to days")
+    _expected = timestamp_features_soln()
     _solution = CS(
     """
     clicks = click_data.assign(day=click_times.dt.day.astype('uint8'),
@@ -14,18 +27,6 @@ class TimestampFeatures(CodingProblem):
                                minute=click_times.dt.minute.astype('uint8'),
                                second=click_times.dt.second.astype('uint8'))
     """)
-    
-    def check(self, clicks, click_data):
-        click_times = click_data['click_time']
-        solution = click_data.assign(day=click_times.dt.day.astype('uint8'),
-                                     hour=click_times.dt.hour.astype('uint8'), 
-                                     minute=click_times.dt.minute.astype('uint8'),
-                                     second=click_times.dt.second.astype('uint8'))
-
-        
-
-        assert (solution.drop('attributed_time', axis=1) == 
-                clicks.drop('attributed_time', axis=1)).all().all()
 
 class LabelEncoding(CodingProblem):
     _var = 'clicks'
@@ -66,7 +67,7 @@ class TrainTestSplits(ThoughtExperiment):
     """
 
 class CreateSplits(CodingProblem):
-    _vars = ['clicks', 'train', 'valid', 'test']
+    _vars = ['train', 'valid', 'test']
     _hint = ("You can sort dataframes with the `.sort_values` method. Then find how many rows "
              "are 10% of the data (as an integer) and use that to slice the dataframe "
              "appropriately. You can index starting from the end of the dataframe using negative "
@@ -74,26 +75,27 @@ class CreateSplits(CodingProblem):
 
     _solution = CS("""
     valid_fraction = 0.1
-    clicks_srt = clicks.sort_values('click_time')
-    valid_rows = int(len(clicks_srt) * valid_fraction)
-    train = clicks_srt[:-valid_rows * 2]
+    sorted_clicks = clicks.sort_values('click_time')
+    valid_rows = int(len(sorted_clicks) * valid_fraction)
+    train = sorted_clicks[:-valid_rows * 2]
     # valid size == test size, last two sections of the data
-    valid = clicks_srt[-valid_rows * 2:-valid_rows]
-    test = clicks_srt[-valid_rows:]
+    valid = sorted_clicks[-valid_rows * 2:-valid_rows]
+    test = sorted_clicks[-valid_rows:]
     """)
 
-    def check(self, clicks_, train_, valid_, test_):
-        valid_fraction = 0.1
-        clicks_srt = clicks_.sort_values('click_time')
-        valid_rows = int(len(clicks_srt) * valid_fraction)
-        train = clicks_srt[:-valid_rows * 2]
-        # valid size == test size, last two sections of the data
-        valid = clicks_srt[-valid_rows * 2:-valid_rows]
-        test = clicks_srt[-valid_rows:]
+    def check(self, train_, valid_, test_):
+        sorted_clicks = click_data.sort_values('click_time')
 
-        assert train_.shape == train.shape, "The train set isn't 80% of the data"
-        assert valid_.shape == valid.shape, "The validation set isn't 10% of the data"
-        assert test_.shape == test.shape, "The test set isn't 10% of the data"
+        valid_fraction = 0.1
+        valid_rows = int(len(sorted_clicks) * valid_fraction)
+        train = sorted_clicks[:-valid_rows * 2]
+        # valid size == test size, last two sections of the data
+        valid = sorted_clicks[-valid_rows * 2:-valid_rows]
+        test = sorted_clicks[-valid_rows:]
+
+        assert train_.shape[0] == train.shape[0], "The train set isn't 80% of the data"
+        assert valid_.shape[0] == valid.shape[0], "The validation set isn't 10% of the data"
+        assert test_.shape[0] == test.shape[0], "The test set isn't 10% of the data"
 
         assert (train_['click_time'].values == train['click_time'].values).all(), (""
             "The click times aren't properly sorted in the train set")
