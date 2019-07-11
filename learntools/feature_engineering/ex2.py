@@ -51,7 +51,7 @@ class CountEncodings(CodingProblem):
         cat_features = ['ip', 'app', 'device', 'os', 'channel']
         count_enc = ce.CountEncoder(cols=cat_features)
 
-        train, valid, test = get_data_splits()
+        train, valid, _ = get_data_splits()
 
         # Learn encoding from the training set
         count_enc.fit(train[cat_features])
@@ -74,7 +74,7 @@ class CountEncodings(CodingProblem):
         assert valid_.equals(valid), "Validation features don't seem to be right"
 
 class TargetEncodings(CodingProblem):
-    _vars = ['clicks', 'target_enc', 'train', 'valid']
+    _vars = ['train', 'valid']
     _hint = ("TargetEncoder works like scikit-learn classes with a `.fit` method to learn the "
     "encoding and a `.transform` method to apply the encoding. Also note that you'll need to tell it "
     "which columns are categorical variables.")
@@ -90,10 +90,11 @@ class TargetEncodings(CodingProblem):
     valid = valid.join(target_enc.transform(valid[cat_features]).add_suffix('_target'))
     """) 
 
-    def check(self, clicks, target_enc, train_, valid_):
+    def check(self, train_, valid_):
         cat_features = ['ip', 'app', 'device', 'os', 'channel']
-        train, valid, _ = get_data_splits(clicks)
-
+        train, valid, _ = get_data_splits()
+        target_enc = ce.TargetEncoder(cols=cat_features)
+        
         # Learn encoding from the training set
         target_enc.fit(train[cat_features], train['is_attributed'])
 
@@ -126,65 +127,65 @@ class RemoveIPEncoding(ThoughtExperiment):
     """
 
 
-class LeaveOneOutEncodings(CodingProblem):
-    _vars = ['clicks', 'loo_enc', 'train', 'valid']
-    _hint = ("LeaveoneOutEncoder works like scikit-learn classes with a `.fit` method to learn the "
-    "encoding and a `.transform` method to apply the encoding. Also note that you'll need to tell it "
-    "which columns are categorical variables.")
-    _solution = CS("""
-    # Have to tell it which features are categorical when they aren't strings
-    loo_enc = ce.LeaveOneOutEncoder(cols=cat_features, random_state=7)
+# class LeaveOneOutEncodings(CodingProblem):
+#     _vars = ['clicks', 'loo_enc', 'train', 'valid']
+#     _hint = ("LeaveoneOutEncoder works like scikit-learn classes with a `.fit` method to learn the "
+#     "encoding and a `.transform` method to apply the encoding. Also note that you'll need to tell it "
+#     "which columns are categorical variables.")
+#     _solution = CS("""
+#     # Have to tell it which features are categorical when they aren't strings
+#     loo_enc = ce.LeaveOneOutEncoder(cols=cat_features, random_state=7)
 
-    # Learn encoding from the training set
-    loo_enc.fit(train[cat_features], train['is_attributed'])
+#     # Learn encoding from the training set
+#     loo_enc.fit(train[cat_features], train['is_attributed'])
 
-    # Apply encoding to the train and validation sets
-    train = train.join(loo_enc.transform(train[cat_features]).add_suffix('_loo'))
-    valid = valid.join(loo_enc.transform(valid[cat_features]).add_suffix('_loo'))
-    """) 
+#     # Apply encoding to the train and validation sets
+#     train = train.join(loo_enc.transform(train[cat_features]).add_suffix('_loo'))
+#     valid = valid.join(loo_enc.transform(valid[cat_features]).add_suffix('_loo'))
+#     """) 
 
-    def check(self, clicks, loo_enc, train_, valid_):
-        cat_features = ['app', 'device', 'os', 'channel']
-        train, valid, _ = get_data_splits(clicks)
+#     def check(self, clicks, loo_enc, train_, valid_):
+#         cat_features = ['app', 'device', 'os', 'channel']
+#         train, valid, _ = get_data_splits(clicks)
 
-        loo_enc.fit(train[cat_features], train['is_attributed'])
+#         loo_enc.fit(train[cat_features], train['is_attributed'])
 
-        train = train.join(loo_enc.transform(train[cat_features]).add_suffix('_loo'))
-        valid = valid.join(loo_enc.transform(valid[cat_features]).add_suffix('_loo'))
+#         train = train.join(loo_enc.transform(train[cat_features]).add_suffix('_loo'))
+#         valid = valid.join(loo_enc.transform(valid[cat_features]).add_suffix('_loo'))
         
-        suffix_count = 0
-        for each in train_.columns:
-            suffix_count += 1 if each.endswith("_loo") else 0
-        assert suffix_count == 4, "Be sure to add the _loo suffix to the new column names"
+#         suffix_count = 0
+#         for each in train_.columns:
+#             suffix_count += 1 if each.endswith("_loo") else 0
+#         assert suffix_count == 4, "Be sure to add the _loo suffix to the new column names"
 
-        suffix_count = 0
-        for each in valid_.columns:
-            suffix_count += 1 if each.endswith("_loo") else 0
-        assert suffix_count == 4, "Be sure to add the _loo suffix to the new column names"
+#         suffix_count = 0
+#         for each in valid_.columns:
+#             suffix_count += 1 if each.endswith("_loo") else 0
+#         assert suffix_count == 4, "Be sure to add the _loo suffix to the new column names"
 
-        assert train_.equals(train), "Train features don't seem to be right"
-        assert valid_.equals(valid), "Validation features don't seem to be right"
+#         assert train_.equals(train), "Train features don't seem to be right"
+#         assert valid_.equals(valid), "Validation features don't seem to be right"
 
 class CatBoostEncodings(CodingProblem):
-    _vars = ['clicks', 'ce', 'train', 'valid']
+    _vars = ['train', 'valid']
     _hint = ("CatBoostEncoder works like scikit-learn classes with a `.fit` method to learn the "
     "encoding and a `.transform` method to apply the encoding. Also note that you'll need to tell it "
     "which columns are categorical variables.")
     _solution = CS("""
     # Have to tell it which features are categorical when they aren't strings
-    loo_enc = ce.CatBoostEncoder(cols=cat_features, random_state=7)
+    cb_enc = ce.CatBoostEncoder(cols=cat_features, random_state=7)
 
     # Learn encoding from the training set
-    loo_enc.fit(train[cat_features], train['is_attributed'])
+    cb_enc.fit(train[cat_features], train['is_attributed'])
 
     # Apply encoding to the train and validation sets
-    train = train.join(loo_enc.transform(train[cat_features]).add_suffix('_cb'))
-    valid = valid.join(loo_enc.transform(valid[cat_features]).add_suffix('_cb'))
+    train = train.join(cb_enc.transform(train[cat_features]).add_suffix('_cb'))
+    valid = valid.join(cb_enc.transform(valid[cat_features]).add_suffix('_cb'))
     """) 
 
-    def check(self, clicks, ce, train_, valid_):
+    def check(self, train_, valid_):
         cat_features = ['app', 'device', 'os', 'channel']
-        train, valid, _ = get_data_splits(clicks)
+        train, valid, _ = get_data_splits()
 
         # CatBoostEncoder permutes the data every time you .fit. So have to create
         # a new encoder here to match the new encoder the student makes.
@@ -208,7 +209,7 @@ class CatBoostEncodings(CodingProblem):
         assert valid_.equals(valid), "Validation features don't seem to be right"
 
 class LearnSVDEmbeddings(CodingProblem):
-    _vars = ['svd', 'svd_components', 'train']
+    _vars = ['svd', 'svd_components']
     _hint = ("You can count up co-occurences of categorical values using a groupby operation. This "
              "will create a DataFrame or Series with a multi-index with a level for each categorical variable. "
              "To convert this to a matrix, you can use the `unstack` method. For each matrix, fit the "
@@ -227,13 +228,14 @@ class LearnSVDEmbeddings(CodingProblem):
         svd.fit(pair_matrix)
         svd_components['_'.join([col2, col1])] = pd.DataFrame(svd.components_)""")
 
-    def check(self, svd, svd_components, train):
+    def check(self, svd, svd_components):
 
         assert svd.n_components == 5, "Please set the number of SVD components to 5"
 
         from itertools import permutations
         
         cat_features = ['app', 'device', 'os', 'channel']
+        train, _, _ = get_data_splits()
         svd_components_ = {}
 
         # Loop through each pair of categorical features
@@ -253,7 +255,7 @@ class LearnSVDEmbeddings(CodingProblem):
 
 
 class ApplySVDEncoding(CodingProblem):
-    _vars = ['svd_components', 'svd_encodings', 'clicks']
+    _vars = ['svd_components', 'svd_encodings']
     _hint = ("TODO")
     _solution=CS("""
     svd_encodings = pd.DataFrame(index=clicks.index)
@@ -272,7 +274,7 @@ class ApplySVDEncoding(CodingProblem):
         svd_encodings = svd_encodings.join(comp_cols)
     """)
 
-    def check(self, svd_components, svd_encodings_, clicks):
+    def check(self, svd_components, svd_encodings_):
         assert svd_encodings_.shape != (2300561, 0), "Please add encoded categorical features to `svd_encodings` dataframe."
         svd_encodings = pd.DataFrame(index=clicks.index)
         for feature in svd_components:
@@ -300,7 +302,7 @@ qvars = bind_exercises(globals(), [
     CountEncodings,
     TargetEncodings,
     RemoveIPEncoding,
-    LeaveOneOutEncodings,
+    # LeaveOneOutEncodings,
     CatBoostEncodings,
     LearnSVDEmbeddings,
     ApplySVDEncoding
