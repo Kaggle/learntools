@@ -18,33 +18,28 @@ notebooks = [
         lesson_idx=0,
         type='tutorial',
         ),
-    # dict(
-    #     filename='tut2.ipynb',
-    #     lesson_idx=1,
-    #     type='tutorial',
-    #     ),
     dict(
         filename='ex1.ipynb',
         lesson_idx=0,
         type='exercise'
         # scriptid=1258954
     ),
-    # dict(
-    #     filename='tut3.ipynb',
-    #     lesson_idx=2,
-    #     type='tutorial'
-    # ),
+    dict(
+        filename='tut2.ipynb',
+        lesson_idx=1,
+        type='tutorial'
+    ),
     dict(
         filename='ex2.ipynb',
         lesson_idx=1,
         type='exercise'
         # scriptid=400771
     ),
-    # dict(
-    #     filename='tut4.ipynb',
-    #     lesson_idx=3,
-    #     type='tutorial'
-    # ),
+    dict(
+        filename='tut3.ipynb',
+        lesson_idx=2,
+        type='tutorial'
+    ),
     dict(
         filename='ex3.ipynb',
         lesson_idx=2,
