@@ -99,7 +99,7 @@ questions_query = \"""
 
 # Set up the query (cancel the query if it would use too much of 
 # your quota, with the limit set to 1 GB)
-safe_config = bigquery.QueryJobConfig(maximum_bytes_billed=10**9)
+safe_config = bigquery.QueryJobConfig(maximum_bytes_billed=10**10)
 questions_query_job = client.query(questions_query, job_config=safe_config)
 
 # API request - run the query, and return a pandas DataFrame
@@ -148,7 +148,7 @@ answers_query = \"""
                 
 # Set up the query (cancel the query if it would use too much of 
 # your quota, with the limit set to 1 GB)
-safe_config = bigquery.QueryJobConfig(maximum_bytes_billed=10**9)
+safe_config = bigquery.QueryJobConfig(maximum_bytes_billed=10**10)
 answers_query_job = client.query(answers_query, job_config=safe_config)
 
 # API request - run the query, and return a pandas DataFrame
@@ -173,7 +173,7 @@ bigquery_experts_query = \"""
 
 # Set up the query (cancel the query if it would use too much of 
 # your quota, with the limit set to 1 GB)
-safe_config = bigquery.QueryJobConfig(maximum_bytes_billed=10**9)
+safe_config = bigquery.QueryJobConfig(maximum_bytes_billed=10**10)
 bigquery_experts_query_job = client.query(bigquery_experts_query, job_config=safe_config)
 
 # API request - run the query, and return a pandas DataFrame
@@ -226,7 +226,7 @@ def expert_finder(topic, client):
                
     # Set up the query (a real service would have good error handling for 
     # queries that scan too much data)
-    safe_config = bigquery.QueryJobConfig(maximum_bytes_billed=1e9)      
+    safe_config = bigquery.QueryJobConfig(maximum_bytes_billed=10**10)      
     my_query_job = client.query(my_query, job_config=safe_config)
     
     # API request - run the query, and return a pandas DataFrame
