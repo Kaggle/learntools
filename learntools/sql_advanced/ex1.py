@@ -107,6 +107,8 @@ avg_num_trips_query = \"""
 avg_num_trips_result = client.query(avg_num_trips_query).result().to_dataframe()
 """
     )
+    _hint = ("Use the **AVG()** function. Write an **OVER** clause with that orders the rows with the `trip_date` column and uses a window that "
+             "includes the 15 preceding rows, the current row, and the following 15 rows.")
 
 
 # (2)
@@ -147,6 +149,8 @@ trip_number_query = \"""
 trip_number_result = client.query(trip_number_query).result().to_dataframe()
 """
 )
+    _hint = ("You don't need a **GROUP BY** clause.  Use the **RANK()** function.  Your **OVER** clause should order the rows by the "
+             "`trip_start_timestamp` column and break the data into partitions based on `pickup_community_area`.")
 
 class BreakTime(CodingProblem):
     _vars = ['break_time_query', 'break_time_result']
@@ -185,13 +189,17 @@ break_time_query = \"""
 break_time_result = client.query(break_time_query).result().to_dataframe()
 """
 )
+    _hint = ("The `TIMESTAMP_DIFF()` function takes three arguments, where the first (`trip_start_timestamp`) and the last (`MINUTE`) "
+             "are provided for you.  This function provides the time difference (in minutes) of the timestamps in the first two arguments. "
+             "You need only fill in the second argument, which should use the **LAG()** function to pull the timestamp corresponding to "
+             "the end of the previous trip (for the same `taxi_id`).")
 
 qvars = bind_exercises(globals(), [
     TaxiDemand,
     CommunityArea,
     BreakTime
     ],
-    tutorial_id=78,
+    tutorial_id=-1,
     var_format='q_{n}',
     )
 

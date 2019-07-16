@@ -14,13 +14,13 @@ notebooks = [
         filename='tut1.ipynb',
         lesson_idx=0,
         type='tutorial',
-        dataset_sources = ["chicago/chicago-taxi-trips-bq", "datasf/san-francisco", "hacker-news/hacker-news"],
+        dataset_sources = ["datasf/san-francisco"],
         ),
     dict(
         filename='ex1.ipynb',
         lesson_idx=0,
         type='exercise',
-        dataset_sources = ["hacker-news/hacker-news", "chicago/chicago-crime"],
+        dataset_sources = ["chicago/chicago-taxi-trips-bq"],
         scriptid=-1
         ),
 ]
