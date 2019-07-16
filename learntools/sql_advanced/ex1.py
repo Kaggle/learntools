@@ -166,7 +166,7 @@ class BreakTime(CodingProblem):
         # check 3: check values, length of dataframe
         assert (len(results)==len(break_time_answer)), ("Your answer does not have the correct number of rows.")
         # check 4: specific number
-        id_to_check = break_time_answer["taxi_id"][0]
+        id_to_check = list(break_time_answer["taxi_id"])[0]
         correct_ans = set(break_time_answer.loc[break_time_answer["taxi_id"] == id_to_check]["prev_break"])
         submitted_ans = set(results.loc[results["taxi_id"] == id_to_check]["prev_break"])
         assert (correct_ans==submitted_ans), ("The results don't look right. Try again.")
