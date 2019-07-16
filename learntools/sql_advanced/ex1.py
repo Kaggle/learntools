@@ -1,0 +1,198 @@
+import pandas as pd
+from google.cloud import bigquery
+
+from learntools.core import *
+
+# Setup 
+client = bigquery.Client()
+
+# (1) TaxiDemand
+avg_num_trips_query = """
+                      WITH trips_by_day AS
+                      (
+                      SELECT DATE(trip_start_timestamp) AS trip_date,
+                          COUNT(*) as num_trips
+                      FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`
+                      WHERE trip_start_timestamp >= '2016-01-01' AND trip_start_timestamp < '2018-01-01'
+                      GROUP BY trip_date
+                      ORDER BY trip_date
+                      )
+                      SELECT trip_date,
+                          AVG(num_trips) 
+                          OVER (
+                               ORDER BY trip_date
+                               ROWS BETWEEN 15 PRECEDING AND 15 FOLLOWING
+                               ) AS avg_num_trips
+                      FROM trips_by_day
+                      """
+avg_num_trips_answer = client.query(avg_num_trips_query).result().to_dataframe()
+
+# (2) CommunityArea
+trip_number_query = """
+                    SELECT pickup_community_area,
+                        trip_start_timestamp,
+                        trip_end_timestamp,
+                        RANK()
+                            OVER (
+                                  PARTITION BY pickup_community_area
+                                  ORDER BY trip_start_timestamp
+                                 ) AS trip_number
+                    FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`
+                    WHERE DATE(trip_start_timestamp) = '2017-05-01' 
+                    """
+trip_number_answer = client.query(trip_number_query).result().to_dataframe()
+
+# (3) BreakTime
+break_time_query = """
+                   SELECT taxi_id,
+                       trip_start_timestamp,
+                       trip_end_timestamp,
+                       TIMESTAMP_DIFF(
+                           trip_start_timestamp, 
+                           LAG(trip_end_timestamp, 1) OVER (PARTITION BY taxi_id ORDER BY trip_start_timestamp), 
+                           MINUTE) as prev_break
+                   FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`
+                   WHERE DATE(trip_start_timestamp) = '2017-05-01' 
+                   """
+break_time_answer = client.query(break_time_query).result().to_dataframe()
+
+
+# (1)
+class TaxiDemand(CodingProblem):
+    _vars = ['avg_num_trips_query', 'avg_num_trips_result']
+    def check(self, query, results):
+        assert (type(query) == str), ("You don't have a valid query yet. Try again.")
+        # check 1: words appear in query
+        assert ("over" in query.lower()), ('Your query is missing an **OVER** clause.')
+        assert ("15" in query.lower()), ("Your window should include the current date, along with the preceding 15 days and the following 15 days.")
+        assert ("avg" in query.lower()), ("Your query should calculate a rolling average.  For this, you need to use the **AVG()** function.")
+        # check 2: column names
+        lowered_colnames = [c.lower() for c in results.columns]
+        assert ('trip_date' in results.columns), ("You didn't select the `trip_date` column. Try again.")
+        assert ('avg_num_trips' in results.columns), ("You didn't select the `avg_num_trips` column. Try again.")
+        # check 3: length of df
+        assert (len(results) == len(avg_num_trips_answer)), ("Your results do not seem to have the correct dates.  You should have one entry "
+                                                             "for each date from January 1, 2016, to December 31, 2017.  Note that the provided partial "
+                                                             "query already selects the appropriate dates for you (in the `trips_by_day` column).")
+        # check 4: check specific value in df
+        # get a date to check
+        first_date = list(avg_num_trips_answer['trip_date'])[0]
+        # get corresponding value  
+        correct_number = avg_num_trips_answer.loc[avg_num_trips_answer['trip_date']==first_date]['avg_num_trips'].values[0]
+        # want this to equal the corresponding value above
+        check_number = results.loc[results['trip_date']==first_date]['avg_num_trips'].values[0]
+        assert (int(check_number)==int(correct_number)), ("The results don't look right. Try again.")
+    
+    _solution = CS(\
+"""
+avg_num_trips_query = \"""
+                      WITH trips_by_day AS
+                      (
+                      SELECT DATE(trip_start_timestamp) AS trip_date,
+                          COUNT(*) as num_trips
+                      FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`
+                      WHERE trip_start_timestamp >= '2016-01-01' AND trip_start_timestamp < '2018-01-01'
+                      GROUP BY trip_date
+                      ORDER BY trip_date
+                      )
+                      SELECT trip_date,
+                          AVG(num_trips) 
+                          OVER (
+                               ORDER BY trip_date
+                               ROWS BETWEEN 15 PRECEDING AND 15 FOLLOWING
+                               ) AS avg_num_trips
+                      FROM trips_by_day
+                      \"""
+
+avg_num_trips_result = client.query(avg_num_trips_query).result().to_dataframe()
+"""
+    )
+
+
+# (2)
+class CommunityArea(CodingProblem):
+    _vars = ['trip_number_query', 'trip_number_result']
+    def check(self, query, results):
+        assert (type(query) == str), ("You don't have a valid query yet. Try again.")
+        # check 1: query contains certain words
+        assert ('rank' in query.lower()), ("There are many different numbering functions that enumerate the rows in the input. "
+                                           "For this exercise, please use the **RANK()** function.")
+        # check 2: correct columns selected
+        assert ('pickup_community_area' in set(results.columns)), ("You didn't select the `pickup_community_area` column.")
+        assert ('trip_start_timestamp' in set(results.columns)), ("You didn't select the `trip_start_timestamp` column.")
+        assert ('trip_end_timestamp' in set(results.columns)), ("You didn't select the `trip_end_timestamp` column.")
+        assert ('trip_number' in set(results.columns)), ("You didn't select the `trip_number` column.")
+        # check 3: length of df
+        assert (len(results)==len(trip_number_answer)), ("Your answer does not have the correct number of rows.")
+        # check 4: specific value
+        correct_number = len(trip_number_answer.loc[trip_number_answer["trip_number"]==3])
+        check_number = len(results.loc[results["trip_number"]==3])
+        assert (int(check_number)==int(correct_number)), ("The results don't look right. Try again.")
+
+    _solution = CS( \
+"""
+trip_number_query = \"""
+                    SELECT pickup_community_area,
+                        trip_start_timestamp,
+                        trip_end_timestamp,
+                        RANK()
+                            OVER (
+                                  PARTITION BY pickup_community_area
+                                  ORDER BY trip_start_timestamp
+                                 ) AS trip_number
+                    FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`
+                    WHERE DATE(trip_start_timestamp) = '2017-05-01' 
+                    \"""
+
+trip_number_result = client.query(trip_number_query).result().to_dataframe()
+"""
+)
+
+class BreakTime(CodingProblem):
+    _vars = ['break_time_query', 'break_time_result']
+    def check(self, query, results):
+        assert (type(query) == str), ("You don't have a valid query yet. Try again.")
+        # check 1: query contains certain words
+        assert ('lag' in query.lower()), ("Use the **LAG()** function to pull the value for `trip_end_timestamp` from the previous row.")
+        # check 2: correct columns selected
+        assert ('taxi_id' in set(results.columns)), ("You didn't select the `taxi_id` column.")
+        assert ('trip_start_timestamp' in set(results.columns)), ("You didn't select the `trip_start_timestamp` column.")
+        assert ('trip_end_timestamp' in set(results.columns)), ("You didn't select the `trip_end_timestamp` column.")
+        assert ('prev_break' in set(results.columns)), ("You didn't select the `prev_break` column.")
+        # check 3: check values, length of dataframe
+        assert (len(results)==len(break_time_answer)), ("Your answer does not have the correct number of rows.")
+        # check 4: specific number
+        id_to_check = break_time_answer["taxi_id"][0]
+        correct_ans = set(break_time_answer.loc[break_time_answer["taxi_id"] == id_to_check]["prev_break"])
+        submitted_ans = set(results.loc[results["taxi_id"] == id_to_check]["prev_break"])
+        assert (correct_ans==submitted_ans), ("The results don't look right. Try again.")
+
+
+    _solution = CS( \
+"""
+break_time_query = \"""
+                   SELECT taxi_id,
+                       trip_start_timestamp,
+                       trip_end_timestamp,
+                       TIMESTAMP_DIFF(
+                           trip_start_timestamp, 
+                           LAG(trip_end_timestamp, 1) OVER (PARTITION BY taxi_id ORDER BY trip_start_timestamp), 
+                           MINUTE) as prev_break
+                   FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`
+                   WHERE DATE(trip_start_timestamp) = '2017-05-01' 
+                   \"""
+
+break_time_result = client.query(break_time_query).result().to_dataframe()
+"""
+)
+
+qvars = bind_exercises(globals(), [
+    TaxiDemand,
+    CommunityArea,
+    BreakTime
+    ],
+    tutorial_id=78,
+    var_format='q_{n}',
+    )
+
+__all__ = list(qvars)
