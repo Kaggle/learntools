@@ -170,8 +170,9 @@ class BreakTime(CodingProblem):
         id_to_check = list(break_time_answer["taxi_id"])[0]
         correct_ans = [int(i) for i in list(break_time_answer.loc[break_time_answer["taxi_id"] == id_to_check]["prev_break"]) if math.isnan(i)==False]
         submitted_ans = [int(i) for i in list(results.loc[results["taxi_id"] == id_to_check]["prev_break"]) if math.isnan(i)==False]
-        assert (min(correct_ans)==min(submitted_ans)), ("The results don't look right. Try again. (%d != %d)" % (min(correct_ans), min(submitted_ans)))
-        assert (max(correct_ans)==max(submitted_ans)), ("The results don't look right. Try again. (%d != %d)" % (max(correct_ans), max(submitted_ans)))
+        if len(correct_ans) > 0:
+          assert (min(correct_ans)==min(submitted_ans)), ("The results don't look right. Try again.")
+          assert (max(correct_ans)==max(submitted_ans)), ("The results don't look right. Try again.")
 
     _solution = CS( \
 """
