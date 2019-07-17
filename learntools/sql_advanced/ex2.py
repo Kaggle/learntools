@@ -56,7 +56,7 @@ all_users_query = """
                   WHERE EXTRACT(DATE FROM q.creation_date) = '2019-01-01'
                   UNION DISTINCT
                   SELECT a.owner_user_id
-                  FROM `bigquery-public-data.stackoverflow.posts_questions` AS a
+                  FROM `bigquery-public-data.stackoverflow.posts_answers` AS a
                   WHERE EXTRACT(DATE FROM a.creation_date) = '2019-01-01'
                   """
 all_users_answer = client.query(all_users_query).result().to_dataframe()
@@ -71,7 +71,7 @@ class CorrectQuery(CodingProblem):
                                                        "%d rows, but you have %d rows." % (len(correct_answer), len(results)))
         # check 2: calculated values
         # correct result
-        correct_list = list(correct_answer["time_to_answer"])
+        correct_list_nan = [i for i in list(correct_answer["time_to_answer"]) if not math.isnan(i)]
         correct_number = int(sum(correct_list)/len(correct_list))
         # submitted value
         submitted_list = list(results["time_to_answer"])
@@ -130,7 +130,7 @@ q_and_a_query = \"""
 q_and_a_result = client.query(q_and_a_query).result().to_dataframe()
 """
 )
-    _hint = ("Which type of JOIN always returns all rows from both tables?")
+    _hint = "Which type of JOIN always returns all rows from both tables?"
 
 # (3)
 class QA_Two(CodingProblem):
@@ -206,7 +206,7 @@ all_users_query = \"""
                   WHERE EXTRACT(DATE FROM q.creation_date) = '2019-01-01'
                   UNION DISTINCT
                   SELECT a.owner_user_id
-                  FROM `bigquery-public-data.stackoverflow.posts_questions` AS a
+                  FROM `bigquery-public-data.stackoverflow.posts_answers` AS a
                   WHERE EXTRACT(DATE FROM a.creation_date) = '2019-01-01'
                   \"""
 
