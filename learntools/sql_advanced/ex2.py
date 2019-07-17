@@ -168,7 +168,7 @@ three_tables_result = client.query(three_tables_query).result().to_dataframe()
 )
     _hint = \
 """
-# Here's a partially completed query.  You need only fill in the appropriate JOINs!
+Here's a partially completed query.  You need only fill in the appropriate JOINs!
 ```
 three_tables_query = \"""
                      SELECT u.id AS id,
