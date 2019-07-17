@@ -110,7 +110,7 @@ class QA_One(CodingProblem):
         assert ('q_creation_date' in set(results.columns)), ("You didn't select the `q_creation_date` column.")
         assert ('a_creation_date' in set(results.columns)), ("You didn't select the `a_creation_date` column.")
         # check 3: length of df
-        assert (len(results)==len(trip_number_answer)), ("Your answer does not have the correct number of rows.  You should have %d rows, "
+        assert (len(results)==len(q_and_a_answer)), ("Your answer does not have the correct number of rows.  You should have %d rows, "
                                                          "but you have %d rows." % (len(trip_number_answer), len(results)))
 
     _solution = CS( \
@@ -132,6 +132,7 @@ q_and_a_result = client.query(q_and_a_query).result().to_dataframe()
 )
     _hint = ("Which type of JOIN always returns all rows from both tables?")
 
+# (3)
 class QA_Two(CodingProblem):
     _vars = ['three_tables_query', 'three_tables_result']
     def check(self, query, results):
