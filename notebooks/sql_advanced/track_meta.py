@@ -6,7 +6,9 @@ track = dict(
 )
 
 lessons = [ {'topic': topic_name} for topic_name in
-                    ['Window Functions',]
+                    ['Analytic Functions',
+                     'JOINs and UNIONs',
+                     ]
             ]
 
 notebooks = [
@@ -21,6 +23,19 @@ notebooks = [
         lesson_idx=0,
         type='exercise',
         dataset_sources = ["chicago/chicago-taxi-trips-bq"],
+        scriptid=-1
+        ),
+    dict(
+        filename='tut2.ipynb',
+        lesson_idx=1,
+        type='tutorial',
+        dataset_sources = ["hacker-news/hacker-news"],
+        ),
+    dict(
+        filename='ex2.ipynb',
+        lesson_idx=1,
+        type='exercise',
+        dataset_sources = ["stackoverflow/stackoverflow"],
         scriptid=-1
         ),
 ]

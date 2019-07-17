@@ -18,7 +18,7 @@ correct_query = """
                 GROUP BY q_id
                 ORDER BY time_to_answer
                 """
-correct_answer = client.query(correct_result_query).result().to_dataframe()
+correct_answer = client.query(correct_query).result().to_dataframe()
 
 # (2) QA_One
 q_and_a_query = """
