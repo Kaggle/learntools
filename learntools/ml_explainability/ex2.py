@@ -8,7 +8,7 @@ class WhichFeaturesAreUseful(ThoughtExperiment):
     _solution = """It would be helpful to know whether New York City taxis
     vary prices based on how many passengers they have. Most places do not
     change fares based on numbers of passengers.
-    If you assume New York City is the same, than only the top 4 features listed should matter. At first glance, it seems all of those should matter equally.
+    If you assume New York City is the same, then only the top 4 features listed should matter. At first glance, it seems all of those should matter equally.
     """
 
 class FirstPermImportance(CodingProblem):
