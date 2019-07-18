@@ -28,7 +28,18 @@ class TimestampFeatures(EqualityCheckProblem):
                                second=click_times.dt.second.astype('uint8'))
     """)
 
-class LabelEncoding(CodingProblem):
+
+def label_encoding_soln():
+    cat_features = ['ip', 'app', 'device', 'os', 'channel']
+    label_encoder = preprocessing.LabelEncoder()
+    
+    clicks = timestamp_features_soln()
+    for feature in cat_features:
+        encoded = label_encoder.fit_transform(clicks[feature])
+        clicks[feature + '_labels'] = encoded
+    return clicks
+
+class LabelEncoding(EqualityCheckProblem):
     _var = 'clicks'
     _hint = ("Try looping through each of the categorical features and using the "
              " using LabelEncoder's .fit_transform method")
@@ -38,24 +49,19 @@ class LabelEncoding(CodingProblem):
     for feature in cat_features:
         encoded = label_encoder.fit_transform(clicks[feature])
         clicks[feature + '_labels'] = encoded
-    """
-    )
-
-    def check(self, clicks):
-        cat_features = ['ip', 'app', 'device', 'os', 'channel']
-        label_encoder = preprocessing.LabelEncoder()
-        
-
-        for feature in cat_features:
-            encoded = label_encoder.fit_transform(clicks[feature])
-            message = f"The {feature} column isn't encoded properly."
-            assert (clicks[feature + '_labels'] == encoded).all(), message
+    """)
+    _expected = label_encoding_soln()
 
 class OnehotEncoding(ThoughtExperiment):
     _solution = """
-    The `ip_labels` column has 58,000 values, which means it will create
-    an extremely sparse matrix with 58,000 columns. Generally a bad idea. 
-    Luckily, LightGBM works well with label encoded features.
+    The `ip` column has 58,000 values, which means it will create an extremely 
+    sparse matrix with 58,000 columns. This many columns will make your model run
+    very slow, so in general you want to avoid one-hot encoding features with many
+    levels.
+    
+    LightGBM models work with label encoded features, so you don't actually need to 
+    one-hot encode the categorical features.
+
     """
 
 class TrainTestSplits(ThoughtExperiment):
@@ -104,15 +110,6 @@ class CreateSplits(CodingProblem):
         assert (test_['click_time'].values == test['click_time'].values).all(), (""
             "The click times aren't properly sorted in the test set")
 
-class EvaluateModel(EqualityCheckProblem):
-    _var = "score"
-    _expected = 0.9726727334566094
-    _hint = ("Use the boosting model to make predictions bst.predict using the test data. "
-    "Then, you can use roc_auc_score from the metrics module to calculate the AUC score. "
-    "Also, be sure to calculate the score using the test dataset. ")
-    _solution = CS("""
-    ypred = bst.predict(valid[feature_cols])
-    score = metrics.roc_auc_score(valid['is_attributed'], ypred)""")
 
 qvars = bind_exercises(globals(), [
     TimestampFeatures,
@@ -120,7 +117,6 @@ qvars = bind_exercises(globals(), [
     OnehotEncoding,
     TrainTestSplits,
     CreateSplits,
-    EvaluateModel
     ],
     tutorial_id=262,
     var_format='q_{n}',
