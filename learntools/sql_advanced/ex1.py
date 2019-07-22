@@ -61,17 +61,20 @@ break_time_answer = client.query(break_time_query).result().to_dataframe()
 
 # (1)
 class TaxiDemand(CodingProblem):
-    _vars = ['avg_num_trips_query', 'avg_num_trips_result']
+    _var = 'avg_num_trips_query'
 
-    def print_table(self):
-      display(avg_num_trips_answer.head())
-
-    def check(self, query, results):
+    def check(self, query):
         assert (type(query) == str), ("You don't have a valid query yet. Try again.")
         # check 1: words appear in query
         assert ("over" in query.lower()), ('Your query is missing an **OVER** clause.')
         assert ("15" in query.lower()), ("Your window should include the current date, along with the preceding 15 days and the following 15 days.")
         assert ("avg" in query.lower()), ("Your query should calculate a rolling average.  For this, you need to use the **AVG()** function.")
+        # EXPERIMENTAL: get results
+        try:
+            results = client.query(query).result().to_dataframe()
+        except:
+            assert False, "Your query didn't run."
+        display(results.head())
         # check 2: column names
         lowered_colnames = [c.lower() for c in results.columns]
         assert ('trip_date' in results.columns), ("You didn't select the `trip_date` column. Try again.")
@@ -88,7 +91,7 @@ class TaxiDemand(CodingProblem):
         # want this to equal the corresponding value above
         check_number = results.loc[results['trip_date']==first_date]['avg_num_trips'].values[0]
         assert (int(check_number)==int(correct_number)), ("The results don't look right. Try again.")
-        display(avg_num_trips_answer.head())
+
     
     _solution = CS(\
 """
