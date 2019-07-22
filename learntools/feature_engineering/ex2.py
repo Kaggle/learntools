@@ -21,17 +21,34 @@ def get_data_splits(valid_fraction=0.1):
     return train, valid, test
 
 
-
 class LeakageQuestion(ThoughtExperiment):
-    _solution = ("You should be calculating the encodings from the training set only. "
-                 "If you include data from the validation and test sets into this, you'll "                
-                 "end up overestimating the model's performance. You should in general be "
+    _solution = ("You should calculate the encodings from the training set only. "
+                 "If you include data from the validation and test sets into the encodings, you'll "                
+                 "overestimate the model's performance. You should in general be "
                  "vigilant to avoid leakage, that is, including any information from the "
-                 "validation and test sets into the model."
+                 "validation and test sets into the model. For a review on this topic, see our "
+                 "lesson on [data leakage](https://www.kaggle.com/alexisbcook/data-leakage)"
                 )
 
-class CountEncodings(CodingProblem):
-    _vars = ['train', 'valid']
+
+def count_encodings_solution():
+    cat_features = ['ip', 'app', 'device', 'os', 'channel']
+    count_enc = ce.CountEncoder(cols=cat_features)
+
+    train, valid, _ = get_data_splits()
+
+    # Learn encoding from the training set
+    count_enc.fit(train[cat_features])
+
+    # Apply encoding to the train and validation sets
+    train_encoded = train.join(count_enc.transform(train[cat_features]).add_suffix('_count'))
+    valid_encoded = valid.join(count_enc.transform(valid[cat_features]).add_suffix('_count'))
+
+    return train_encoded, valid_encoded
+
+
+class CountEncodings(EqualityCheckProblem):
+    _vars = ['train_encoded', 'valid_encoded']
     _hint = ("CountEncoder works like scikit-learn classes with a `.fit` method to calculate "
     "counts and a `.transform` method to apply the encoding. You can join two dataframes with the same "
     "index using `.join` and add suffixes to columns names with `.add_suffix`")
@@ -43,38 +60,37 @@ class CountEncodings(CodingProblem):
     count_enc.fit(train[cat_features])
 
     # Apply encoding to the train and validation sets
-    train = train.join(count_enc.transform(train[cat_features]).add_suffix('_count'))
-    valid = valid.join(count_enc.transform(valid[cat_features]).add_suffix('_count'))
-    """) 
+    train_encoded = train.join(count_enc.transform(train[cat_features]).add_suffix('_count'))
+    valid_encoded = valid.join(count_enc.transform(valid[cat_features]).add_suffix('_count'))
+    """)
+    _expected = count_encodings_solution()
 
-    def check(self, train_, valid_):
-        cat_features = ['ip', 'app', 'device', 'os', 'channel']
-        count_enc = ce.CountEncoder(cols=cat_features)
+class CountEncodingEffectiveness(ThoughtExperiment):
 
-        train, valid, _ = get_data_splits()
+    _solution = """
+    Rare values tend to have similar counts (with values like 1 or 2), so you can classify rare 
+    values together at prediction time. Common values with large counts are unlikely to have 
+    the same exact count as other values. So, the common/important values get their own 
+    grouping.
+    """
 
-        # Learn encoding from the training set
-        count_enc.fit(train[cat_features])
+def target_encodings_solution():
+    cat_features = ['ip', 'app', 'device', 'os', 'channel']
+    target_enc = ce.TargetEncoder(cols=cat_features)
 
-        # Apply encoding to the train and validation sets
-        train = train.join(count_enc.transform(train[cat_features]).add_suffix('_count'))
-        valid = valid.join(count_enc.transform(valid[cat_features]).add_suffix('_count'))
-        
-        suffix_count = 0
-        for each in train_.columns:
-            suffix_count += 1 if each.endswith("_count") else 0
-        assert suffix_count == 5, "Be sure to add the _count suffix to the new column names"
+    train, valid, _ = get_data_splits()
 
-        suffix_count = 0
-        for each in valid_.columns:
-            suffix_count += 1 if each.endswith("_count") else 0
-        assert suffix_count == 5, "Be sure to add the _count suffix to the new column names"
+    # Learn encoding from the training set
+    target_enc.fit(train[cat_features], train['is_attributed'])
 
-        assert train_.equals(train), "Train features don't seem to be right"
-        assert valid_.equals(valid), "Validation features don't seem to be right"
+    # Apply encoding to the train and validation sets
+    train_encoded = train.join(target_enc.transform(train[cat_features]).add_suffix('_target'))
+    valid_encoded = valid.join(target_enc.transform(valid[cat_features]).add_suffix('_target'))
 
-class TargetEncodings(CodingProblem):
-    _vars = ['train', 'valid']
+    return train_encoded, valid_encoded
+
+class TargetEncodings(EqualityCheckProblem):
+    _vars = ['train_encoded', 'valid_encoded']
     _hint = ("TargetEncoder works like scikit-learn classes with a `.fit` method to learn the "
     "encoding and a `.transform` method to apply the encoding. Also note that you'll need to tell it "
     "which columns are categorical variables.")
@@ -86,88 +102,43 @@ class TargetEncodings(CodingProblem):
     target_enc.fit(train[cat_features], train['is_attributed'])
 
     # Apply encoding to the train and validation sets
-    train = train.join(target_enc.transform(train[cat_features]).add_suffix('_target'))
-    valid = valid.join(target_enc.transform(valid[cat_features]).add_suffix('_target'))
-    """) 
+    train_encoded = train.join(target_enc.transform(train[cat_features]).add_suffix('_target'))
+    valid_encoded = valid.join(target_enc.transform(valid[cat_features]).add_suffix('_target'))
+    """)
+    _expected = target_encodings_solution()
 
-    def check(self, train_, valid_):
-        cat_features = ['ip', 'app', 'device', 'os', 'channel']
-        train, valid, _ = get_data_splits()
-        target_enc = ce.TargetEncoder(cols=cat_features)
-        
-        # Learn encoding from the training set
-        target_enc.fit(train[cat_features], train['is_attributed'])
-
-        # Apply encoding to the train and validation sets
-        train = train.join(target_enc.transform(train[cat_features]).add_suffix('_target'))
-        valid = valid.join(target_enc.transform(valid[cat_features]).add_suffix('_target'))
-        
-        suffix_count = 0
-        for each in train_.columns:
-            suffix_count += 1 if each.endswith("_target") else 0
-        assert suffix_count == 5, "Be sure to add the _target suffix to the new column names"
-
-        suffix_count = 0
-        for each in valid_.columns:
-            suffix_count += 1 if each.endswith("_target") else 0
-        assert suffix_count == 5, "Be sure to add the _target suffix to the new column names"
-
-        #print(train_.head())
-        #print(train.head())
-        assert train_.equals(train), "Train features don't seem to be right"
-        assert valid_.equals(valid), "Validation features don't seem to be right"
 
 class RemoveIPEncoding(ThoughtExperiment):
     _solution = """
-    (This is my guess) Target encoding attempts to measure the population mean of the target for each 
-    level in a categorical feature. This means when there is less data per level, the estimated mean 
-    will be further, there will be more variance. There is little data per IP address so it's likely 
-    that the estimates are much noisier than for the other features. Going forward, we'll leave out the 
-    IP feature when trying different encodings.
+    Target encoding attempts to measure the population mean of the target for each 
+    level in a categorical feature. This means when there is less data per level, the 
+    estimated mean will be further away from the "true" mean, there will be more variance. 
+    There is little data per IP address so it's likely that the estimates are much noisier
+    than for the other features. The model will rely heavily on this feature since it is 
+    extremely predictive. This causes it to make fewer splits on other features, and those
+    features are fit on just the errors left over accounting for IP address. So, the 
+    model will perform very poorly when seeing new IP addresses that weren't in the 
+    training data (which is likely most new data). Going forward, we'll leave out the IP feature when trying
+    different encodings.
     """
 
+def cb_encodings_solution():
+    cat_features = ['app', 'device', 'os', 'channel']
+    cb_enc = ce.CatBoostEncoder(cols=cat_features, random_state=7)
 
-# class LeaveOneOutEncodings(CodingProblem):
-#     _vars = ['clicks', 'loo_enc', 'train', 'valid']
-#     _hint = ("LeaveoneOutEncoder works like scikit-learn classes with a `.fit` method to learn the "
-#     "encoding and a `.transform` method to apply the encoding. Also note that you'll need to tell it "
-#     "which columns are categorical variables.")
-#     _solution = CS("""
-#     # Have to tell it which features are categorical when they aren't strings
-#     loo_enc = ce.LeaveOneOutEncoder(cols=cat_features, random_state=7)
+    train, valid, _ = get_data_splits()
 
-#     # Learn encoding from the training set
-#     loo_enc.fit(train[cat_features], train['is_attributed'])
+    # Learn encoding from the training set
+    cb_enc.fit(train[cat_features], train["is_attributed"])
 
-#     # Apply encoding to the train and validation sets
-#     train = train.join(loo_enc.transform(train[cat_features]).add_suffix('_loo'))
-#     valid = valid.join(loo_enc.transform(valid[cat_features]).add_suffix('_loo'))
-#     """) 
+    # Apply encoding to the train and validation sets
+    train_encoded = train.join(cb_enc.transform(train[cat_features]).add_suffix('_cb'))
+    valid_encoded = valid.join(cb_enc.transform(valid[cat_features]).add_suffix('_cb'))
 
-#     def check(self, clicks, loo_enc, train_, valid_):
-#         cat_features = ['app', 'device', 'os', 'channel']
-#         train, valid, _ = get_data_splits(clicks)
+    return train_encoded, valid_encoded
 
-#         loo_enc.fit(train[cat_features], train['is_attributed'])
-
-#         train = train.join(loo_enc.transform(train[cat_features]).add_suffix('_loo'))
-#         valid = valid.join(loo_enc.transform(valid[cat_features]).add_suffix('_loo'))
-        
-#         suffix_count = 0
-#         for each in train_.columns:
-#             suffix_count += 1 if each.endswith("_loo") else 0
-#         assert suffix_count == 4, "Be sure to add the _loo suffix to the new column names"
-
-#         suffix_count = 0
-#         for each in valid_.columns:
-#             suffix_count += 1 if each.endswith("_loo") else 0
-#         assert suffix_count == 4, "Be sure to add the _loo suffix to the new column names"
-
-#         assert train_.equals(train), "Train features don't seem to be right"
-#         assert valid_.equals(valid), "Validation features don't seem to be right"
-
-class CatBoostEncodings(CodingProblem):
-    _vars = ['train', 'valid']
+class CatBoostEncodings(EqualityCheckProblem):
+    _vars = ['train_encoded', 'valid_encoded']
     _hint = ("CatBoostEncoder works like scikit-learn classes with a `.fit` method to learn the "
     "encoding and a `.transform` method to apply the encoding. Also note that you'll need to tell it "
     "which columns are categorical variables.")
@@ -179,34 +150,10 @@ class CatBoostEncodings(CodingProblem):
     cb_enc.fit(train[cat_features], train['is_attributed'])
 
     # Apply encoding to the train and validation sets
-    train = train.join(cb_enc.transform(train[cat_features]).add_suffix('_cb'))
-    valid = valid.join(cb_enc.transform(valid[cat_features]).add_suffix('_cb'))
+    train_encoded = train.join(cb_enc.transform(train[cat_features]).add_suffix('_cb'))
+    valid_encoded = valid.join(cb_enc.transform(valid[cat_features]).add_suffix('_cb'))
     """) 
-
-    def check(self, train_, valid_):
-        cat_features = ['app', 'device', 'os', 'channel']
-        train, valid, _ = get_data_splits()
-
-        # CatBoostEncoder permutes the data every time you .fit. So have to create
-        # a new encoder here to match the new encoder the student makes.
-        cb_enc = ce.CatBoostEncoder(cols=cat_features, random_state=7)
-        cb_enc.fit(train[cat_features], train['is_attributed'])
-
-        train = train.join(cb_enc.transform(train[cat_features]).add_suffix('_cb'))
-        valid = valid.join(cb_enc.transform(valid[cat_features]).add_suffix('_cb'))
-        
-        suffix_count = 0
-        for each in train_.columns:
-            suffix_count += 1 if each.endswith("_cb") else 0
-        assert suffix_count == 4, "Be sure to add the _cb suffix to the new column names"
-
-        suffix_count = 0
-        for each in valid_.columns:
-            suffix_count += 1 if each.endswith("_cb") else 0
-        assert suffix_count == 4, "Be sure to add the _cb suffix to the new column names"
-
-        assert train_.equals(train), "Train features don't seem to be right"
-        assert valid_.equals(valid), "Validation features don't seem to be right"
+    _expected = cb_encodings_solution()
 
 class LearnSVDEmbeddings(CodingProblem):
     _vars = ['svd', 'svd_components']
@@ -300,6 +247,7 @@ class ApplySVDEncoding(CodingProblem):
 qvars = bind_exercises(globals(), [
     LeakageQuestion,
     CountEncodings,
+    CountEncodingEffectiveness,
     TargetEncodings,
     RemoveIPEncoding,
     # LeaveOneOutEncodings,
