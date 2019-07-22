@@ -46,11 +46,11 @@ notebooks = [
         type='exercise'
         # scriptid=1259097
     ),
-    # dict(
-    #     filename='tut5.ipynb',
-    #     lesson_idx=4,
-    #     type='tutorial'
-    #     ),
+    dict(
+        filename='tut4.ipynb',
+        lesson_idx=3,
+        type='tutorial'
+        ),
     dict(
         filename='ex4.ipynb',
         lesson_idx=3,
