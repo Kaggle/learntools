@@ -161,6 +161,8 @@ class LearnLessonPreprocessor(Preprocessor):
             i = b
         newsrc += src[i:]
         cell['source'] = newsrc
+        if cell['cell_type'] == 'markdown':
+            cell['metadata']['KAGGLE_FREEZE'] = True
         return cell
 
     def expand_macro(self, macro, cell):
@@ -168,9 +170,6 @@ class LearnLessonPreprocessor(Preprocessor):
         it's side-effecty), by looking up and calling the corresponding
         LessonPreprocessor method.
         """
-        # TODO: The fact that some macros expand to some text, and some just have
-        # some effect on their cell leads to some awkwardness. Could be nice to
-        # delineate syntactically. e.g. #$HIDE!$
         args = []
         if macro.endswith(')'):
             macro, argstr = macro[:-1].split('(')
