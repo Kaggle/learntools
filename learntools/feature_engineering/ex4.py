@@ -9,6 +9,17 @@ from boruta import BorutaPy
 
 from learntools.core import *
 
+def get_data_splits(dataframe, valid_fraction=0.1):
+
+    dataframe = dataframe.sort_values('click_time')
+    valid_rows = int(len(dataframe) * valid_fraction)
+    train = dataframe[:-valid_rows * 2]
+    # valid size == test size, last two sections of the data
+    valid = dataframe[-valid_rows * 2:-valid_rows]
+    test = dataframe[-valid_rows:]
+    
+    return train, valid, test
+
 class FeatureSelectionData(ThoughtExperiment):
     _solution = ("Including validation and test data within the feature "
                  "selection is a source of leakage. You'll want to perform "
@@ -195,7 +206,7 @@ class ApplyPCAEncodings(CodingProblem):
         assert df.equals(student_df)
 
 class FitBoruta(CodingProblem):
-    _vars = ['fit_boruta', 'train']
+    _vars = ['fit_boruta', 'clicks']
     _hint = ("The first thing to do is create a random forest classifier from sklearn "
              "then use BorutaPy to create the selector, with the random forest model. "
              "After fitting the selector, you can get back the accepted and rejected  "
@@ -221,7 +232,7 @@ class FitBoruta(CodingProblem):
         return selected_columns
     """)
 
-    def check(self, student_func, train):
+    def check(self, student_func, clicks):
         
 
         def fit_boruta(df, feature_cols, target):
@@ -242,12 +253,12 @@ class FitBoruta(CodingProblem):
             selected_columns = feature_cols[feat_selector.support_]
             return selected_columns
 
+        print("Running checking code, please wait.")
+        train, _, _ = get_data_splits(clicks)
         feature_cols = train.columns.drop(['click_time', 'attributed_time',
                                             'is_attributed'])
-
-        print("Running checking code, please wait.")
         student_selected = student_func(train[:5000], feature_cols, 'is_attributed')
-        assert student_selected is not ____, "Please implement the `fit_boruta`sdfsf function"
+        assert student_selected is not ____, "Please implement the `fit_boruta` function"
 
         
         selected = fit_boruta(train[:5000], feature_cols, 'is_attributed')
