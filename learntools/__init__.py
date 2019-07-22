@@ -2,4 +2,4 @@ from . import advanced_pandas, core, data_viz_to_coder, deep_learning, embedding
               machine_learning, ml_explainability, ml_insights, ml_intermediate, python, \
               sql, time_series_with_siraj
 
-__version__ = '0.3.0'
+__version__ = '0.3.1'

@@ -25,7 +25,6 @@ TRACKS="deep_learning embeddings pandas python machine_learning sql data_viz_to_
 for track in $TRACKS
 do
     # Run each step of the rendering pipeline, to make sure it runs without errors.
-    python3 clean.py $track
     python3 prepare_push.py $track
 done
 
@@ -42,11 +41,9 @@ do
     ! [[ -a setup_data.sh ]] || ./setup_data.sh
     for nb in `ls raw/*.ipynb`
     do
-        # Skip some known bugs/misbehaving tests
-        # First pandas reference notebook has a bug (b/120286668), and times out.
         # First python exercise notebook uses google/tinyquickdraw dataset, which
         # is 11 GB. Downloading it would probably slow down testing unacceptably.
-        if [[ $nb =~ "writing-reference" || ( $nb =~ "ex_1" && $track == "python" ) ]]
+        if [[ ( $nb =~ "ex_1" && $track == "python" ) ]]
         then
             echo "Warning: skipping $nb in track $track"
             continue
