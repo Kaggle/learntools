@@ -1,6 +1,7 @@
 import math
 import pandas as pd
 from google.cloud import bigquery
+from IPython.display import display
 
 from learntools.core import *
 
@@ -63,8 +64,7 @@ class TaxiDemand(CodingProblem):
     _vars = ['avg_num_trips_query', 'avg_num_trips_result']
 
     def print_table(self):
-      self._view.solution()
-      avg_num_trips_answer.head()
+      display(avg_num_trips_answer.head())
 
     def check(self, query, results):
         assert (type(query) == str), ("You don't have a valid query yet. Try again.")
@@ -88,6 +88,7 @@ class TaxiDemand(CodingProblem):
         # want this to equal the corresponding value above
         check_number = results.loc[results['trip_date']==first_date]['avg_num_trips'].values[0]
         assert (int(check_number)==int(correct_number)), ("The results don't look right. Try again.")
+        display(avg_num_trips_answer.head())
     
     _solution = CS(\
 """
