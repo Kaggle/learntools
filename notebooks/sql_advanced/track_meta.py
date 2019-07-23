@@ -1,13 +1,14 @@
 # See also examples/example_track/example_meta.py for a longer, commented example
 track = dict(
-    author_username='dansbecker',
-    course_name='SQL',
+    author_username='alexisbcook',
+    course_name='Advanced SQL',
     course_url='https://www.kaggle.com/learn/advanced-sql'
 )
 
 lessons = [ {'topic': topic_name} for topic_name in
-                    ['Analytic Functions',
-                     'JOINs and UNIONs',
+                    ['JOINs and UNIONs',
+                     'Analytic Functions',
+                     'Nested and Repeated Data',
                      ]
             ]
 
@@ -36,6 +37,19 @@ notebooks = [
         lesson_idx=1,
         type='exercise',
         dataset_sources = ["stackoverflow/stackoverflow"],
+        scriptid=-1
+        ),
+    dict(
+        filename='tut3.ipynb',
+        lesson_idx=2,
+        type='tutorial',
+        dataset_sources = ["bigquery/google-analytics-sample"],
+        ),
+    dict(
+        filename='ex3.ipynb',
+        lesson_idx=2,
+        type='exercise',
+        dataset_sources = ["github/github-repos"],
         scriptid=-1
         ),
 ]
