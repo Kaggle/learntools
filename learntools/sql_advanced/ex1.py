@@ -122,9 +122,9 @@ avg_num_trips_query = \"""
 
 # (2)
 class CommunityArea(CodingProblem):
-    _vars = ['trip_number_query', 'trip_number_result']
-    def check(self, query, results):
-        assert (type(query) == str), ("You don't have a valid query yet. Try again.")
+    _var = 'trip_number_query'
+    def check(self, query):
+        results = run_query(query)
         # check 1: query contains certain words
         assert ('rank' in query.lower()), ("There are many different numbering functions that enumerate the rows in the input. "
                                            "For this exercise, please use the **RANK()** function.")
@@ -161,10 +161,11 @@ trip_number_result = client.query(trip_number_query).result().to_dataframe()
     _hint = ("You don't need a **GROUP BY** clause.  Use the **RANK()** function.  Your **OVER** clause should order the rows by the "
              "`trip_start_timestamp` column and break the data into partitions based on `pickup_community_area`.")
 
+# (3)
 class BreakTime(CodingProblem):
-    _vars = ['break_time_query', 'break_time_result']
-    def check(self, query, results):
-        assert (type(query) == str), ("You don't have a valid query yet. Try again.")
+    _var = 'break_time_query'
+    def check(self, query):
+        results = run_query(query)
         # check 1: query contains certain words
         assert ('lag' in query.lower()), ("Use the **LAG()** function to pull the value for `trip_end_timestamp` from the previous row.")
         # check 2: correct columns selected
@@ -179,8 +180,8 @@ class BreakTime(CodingProblem):
         correct_ans = [int(i) for i in list(break_time_answer.loc[break_time_answer["taxi_id"] == id_to_check]["prev_break"]) if math.isnan(i)==False]
         submitted_ans = [int(i) for i in list(results.loc[results["taxi_id"] == id_to_check]["prev_break"]) if math.isnan(i)==False]
         if len(correct_ans) > 0:
-          assert (min(correct_ans)==min(submitted_ans)), ("The results don't look right. Try again.")
-          assert (max(correct_ans)==max(submitted_ans)), ("The results don't look right. Try again.")
+            assert (min(correct_ans)==min(submitted_ans)), ("The results don't look right. Try again.")
+            assert (max(correct_ans)==max(submitted_ans)), ("The results don't look right. Try again.")
 
     _solution = CS( \
 """
