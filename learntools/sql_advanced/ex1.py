@@ -1,6 +1,7 @@
 import math
 import pandas as pd
 from google.cloud import bigquery
+from IPython.display import display
 
 from learntools.core import *
 
@@ -62,6 +63,7 @@ def run_query(query):
         results = client.query(query).result().to_dataframe()
     except:
         assert False, "You don't have a valid query yet.  Try again."
+    display(results.head())
     return results
 
 # (1)
@@ -70,7 +72,6 @@ class TaxiDemand(CodingProblem):
 
     def check(self, query):
         results = run_query(query)
-        self.results = results
         # check 1: words appear in query
         assert ("over" in query.lower()), ('Your query is missing an **OVER** clause.')
         assert ("15" in query.lower()), ("Your window should include the current date, along with the preceding 15 days and the following 15 days.")
@@ -91,7 +92,6 @@ class TaxiDemand(CodingProblem):
         # want this to equal the corresponding value above
         check_number = results.loc[results['trip_date']==first_date]['avg_num_trips'].values[0]
         assert (int(check_number)==int(correct_number)), ("The results don't look right. Try again.")
-
     
     _solution = CS(\
 """
@@ -124,7 +124,6 @@ class CommunityArea(CodingProblem):
     _var = 'trip_number_query'
     def check(self, query):
         results = run_query(query)
-        self.results = results
         # check 1: query contains certain words
         assert ('rank' in query.lower()), ("There are many different numbering functions that enumerate the rows in the input. "
                                            "For this exercise, please use the **RANK()** function.")
@@ -166,7 +165,6 @@ class BreakTime(CodingProblem):
     _var = 'break_time_query'
     def check(self, query):
         results = run_query(query)
-        self.results = results
         # check 1: query contains certain words
         assert ('lag' in query.lower()), ("Use the **LAG()** function to pull the value for `trip_end_timestamp` from the previous row.")
         # check 2: correct columns selected

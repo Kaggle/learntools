@@ -61,11 +61,19 @@ all_users_query = """
                   """
 all_users_answer = client.query(all_users_query).result().to_dataframe()
 
+def run_query(query):
+    try:
+        results = client.query(query).result().to_dataframe()
+    except:
+        assert False, "You don't have a valid query yet.  Try again."
+    display(results.head())
+    return results
 
 # (1)
 class CorrectQuery(CodingProblem):
-    _vars = ['correct_query', 'correct_result']
-    def check(self, query, results):
+    _var = 'correct_query'
+    def check(self, query):
+        results = run_query(query)
         # check 1: length of df
         assert (len(results) == len(correct_answer)), ("You don't have the correct number of rows in your submission.  You should have "
                                                        "%d rows, but you have %d rows." % (len(correct_answer), len(results)))
@@ -101,8 +109,9 @@ correct_result = client.query(correct_result_query).result().to_dataframe()
 
 # (2)
 class QA_One(CodingProblem):
-    _vars = ['q_and_a_query', 'q_and_a_result']
-    def check(self, query, results):
+    _var = 'q_and_a_query'
+    def check(self, query):
+        results = run_query(query)
         # check 1: query contains certain words
         assert ('min' in query.lower()), ("For this exercise, you need only fill in the appropriate **JOIN**.  All other parts of the query should be left as-is.")
         # check 2: correct columns selected
@@ -134,8 +143,9 @@ q_and_a_result = client.query(q_and_a_query).result().to_dataframe()
 
 # (3)
 class QA_Two(CodingProblem):
-    _vars = ['three_tables_query', 'three_tables_result']
-    def check(self, query, results):
+    _var = 'three_tables_query'
+    def check(self, query):
+        results = run_query(query)
         # check 1: query contains certain words
         assert ('full' in query.lower()), ("Your answer should include a **FULL JOIN**.")
         assert ('users' in query.lower()), ("Don't forget to use the `users` table.")
@@ -187,8 +197,9 @@ three_tables_query = \"""
 
 # (4)
 class AllUsers(CodingProblem):
-    _vars = ['all_users_query', 'all_users_result']
-    def check(self, query, results):
+    _var = 'all_users_query'
+    def check(self, query):
+        results = run_query(query)
         # check 1: query contains certain words
         assert ('union' in query.lower()), ("Your query must use a **UNION**.")
         assert ('posts_answers' in query.lower()), ("You must use the `posts_answers` table to answer this question.")
