@@ -17,26 +17,26 @@ notebooks = [
         filename='tut1.ipynb',
         lesson_idx=0,
         type='tutorial',
-        dataset_sources = ["datasf/san-francisco"],
+        dataset_sources = ["hacker-news/hacker-news"],
         ),
     dict(
         filename='ex1.ipynb',
         lesson_idx=0,
         type='exercise',
-        dataset_sources = ["chicago/chicago-taxi-trips-bq"],
+        dataset_sources = ["stackoverflow/stackoverflow"],
         scriptid=-1
         ),
     dict(
         filename='tut2.ipynb',
         lesson_idx=1,
         type='tutorial',
-        dataset_sources = ["hacker-news/hacker-news"],
+        dataset_sources = ["datasf/san-francisco"],
         ),
     dict(
         filename='ex2.ipynb',
         lesson_idx=1,
         type='exercise',
-        dataset_sources = ["stackoverflow/stackoverflow"],
+        dataset_sources = ["chicago/chicago-taxi-trips-bq"],
         scriptid=-1
         ),
     dict(

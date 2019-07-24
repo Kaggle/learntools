@@ -99,8 +99,6 @@ correct_query = \"""
                 GROUP BY q_id
                 ORDER BY time_to_answer
                 \"""
-
-correct_result = client.query(correct_result_query).result().to_dataframe()
 """
     )
     _hint = ("Is the `posts_questions` table the **LEFT** or **RIGHT** table?  You want to keep all of the rows from this table, regardless of "
@@ -135,8 +133,6 @@ q_and_a_query = \"""
                     AND a.creation_date >= '2019-01-01' AND a.creation_date < '2019-02-01'
                 GROUP BY owner_user_id
                 \"""
-
-q_and_a_result = client.query(q_and_a_query).result().to_dataframe()
 """
 )
     _hint = "Which type of JOIN always returns all rows from both tables?"
@@ -172,8 +168,6 @@ three_tables_query = \"""
                      WHERE u.creation_date >= '2019-01-01' and u.creation_date < '2019-02-01'
                      GROUP BY id
                     \"""
-
-three_tables_result = client.query(three_tables_query).result().to_dataframe()
 """
 )
     _hint = \
@@ -222,8 +216,6 @@ all_users_query = \"""
                   FROM `bigquery-public-data.stackoverflow.posts_answers` AS a
                   WHERE EXTRACT(DATE FROM a.creation_date) = '2019-01-01'
                   \"""
-
-all_users_answer = client.query(all_users_query).result().to_dataframe()
 """
 )
     _hint = ("Begin by writing two separate queries: one to get the user IDs corresponding to questions, and another corresponding "
