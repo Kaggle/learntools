@@ -17,13 +17,41 @@ Why not **2**: This sounds like it will be run only one time. So, it probably do
 """
 
 class Mitzie(ThoughtExperiment):
-    _hint = ("Does the dataset have a lot of missing values, or just a few?  Would we lose much "
-             "information if we completely ignored the columns with missing entries?")
-    _solution = ("Since there are relatively few missing entries in the data (the column with "
-                 "the greatest percentage of missing values is missing less than 20% of its entries), "
-                 "we can expect that dropping columns is unlikely to yield good results.  This is "
-                 "because we'd be throwing away a lot of valuable data, and so imputation will likely "
-                 "perform better.")
+    _hint = ("Do you see any large merges in the query?")
+    _solution = \
+"""
+Yes. Working with the LocationsAndOwners table is very inefficient, because it’s a big table. There are a few options here, and which works best depends on database specifics. One likely improvement is
+
+```
+WITH CurrentOwnersCostumes AS
+(
+SELECT CostumeID 
+FROM CostumeOwners 
+WHERE OwnerID = MitzieOwnerID
+),
+OwnersCostumesLocations AS
+(
+SELECT cc.CostumeID, Timestamp, Location 
+FROM CurrentOwnersCostumes cc INNER JOIN CostumeLocations cl
+    ON cc.CostumeID = cl.CostumeID
+),
+LastSeen AS
+(
+SELECT CostumeID, MAX(Timestamp)
+FROM OwnersCostumesLocations
+GROUP BY CostumeID
+)
+SELECT ocl.CostumeID, Location 
+FROM OwnersCostumesLocations ocl INNER JOIN LastSeen ls 
+    ON ocl.timestamp = ls.timestamp AND ocl.CostumeID = ls.costumeID
+```
+
+**Why is this better?**
+
+Instead of doing large merges and running calculations (like finding the last timestamp) for every costume, we discard the rows for other owners as the first step. So each subsequent step (like calculating the last timestamp) is working with something like 99.999% fewer rows than what was needed in the original query.
+
+Databases have something called “Query Planners” to optimize details of how a query executes even after you write it. Perhaps some query planner would figure out the ability to do this. But the original query as written would be very inefficient on large datasets.
+"""
 
 
 qvars = bind_exercises(globals(), [
