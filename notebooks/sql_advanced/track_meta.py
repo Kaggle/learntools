@@ -9,6 +9,7 @@ lessons = [ {'topic': topic_name} for topic_name in
                     ['JOINs and UNIONs',
                      'Analytic Functions',
                      'Nested and Repeated Data',
+                     'Writing Efficient Queries'
                      ]
             ]
 
@@ -50,6 +51,19 @@ notebooks = [
         lesson_idx=2,
         type='exercise',
         dataset_sources = ["github/github-repos"],
+        scriptid=-1
+        ),
+    dict(
+        filename='tut4.ipynb',
+        lesson_idx=3,
+        type='tutorial',
+        dataset_sources = ["github/github-repos", "datasf/san-francisco"],
+        ),
+    dict(
+        filename='ex4.ipynb',
+        lesson_idx=3,
+        type='exercise',
+        dataset_sources = [],
         scriptid=-1
         ),
 ]

@@ -18,25 +18,25 @@ q1_query = """
 q1_answer = client.query(q1_query).result().to_dataframe()
 
 
-# (2) QA_One
-q2_query = """
+# (3) QA_One
+q3_query = """
            SELECT l.name as language_name, COUNT(*) as num_repos
            FROM `bigquery-public-data.github_repos.languages`,
                UNNEST(language) AS l
            GROUP BY language_name
            ORDER BY num_repos DESC
            """
-q2_answer = client.query(q2_query).result().to_dataframe()
+q3_answer = client.query(q3_query).result().to_dataframe()
 
-# (3) AllLangs
-q3_query = """
+# (4) AllLangs
+q4_query = """
            SELECT l.name, l.bytes
            FROM `bigquery-public-data.github_repos.languages`,
                UNNEST(language) as l
            WHERE repo_name = 'polyrabbit/polyglot'
            ORDER BY l.bytes DESC
            """
-q3_answer = client.query(q3_query).result().to_dataframe()
+q4_answer = client.query(q4_query).result().to_dataframe()
 
 
 def run_query(query):
@@ -84,8 +84,21 @@ max_commits_query = \"""
                     \"""
 """ 
 )
-
+    
 # (2)
+class LookLang(EqualityCheckProblem):
+    _var = 'num_rows'
+    _expected = 6
+    _hint = \
+"""Remember that the **UNNEST()** function essentially flattens the repeated data (which is then appended to the right side of the table) so that we have one element on each row."""
+
+    _solution = CS(
+"""
+num_rows = 6
+"""
+)
+    
+# (3)
 class PopLang(CodingProblem):
     _var = 'pop_lang_query'
     def check(self, query):
@@ -99,11 +112,11 @@ class PopLang(CodingProblem):
         assert ('language_name' in set(results.columns)), ("You didn't select the `language_name` column.")
         assert ('num_repos' in set(results.columns)), ("You didn't select the `num_repos` column.")
         # check 3: length of df
-        assert (len(results)==len(q2_answer)), ("Your answer does not have the correct number of rows.  You should have %d rows, "
-                                                         "but you have %d rows." % (len(q2_answer), len(results)))
+        assert (len(results)==len(q3_answer)), ("Your answer does not have the correct number of rows.  You should have %d rows, "
+                                                         "but you have %d rows." % (len(q3_answer), len(results)))
         # check 4: specific value
-        first_lang = list(q2_answer['language_name'])[0]
-        correct_number = q2_answer.loc[q2_answer['language_name']==first_lang]['num_repos'].values[0]
+        first_lang = list(q3_answer['language_name'])[0]
+        correct_number = q3_answer.loc[q3_answer['language_name']==first_lang]['num_repos'].values[0]
         check_number = results.loc[results['language_name']==first_lang]['num_repos'].values[0]
         assert (int(correct_number)==int(check_number)), ("The results don't look right. Try again.")
 
@@ -120,7 +133,7 @@ pop_lang_query = \"""
 )
     _hint = "The \"language\" column contains repeated data!"
 
-# (3)
+# (4)
 class AllLangs(CodingProblem):
     _var = 'all_langs_query'
     def check(self, query):
@@ -136,11 +149,11 @@ class AllLangs(CodingProblem):
         assert ('name' in set(results.columns)), ("You didn't select the `name` column.")
         assert ('bytes' in set(results.columns)), ("You didn't select the `bytes` column.")
         # check 3: check values, length of dataframe
-        assert (len(results)==len(q3_answer)), ("Your answer does not have the correct number of rows. You should have %d rows, "
-                                                          "but you have %d rows." % (len(q3_answer), len(results)))
+        assert (len(results)==len(q4_answer)), ("Your answer does not have the correct number of rows. You should have %d rows, "
+                                                          "but you have %d rows." % (len(q4_answer), len(results)))
         # check 4: specific value
-        first_lang = list(q3_answer['name'])[0]
-        correct_number = q3_answer.loc[q3_answer['name']==first_lang]['bytes'].values[0]
+        first_lang = list(q4_answer['name'])[0]
+        correct_number = q4_answer.loc[q4_answer['name']==first_lang]['bytes'].values[0]
         check_number = results.loc[results['name']==first_lang]['bytes'].values[0]
         assert (int(correct_number)==int(check_number)), ("The results don't look right. Try again.")
 
@@ -162,6 +175,7 @@ The \"language\" column contains repeated data!  You'll need to use a **WHERE** 
 
 qvars = bind_exercises(globals(), [
     MaxCommits,
+    LookLang,
     PopLang,
     AllLangs
     ],
