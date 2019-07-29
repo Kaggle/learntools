@@ -25,7 +25,7 @@ notebooks = [
         lesson_idx=0,
         type='exercise',
         dataset_sources = ["stackoverflow/stackoverflow"],
-        scriptid=-1
+        scriptid=17990556
         ),
     dict(
         filename='tut2.ipynb',
@@ -38,7 +38,7 @@ notebooks = [
         lesson_idx=1,
         type='exercise',
         dataset_sources = ["chicago/chicago-taxi-trips-bq"],
-        scriptid=-1
+        scriptid=17990574
         ),
     dict(
         filename='tut3.ipynb',
@@ -51,7 +51,7 @@ notebooks = [
         lesson_idx=2,
         type='exercise',
         dataset_sources = ["github/github-repos"],
-        scriptid=-1
+        scriptid=17990570
         ),
     dict(
         filename='tut4.ipynb',
@@ -64,6 +64,6 @@ notebooks = [
         lesson_idx=3,
         type='exercise',
         dataset_sources = [],
-        scriptid=-1
+        scriptid=17990566
         ),
 ]
