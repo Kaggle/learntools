@@ -220,7 +220,7 @@ def expert_finder(topic, client):
                FROM `bigquery-public-data.stackoverflow.posts_questions` AS q
                INNER JOIN `bigquery-public-data.stackoverflow.posts_answers` AS a
                    ON q.id = a.parent_Id
-               WHERE q.tags like '%' + tag + '%'
+               WHERE q.tags like '%{topic}%'
                GROUP BY a.owner_user_id
                \"""
                
