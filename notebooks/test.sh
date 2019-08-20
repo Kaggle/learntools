@@ -21,7 +21,7 @@ TMP_DIR=`mktemp -d`
 # Install packages the notebook pipeline depends on but which aren't installed with the learntools package.
 pip install -q -r requirements.txt
 
-TRACKS="deep_learning embeddings pandas python machine_learning sql data_viz_to_coder ml_intermediate"
+TRACKS="deep_learning embeddings pandas python machine_learning sql data_viz_to_coder ml_intermediate sql_advanced"
 for track in $TRACKS
 do
     # Run each step of the rendering pipeline, to make sure it runs without errors.
