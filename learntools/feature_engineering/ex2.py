@@ -1,5 +1,6 @@
 import category_encoders as ce
 import pandas as pd
+from sklearn.decomposition import TruncatedSVD
 
 from learntools.core import *
 
@@ -156,7 +157,7 @@ class CatBoostEncodings(EqualityCheckProblem):
     _expected = cb_encodings_solution()
 
 class LearnSVDEmbeddings(CodingProblem):
-    _vars = ['svd', 'svd_components']
+    _var = 'svd_components'
     _hint = ("You can count up co-occurences of categorical values using a groupby operation. This "
              "will create a DataFrame or Series with a multi-index with a level for each categorical variable. "
              "To convert this to a matrix, you can use the `unstack` method. For each matrix, fit the "
@@ -175,11 +176,12 @@ class LearnSVDEmbeddings(CodingProblem):
         svd.fit(pair_matrix)
         svd_components['_'.join([col2, col1])] = pd.DataFrame(svd.components_)""")
 
-    def check(self, svd, svd_components):
-
-        assert svd.n_components == 5, "Please set the number of SVD components to 5"
+    def check(self, svd_components):
 
         from itertools import permutations
+        
+        # Create the SVD transformer
+        svd = TruncatedSVD(n_components=5, random_state=7)
         
         cat_features = ['app', 'device', 'os', 'channel']
         train, _, _ = get_data_splits()
@@ -198,12 +200,14 @@ class LearnSVDEmbeddings(CodingProblem):
         assert svd_components.keys() == svd_components_.keys()
 
         for pair in svd_components:
-            assert svd_components[pair].equals(svd_components_[pair]), f"Something wrong with {pair}"
+            assert svd_components_[pair].equals(svd_components[pair]), f"Something wrong with {pair}"
 
 
 class ApplySVDEncoding(CodingProblem):
     _vars = ['svd_components', 'svd_encodings']
-    _hint = ("TODO")
+    _hint = ("To encode, you'll first want to reindex the feature components using the column"
+             "values from clicks. Then, set the index to match clicks.index. From there, "
+             "add the prefixes and join the encoded features to svd_encodings.")
     _solution=CS("""
     svd_encodings = pd.DataFrame(index=clicks.index)
     for feature in svd_components:
