@@ -205,7 +205,9 @@ class LearnSVDEmbeddings(CodingProblem):
 
 class ApplySVDEncoding(CodingProblem):
     _vars = ['svd_components', 'svd_encodings']
-    _hint = ("TODO")
+    _hint = ("To encode, you'll first want to reindex the feature components using the column"
+             "values from clicks. Then, set the index to match clicks.index. From there, "
+             "add the prefixes and join the encoded features to svd_encodings.")
     _solution=CS("""
     svd_encodings = pd.DataFrame(index=clicks.index)
     for feature in svd_components:
