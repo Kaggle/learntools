@@ -149,7 +149,7 @@ qvars = bind_exercises(globals(), [
     PreviousAttributionsFeature,
     TreeVsDLModels
     ],
-    tutorial_id=262,
+    tutorial_id=272,
     var_format='q_{n}',
     )
 __all__ = list(qvars)
