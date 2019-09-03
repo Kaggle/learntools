@@ -4,7 +4,11 @@ import numpy as np
 
 class SingleReviewMatch(CodingProblem):
     _var = "matches"
-    _hint = ""
+    _hint = ("You should set the attr keyword argument to 'LOWER' so matching is case insensitive. "
+             "An easy way to make a list of phrase documents is to loop through each item in the "
+             "menu and apply the model nlp(item). This is best done in a list comprehension. "
+             "From there, you can add the patterns to the matcher with matcher.add and pass in "
+             "the review document to perform the matching.")
     _solution = CS(textwrap.dedent("""
     import spacy
     from spacy.matcher import PhraseMatcher
@@ -23,6 +27,12 @@ class SingleReviewMatch(CodingProblem):
 
 class MatchAllDataset(CodingProblem):
     _var = "item_ratings"
+    _hint = ("For each review, use the `nlp` model to convert the text to a document. Then "
+             "use the matcher from exercise 1 to extract the item matches from the review text. "
+             "The matches you get from the matcher are tuples (match_id, start, end), so you can "
+             "do doc[start:end] to get the text phrase for that match. To get all of the unique "
+             "items in the review, create a list of all the matched phrases, and convert that "
+             "into a set. Finally for each of those items, append the review's rating to " "item_ratings. Make sure to add the item string in lowercase. ")
     _solution = CS(textwrap.dedent("""
     item_ratings = defaultdict(list)
 
@@ -82,11 +92,69 @@ class MatchAllDataset(CodingProblem):
                             5.0])
 
         means = np.array([sum(item)/len(item) for _, item in item_ratings.items()])
+        means.sort()
+        correct.sort()
+        assert len(means) == len(correct), f"Please add items to item_ratings. You should have {len(correct)} items."
         assert np.allclose(means, correct)
+
+class BestReviewedItems(EqualityCheckProblem):
+    _var = "best_items"
+    _hint = ("Loop through each item in item_ratings and calculate the mean, "
+             "the sum of the ratings divided by the number of ratings. This is easiest "
+             "using a dictionary comprehension. Then use the `sorted` function to sort "
+             "the dictionary keys based on the dictionary values.")
+    _solution = CS(textwrap.dedent("""
+    mean_ratings = {item: sum(ratings)/len(ratings) for item, ratings in item_ratings.items()}
+    best_items = sorted(mean_ratings, key=mean_ratings.get, reverse=True)
+    """))
+    _expected = ['artichoke salad',
+                'fettuccini alfredo',
+                'turkey breast',
+                'corned beef',
+                'reuben',
+                'pastrami',
+                'chicken salad',
+                'purista',
+                'prosciutto',
+                'chicken pesto',
+                'chicken spinach salad',
+                'grilled veggie',
+                'gnocchi',
+                'lasagna',
+                'cheesesteak',
+                'pizzas',
+                'pasta',
+                'mac and cheese',
+                'calzone',
+                'cannoli',
+                'pizza',
+                'tiramisu',
+                'ziti',
+                'chicken parmigiana',
+                'salami',
+                'italian sausage',
+                'roast beef',
+                'portobello',
+                'meatball',
+                'garlic bread',
+                'italian beef',
+                'tuna salad',
+                'eggplant',
+                'italian combo',
+                'spaghetti',
+                'turkey sandwich',
+                'chicken cutlet']
+
+class CountImportanceQuestion(ThoughtExperiment):
+    _solution = """
+    The less data you have for any specific item, the less you can trust that the average rating is the "real" sentiment of the customers. This is fairly common sense. If more people tell you the same thing, you're more likely to believe it. It's also mathematically sound. As the number of data points increases, the error on the mean decreases as 1 / sqrt(n).
+    """
 
 qvars = bind_exercises(globals(), [
     SingleReviewMatch,
-    MatchAllDataset
+    MatchAllDataset,
+    BestReviewedItems,
+    CountImportanceQuestion
     ],
     tutorial_id=262,
     var_format='q_{n}',
