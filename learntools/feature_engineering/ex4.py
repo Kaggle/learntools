@@ -5,7 +5,6 @@ from sklearn.feature_selection import SelectFromModel
 from sklearn.feature_selection import SelectKBest, f_classif
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
-from boruta import BorutaPy
 
 from learntools.core import *
 
@@ -151,121 +150,13 @@ class FeatureSelectionTrees(ThoughtExperiment):
                  "best features.")
 
 
-class FitPCA(CodingProblem):
-    _vars = ['pca', 'train']
-    _hint = ("Create the PCA transformer with `PCA()`, setting the number of "
-             "components to 20 and the random state to 7. Then fit the transformer "
-             "with the features from the training date.")
-    _solution = CS("""
-    from sklearn.decomposition import PCA
-
-    train, valid, test = get_data_splits(clicks)
-
-    # Select the feature columns you'll use to train the PCA transformer
-    feature_cols = train.columns[-63:]
-
-    # Create the PCA transformer with 20 components
-    pca = PCA(n_components=20, random_state=7)
-
-    # Fit PCA to the feature columns
-    pca.fit(train[feature_cols], train['is_attributed'])""")
-
-    def check(self, pca_, train):
-        feature_cols = train.columns[-63:]
-
-        pca = PCA(n_components=20, random_state=7)
-        pca.fit(train[feature_cols], train['is_attributed'])
-
-        assert (pca.components_ == pca_.components_).all()
-
-
-class ApplyPCAEncodings(CodingProblem):
-    _vars = ['encode_pcs', 'train', 'pca']
-    _hint = ""
-    _solution = CS("""
-    def encode_pcs(df, pca, feature_cols):
-        encodings = pd.DataFrame(pca.transform(df[feature_cols]),
-                                index=df.index).add_prefix('pca_')
-        encoded_df = df.drop(feature_cols, axis=1).join(encodings)
-        return encoded_df
-    """)
-
-    def check(self, student_func, train, pca):
-        feature_cols = train.columns[-63:]
-        def encode_pcs(df, pca, feature_cols):
-            encodings = pd.DataFrame(pca.transform(df[feature_cols]),
-                                    index=df.index).add_prefix('pca_')
-            encoded_df = df.drop(feature_cols, axis=1).join(encodings)
-            return encoded_df
-
-        student_df = student_func(train, pca, feature_cols)
-        df = encode_pcs(train, pca, feature_cols)
-
-        assert student_df is not ____, "Please implement the `encode_pcs` function."
-
-        assert df.equals(student_df)
-
-class FitBoruta(CodingProblem):
-    _vars = ['fit_boruta', 'clicks']
-    _hint = ("The first thing to do is create a random forest classifier from sklearn "
-             "then use BorutaPy to create the selector, with the random forest model. "
-             "After fitting the selector, you can get back the accepted and rejected  "
-             "features with `selector.support_`")
-    _solution = CS(""" 
-    def fit_boruta(df, feature_cols, target):
-        X = df[feature_cols].values
-        y = df[target].values
-        
-        # define random forest classifier, with utilising all cores and
-        # sampling in proportion to y labels
-        rf = RandomForestClassifier(class_weight='balanced', max_depth=5, 
-                                    random_state=7, n_jobs=-1)
-
-        # define Boruta feature selection method
-        feat_selector = BorutaPy(rf, n_estimators='auto', random_state=7)
-
-        # Fit the Boruta selector
-        feat_selector.fit(X, y)
-
-        # Get the selected columns
-        selected_columns = feature_cols[feat_selector.support_]
-        return selected_columns
-    """)
-
-    def check(self, student_func, clicks):
-        
-
-        def fit_boruta(df, feature_cols, target):
-            X = df[feature_cols].values
-            y = df[target].values
-            
-            # define random forest classifier, with utilising all cores and
-            # sampling in proportion to y labels
-            rf = RandomForestClassifier(class_weight='balanced', max_depth=5, n_jobs=-1)
-
-            # define Boruta feature selection method
-            feat_selector = BorutaPy(rf, n_estimators='auto', random_state=7)
-
-            # Fit the Boruta selector
-            feat_selector.fit(X, y)
-
-            # Get the selected columns
-            selected_columns = feature_cols[feat_selector.support_]
-            return selected_columns
-
-        print("Running checking code, please wait.")
-        train, _, _ = get_data_splits(clicks)
-        feature_cols = train.columns.drop(['click_time', 'attributed_time',
-                                            'is_attributed'])
-        student_selected = student_func(train[:5000], feature_cols, 'is_attributed')
-        assert student_selected is not ____, "Please implement the `fit_boruta` function"
-
-        
-        selected = fit_boruta(train[:5000], feature_cols, 'is_attributed')
-
-        message = ("Something isn't right, please check that you set the random "
-                   "state to 7.")
-        assert (selected == student_selected).all(), message
+class L1SelectionTopK(ThoughtExperiment):
+    _solution = ("To select a certain number of features with L1 regularization, "
+                 "you need to find the regularization parameter that leaves the "
+                 "desired number of features. To do this you can iterate over models with "
+                 "different regularization parameters from low to high and choose the "
+                 "one that leaves K features. Note that for the scikit-learn models "
+                 "C is the *inverse* of the regularization strength.")
 
 
 qvars = bind_exercises(globals(), [
@@ -274,9 +165,7 @@ qvars = bind_exercises(globals(), [
     BestKValue,
     L1Regularization,
     FeatureSelectionTrees,
-    FitPCA,
-    ApplyPCAEncodings,
-    FitBoruta
+    L1SelectionTopK
     ],
     tutorial_id=262,
     var_format='q_{n}',
