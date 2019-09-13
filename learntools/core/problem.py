@@ -41,7 +41,7 @@ class Problem(ABC):
         return optionally_plural_property(self, '_hint')
 
     @property
-    def correct_message(self):
+    def _correct_message(self):
         if (
                 self.show_solution_on_correct 
                 or (self.show_solution_on_correct is None 
@@ -171,7 +171,7 @@ class EqualityCheckProblem(CodingProblem):
     def check(self, *args):
         for (var, actual, expected) in zip(self.injectable_vars, args, self.expected):
             asserts.assert_equal(actual, expected, var=var,
-                    failure_factory=getattr(self, 'failure_message', None)
+                    failure_factory=getattr(self, '_failure_message', None)
                     )
 
     def check_whether_attempted(self, *args):

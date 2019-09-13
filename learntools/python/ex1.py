@@ -9,7 +9,7 @@ class ExerciseFormatTutorial(EqualityCheckProblem):
     _solution = CS('color = "blue"')
 
     @property
-    def correct_message(self):
+    def _correct_message(self):
         history = self._view.interactions
         if history['hint'] == 0 and history['solution'] == 0:
             return ("What?! You got it right without needing a hint or anything?"
@@ -19,7 +19,7 @@ class ExerciseFormatTutorial(EqualityCheckProblem):
                     )
         return ''
 
-    def failure_message(self, var, actual, expected):
+    def _failure_message(self, var, actual, expected):
         if (
                 any(actual.endswith(suff) for suff in ['oo', 'ue', 'ew'])
                 and actual.strip().lower() != 'blue'
