@@ -78,11 +78,11 @@ def assert_equal(actual, expected, name, failure_factory=None):
     if failure_factory:
         # This optional kwarg lets the caller pass a function to generate a custom
         # failure message. Currently only used in the Python ex1 favourite color question.
-        failure_message = failure_factory(name, actual, expected)
+        _failure_message = failure_factory(name, actual, expected)
     else:
-        failure_message = "Incorrect value for {}: `{}`".format(
+        _failure_message = "Incorrect value for {}: `{}`".format(
                 name, repr(actual))
-    assert check, failure_message
+    assert check, _failure_message
 
 @name_or_var
 def assert_has_columns(df, cols, name="dataframe", strict=False):

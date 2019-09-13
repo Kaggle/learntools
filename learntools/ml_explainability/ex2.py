@@ -24,8 +24,12 @@ eli5.show_weights(perm, feature_names = base_features)
 """)
     def check(self, perm_obj):
         assert np.allclose(perm_obj.feature_importances_,
-                            np.array([ 0.62288714,  0.8266946 ,  0.53837499,
-                                       0.84735854, -0.00291397]), rtol=0.1)
+                            np.array([ 0.59,  0.83 ,  0.53,
+                                       0.84, -0.00291397]), rtol=0.3)
+    _congrats = "Nice job!"
+    _correct_message = """Note that these scores can vary slightly from one run to the next.
+                      But the big picture findings will stay the same each time.
+                      """
 
 class WhyLatitude(ThoughtExperiment):
     _solution = """
