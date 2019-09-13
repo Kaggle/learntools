@@ -29,13 +29,12 @@ world_loans.plot(ax=ax, markersize=2)
         pass 
 
 class Q3(EqualityCheckProblem):
-    _vars = ["PHL", "PHL_loans"]
-    _expected = [PHL, PHL_loans]
+    _var = "PHL_loans"
+    _expected = PHL_loans
     _hint = ("Check out [this tutorial](https://www.kaggle.com/residentmario/indexing-selecting-assigning/), "
              "if you need to review conditional selection for DataFrames (and GeoDataFrames).")
     _solution = CS(
-"""PHL = world.loc[world.iso_a3=="PHL"].copy()
-PHL_loans = world_loans.loc[world_loans.country=="Philippines"].copy()
+"""PHL_loans = world_loans.loc[world_loans.country=="Philippines"].copy()
 """)
 
 class Q4P(CodingProblem):
@@ -49,10 +48,8 @@ PHL_loans.plot(ax=ax, markersize=2)
     
 class Q4T(ThoughtExperiment):
     _hint = "Take a look at the map above.  Do all islands have loans?"
-    _solution = ("The first thing that you can probably notice is that the map of the "
-                 "Philippines is not very detailed, where many of the remote islands are "
-                 "not included in the map.  But that said, it appears that **Mindoro** (in the "
-                 "western part of the Philippines) is a large region without any loans "
+    _solution = ("There are a number of potential islands, but **Mindoro** (in the "
+                 "central part of the Philippines) stands out as a relatively large island without any loans "
                  "in the current dataset.  This island is potentially a good location for "
                  "recruiting new Field Partners!")
     
