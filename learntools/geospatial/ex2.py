@@ -4,7 +4,7 @@ import pandas as pd
 import geopandas as gpd
 
 # Q1
-birds_df = pd.read_csv("../input/geospatial-course-data/purple_martin.csv", parse_dates=['timestamp'])
+birds_df = pd.read_csv("../input/geospatial-learn-course-data/purple_martin.csv", parse_dates=['timestamp'])
 birds = gpd.GeoDataFrame(birds_df, geometry=gpd.points_from_xy(birds_df["location-long"], birds_df["location-lat"]))
 birds.crs = {'init' :'epsg:4326'}
 
@@ -14,7 +14,7 @@ end_gdf = gpd.GeoDataFrame(end_df, geometry=end_df.geometry)
 end_gdf.crs = {'init' :'epsg:4326'}
 
 # Q5
-protected_filepath = "../input/geospatial-course-data/SAPA_Aug2019-shapefile/SAPA_Aug2019-shapefile-polygons.shp"
+protected_filepath = "../input/geospatial-learn-course-data/SAPA_Aug2019-shapefile/SAPA_Aug2019-shapefile/SAPA_Aug2019-shapefile-polygons.shp"
 protected_areas = gpd.read_file(protected_filepath)
 
 # Q7

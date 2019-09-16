@@ -6,7 +6,7 @@ import geopandas as gpd
 from geopandas.tools import geocode
 
 # Q1
-starbucks = pd.read_csv("../input/geospatial-course-data/starbucks_locations.csv")
+starbucks = pd.read_csv("../input/geospatial-learn-course-data/starbucks_locations.csv")
 rows_with_missing = starbucks[starbucks["City"]=="Berkeley"]
 def geo_locate(row):
     point = geocode(row, provider='nominatim').geometry[0]
@@ -15,10 +15,10 @@ berkeley_locations = rows_with_missing.apply(lambda x: geo_locate(x['Address']),
 starbucks.update(berkeley_locations)
 
 # Q3
-CA_counties = gpd.read_file("../input/geospatial-course-data/CA_county_boundaries/CA_county_boundaries.shp")
-CA_pop = pd.read_csv("../input/geospatial-course-data/CA_county_population.csv", index_col="GEOID")
-CA_high_earners = pd.read_csv("../input/geospatial-course-data/CA_county_high_earners.csv", index_col="GEOID")
-CA_median_age = pd.read_csv("../input/geospatial-course-data/CA_county_median_age.csv", index_col="GEOID")
+CA_counties = gpd.read_file("../input/geospatial-learn-course-data/CA_county_boundaries/CA_county_boundaries/CA_county_boundaries.shp")
+CA_pop = pd.read_csv("../input/geospatial-learn-course-data/CA_county_population.csv", index_col="GEOID")
+CA_high_earners = pd.read_csv("../input/geospatial-learn-course-data/CA_county_high_earners.csv", index_col="GEOID")
+CA_median_age = pd.read_csv("../input/geospatial-learn-course-data/CA_county_median_age.csv", index_col="GEOID")
 cols_to_add = CA_pop.join([CA_high_earners, CA_median_age]).reset_index()
 CA_stats = CA_counties.merge(cols_to_add, on="GEOID")
 

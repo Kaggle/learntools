@@ -3,7 +3,7 @@ from learntools.core import *
 import geopandas as gpd
 
 # Q1
-world_loans = gpd.read_file("../input/geospatial-course-data/kiva_loans/kiva_loans.shp")
+world_loans = gpd.read_file("../input/geospatial-learn-course-data/kiva_loans/kiva_loans/kiva_loans.shp")
 
 # Q3
 world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))

@@ -19,65 +19,65 @@ notebooks = [
         filename='tut1.ipynb',
         lesson_idx=0,
         type='tutorial',
-        dataset_sources = ["alexisbcook/geospatial-course-data"],
+        dataset_sources = ["alexisbcook/geospatial-learn-course-data", "alexisbcook/data-for-datavis"],
         ),
     dict(
         filename='ex1.ipynb',
         lesson_idx=0,
         type='exercise',
-        dataset_sources = ["alexisbcook/geospatial-course-data"],
+        dataset_sources = ["alexisbcook/geospatial-learn-course-data", "alexisbcook/data-for-datavis"],
         scriptid=0
         ),
     dict(
         filename='tut2.ipynb',
         lesson_idx=1,
         type='tutorial',
-        dataset_sources = ["alexisbcook/geospatial-course-data"],
+        dataset_sources = ["alexisbcook/geospatial-learn-course-data", "alexisbcook/data-for-datavis"],
         ),
     dict(
         filename='ex2.ipynb',
         lesson_idx=1,
         type='exercise',
-        dataset_sources = ["alexisbcook/geospatial-course-data"],
+        dataset_sources = ["alexisbcook/geospatial-learn-course-data", "alexisbcook/data-for-datavis"],
         scriptid=0
         ),
     dict(
         filename='tut3.ipynb',
         lesson_idx=2,
         type='tutorial',
-        dataset_sources = ["alexisbcook/geospatial-course-data"],
+        dataset_sources = ["alexisbcook/geospatial-learn-course-data", "alexisbcook/data-for-datavis"],
         ),
     dict(
         filename='ex3.ipynb',
         lesson_idx=2,
         type='exercise',
-        dataset_sources = ["alexisbcook/geospatial-course-data"],
+        dataset_sources = ["alexisbcook/geospatial-learn-course-data", "alexisbcook/data-for-datavis"],
         scriptid=0
         ),
     dict(
         filename='tut4.ipynb',
         lesson_idx=3,
         type='tutorial',
-        dataset_sources = ["alexisbcook/geospatial-course-data"],
+        dataset_sources = ["alexisbcook/geospatial-learn-course-data", "alexisbcook/data-for-datavis"],
         ),
     dict(
         filename='ex4.ipynb',
         lesson_idx=3,
         type='exercise',
-        dataset_sources = ["alexisbcook/geospatial-course-data"],
+        dataset_sources = ["alexisbcook/geospatial-learn-course-data", "alexisbcook/data-for-datavis"],
         scriptid=0
         ),
     dict(
         filename='tut5.ipynb',
         lesson_idx=4,
         type='tutorial',
-        dataset_sources = ["alexisbcook/geospatial-course-data"],
+        dataset_sources = ["alexisbcook/geospatial-learn-course-data", "alexisbcook/data-for-datavis"],
         ),
     dict(
         filename='ex5.ipynb',
         lesson_idx=4,
         type='exercise',
-        dataset_sources = ["alexisbcook/geospatial-course-data"],
+        dataset_sources = ["alexisbcook/geospatial-learn-course-data", "alexisbcook/data-for-datavis"],
         scriptid=0
         ),
 ]

@@ -2,8 +2,8 @@ from learntools.core import *
 
 import geopandas as gpd
 
-collisions = gpd.read_file("../input/geospatial-course-data/NYPD_Motor_Vehicle_Collisions/NYPD_Motor_Vehicle_Collisions.shp")
-hospitals = gpd.read_file("../input/geospatial-course-data/nyu_2451_34494/nyu_2451_34494.shp")
+collisions = gpd.read_file("../input/geospatial-learn-course-data/NYPD_Motor_Vehicle_Collisions/NYPD_Motor_Vehicle_Collisions/NYPD_Motor_Vehicle_Collisions.shp")
+hospitals = gpd.read_file("../input/geospatial-learn-course-data/nyu_2451_34494/nyu_2451_34494/nyu_2451_34494.shp")
 
 class Q1(CodingProblem):
     _hint = ("Use `folium.plugins.HeatMap()` to add a heatmap. Set `data` to a DataFrame containing the latitude "
