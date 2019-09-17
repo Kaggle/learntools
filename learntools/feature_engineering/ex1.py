@@ -22,10 +22,12 @@ class TimestampFeatures(EqualityCheckProblem):
     _expected = timestamp_features_soln()
     _solution = CS(
     """
-    clicks = click_data.assign(day=click_times.dt.day.astype('uint8'),
-                               hour=click_times.dt.hour.astype('uint8'), 
-                               minute=click_times.dt.minute.astype('uint8'),
-                               second=click_times.dt.second.astype('uint8'))
+    # Split up the times
+    click_times = click_data['click_time']
+    clicks['day'] = click_times.dt.day.astype('uint8')
+    clicks['hour'] = click_times.dt.hour.astype('uint8')
+    clicks['minute'] = click_times.dt.minute.astype('uint8')
+    clicks['second'] = click_times.dt.second.astype('uint8')
     """)
 
 
@@ -57,9 +59,7 @@ class OnehotEncoding(ThoughtExperiment):
     The `ip` column has 58,000 values, which means it will create an extremely 
     sparse matrix with 58,000 columns. This many columns will make your model run
     very slow, so in general you want to avoid one-hot encoding features with many
-    levels.
-    
-    LightGBM models work with label encoded features, so you don't actually need to 
+    levels. LightGBM models work with label encoded features, so you don't actually need to 
     one-hot encode the categorical features.
 
     """
