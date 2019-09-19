@@ -29,8 +29,7 @@ do
     kaggle competitions download $comp -p $dest
     cd $dest
     unzip ${comp}.zip
+    chmod 700 *.csv
     cp *.csv ..
     cd ..
 done
-
-cd ..
