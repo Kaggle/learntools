@@ -122,6 +122,8 @@ class ProblemView:
             if hasattr(self.problem, '_congrats'):
                 return Correct(self.problem._correct_message,
                                _congrats=self.problem._congrats)
+            else:
+                return Correct(self.problem._correct_message)
 
     def _get_injected_args(self):
         names = self.problem.injectable_vars
