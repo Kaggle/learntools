@@ -65,7 +65,12 @@ class LearnLessonPreprocessor(Preprocessor):
         course_link ="""**[{} Home Page]({})**\n\n""".format(self.track.course_name,
         self.track.course_url)
         horizontal_line_break = "---\n"
-        header_content = course_link + horizontal_line_break
+        header_temp_message = "\n*This exercise involves you writing code, and we check it automatically to tell you if it's right. We're having a temporary problem with out checking infrastructure, causing a bar that says `None` in some cases when you have the right answer. We're sorry. We're fixing it. In the meantime, if you see a bar saying `None` that means you've done something good.*"
+        if self.nb_meta.type == 'exercise':
+            header_content = course_link + horizontal_line_break + header_temp_message
+        else:
+            header_content = course_link + horizontal_line_break
+
         footer_content = horizontal_line_break + course_link
 
         forum_cta = """\n\n\n\n*Have questions or comments? Visit the [Learn Discussion forum](https://www.kaggle.com/learn-forum) to chat with other Learners.*"""
