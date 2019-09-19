@@ -119,7 +119,11 @@ class ProblemView:
             return RichText(msg, color=colors.WARN)
         else:
             self._track_check(tracking.OutcomeType.PASS)
-            return Correct(self.problem.correct_message)
+            if hasattr(self.problem, '_congrats'):
+                return Correct(self.problem._correct_message,
+                               _congrats=self.problem._congrats)
+            else:
+                return Correct(self.problem._correct_message)
 
     def _get_injected_args(self):
         names = self.problem.injectable_vars

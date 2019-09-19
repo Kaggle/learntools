@@ -143,7 +143,6 @@ class QA_Two(CodingProblem):
     def check(self, query):
         results = run_query(query)
         # check 1: query contains certain words
-        assert ('full' in query.lower()), ("Your answer should include a **FULL JOIN**.")
         assert ('users' in query.lower()), ("Don't forget to use the `users` table.")
         assert ('group' in query.lower()), ("You'll need to use a `GROUP BY` clause in your query.")
         # check 2: correct columns selected
@@ -160,10 +159,10 @@ three_tables_query = \"""
                      SELECT u.id AS id,
                          MIN(q.creation_date) AS q_creation_date,
                          MIN(a.creation_date) AS a_creation_date
-                     FROM `bigquery-public-data.stackoverflow.posts_questions` AS q
-                         FULL JOIN `bigquery-public-data.stackoverflow.posts_answers` AS a
-                             ON q.owner_user_id = a.owner_user_id 
-                         RIGHT JOIN `bigquery-public-data.stackoverflow.users` AS u
+                     FROM `bigquery-public-data.stackoverflow.users` AS u
+                         LEFT JOIN `bigquery-public-data.stackoverflow.posts_answers` AS a
+                             ON u.id = a.owner_user_id
+                         LEFT JOIN `bigquery-public-data.stackoverflow.posts_questions` AS q
                              ON q.owner_user_id = u.id
                      WHERE u.creation_date >= '2019-01-01' and u.creation_date < '2019-02-01'
                      GROUP BY id
@@ -178,10 +177,10 @@ three_tables_query = \"""
                      SELECT u.id AS id,
                          MIN(q.creation_date) AS q_creation_date,
                          MIN(a.creation_date) AS a_creation_date
-                     FROM `bigquery-public-data.stackoverflow.posts_questions` AS q
+                     FROM `bigquery-public-data.stackoverflow.users` AS u
                          ____ `bigquery-public-data.stackoverflow.posts_answers` AS a
-                             ON q.owner_user_id = a.owner_user_id 
-                         ____ `bigquery-public-data.stackoverflow.users` AS u
+                             ON u.id = a.owner_user_id
+                         ____ `bigquery-public-data.stackoverflow.posts_questions` AS q
                              ON q.owner_user_id = u.id
                      WHERE u.creation_date >= '2019-01-01' and u.creation_date < '2019-02-01'
                      GROUP BY id
