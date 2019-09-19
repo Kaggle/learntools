@@ -3,15 +3,15 @@ from learntools.core import *
 import math
 import pandas as pd
 import geopandas as gpd
-from geopandas.tools import geocode
+from learntools.geospatial.tools import geocode
 
 # Q1
 starbucks = pd.read_csv("../input/geospatial-learn-course-data/starbucks_locations.csv")
 rows_with_missing = starbucks[starbucks["City"]=="Berkeley"]
-def geo_locate(row):
+def my_geocoder(row):
     point = geocode(row, provider='nominatim').geometry[0]
     return pd.Series({'Longitude': point.x, 'Latitude': point.y})
-berkeley_locations = rows_with_missing.apply(lambda x: geo_locate(x['Address']), axis=1)
+berkeley_locations = rows_with_missing.apply(lambda x: my_geocoder(x['Address']), axis=1)
 starbucks.update(berkeley_locations)
 
 # Q3
