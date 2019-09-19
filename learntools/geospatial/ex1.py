@@ -40,7 +40,7 @@ class Q3(EqualityCheckProblem):
 class Q4P(CodingProblem):
     _hint = "Use the `plot()` method of each GeoDataFrame."
     _solution = CS(
-"""ax = PHL.plot(figsize=(8,8), color='whitesmoke', linestyle=':', edgecolor='black')
+"""ax = PHL.plot(figsize=(12,12), color='whitesmoke', linestyle=':', edgecolor='lightgray')
 PHL_loans.plot(ax=ax, markersize=2)
 """)
     def check(self):

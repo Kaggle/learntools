@@ -28,11 +28,11 @@ class Q1(CodingProblem):
              "\"Address\" column.  You might find the [`pd.DataFrame.update()`](https://bit.ly/2kEyXP9l) "
              "method useful to solve this problem.")
     _solution = CS(
-"""def geo_locate(row):
+"""def my_geocoder(row):
     point = geocode(row, provider='nominatim').geometry[0]
     return pd.Series({'Longitude': point.x, 'Latitude': point.y})
 
-berkeley_locations = rows_with_missing.apply(lambda x: geo_locate(x['Address']), axis=1)
+berkeley_locations = rows_with_missing.apply(lambda x: my_geocoder(x['Address']), axis=1)
 starbucks.update(berkeley_locations)
 """)
     def check(self, submitted_starbucks):
