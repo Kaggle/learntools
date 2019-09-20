@@ -5,6 +5,9 @@ import pandas as pd
 import geopandas as gpd
 from learntools.geospatial.tools import geocode
 
+congrats_map_completion = "Thank you for creating a map!"
+correct_message_map_completion = ""
+
 # Q1
 starbucks = pd.read_csv("../input/geospatial-learn-course-data/starbucks_locations.csv")
 rows_with_missing = starbucks[starbucks["City"]=="Berkeley"]
@@ -48,7 +51,6 @@ starbucks.update(berkeley_locations)
         # didn't change columns
         assert set(starbucks.columns) == set(submitted_starbucks.columns), \
         "Please only fill in the missing values in the `starbucks` DataFrame.  Do not add or remove columns."                     
-        
         # dataframes equal?
         assert starbucks.equals(submitted_starbucks), "Did you use the nominatim geocoder to fill in the values?"
 
@@ -59,6 +61,8 @@ class Q2P(CodingProblem):
 for idx, row in starbucks[starbucks["City"]=='Berkeley'].iterrows():
     Marker([row['Latitude'], row['Longitude']]).add_to(m_2)
 """)
+    _congrats = congrats_map_completion
+    _correct_message = correct_message_map_completion
     def check(self):
         pass 
     
@@ -138,6 +142,8 @@ for idx, row in locations_of_interest.iterrows():
         
 m_6.add_child(mc)
 """)
+    _congrats = congrats_map_completion
+    _correct_message = correct_message_map_completion
     def check(self):
         pass
         

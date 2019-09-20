@@ -1,5 +1,8 @@
 from learntools.core import *
 
+congrats_map_completion = "Thank you for creating a map!"
+correct_message_map_completion = ""
+
 class Q1P(CodingProblem):
     _hint = ("Use `folium.plugins.HeatMap()` to add a heatmap. Set `data` to a DataFrame containing the latitude "
         "and longitude locations.  We got fairly good results by setting `radius=15`. Don't forget "
@@ -8,6 +11,8 @@ class Q1P(CodingProblem):
 """# Add a heatmap to the map
 HeatMap(data=earthquakes[['Latitude', 'Longitude']], radius=15).add_to(m_1)
 """)
+    _congrats = congrats_map_completion
+    _correct_message = correct_message_map_completion
     def check(self):
         pass
 
@@ -37,6 +42,8 @@ for i in range(0,len(earthquakes)):
         radius=2000,
         color=color_producer(earthquakes.iloc[i]['Depth'])).add_to(m_2)
 """)
+    _congrats = congrats_map_completion
+    _correct_message = correct_message_map_completion
     def check(self):
         pass 
 
@@ -62,6 +69,8 @@ Choropleth(geo_data=prefectures['geometry'].__geo_interface__,
            legend_name='Population density (per square kilometer)'
           ).add_to(m_3)
 """)
+    _congrats = congrats_map_completion
+    _correct_message = correct_message_map_completion
     def check(self):
         pass   
 
@@ -99,6 +108,8 @@ for i in range(0,len(earthquakes)):
         radius=earthquakes.iloc[i]['Magnitude']**5.5,
         color=color_producer(earthquakes.iloc[i]['Magnitude'])).add_to(m_4)
 """)
+    _congrats = congrats_map_completion
+    _correct_message = correct_message_map_completion
     def check(self):
         pass    
 

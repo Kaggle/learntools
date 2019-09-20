@@ -2,6 +2,9 @@ from learntools.core import *
 
 import geopandas as gpd
 
+congrats_map_completion = "Thank you for creating a map!"
+correct_message_map_completion = ""
+
 collisions = gpd.read_file("../input/geospatial-learn-course-data/NYPD_Motor_Vehicle_Collisions/NYPD_Motor_Vehicle_Collisions/NYPD_Motor_Vehicle_Collisions.shp")
 hospitals = gpd.read_file("../input/geospatial-learn-course-data/nyu_2451_34494/nyu_2451_34494/nyu_2451_34494.shp")
 
@@ -13,6 +16,8 @@ class Q1(CodingProblem):
 """# Visualize the collision data
 HeatMap(data=collisions[['LATITUDE', 'LONGITUDE']], radius=9).add_to(m_1)
 """)
+    _congrats = congrats_map_completion
+    _correct_message = correct_message_map_completion
     def check(self):
         pass
 
@@ -23,6 +28,8 @@ class Q2(CodingProblem):
 for idx, row in hospitals.iterrows():
     Marker([row['latitude'], row['longitude']], popup=row['name']).add_to(m_2)
 """)
+    _congrats = congrats_map_completion
+    _correct_message = correct_message_map_completion
     def check(self):
         pass 
 
