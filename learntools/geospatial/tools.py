@@ -9,7 +9,7 @@ def geocode(address, provider="nominatim"):
     
     print(address)
     print(provider)
-    print("address in addresses?". print(address in all_addresses))
+    print("address in addresses?", (address in all_addresses))
     my_index = all_addresses.index(address)
     print(my_index)
     gdf = gpd.read_file("../../notebooks/geospatial/ex4_files/add_{}.shp".format(my_index))
