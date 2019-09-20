@@ -2,6 +2,9 @@ from learntools.core import *
 
 import geopandas as gpd
 
+congrats_map_completion = "Thank you for creating a map!"
+correct_message_map_completion = ""
+
 # Q1
 world_loans = gpd.read_file("../input/geospatial-learn-course-data/kiva_loans/kiva_loans/kiva_loans.shp")
 
@@ -25,6 +28,8 @@ class Q2(CodingProblem):
 """ax = world.plot(figsize=(20,20), color='whitesmoke', linestyle=':', edgecolor='black')
 world_loans.plot(ax=ax, markersize=2)
 """)
+    _congrats = congrats_map_completion
+    _correct_message = correct_message_map_completion
     def check(self):
         pass 
 
@@ -43,6 +48,8 @@ class Q4P(CodingProblem):
 """ax = PHL.plot(figsize=(12,12), color='whitesmoke', linestyle=':', edgecolor='lightgray')
 PHL_loans.plot(ax=ax, markersize=2)
 """)
+    _congrats = congrats_map_completion
+    _correct_message = correct_message_map_completion
     def check(self):
         pass
     
