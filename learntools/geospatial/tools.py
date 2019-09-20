@@ -6,9 +6,12 @@ def geocode(address, provider="nominatim"):
        '1444 Shattuck Place Berkeley CA',
        '3001 Telegraph Avenue Berkeley CA',
        '2128 Oxford Street Berkeley CA']
-    try: 
-        my_index = all_addresses.index(address)
-        gdf = gpd.read_file("../../notebooks/geospatial/ex4_files/add_{}.shp".format(my_index))
-        return gdf
-    except:
-        return None
+    
+    print(address)
+    print(provider)
+    print("address in addresses?". print(address in all_addresses))
+    my_index = all_addresses.index(address)
+    print(my_index)
+    gdf = gpd.read_file("../../notebooks/geospatial/ex4_files/add_{}.shp".format(my_index))
+    print(gdf.head())
+    return gdf
