@@ -8,7 +8,7 @@ def geocode(address, provider="nominatim"):
        '2128 Oxford Street Berkeley CA']
     try: 
         my_index = all_addresses.index(address)
-        gdf = gpd.read_file("../ex4_files/add_{}.shp".format(my_index))
+        gdf = gpd.read_file("../../notebooks/geospatial/ex4_files/add_{}.shp".format(my_index))
         return gdf
     except:
         return None
