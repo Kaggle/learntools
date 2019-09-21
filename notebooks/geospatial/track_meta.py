@@ -26,7 +26,7 @@ notebooks = [
         lesson_idx=0,
         type='exercise',
         dataset_sources = ["alexisbcook/geospatial-learn-course-data", "alexisbcook/data-for-datavis"],
-        scriptid=5822773#5832167
+        scriptid=5832167#5822773#
         ),
     dict(
         filename='tut2.ipynb',
@@ -39,7 +39,7 @@ notebooks = [
         lesson_idx=1,
         type='exercise',
         dataset_sources = ["alexisbcook/geospatial-learn-course-data", "alexisbcook/data-for-datavis"],
-        scriptid=5822782#5832146
+        scriptid=5832146#5822782#
         ),
     dict(
         filename='tut3.ipynb',
@@ -52,7 +52,7 @@ notebooks = [
         lesson_idx=2,
         type='exercise',
         dataset_sources = ["alexisbcook/geospatial-learn-course-data", "alexisbcook/data-for-datavis"],
-        scriptid=5822780#5832145
+        scriptid=5832145#5822780#
         ),
     dict(
         filename='tut4.ipynb',
@@ -65,7 +65,7 @@ notebooks = [
         lesson_idx=3,
         type='exercise',
         dataset_sources = ["alexisbcook/geospatial-learn-course-data", "alexisbcook/data-for-datavis"],
-        scriptid=5822779#5832170
+        scriptid=5832170#5822779#
         ),
     dict(
         filename='tut5.ipynb',
@@ -78,6 +78,6 @@ notebooks = [
         lesson_idx=4,
         type='exercise',
         dataset_sources = ["alexisbcook/geospatial-learn-course-data", "alexisbcook/data-for-datavis"],
-        scriptid=5822783#5832141
+        scriptid=5832147#5822783#
         ),
 ]
