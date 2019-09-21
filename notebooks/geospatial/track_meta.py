@@ -2,7 +2,7 @@
 track = dict(
     author_username='alexisbcook',
     course_name='Geospatial Analysis',
-    course_url='https://www.kaggle.com/learn/geospatial'
+    course_url='https://www.kaggle.com/learn/geospatial-analysis'
 )
 
 lessons = [ {'topic': topic_name} for topic_name in
