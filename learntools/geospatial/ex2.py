@@ -3,6 +3,9 @@ from learntools.core import *
 import pandas as pd
 import geopandas as gpd
 
+congrats_map_completion = "Thank you for creating a map!"
+correct_message_map_completion = ""
+
 # Q1
 birds_df = pd.read_csv("../input/geospatial-learn-course-data/purple_martin.csv", parse_dates=['timestamp'])
 birds = gpd.GeoDataFrame(birds_df, geometry=gpd.points_from_xy(birds_df["location-long"], birds_df["location-lat"]))
@@ -46,6 +49,8 @@ birds.plot(ax=ax, markersize=10)
 #ax.set_xlim([-110, -30])
 #ax.set_ylim([-30, 60])
 """)
+    _congrats = congrats_map_completion
+    _correct_message = correct_message_map_completion
     def check(self):
         pass 
 
@@ -76,6 +81,8 @@ start_gdf.plot(ax=ax, color='red',  markersize=30)
 path_gdf.plot(ax=ax, cmap='tab20b', linestyle='-', linewidth=1, zorder=1)
 end_gdf.plot(ax=ax, color='black', markersize=30)
 """)
+    _congrats = congrats_map_completion
+    _correct_message = correct_message_map_completion
     def check(self):
         pass 
 
@@ -94,6 +101,8 @@ class Q6(CodingProblem):
 ax = south_america.plot(figsize=(10,10), color='white', edgecolor='gray')
 protected_areas.plot(ax=ax, alpha=0.4)
 """)
+    _congrats = congrats_map_completion
+    _correct_message = correct_message_map_completion
     def check(self):
         pass
     
@@ -112,13 +121,15 @@ class Q8(CodingProblem):
 protected_areas[protected_areas['MARINE']!='2'].plot(ax=ax, alpha=0.4, zorder=1)
 birds[birds.geometry.y < 0].plot(ax=ax, color='red', alpha=0.6, markersize=10, zorder=2)
 """)
+    _congrats = congrats_map_completion
+    _correct_message = correct_message_map_completion
     def check(self):
         pass
 
 qvars = bind_exercises(globals(), [
     Q1, Q2, Q3, Q4, Q5, Q6, Q7, Q8
     ],
-    tutorial_id=0,
+    tutorial_id=275,
     var_format='q_{n}',
     )
 __all__ = list(qvars)

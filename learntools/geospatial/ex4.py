@@ -3,15 +3,18 @@ from learntools.core import *
 import math
 import pandas as pd
 import geopandas as gpd
-from geopandas.tools import geocode
+from learntools.geospatial.tools import geocode
+
+congrats_map_completion = "Thank you for creating a map!"
+correct_message_map_completion = ""
 
 # Q1
 starbucks = pd.read_csv("../input/geospatial-learn-course-data/starbucks_locations.csv")
 rows_with_missing = starbucks[starbucks["City"]=="Berkeley"]
-def geo_locate(row):
+def my_geocoder(row):
     point = geocode(row, provider='nominatim').geometry[0]
     return pd.Series({'Longitude': point.x, 'Latitude': point.y})
-berkeley_locations = rows_with_missing.apply(lambda x: geo_locate(x['Address']), axis=1)
+berkeley_locations = rows_with_missing.apply(lambda x: my_geocoder(x['Address']), axis=1)
 starbucks.update(berkeley_locations)
 
 # Q3
@@ -28,11 +31,11 @@ class Q1(CodingProblem):
              "\"Address\" column.  You might find the [`pd.DataFrame.update()`](https://bit.ly/2kEyXP9l) "
              "method useful to solve this problem.")
     _solution = CS(
-"""def geo_locate(row):
+"""def my_geocoder(row):
     point = geocode(row, provider='nominatim').geometry[0]
     return pd.Series({'Longitude': point.x, 'Latitude': point.y})
 
-berkeley_locations = rows_with_missing.apply(lambda x: geo_locate(x['Address']), axis=1)
+berkeley_locations = rows_with_missing.apply(lambda x: my_geocoder(x['Address']), axis=1)
 starbucks.update(berkeley_locations)
 """)
     def check(self, submitted_starbucks):
@@ -48,7 +51,6 @@ starbucks.update(berkeley_locations)
         # didn't change columns
         assert set(starbucks.columns) == set(submitted_starbucks.columns), \
         "Please only fill in the missing values in the `starbucks` DataFrame.  Do not add or remove columns."                     
-        
         # dataframes equal?
         assert starbucks.equals(submitted_starbucks), "Did you use the nominatim geocoder to fill in the values?"
 
@@ -59,6 +61,8 @@ class Q2P(CodingProblem):
 for idx, row in starbucks[starbucks["City"]=='Berkeley'].iterrows():
     Marker([row['Latitude'], row['Longitude']]).add_to(m_2)
 """)
+    _congrats = congrats_map_completion
+    _correct_message = correct_message_map_completion
     def check(self):
         pass 
     
@@ -138,6 +142,8 @@ for idx, row in locations_of_interest.iterrows():
         
 m_6.add_child(mc)
 """)
+    _congrats = congrats_map_completion
+    _correct_message = correct_message_map_completion
     def check(self):
         pass
         
@@ -145,7 +151,7 @@ m_6.add_child(mc)
 qvars = bind_exercises(globals(), [
     Q1, Q2, Q3, Q4, Q5, Q6
     ],
-    tutorial_id=0,
+    tutorial_id=277,
     var_format='q_{n}',
     )
 __all__ = list(qvars)
