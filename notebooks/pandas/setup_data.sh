@@ -19,5 +19,5 @@ do
 done
 
 # Things on reddit is a zip of a zip. Kaggle d --unzip doesn't do a deep unzip, but kernels does
-unzip -q input/things-on-reddit/top-things.zip -d input/things-on-reddit/top-things
+# unzip -q input/things-on-reddit/top-things.zip -d input/things-on-reddit/top-things
 
