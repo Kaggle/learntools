@@ -46,12 +46,12 @@ def create_model():
 
 def train_func(model, train_data, optimizer, batch_size=8):
     losses = {}
-    #random.seed(1)
+    # random.seed(1)
     random.shuffle(train_data)
     batches = minibatch(train_data, size=batch_size)
     for batch in batches:
         texts, labels = zip(*batch)
-        model.update(texts, labels, sgd=optimizer, drop=0.2, losses=losses)
+        model.update(texts, labels, sgd=optimizer, losses=losses)
     return losses
 
 class CreateTextCatModel(CodingProblem):
@@ -100,7 +100,7 @@ class TrainFunction(CodingProblem):
         batches = minibatch(train_data, size=batch_size)
         for batch in batches:
             texts, labels = zip(*batch)
-            model.update(texts, labels, sgd=optimizer, drop=0.2, losses=losses)
+            model.update(texts, labels, sgd=optimizer, losses=losses)
         return losses""")
 
     def check(self, train):
@@ -112,7 +112,7 @@ class TrainFunction(CodingProblem):
             batches = minibatch(train_data, size=batch_size)
             for batch in batches:
                 texts, labels = zip(*batch)
-                model.update(texts, labels, sgd=optimizer, drop=0.2, losses=losses)
+                model.update(texts, labels, sgd=optimizer, losses=losses)
             return losses
         
 
