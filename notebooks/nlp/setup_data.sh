@@ -10,7 +10,7 @@ fi
 
 mkdir -p input
 
-DATASETS="matleonard/nlp-course"
+DATASETS="matleonard/nlp-course alexisbcook/geospatial-learn-course-data"
 
 for slug in $DATASETS
 do
