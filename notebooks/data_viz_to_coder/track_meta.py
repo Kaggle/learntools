@@ -104,3 +104,6 @@ notebooks = [
 for nb in notebooks:
     nb['dataset_sources'] = ["alexisbcook/data-for-datavis"]
 
+    if "ex7" in nb['filename']:
+        nb['dataset_sources'] = []
+
