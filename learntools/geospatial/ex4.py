@@ -27,7 +27,7 @@ CA_stats = CA_counties.merge(cols_to_add, on="GEOID")
 
 class Q1(CodingProblem):
     _var = 'starbucks'
-    _hint = ("Use `geopandas.geotools.geocode()` to get the missing locations from the addresses in the "
+    _hint = ("Use `geocode()` to get the missing locations from the addresses in the "
              "\"Address\" column.  You might find the [`pd.DataFrame.update()`](https://bit.ly/2kEyXP9l) "
              "method useful to solve this problem.")
     _solution = CS(
