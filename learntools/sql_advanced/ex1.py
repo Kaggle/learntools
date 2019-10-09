@@ -193,14 +193,36 @@ class AllUsers(CodingProblem):
     _var = 'all_users_query'
     def check(self, query):
         results = run_query(query)
+        # check 0: maybe just getting started
+        assert (len(results)!=2692), ("You're off to a great start!  It looks like you have selected the IDs corresponding "
+                                      "to users who posted a question on January 1, 2019.  Now add IDs corresponding to users "
+                                      "who posted an answer.")
+        assert (len(results)!=3393), ("You're off to a great start!  It looks like you have selected the IDs corresponding "
+                                      "to users who posted an answer on January 1, 2019.  Now add IDs corresponding to users "
+                                      "who posted a question.")
         # check 1: query contains certain words
         assert ('union' in query.lower()), ("Your query must use a **UNION**.")
         assert ('posts_answers' in query.lower()), ("You must use the `posts_answers` table to answer this question.")
         assert ('posts_questions' in query.lower()), ("You must use the `posts_questions` table to answer this question.")
+        assert ('stackoverflow.users' not in query.lower()), ("You should only use the `posts_questions` "
+                                                              "and `posts_answers` tables to answer this question.")
         # check 2: correct columns selected
         assert ('owner_user_id' in set(results.columns)), ("You didn't select the `owner_user_id` column.")
         assert (len(results.columns)==1), ("Your table has the wrong number of columns.  You should only have one column.")
         # check 3: check values, length of dataframe
+        assert (len(results)!=174729), ("Your answer does not have the correct number of rows. You should have %d rows, "
+                                        "but you have %d rows. Make sure that you are pulling users for January 1, 2019, "
+                                        "and not the entire month of January." % (len(all_users_answer), len(results)))
+        assert (len(results)!=6085), ("Your answer does not have the correct number of rows. You should have %d rows, "
+                                      "but you have %d rows. Make sure that each user appears at most once (in other "
+                                      "words, select **DISTINCT** users)." % (len(all_users_answer), len(results)))
+        assert (len(results)!=622741), ("Your answer does not have the correct number of rows. You should have %d rows, "
+                                        "but you have %d rows. Make sure that you are pulling users for only one day, and "
+                                        "not anytime on/after January 1, 2019." % (len(all_users_answer), len(results)))
+        assert (len(results)!=389388), ("Your answer does not have the correct number of rows. You should have %d rows, "
+                                        "but you have %d rows. Make sure that each user appears at most once (in other "
+                                        "words, select **DISTINCT** users). And make sure that you are pulling users for "
+                                        "January 1, 2019, and not the entire month of January." % (len(all_users_answer), len(results)))
         assert (len(results)==len(all_users_answer)), ("Your answer does not have the correct number of rows. You should have %d rows, "
                                                           "but you have %d rows." % (len(all_users_answer), len(results)))
 
@@ -218,7 +240,7 @@ all_users_query = \"""
 """
 )
     _hint = ("Begin by writing two separate queries: one to get the user IDs corresponding to questions, and another corresponding "
-             "to answers.  Then, take the union of the two columns.")
+             "to answers (posted on January 1, 2019).  Then, take the union of the two results.")
 
 qvars = bind_exercises(globals(), [
     CorrectQuery,
