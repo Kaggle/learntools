@@ -1,5 +1,6 @@
 import category_encoders as ce
 import pandas as pd
+from sklearn.decomposition import TruncatedSVD
 
 from learntools.core import *
 
@@ -154,6 +155,97 @@ class CatBoostEncodings(EqualityCheckProblem):
     valid_encoded = valid.join(cb_enc.transform(valid[cat_features]).add_suffix('_cb'))
     """) 
     _expected = cb_encodings_solution()
+
+class LearnSVDEmbeddings(CodingProblem):
+    _var = 'svd_components'
+    _hint = ("You can count up co-occurences of categorical values using a groupby operation. This "
+             "will create a DataFrame or Series with a multi-index with a level for each categorical variable. "
+             "To convert this to a matrix, you can use the `unstack` method. For each matrix, fit the "
+             "SVD transformer and save the learned components to the dictionary. ")
+    _solution = CS(""" 
+    svd = TruncatedSVD(n_components=5)
+    # Loop through each pair of categorical features
+    for col1, col2 in itertools.permutations(cat_features, 2):
+        # For a pair, create a sparse matrix with cooccurence counts
+        pair_counts = train.groupby([col1, col2])['is_attributed'].count()
+        # Unstack the counts in a matrix
+        pair_matrix = pair_counts.unstack(fill_value=0)
+        
+        # Fit the SVD and store the components
+        # Note: these components represent column 2
+        svd.fit(pair_matrix)
+        svd_components['_'.join([col2, col1])] = pd.DataFrame(svd.components_)""")
+
+    def check(self, svd_components):
+
+        from itertools import permutations
+        
+        # Create the SVD transformer
+        svd = TruncatedSVD(n_components=5, random_state=7)
+        
+        cat_features = ['app', 'device', 'os', 'channel']
+        train, _, _ = get_data_splits()
+        svd_components_ = {}
+
+        # Loop through each pair of categorical features
+        for col1, col2 in permutations(cat_features, 2):
+            # For a pair, create a sparse matrix with cooccurence counts
+            pair_counts = train.groupby([col1, col2])['is_attributed'].count()
+            pair_matrix = pair_counts.unstack(fill_value=0)
+            
+            # Fit the SVD and store the components
+            # Note: these components represent column 2
+            svd_components_['_'.join([col1, col2])] = pd.DataFrame(svd.fit_transform(pair_matrix))
+
+        assert svd_components.keys() == svd_components_.keys()
+
+        for pair in svd_components:
+            assert svd_components_[pair].equals(svd_components[pair]), f"Something wrong with {pair}"
+
+
+class ApplySVDEncoding(CodingProblem):
+    _vars = ['svd_components', 'svd_encodings']
+    _hint = ("To encode, you'll first want to reindex the feature components using the column"
+             "values from clicks. Then, set the index to match clicks.index. From there, "
+             "add the prefixes and join the encoded features to svd_encodings.")
+    _solution=CS("""
+    svd_encodings = pd.DataFrame(index=clicks.index)
+    for feature in svd_components:
+        # Get the feature column the SVD components are encoding
+        col = feature.split('_')[0]
+
+        ## Use SVD components to encode the categorical features
+        # Need to transpose so .reindex works appropriately
+        feature_components = svd_components[feature].transpose()
+        comp_cols = feature_components.reindex(clicks[col]).set_index(clicks.index)
+        
+        # Doing this so we know what these features are
+        comp_cols = comp_cols.add_prefix(feature + '_svd_')
+        
+        svd_encodings = svd_encodings.join(comp_cols)
+    """)
+
+    def check(self, svd_components, svd_encodings_):
+        assert svd_encodings_.shape != (2300561, 0), "Please add encoded categorical features to `svd_encodings` dataframe."
+        svd_encodings = pd.DataFrame(index=clicks.index)
+        for feature in svd_components:
+            # Get the feature column the SVD components are encoding
+            col = feature.split('_')[0]
+
+            ## Use SVD components to encode the categorical features
+            feature_components = svd_components[feature]
+            comp_cols = feature_components.reindex(clicks[col]).set_index(clicks.index)
+            
+            # Doing this so we know what these features are
+            comp_cols = comp_cols.add_prefix(feature + '_svd_')
+            
+            svd_encodings = svd_encodings.join(comp_cols)
+
+
+        # Fill null values with the mean
+        svd_encodings = svd_encodings.fillna(svd_encodings.mean())
+
+        assert svd_encodings.equals(svd_encodings_)
         
 
 qvars = bind_exercises(globals(), [
@@ -162,7 +254,10 @@ qvars = bind_exercises(globals(), [
     CountEncodingEffectiveness,
     TargetEncodings,
     RemoveIPEncoding,
+    # LeaveOneOutEncodings,
     CatBoostEncodings,
+    LearnSVDEmbeddings,
+    ApplySVDEncoding
     ],
     tutorial_id=271,
     var_format='q_{n}',
