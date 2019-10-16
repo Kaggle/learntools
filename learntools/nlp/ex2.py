@@ -24,7 +24,7 @@ def load_data(csv_file, split=0.8):
     
     return texts[:split], train_labels, texts[split:], val_labels
 
-train_texts, train_labels, val_texts, val_labels = load_data('../input/yelp_ratings.csv')
+train_texts, train_labels, val_texts, val_labels = load_data('../input/nlp-course/yelp_ratings.csv')
 
 def create_model():
     # Create an empty model
