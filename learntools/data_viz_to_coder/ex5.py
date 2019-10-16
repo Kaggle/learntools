@@ -121,7 +121,6 @@ qvars = bind_exercises(globals(), [
     Hist,
     Threshold
     ],
-    tutorial_id=191,
     var_format='step_{n}',
     )
 __all__ = list(qvars)

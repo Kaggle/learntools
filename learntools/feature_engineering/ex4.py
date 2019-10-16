@@ -167,7 +167,6 @@ qvars = bind_exercises(globals(), [
     FeatureSelectionTrees,
     L1SelectionTopK
     ],
-    tutorial_id=273,
     var_format='q_{n}',
     )
 __all__ = list(qvars)

@@ -118,7 +118,6 @@ qvars = bind_exercises(globals(), [
     TrainTestSplits,
     # CreateSplits,
     ],
-    tutorial_id=270,
     var_format='q_{n}',
     )
 __all__ = list(qvars)

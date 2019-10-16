@@ -164,7 +164,6 @@ qvars = bind_exercises(globals(), [
     RemoveIPEncoding,
     CatBoostEncodings,
     ],
-    tutorial_id=271,
     var_format='q_{n}',
     )
 __all__ = list(qvars)

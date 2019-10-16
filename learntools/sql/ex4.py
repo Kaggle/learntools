@@ -100,7 +100,6 @@ qvars = bind_exercises(globals(), [
     EducationSpending,
     FindInterestingCodes
     ],
-    tutorial_id=80,
     var_format='q_{n}',
     )
 

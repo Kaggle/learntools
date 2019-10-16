@@ -60,7 +60,6 @@ qvars = bind_exercises(globals(), [
     VerticalLineDetector,
     BigVsSmallConvolutions,
     ],
-    tutorial_id=74,
     var_format='q_{n}',
     )
 

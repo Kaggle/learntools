@@ -32,7 +32,6 @@ qvars = bind_exercises(globals(), [
     LoadHomeData,
     HomeDescription,
     ],
-    tutorial_id=118,
     var_format='step_{n}',
     )
 __all__ = list(qvars)

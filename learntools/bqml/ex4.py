@@ -95,7 +95,6 @@ qvars = bind_exercises(globals(), [
     RawActualsInsteadOfPDP,
     UseShap
     ],
-    tutorial_id=139,
     var_format='q_{n}',
     )
 __all__ = list(qvars)

@@ -92,7 +92,6 @@ qvars = bind_exercises(globals(), [
     WhatCompileArgsAffectModel,
     FitTransferModel,
     ],
-    tutorial_id=76,
     var_format='step_{n}',
     )
 

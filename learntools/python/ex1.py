@@ -196,7 +196,6 @@ qvars = bind_exercises(globals(), [
     QuickdrawGridProblem,
     SameValueInitializationRiddle,
     ],
-    tutorial_id=102,
     start=0,
     )
 __all__ = list(qvars)

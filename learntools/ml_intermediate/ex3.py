@@ -169,7 +169,6 @@ qvars = bind_exercises(globals(), [
     Cardinality,
     OneHot
     ],
-    tutorial_id=239,
     var_format='step_{n}',
     )
 __all__ = list(qvars)

@@ -49,7 +49,6 @@ qvars = bind_exercises(globals(), [
     LoadData,
     CreatePlot
     ],
-    tutorial_id=195,
     var_format='step_{n}',
     )
 __all__ = list(qvars)

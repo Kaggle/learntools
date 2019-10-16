@@ -27,7 +27,6 @@ rf_val_mae = mean_absolute_error(rf_val_predictions, val_y)
 qvars = bind_exercises(globals(), [
     CheckRfScore
     ],
-    tutorial_id=121,
     var_format='step_{n}',
     )
 __all__ = list(qvars)

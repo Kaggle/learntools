@@ -92,7 +92,6 @@ qvars = bind_exercises(globals(), [
     CodeWithAugmentation,
     DidAugmentationHelp
     ],
-    tutorial_id=77,
     var_format='q_{n}',
     )
 

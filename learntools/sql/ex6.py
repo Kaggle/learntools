@@ -245,7 +245,6 @@ qvars = bind_exercises(globals(), [
     BigQueryExperts,
     GeneralizeExpertFinder
     ],
-    tutorial_id=82,
     var_format='q_{n}',
     )
 

@@ -251,6 +251,5 @@ qvars = bind_exercises(globals(), [
     OneTopping,
     BlackJackProblem,
     ],
-    tutorial_id=106,
 )
 __all__ = list(qvars)

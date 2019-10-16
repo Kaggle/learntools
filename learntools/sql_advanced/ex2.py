@@ -209,7 +209,6 @@ qvars = bind_exercises(globals(), [
     CommunityArea,
     BreakTime
     ],
-    tutorial_id=267,
     var_format='q_{n}',
     )
 

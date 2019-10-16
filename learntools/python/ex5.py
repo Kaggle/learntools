@@ -163,6 +163,5 @@ qvars = bind_exercises(globals(), [
     ExpectedSlotsPayout,
     SlotsSurvival,
     ],
-    tutorial_id=110,
 )
 __all__ = list(qvars) + ['play_slot_machine']

@@ -162,7 +162,6 @@ qvars = bind_exercises(globals(), [
     Model2,
     Model3
     ],
-    tutorial_id=245,
     var_format='step_{n}',
     )
 __all__ = list(qvars)

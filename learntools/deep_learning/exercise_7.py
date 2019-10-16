@@ -188,7 +188,6 @@ qvars = bind_exercises(globals(), [
     FitFullDLModel,
     CreateNewDLModelFromScratch,
     ],
-    tutorial_id=91,
     var_format='q_{n}',
     )
 

@@ -58,7 +58,6 @@ qvars = bind_exercises(globals(), [
     PlotSirajStockModel,
     PlotMyStockModel
     ],
-    tutorial_id=150,
     var_format='step_{n}',
     )
 __all__ = list(qvars)
