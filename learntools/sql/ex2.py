@@ -97,7 +97,6 @@ qvars = bind_exercises(globals(), [
     WhichCountries,
     ZeroPollution,
     ],
-    tutorial_id=78,
     var_format='q_{n}',
     )
 

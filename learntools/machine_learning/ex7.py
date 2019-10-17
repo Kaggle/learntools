@@ -29,7 +29,6 @@ output.to_csv('submission.csv', index=False)
 qvars = bind_exercises(globals(), [
     CheckSubmittablePreds
     ],
-    tutorial_id=122,
     var_format='step_{n}',
     )
 __all__ = list(qvars)

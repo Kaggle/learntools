@@ -81,7 +81,6 @@ qvars = bind_exercises(globals(), [
     YourTurn,
     TestPreds
     ],
-    tutorial_id=241,
     var_format='step_{n}',
     )
 __all__ = list(qvars)

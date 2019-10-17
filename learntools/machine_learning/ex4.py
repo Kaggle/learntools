@@ -72,7 +72,6 @@ qvars = bind_exercises(globals(), [
     ValPreds,
     MAE
     ],
-    tutorial_id=119,
     var_format='step_{n}',
     )
 __all__ = list(qvars)

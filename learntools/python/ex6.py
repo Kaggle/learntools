@@ -211,7 +211,6 @@ qvars = bind_exercises(globals(), [
     DiamondArt,
     RouletteAnalyzer
     ],
-    tutorial_id=112,
     start=0,
 )
 __all__ = list(qvars)

@@ -34,7 +34,6 @@ qvars = bind_exercises(globals(), [
     BestTreeSize,
     FitModelWithAllData
     ],
-    tutorial_id=120,
     var_format='step_{n}',
     )
 __all__ = list(qvars)

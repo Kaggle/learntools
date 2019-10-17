@@ -58,7 +58,6 @@ qvars = bind_exercises(globals(), [
     PetCostumes,
     Mitzie
     ],
-    tutorial_id=269,
     var_format='q_{n}',
     )
 

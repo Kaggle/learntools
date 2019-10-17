@@ -251,7 +251,6 @@ qvars = bind_exercises(globals(), [
     TheLongQuery,
     AllRidesInTheMorning
     ],
-    tutorial_id=81,
     var_format='q_{n}',
     )
 

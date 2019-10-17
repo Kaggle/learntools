@@ -73,7 +73,6 @@ qvars = bind_exercises(globals(), [
     WhichWayInteraction,
     CompareSHAPDepPlots
     ],
-    tutorial_id=141,
     var_format='q_{n}',
     )
 __all__ = list(qvars)

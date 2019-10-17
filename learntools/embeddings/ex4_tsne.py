@@ -63,7 +63,6 @@ qvars = bind_exercises(globals(), [
     MeanRatingPlot,
     NRatingsPlot,
     ],
-    tutorial_id=152,
     var_format='part{n}',
 )
 __all__ = list(qvars)

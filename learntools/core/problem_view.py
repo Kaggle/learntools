@@ -30,10 +30,9 @@ class ProblemView:
             " tell you whether your code is correct."
     )
 
-    def __init__(self, problem:Problem, globals_, tutorial_id):
+    def __init__(self, problem:Problem, globals_):
         self.problem = problem
         self.globals = globals_
-        self.tutorial_id = tutorial_id
         self.interactions = Counter()
         # The outcome of the last call to .check (as a tracking.OutcomeType).
         # Used for notebook testing.
@@ -69,7 +68,6 @@ class ProblemView:
             kwargs['questionType'] = tracking.QuestionType.THOUGHTEXPERIMENT
 
         problem_fields = dict(
-                learnTutorialId=self.tutorial_id,
                 questionId=self.questionId,
             )
         kwargs.update(problem_fields)

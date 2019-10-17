@@ -76,7 +76,6 @@ qvars = bind_exercises(globals(), [
     CountTimestampFields,
     IdentifyFieldsForPlotting,
     ],
-    tutorial_id=169,
     var_format='q_{n}',
     )
 

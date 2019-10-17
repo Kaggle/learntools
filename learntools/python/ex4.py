@@ -167,6 +167,5 @@ qvars = bind_exercises(globals(), [
     FashionablyLate,
     CountNegativesRiddle,
     ],
-    tutorial_id=108,
 )
 __all__ = list(qvars)
