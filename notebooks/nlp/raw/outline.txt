@@ -1,0 +1,25 @@
+Here I'm going to keep notes and an outline for this mini-course on natural language processing.
+
+Audience: Students who have been through the Intro to ML mini-course and want to learn how to apply their new skills to text data.
+
+Outline:
+- First steps with a natural language classifier
+    - All using scikit-learn
+    - Tokenizing text data
+    - TF-IDF to get frequency representation
+    - Naive Bayes classifier
+- Improving the model
+    - SVM
+    - RandomForest?
+    - Should do some more research into this
+- Unsupervised learning
+    - clustering
+    - K-means
+- Latent dirichlet allocation
+- Embeddings
+    - word2vec
+    - glove
+    - point to Embeddings mini-course
+- Neural networks (should we?)
+    - Should we get into deep learning?
+    - Pretty simple to make classifiers with dense networks and RNNs
