@@ -156,7 +156,6 @@ qvars = bind_exercises(globals(), [
     BestReviewedItems,
     CountImportanceQuestion
     ],
-    tutorial_id=262,
     var_format='q_{n}',
     )
 __all__ = list(qvars)
