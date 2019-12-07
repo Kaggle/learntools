@@ -3,19 +3,8 @@
   "title": "NaCL",
   "description": "The game of mineral salt.",
   "version": "1.0.0",
-  "agents": {
-    "minimum": 2,
-    "maximum": 4,
-    "defaults": {
-      "done": false,
-      "observation": [
-        { "player": 0 },
-        { "player": 1 },
-        { "player": 2 },
-        { "player": 3 }
-      ]
-    }
-  },
+  "agents": [1, 2, 4],
+  "max_steps": 500,
   "configuration": {
     "halite": {
       "description": "The starting amount of halite available on the board.",
@@ -26,15 +15,15 @@
       "description": "The number of cells vertically and horizontally on the board.",
       "type": "integer",
       "default": 32,
-      "minimum": 32
+      "minimum": 2
     },
-    "ship_cost": {
-      "description": "The amount of halite to create a new ship.",
+    "spawn_cost": {
+      "description": "The amount of halite to spawn a new ship.",
       "type": "integer",
       "default": 1000,
       "minimum": 0
     },
-    "drop_off_cost": {
+    "convert_cost": {
       "description": "The amount of halite to convert a ship into a dropoff.",
       "type": "integer",
       "default": 4000,
@@ -94,11 +83,16 @@
             "type": "integer",
             "default": -1
           },
-
           {
             "description": "Ship: Player id. -1 if none present.",
             "type": "integer",
             "default": -1
+          },
+          {
+            "description": "Ship Halite: The amount present in a ship.",
+            "type": "integer",
+            "default": 0,
+            "minimum": 0
           }
         ]
       },
@@ -126,5 +120,14 @@
       ]
     },
     "default": []
+  },
+  "reset": {
+    "status": "ACTIVE",
+    "observation": [
+      { "player": 0 },
+      { "player": 1 },
+      { "player": 2 },
+      { "player": 3 }
+    ]
   }
 }

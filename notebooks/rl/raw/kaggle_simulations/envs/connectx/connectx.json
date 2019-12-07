@@ -1,16 +1,9 @@
 {
   "name": "connectx",
-  "title": "Connect X",
-  "description": "Classic Connect Four but configurable.",
+  "title": "ConnectX",
+  "description": "Classic Connect in a row but configurable.",
   "version": "1.0.0",
-  "agents": {
-    "minimum": 2,
-    "maximum": 2,
-    "defaults": {
-      "done": [false, true],
-      "observation": [{ "mark": 1 }, { "mark": 2 }]
-    }
-  },
+  "agents": [2],
   "configuration": {
     "columns": {
       "description": "The number of columns on the board",
@@ -56,5 +49,9 @@
     "type": "integer",
     "minimum": 0,
     "default": 0
+  },
+  "reset": {
+    "status": ["ACTIVE", "INACTIVE"],
+    "observation": [{ "mark": 1 }, { "mark": 2 }]
   }
 }

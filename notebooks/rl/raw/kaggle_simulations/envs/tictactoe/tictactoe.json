@@ -3,15 +3,8 @@
   "title": "Tic Tac Toe",
   "description": "Classic Tic Tac Toe",
   "version": "1.0.0",
-  "agents": {
-    "minimum": 2,
-    "maximum": 2,
-    "defaults": {
-      "done": [false, true],
-      "observation": [{ "mark": 1 }, { "mark": 2 }],
-      "reward": 0.5
-    }
-  },
+  "agents": [2],
+  "max_steps": 10,
   "reward": {
     "description": "0 = Lost, 0.5 = Draw, 1 = Won",
     "enum": [0, 0.5, 1],
@@ -35,5 +28,10 @@
     "type": "integer",
     "minimum": 0,
     "maximum": 8
+  },
+  "reset": {
+    "status": ["ACTIVE", "INACTIVE"],
+    "observation": [{ "mark": 1 }, { "mark": 2 }],
+    "reward": 0.5
   }
 }

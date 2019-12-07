@@ -18,7 +18,6 @@ EMPTY = 0
 
 def random_agent(obs):
     return choice([c for c in range(len(obs.board)) if obs.board[c] == EMPTY])
-    # return choice(list(filter(lambda m: m[1] == 0, enumerate(obs.board))))[0]
 
 
 def reaction_agent(obs):
@@ -44,18 +43,22 @@ def interpreter(state, env):
     if env.done:
         return state
 
-    agent1 = state[0]
-    agent2 = state[1]
-    active = agent1 if agent2.done else agent2
+    # Isolate the active and inactive agents.
+    active = state[0] if state[0].status == "ACTIVE" else state[1]
+    inactive = state[0] if state[0].status == "INACTIVE" else state[1]
+    if active.status != "ACTIVE" or inactive.status != "INACTIVE":
+        active.status = "DONE" if active.status == "ACTIVE" else active.status
+        inactive.status = "DONE" if inactive.status == "INACTIVE" else inactive.status
+        return state
 
     # Keep the board in sync between both agents.
-    board = agent1.observation.board
-    agent2.observation.board = board
+    board = active.observation.board
+    inactive.observation.board = board
 
-    # Illegal move, agent losses, all agents are done.
+    # Illegal move by the active agent.
     if board[active.action] != EMPTY:
-        active.reward = 0
-        active.done = True
+        active.status = f"Invalid move: {active.action}"
+        inactive.status = "DONE"
         return state
 
     # Mark the position.
@@ -63,19 +66,21 @@ def interpreter(state, env):
 
     # Check for a win.
     if any(all(board[p] == active.observation.mark for p in c) for c in checks):
-        agent1.reward = 0 if agent1.done else 1
-        agent2.reward = 0 if agent2.done else 1
-        active.done = True
+        active.reward = 1
+        active.status = "DONE"
+        inactive.reward = 0
+        inactive.status = "DONE"
         return state
 
     # Check for a tie.
     if all(mark != EMPTY for mark in board):
-        active.done = True
+        active.status = "DONE"
+        inactive.status = "DONE"
         return state
 
-    # Swap done agents to switch turns.
-    agent1.done = not agent1.done
-    agent2.done = not agent2.done
+    # Swap active and inactive agents to switch turns.
+    active.status = "INACTIVE"
+    inactive.status = "ACTIVE"
 
     return state
 

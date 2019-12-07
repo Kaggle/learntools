@@ -28,19 +28,22 @@
         "minimum": 1,
         "default": 10000
       },
+      "agent_timeout": {
+        "description": "Seconds an agent function can run before timing out.",
+        "type": "integer",
+        "minimum": 1,
+        "default": 2
+      },
       "agents": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "minimum": { "type": "integer", "default": 0 },
-          "maximum": { "type": "integer" },
-          "defaults": { "type": "object", "default": {} }
+        "type": "array",
+        "items": {
+          "type": "integer"
         },
-        "default": {}
+        "default": [1]
       },
       "reward": {
         "type": "object",
-        "default": { "type": "number", "default": 0 }
+        "default": { "type": ["number", "null"], "default": 0 }
       },
       "info": {
         "type": "object",
@@ -53,6 +56,10 @@
       "action": {
         "type": "object",
         "default": { "type": "integer", "default": 0 }
+      },
+      "reset": {
+        "type": "object",
+        "default": {}
       }
     }
   },
@@ -80,10 +87,11 @@
         "type": "object",
         "default": {}
       },
-      "done": {
-        "description": "Notify the environment the agent cannot proceed.",
-        "type": "boolean",
-        "default": false
+      "status": {
+        "description": "Agent status caused by stepping through the environment.",
+        "type": "string",
+        "default": "INACTIVE",
+        "enum": ["INACTIVE", "ACTIVE", "DONE", "ERROR", "INVALID", "TIMEOUT"]
       }
     }
   }

@@ -1,3 +1,4 @@
+import time
 from kaggle_simulations import make, evaluate, run
 
 env = None
@@ -13,57 +14,32 @@ def custom2(obs):
     return [1, 3, 5, 7][step]
 
 
+def custom3():
+    time.sleep(5)
+    return 3
+
+
+def custom4():
+    raise Exception("Foo Bar")
+
+
+def custom5():
+    return -1
+
+
 def beforeEach(state=None):
     global env
-    env = make("tictactoe", state=state)
+    steps = [] if state == None else [state]
+    env = make("tictactoe", steps=steps, debug=True)
 
 
 def test_to_json():
     beforeEach()
-    assert env.toJSON() == {
-        "configuration": {},
-        "description": "Classic Tic Tac Toe",
-        "max_steps": 10000,
-        "name": "tictactoe",
-        "specification": {
-            "action": {
-                "default": 0,
-                "description": "Position to place a mark on the " "board.",
-                "maximum": 8,
-                "minimum": 0,
-                "type": "integer",
-            },
-            "agents": {
-                "defaults": {
-                    "done": [False, True],
-                    "observation": [{"mark": 1}, {"mark": 2}],
-                    "reward": 0.5,
-                },
-                "maximum": 2,
-                "minimum": 2,
-            },
-            "configuration": {},
-            "info": {},
-            "observation": {
-                "board": {
-                    "default": [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    "description": "Serialized 3x3 " "grid. 0 = Empty, " "1 = X, 2 = O",
-                    # "items": {"enum": [0, 1, 2]}, # disabled due to naming conflict
-                    "maxItems": 9,
-                    "minItems": 9,
-                    "type": "array",
-                },
-                "mark": {"description": "Mark for the agent " "to use", "enum": [1, 2]},
-            },
-            "reward": {
-                "default": 0.5,
-                "description": "0 = Lost, 0.5 = Draw, 1 = Won",
-                "enum": [0, 0.5, 1],
-                "type": "number",
-            },
-        },
-        "version": "1.0.0",
-    }
+    json = env.toJSON()
+    assert json["name"] == "tictactoe"
+    assert json["rewards"] == [0.5, 0.5]
+    assert json["statuses"] == ["ACTIVE", "INACTIVE"]
+    assert json["specification"]["reward"]["type"] == ["number", "null"]
 
 
 def test_can_reset():
@@ -71,14 +47,14 @@ def test_can_reset():
     assert env.reset() == [
         {
             "action": 0,
-            "done": False,
+            "status": "ACTIVE",
             "info": {},
             "observation": {"mark": 1, "board": [0, 0, 0, 0, 0, 0, 0, 0, 0]},
             "reward": 0.5,
         },
         {
             "action": 0,
-            "done": True,
+            "status": "INACTIVE",
             "info": {},
             "observation": {"mark": 2, "board": [0, 0, 0, 0, 0, 0, 0, 0, 0]},
             "reward": 0.5,
@@ -92,14 +68,14 @@ def test_can_place_valid_mark():
     assert env.step([4, None]) == [
         {
             "action": 4,
-            "done": True,
+            "status": "INACTIVE",
             "info": {},
             "observation": {"mark": 1, "board": [0, 0, 0, 0, 1, 0, 0, 0, 0]},
             "reward": 0.5,
         },
         {
             "action": 0,  # None caused the default action to be applied.
-            "done": False,
+            "status": "ACTIVE",
             "info": {},
             "observation": {"mark": 2, "board": [0, 0, 0, 0, 1, 0, 0, 0, 0]},
             "reward": 0.5,
@@ -115,17 +91,17 @@ def test_can_place_invalid_mark():
     assert env.step([None, 4]) == [
         {
             "action": 0,
-            "done": True,
+            "status": "DONE",
             "info": {},
             "observation": {"mark": 1, "board": [0, 0, 0, 0, 1, 0, 0, 0, 0]},
             "reward": 0.5,
         },
         {
             "action": 4,
-            "done": True,
+            "status": "INVALID",
             "info": {},
             "observation": {"mark": 2, "board": [0, 0, 0, 0, 1, 0, 0, 0, 0]},
-            "reward": 0,
+            "reward": None,
         },
     ]
 
@@ -137,14 +113,14 @@ def test_can_place_winning_mark():
     assert env.step([7, None]) == [
         {
             "action": 7,
-            "done": True,
+            "status": "DONE",
             "info": {},
             "observation": {"mark": 1, "board": [2, 1, 0, 1, 1, 0, 2, 1, 2]},
             "reward": 1,
         },
         {
             "action": 0,
-            "done": True,
+            "status": "DONE",
             "info": {},
             "observation": {"mark": 2, "board": [2, 1, 0, 1, 1, 0, 2, 1, 2]},
             "reward": 0,
@@ -156,7 +132,7 @@ def test_can_render():
     obs = {"observation": {"board": [0, 1, 0, 2, 1, 2, 0, 0, 2]}}
     beforeEach([obs, obs])
     out = "   | X |   \n---+---+---\n O | X | O \n---+---+---\n   |   | O "
-    assert env.render(True) == out
+    assert env.render(mode="ansi") == out
 
 
 def test_can_step_through_agents():
@@ -192,14 +168,74 @@ def test_can_run_custom_agents():
             "reward": 1,
             "info": {},
             "observation": {"board": [1, 2, 1, 2, 1, 2, 1, 0, 0], "mark": 1},
-            "done": True,
+            "status": "DONE",
         },
         {
             "action": 0,
             "reward": 0,
             "info": {},
             "observation": {"board": [1, 2, 1, 2, 1, 2, 1, 0, 0], "mark": 2},
-            "done": True,
+            "status": "DONE",
+        },
+    ]
+
+
+def test_agents_can_timeout():
+    state = env.run([custom1, custom3])[-1]
+    assert state == [
+        {
+            "action": 0,
+            "reward": 0.5,
+            "info": {},
+            "observation": {"board": [1, 0, 0, 0, 0, 0, 0, 0, 0], "mark": 1},
+            "status": "DONE",
+        },
+        {
+            "action": None,
+            "reward": None,
+            "info": {},
+            "observation": {"board": [1, 0, 0, 0, 0, 0, 0, 0, 0], "mark": 2},
+            "status": "TIMEOUT",
+        },
+    ]
+
+
+def test_agents_can_error():
+    state = env.run([custom1, custom4])[-1]
+    assert state == [
+        {
+            "action": 0,
+            "reward": 0.5,
+            "info": {},
+            "observation": {"board": [1, 0, 0, 0, 0, 0, 0, 0, 0], "mark": 1},
+            "status": "DONE",
+        },
+        {
+            "action": None,
+            "reward": None,
+            "info": {},
+            "observation": {"board": [1, 0, 0, 0, 0, 0, 0, 0, 0], "mark": 2},
+            "status": "ERROR",
+        },
+    ]
+
+
+def test_agents_can_have_invalid_actions():
+    state = env.run([custom1, custom5])[-1]
+    assert state == [
+        {
+            "action": 0,
+            "reward": 0.5,
+            "info": {},
+            "observation": {"board": [1, 0, 0, 0, 0, 0, 0, 0, 0], "mark": 1},
+            "status": "DONE",
+        },
+        {
+            "action": -1,
+            "reward": None,
+            "info": {},
+            "observation": {"board": [1, 0, 0, 0, 0, 0, 0, 0, 0], "mark": 2},
+            "status": "INVALID",
         },
     ]
 

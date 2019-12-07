@@ -1,12 +1,13 @@
 import os
 import json
 import jsonschema
-from io import StringIO
 import sys
 import traceback
 from copy import deepcopy
+from io import StringIO
 from pathlib import Path
-from .errors import InvalidArgument, NotFound
+from threading import Thread
+from .errors import DeadlineExceeded, InvalidArgument, NotFound
 
 
 # Path Utilities.
@@ -55,6 +56,12 @@ def has(o, classinfo=None, default=None, path=[], isCallable=None):
             cur[path[-1]] = default
         return False
 
+def call(o, default=None, path=[], args=[], kwargs={}):
+    o = get(o, default=False, path=path, isCallable=True)
+    if o != False:
+        return o(*args, **kwargs)
+    else:
+        return default
 
 class Struct(dict):
     def __init__(self, **entries):
@@ -65,6 +72,28 @@ class Struct(dict):
     def __setattr__(self, attr, value):
         self.__dict__[attr] = value
         self[attr] = value
+
+
+def timeout(fn, *args, **kwargs):
+    seconds = get(kwargs, int, 60, path=["seconds"])
+    rtn = [DeadlineExceeded(f"Timed out after {seconds} seconds.")]
+
+    def target():
+        try:
+            rtn[0] = fn(*args)
+        except Exception as e:
+            rtn[0] = e
+
+    t = Thread(target=target)
+    t.daemon = True
+    try:
+        t.start()
+        t.join(seconds)
+    except Exception as e:
+        raise e
+    if isinstance(rtn[0], BaseException):
+        raise rtn[0]
+    return rtn[0]
 
 
 # Added benifit of cloning lists and dicts.
@@ -97,12 +126,12 @@ def getExec(raw, fallback=None):
         sys.stdout = sys.__stdout__
         print(buffer.getvalue())
         return env
-    except:
+    except Exception as e:
         sys.stdout = sys.__stdout__
         print(buffer.getvalue())
         if fallback != None:
             return fallback
-        raise InvalidArgument("Invalid raw Python")
+        raise InvalidArgument("Invalid raw Python: " + str(e))
 
 
 def getCallable(raw, callables, fallback=None):
@@ -126,7 +155,6 @@ def get_last_callable(raw, fallback=None):
             return callables[-1]
         raise "Nope"
     except Exception as e:
-        print(e)
         if fallback != None:
             return fallback
         raise InvalidArgument("No callable found")

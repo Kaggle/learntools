@@ -14,6 +14,17 @@
         height: 100%;
         font-family: sans-serif;
       }
+      canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        /* image-rendering: -moz-crisp-edges;
+        image-rendering: -webkit-crisp-edges;
+        image-rendering: pixelated;
+        image-rendering: crisp-edges; */
+      }
     </style>
     <script src="https://unpkg.com/preact@10.0.1/dist/preact.umd.js"></script>
     <script src="https://unpkg.com/preact@10.0.1/hooks/dist/hooks.umd.js"></script>
@@ -37,6 +48,8 @@
       //   environment: { steps: [] },]
       //   header: false,
       //   speed: 500,
+      //   animate: false,
+      //   settings: false,
       //   renderer: null,
       // };
       /*window.kaggle*/
@@ -108,9 +121,14 @@
       `;
 
       const Viewer = styled(props => {
-        const { playing, renderer, step, speed, environment } = useContext(
-          Context
-        );
+        const {
+          animate,
+          playing,
+          renderer,
+          step,
+          speed,
+          environment,
+        } = useContext(Context);
         const ref = preact.createRef();
         const stepRef = useRef(-1);
         stepRef.current = step;
@@ -119,10 +137,15 @@
           if (!ref.current) return;
 
           const renderFrame = (start, startStep, lastFrame) => {
-            if (lastFrame === 1 || startStep !== stepRef.current) return;
-            const frame = playing
-              ? Math.min((Date.now() - start) / speed, 1)
-              : 1;
+            if (startStep !== stepRef.current) return;
+            if (lastFrame === 1) {
+              if (!animate) return;
+              start = Date.now();
+            }
+            const frame =
+              playing || animate
+                ? Math.min((Date.now() - start) / speed, 1)
+                : 1;
             renderer({
               parent: ref.current,
               environment,
@@ -243,18 +266,18 @@
         };
 
         return h`
-  <div className=${props.className}>
-    <${PlayButton} onClick=${onClick}><svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="#FFFFFF">${
+          <div className=${props.className}>
+            <${PlayButton} onClick=${onClick}><svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="#FFFFFF">${
           playing
             ? h`<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/><path d="M0 0h24v24H0z" fill="none"/>`
             : h`<path d="M8 5v14l11-7z"/><path d="M0 0h24v24H0z" fill="none"/>`
         }</svg><//>
-    <${StepInput} min="1" max=${
+            <${StepInput} min="1" max=${
           environment.steps.length
         } value="${value}" onInput=${onInput} />
-    <${StepCount}>${value} / ${environment.steps.length}<//>
-  </div>
-`;
+            <${StepCount}>${value} / ${environment.steps.length}<//>
+          </div>
+        `;
       })`
         align-items: center;
         border-top: 4px solid #212121;
@@ -263,15 +286,64 @@
         width: 100%;
       `;
 
-      const Player = styled(props => {
-        const { controls, header, loading } = useContext(Context);
+      const Info = styled(props => {
+        const {
+          environment,
+          playing,
+          step,
+          speed,
+          animate,
+          header,
+          controls,
+          settings,
+        } = useContext(Context);
+
         return h`
-    <div className=${props.className}>
-      ${loading && h`<${Loading} />`}
-      ${!loading && header && h`<${Header} />`}
-      ${!loading && h`<${Viewer} />`}
-      ${!loading && controls && h`<${Controls} />`}
-    </div>`;
+          <div className=${props.className}>
+            info:
+            step(${step}),
+            playing(${playing ? "T" : "F"}),
+            speed(${speed}),
+            animate(${animate ? "T" : "F"})
+          </div>`;
+      })`
+        color: #888;
+        font-family: monospace;
+        font-size: 12px;
+      `;
+
+      const Settings = styled(props => {
+        const { environment, pause, play, playing, setStep, step } = useContext(
+          Context
+        );
+
+        return h`
+          <div className=${props.className}>
+            <${Info} />
+          </div>
+        `;
+      })`
+        background: #fff;
+        border-top: 4px solid #212121;
+        box-sizing: border-box;
+        padding: 20px;
+        width: 100%;
+
+        h1 {
+          font-size: 20px;
+        }
+      `;
+
+      const Player = styled(props => {
+        const { controls, header, loading, settings } = useContext(Context);
+        return h`
+          <div className=${props.className}>
+            ${loading && h`<${Loading} />`}
+            ${!loading && header && h`<${Header} />`}
+            ${!loading && h`<${Viewer} />`}
+            ${!loading && controls && h`<${Controls} />`}
+            ${!loading && settings && h`<${Settings} />`}
+          </div>`;
       })`
         align-items: center;
         background: #212121;
@@ -295,6 +367,9 @@
         const [, setStepState] = useState(0);
         const stepRef = useRef(window.kaggle.step || 0);
         const [playing, setPlaying] = useState(window.kaggle.autoplay || false);
+        const [settings, setSettings] = useState(
+          window.kaggle.settings || false
+        );
         const [loading, setLoading] = useState(false);
         const [controls, setControls] = useState(
           "controls" in window.kaggle
@@ -308,6 +383,7 @@
         );
         const intervalRef = useRef(0);
         const speed = window.kaggle.speed || 500;
+        const animate = !!window.kaggle.animate;
 
         const setStep = newStep => {
           stepRef.current = newStep;
@@ -338,6 +414,7 @@
         }, []);
 
         const context = {
+          animate,
           environment,
           renderer,
           loading,
@@ -351,12 +428,14 @@
           playing,
           play,
           controls,
+          settings,
+          setSettings,
         };
 
         return h`
-    <${Context.Provider} value=${context}>
-      <${Player} />
-    <//>`;
+          <${Context.Provider} value=${context}>
+            <${Player} />
+          <//>`;
       };
 
       preact.render(h`<${App} />`, document.body);
