@@ -49,3 +49,5 @@ The Kaggle Kernels API requires a `kernel-metadata.json` file for any kernel bei
 
 Use ./pushall.sh as
     ./pushall deep_learning/prod
+
+Changes to the functionality of this pipeline happen by modifying the nb_utils folder.
