@@ -142,18 +142,3 @@ Set `_bonus = True` to mark a problem as being a bonus (i.e. the user doesn't ne
 
 Sending tracking events is managed at the `ProblemView` layer. See `problem_view.py` and `tracking.py` for details.
 
-# Testing notebooks (optional but recommended)
-
-I recommend making testing notebooks for each exercise. See `learntools/python/*testing.ipynb` for examples. My process for doing this is to fork the main exercise notebook (the one intended for eventual user consumption), and expand it by...
-
-- Making copies of the starter code cells (the ones that call `check()`), with at least one incorrect solution and at least one correct solution.
-- Uncommenting the calls to `.hint()` and `.solution()`.
-
-If you can run the whole notebook without exceptions, and the outputs look reasonable, you can be pretty confident that it's ready to go.
-
-Furthermore, these make for great regression tests. If, after changing some exercise code (or code in `learntools.core`), you re-execute the testing notebooks and see no changes (other than expected superficial changes, like the `execution_count` metadata going up), you can be pretty confident you didn't break anything major.
-
-Reminder: you can programmatically execute a bunch of notebooks from the command line by running something like:
-
-    jupyter nbconvert --execute --inplace *.ipynb
-
