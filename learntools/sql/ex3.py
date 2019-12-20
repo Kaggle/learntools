@@ -83,7 +83,6 @@ qvars = bind_exercises(globals(), [
     ProlificCommenters,
     NumDeletedPosts,
     ],
-    tutorial_id=79,
     var_format='q_{n}',
     )
 

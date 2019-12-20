@@ -53,7 +53,6 @@ qvars = bind_exercises(globals(), [
     ConfusionMatrixQuestion,
     UnbalancedClassesQuestion
     ],
-    tutorial_id=262,
     var_format='step_{n}',
     )
 __all__ = list(qvars)

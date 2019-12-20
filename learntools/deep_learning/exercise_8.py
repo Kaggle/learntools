@@ -31,7 +31,6 @@ fashion_model_1.add(Dense(num_classes, activation='softmax'))
 qvars = bind_exercises(globals(), [
     AddStrides,
     ],
-    tutorial_id=83,
     var_format='q_{n}',
     )
 

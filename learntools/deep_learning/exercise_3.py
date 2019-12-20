@@ -97,7 +97,6 @@ qvars = bind_exercises(globals(), [
     ScoreHotDogModel,
     TryVGG
     ],
-    tutorial_id=75,
     var_format='q_{n}',
     )
 

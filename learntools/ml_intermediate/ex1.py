@@ -40,7 +40,6 @@ qvars = bind_exercises(globals(), [
     BestModel,
     Predictions,
     ],
-    tutorial_id=235,
     var_format='step_{n}',
     )
 __all__ = list(qvars)

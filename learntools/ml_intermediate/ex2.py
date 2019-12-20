@@ -215,7 +215,6 @@ qvars = bind_exercises(globals(), [
     Impute,
     PredsCode
     ],
-    tutorial_id=237,
     var_format='step_{n}',
     )
 __all__ = list(qvars)

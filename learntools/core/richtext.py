@@ -8,9 +8,10 @@ class RichText:
     If displayed from a code cell, it will render the nice rich output. If in the console,
     we'll fall back to the simple representation.
     """
-    def __init__(self, txt, color=None):
+    def __init__(self, txt, color=None, **kwargs):
         self.txt = txt
         self.color = color
+        self.kwargs = kwargs
 
     def _repr_markdown_(self):
         if self.color:
@@ -18,9 +19,6 @@ class RichText:
         return self.txt
 
     def __repr__(self):
-        # TODO: we should strip out markdown syntax here
-        # (Though, in practice, this will basically never be seen. These exercises
-        # were really designed to be run in notebooks.)
         return self.txt
 
 class PrefixedRichText(RichText):
@@ -37,11 +35,7 @@ class PrefixedRichText(RichText):
 
     def _repr_markdown_(self):
         if not self.txt:
-            # TODO: hm, this fallback behaviour makes sense for Correct and
-            # TestFailure, but not really for the others. For classes like
-            # Hint or Solution, we should probably treat the absence of self.txt
-            # as an error condition.
-            return colorify(self.label, self.label_color)
+           return colorify(self.label, self.label_color)
         pre = colorify(self.label+':', self.label_color)
         return pre + ' ' + self.txt
 
@@ -51,7 +45,6 @@ class PrefixedRichText(RichText):
         return self.label + ':' + ' ' + self.txt
 
 
-# Might be worth also investigating other formatting options. Maybe set a bg-color throughout? (Would help distinguish markdown output from a code cell and rendered markdown cells - they can sometimes bleed together visually)
 class Hint(PrefixedRichText):
     label_color = colors.HINT
     def __init__(self, txt, n=1, last=True):
@@ -72,17 +65,19 @@ class Hint(PrefixedRichText):
         return 'Hint'
 
 class Correct(PrefixedRichText):
-    _label = 'Correct'
+    @property
+    def _label(self):
+        return self.kwargs.get('_congrats', 'Correct')
     label_color = colors.CORRECT
 
 class Solution(PrefixedRichText):
     label_color = colors.SOLUTION
 
 class CodeSolution(Solution):
-    """A solution consisting entirely of Python code. We wrap this in a 
+    """A solution consisting entirely of Python code. We wrap this in a
     syntax-highlighted code block.
     """
-    _label = 'Solution'    
+    _label = 'Solution'
 
     def __init__(self, *lines):
         """As a convenience, may pass in one string per line of code, rather than
@@ -100,7 +95,7 @@ class CodeSolution(Solution):
         with open(path) as f:
             lines = f.readlines()
             # Strip trailing newlines (cause constructor adds them back...)
-            lines = [line[:-1] for line in lines 
+            lines = [line[:-1] for line in lines
                     # Hack
                     if not line.startswith('from learntools.python.solns')
                     ]

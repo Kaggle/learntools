@@ -144,6 +144,5 @@ qvars = bind_exercises(globals(), [
     ItalianWines,
     TopOceanicWines,
     ],
-    tutorial_id=46,
     )
 __all__ = list(qvars)

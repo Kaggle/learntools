@@ -11,7 +11,7 @@ class SplitData(CodingProblem):
     _hint = ("The function you need to import is part of sklearn. When calling "
              "the function, the arguments are X and y. Ensure you set the random_state to 1.")
     _solution = CS("""from sklearn.model_selection import train_test_split
-train_x, val_X, train_y, val_y = train_test_split(X, y, random_state=1)""")
+train_X, val_X, train_y, val_y = train_test_split(X, y, random_state=1)""")
 
     def check(self, train_X, val_X, train_y, val_y, X, y):
 
@@ -72,7 +72,6 @@ qvars = bind_exercises(globals(), [
     ValPreds,
     MAE
     ],
-    tutorial_id=119,
     var_format='step_{n}',
     )
 __all__ = list(qvars)

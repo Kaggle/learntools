@@ -109,6 +109,5 @@ qvars = bind_exercises(globals(), [
     DescriptorCounts,
     StarRatings,
     ],
-    tutorial_id=47,
     )
 __all__ = list(qvars)

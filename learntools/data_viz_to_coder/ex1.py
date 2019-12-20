@@ -71,7 +71,6 @@ qvars = bind_exercises(globals(), [
     LoadFIFAData,
     Line
     ],
-    tutorial_id=233,
     var_format='step_{n}',
     )
 __all__ = list(qvars)

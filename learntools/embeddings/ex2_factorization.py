@@ -95,7 +95,6 @@ qvars = bind_exercises(globals(), [
     L2Intro,
     L2Predictions,
     ],
-    tutorial_id=150,
     var_format='part{n}',
 )
 __all__ = list(qvars)

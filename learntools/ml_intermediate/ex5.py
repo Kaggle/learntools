@@ -83,7 +83,6 @@ qvars = bind_exercises(globals(), [
     GetDict,
     BestEst
     ],
-    tutorial_id=243,
     var_format='step_{n}',
     )
 __all__ = list(qvars)

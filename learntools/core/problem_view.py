@@ -30,10 +30,9 @@ class ProblemView:
             " tell you whether your code is correct."
     )
 
-    def __init__(self, problem:Problem, globals_, tutorial_id):
+    def __init__(self, problem:Problem, globals_):
         self.problem = problem
         self.globals = globals_
-        self.tutorial_id = tutorial_id
         self.interactions = Counter()
         # The outcome of the last call to .check (as a tracking.OutcomeType).
         # Used for notebook testing.
@@ -69,7 +68,6 @@ class ProblemView:
             kwargs['questionType'] = tracking.QuestionType.THOUGHTEXPERIMENT
 
         problem_fields = dict(
-                learnTutorialId=self.tutorial_id,
                 questionId=self.questionId,
             )
         kwargs.update(problem_fields)
@@ -119,7 +117,11 @@ class ProblemView:
             return RichText(msg, color=colors.WARN)
         else:
             self._track_check(tracking.OutcomeType.PASS)
-            return Correct(self.problem.correct_message)
+            if hasattr(self.problem, '_congrats'):
+                return Correct(self.problem._correct_message,
+                               _congrats=self.problem._congrats)
+            else:
+                return Correct(self.problem._correct_message)
 
     def _get_injected_args(self):
         names = self.problem.injectable_vars

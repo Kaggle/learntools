@@ -136,7 +136,6 @@ qvars = bind_exercises(globals(), [
     DesignDatasetUShapedPdp,
     DesignFlatPDPWithHighImportance
     ],
-    tutorial_id=135,
     var_format='q_{n}',
     )
 __all__ = list(qvars)

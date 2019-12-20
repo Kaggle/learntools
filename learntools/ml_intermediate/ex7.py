@@ -85,7 +85,6 @@ qvars = bind_exercises(globals(), [
     PreventingInfections,
     HomeAgainLeakage,
     ],
-    tutorial_id=247,
     var_format='q_{n}',
     )
 __all__ = list(qvars)

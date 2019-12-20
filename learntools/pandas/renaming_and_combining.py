@@ -53,6 +53,5 @@ qvars = bind_exercises(globals(), [
     ConcatReddit,
     JoinLifting,
     ],
-    tutorial_id=50,
     )
 __all__ = list(qvars)
