@@ -3,9 +3,10 @@ from learntools.core.multiproblem import MultipartProblem
 def backtickify(s):
     return '`{}`'.format(s)
 
+# This is an artifact of when we had extra credit questions and wanted an option for
+# a scoring mechanism that's no longer necessary
 quantum_of_bonus = 1/37
 
-# TODO: Maybe this factory should be a class method of ProblemView or something?
 def instantiate_probview(prob_cls, value_per_problem):
     # TODO: Bleh, circular import...
     from learntools.core import problem_view as pv
@@ -81,7 +82,6 @@ def bind_exercises(g, exercises, start=1, var_format='q{n}'):
         yield '____'
 
 def format_args(fn, args):
-    # I guess technically not portable to other python implementations...
     c = fn.__code__
     params = c.co_varnames[:c.co_argcount]
     #assert len(args) == len(params)
