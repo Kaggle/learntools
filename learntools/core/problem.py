@@ -1,8 +1,4 @@
 from abc import ABC, abstractmethod
-# An annoying limitation of abc is that I can't mark an attribute as abstract, only a property.
-# And I don't want to impose on each problem subclass to go to the work of defining a property for stuff like
-# vars, expected.
-# cf. https://stackoverflow.com/questions/43790040/how-to-create-an-abstract-class-attribute-potentially-read-only
 from typing import List
 import functools
 

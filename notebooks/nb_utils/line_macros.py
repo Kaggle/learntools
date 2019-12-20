@@ -13,8 +13,6 @@ def RM(line):
     # to be "do nothing")
     return None
 
-# Could be really fancy and define some decorator to autogenerate these
-# FOO_IF macros from their FOO counterparts. But maybe let's hold off for now.
 def RM_IF(line, cond):
     if cond:
         return RM(line)

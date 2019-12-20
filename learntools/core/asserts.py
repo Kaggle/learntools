@@ -1,11 +1,9 @@
 """
 Some assertion helpers used in Problem.check implementations.
 
-TODO: standardize on some conventions for how these helpers are called, and how they
-present information to the user:
-    - When showing actual/expected values, do we use the result of str() or repr()?
-        - (Should we truncate the representation in case it's huge?)
-    - When showing types, str or repr?
+These are most heavily used in EqualityCheckProblems. They have nice error messages, and thus could be
+used in how we code check methods in CodingProblems, though that wasn't a widespread practice when
+this comment was written in Dec 2019.
 """
 
 import os
