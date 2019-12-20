@@ -7,7 +7,7 @@ class dotdict(dict):
     __setattr__ = dict.__setitem__
     __delattr__ = dict.__delitem__
 
-config = {'columns': 7, 'rows': 6, 'inarow': 4}
+config = dotdict({'columns': 7, 'rows': 6, 'inarow': 4})
 
 def flip_mark(board):
     return list(np.where(np.array(board)==2, 1, np.array(board)*2))
@@ -20,7 +20,7 @@ pos_diag_board = [0, 0, 0, 0, 0, 0, 0,
                   0, 0, 2, 1, 2, 0, 0]
 pos_diag_col = 1
 
-obs_pos_diag_win_1 = {'board': pos_diag_board, 'mark': 1}
+obs_pos_diag_win_1 = dotdict({'board': pos_diag_board, 'mark': 1})
 obs_pos_diag_win_2 = {'board': flip_mark(pos_diag_board), 'mark': 2}
 obs_pos_diag_block_1 = {'board': flip_mark(pos_diag_board), 'mark': 1}
 obs_pos_diag_block_2 = {'board': pos_diag_board, 'mark': 2}
@@ -64,7 +64,9 @@ obs_vertical_win_2 = {'board': flip_mark(vertical_board), 'mark': 2}
 obs_vertical_block_1 = {'board': flip_mark(vertical_board), 'mark': 1}
 obs_vertical_block_2 = {'board': vertical_board, 'mark': 2}
 
-class SelectWinning(FunctionProblem):
+#################################################################################
+
+class SelectWinning(CodingProblem):
     _hint = ""
     _solution = CS(
 """def agent_q1(obs, config):
@@ -75,6 +77,8 @@ class SelectWinning(FunctionProblem):
     return random.choice(valid_moves)
 """)
     _var = 'agent_q1'
+    
+    """
     _test_cases = [
     ((obs_pos_diag_win_1, config), pos_diag_col),
     ((obs_pos_diag_win_2, config), pos_diag_col),
@@ -85,6 +89,7 @@ class SelectWinning(FunctionProblem):
     ((obs_vertical_win_1, config), vertical_col),
     ((obs_vertical_win_2, config), vertical_col),
     ]
+    """
 
 class BlockOpponent(FunctionProblem):
     _hint = ""
