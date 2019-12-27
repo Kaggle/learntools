@@ -54,6 +54,21 @@ def train_func(model, train_data, optimizer, batch_size=8):
         model.update(texts, labels, sgd=optimizer, losses=losses)
     return losses
 
+class EvaluateFeedbackFormApproach(ThoughtExperiment):
+    _solution = ("Any way of setting up an ML problem will have multiple strengths and weaknesses.  "
+                 "So you may have thought of different issues than listed here.\n\nThe strength of this "
+                 "approach is that it allows you to distinguish positive email messages from negative emais "
+                 "even though you don't have historical emails that you have labeled as positive or negative.\n\n"
+                 "The weakness of this approach is that emails may be systematically different from Yelp reviews "
+                 "in ways that make your model less accurate. For example, customers might generally use different "
+                 "words or slang in emails, and the model based on Yelp reviews won't have seen these words.\n\n"
+                 "If you wanted to see hwo serious this issue is, you could compare word frequencies between the two sources. "
+                 "In practice, manually reading a few emails from each source may be enough to see if it's a serious issue. \n\n"
+                 "If you wanted to do something fancier, you could cretae a dataset that contains both Yelp reviews and emails "
+                 "and see whether a model can tell a reviews source from the text content. Ideally, you'd like to find "
+                 "that model didn't perform well, because it would mean your data sources are similar. That approach seems "
+                 "unnecessarily complex here."
+
 class CreateTextCatModel(CodingProblem):
     _var = 'nlp'
     _hint = ("After creating the empty model, use .create_pipe to add the TextCategorizer "
@@ -235,18 +250,17 @@ class EvaluateFunction(CodingProblem):
 class ModelOptimizationQuestion(ThoughtExperiment):
     _solution = ("Answer: There are various hyperparameters to work with here. The biggest one "
                  "is the TextCategorizer architecture. You used the simplest model which trains "
-                 "faster but likely has worse performance than the CNN and ensemble models. You "
-                 "can adjust the dropout parameter to reduce overfitting. Also, you can save the "
-                 "model after each training pass through the data and use the model with the best "
-                 "validation accuracy.")
+                 "faster but likely has worse performance than the CNN and ensemble models. "
+                 )
 
 qvars = bind_exercises(globals(), [
+    EvaluateFeedbackFormApproach,
     CreateTextCatModel,
     TrainFunction,
     PredictFunction,
     EvaluateFunction,
     ModelOptimizationQuestion
     ],
-    var_format='q_{n}',
+    var_format='step_{n}',
     )
 __all__ = list(qvars)
