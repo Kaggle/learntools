@@ -19,7 +19,7 @@ class TrainAModel(CodingProblem):
     "training features and labels."
     )
     _solution = CS("""
-    model = LinearSVC(C=10, random_state=1, dual=False)
+    model = LinearSVC(random_state=1, dual=False)
     model.fit(X_train, y_train)
     """)
 
@@ -27,7 +27,9 @@ class TrainAModel(CodingProblem):
         X_train, X_test, y_train, y_test = train_test_split(all_vectors, review_data.sentiment, 
                                                             test_size=0.1, random_state=1)
 
-        assert np.allclose(model.score(X_test, y_test), 0.9393667190657984)
+        model_score = model.score(X_test, y_test) 
+        assert model_score > 0.9, ("Your model accuracy should be about 94%. " 
+            "Your model's accuracy was {}. Something isn't right.".format(model_score))
                                     
 
 class MakeAPrediction(EqualityCheckProblem):
