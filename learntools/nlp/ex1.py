@@ -18,16 +18,16 @@ class SingleReviewMatch(CodingProblem):
     import spacy
     from spacy.matcher import PhraseMatcher
 
-    nlp = spacy.load('en_core_web_sm')
-    review_doc = nlp(data.iloc[4].text)
+    nlp = spacy.blank('en')
+    review_doc = nlp(data.iloc[14].text)
 
     matcher = PhraseMatcher(nlp.vocab, attr='LOWER')
-    patterns = [nlp(item) for item in menu]
-    matcher.add("MENU", None, *patterns)
+    menu_tokens_list = [nlp(item) for item in menu]
+    matcher.add("MENU", None, *menu_tokens_list)
     matches = matcher(review_doc))"""))
     
     def check(self, matches):
-        correct = [(3, 4), (9, 11)]
+        correct = [(2, 3), (16, 17), (58, 59)]
         assert [(match[1], match[2]) for match in matches] == correct
 
 class MatchAllDataset(CodingProblem):

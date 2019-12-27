@@ -29,7 +29,7 @@ do
     python3 prepare_push.py $track
 done
 
-TESTABLE_NOTEBOOK_TRACKS="python pandas machine_learning data_viz_to_coder ml_intermediate feature_engineering geospatial nlp"
+TESTABLE_NOTEBOOK_TRACKS="nlp python pandas machine_learning data_viz_to_coder ml_intermediate feature_engineering geospatial"
 for track in $TESTABLE_NOTEBOOK_TRACKS
 do
     # Running the deep learning notebooks is fairly slow (~10-20 minutes), so only

@@ -67,7 +67,7 @@ class EvaluateFeedbackFormApproach(ThoughtExperiment):
                  "If you wanted to do something fancier, you could cretae a dataset that contains both Yelp reviews and emails "
                  "and see whether a model can tell a reviews source from the text content. Ideally, you'd like to find "
                  "that model didn't perform well, because it would mean your data sources are similar. That approach seems "
-                 "unnecessarily complex here."
+                 "unnecessarily complex here.")
 
 class CreateTextCatModel(CodingProblem):
     _var = 'nlp'

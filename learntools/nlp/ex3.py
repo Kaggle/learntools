@@ -12,22 +12,6 @@ review_data = pd.read_csv('../input/nlp-course/yelp_ratings.csv')
 nlp = spacy.load('en_core_web_lg')
 all_vectors = np.load('../input/nlp-course/review_vectors.npy')
 
-class WordVectors(CodingProblem):
-    _var = 'vectors'
-    _hint = ("For each review use the `nlp` model to get the vectors. You can iterate "
-    "through the reviews with the `.iterrows()` method. The easiest way to create the new "
-    "numpy array is creating it from a list comprehension.")
-    _solution = CS("""
-    reviews = review_data[:100]
-
-    with nlp.disable_pipes():
-        vectors = np.array([nlp(review.text).vector for idx, review in reviews.iterrows()])""")
-    
-    def check(self, vectors):
-        reviews = review_data[:100]
-        with nlp.disable_pipes():
-            vectors = np.array([nlp(review.text).vector for idx, review in reviews.iterrows()])
-
 class TrainAModel(CodingProblem):
     _var = "model"
     _hint = ("Create the LinearSVC model with the regularization parameter = 10, "
@@ -101,7 +85,6 @@ class OtherSimilarReviews(ThoughtExperiment):
     """
 
 qvars = bind_exercises(globals(), [
-    WordVectors,
     TrainAModel,
     MakeAPrediction,
     CenteringVectors,
