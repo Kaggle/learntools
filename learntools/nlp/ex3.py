@@ -13,7 +13,7 @@ nlp = spacy.load('en_core_web_lg')
 all_vectors = np.load('../input/nlp-course/review_vectors.npy')
 
 class TrainAModel(CodingProblem):
-    _var = "model"
+    _vars = ['model', 'X_test', 'y_test']
     _hint = ("Create the LinearSVC model with the regularization parameter = 10, "
     "the random state set to 1, and dual set to False. Then fit the model with the "
     "training features and labels."
@@ -23,14 +23,11 @@ class TrainAModel(CodingProblem):
     model.fit(X_train, y_train)
     """)
 
-    def check(self, model):
-        X_train, X_test, y_train, y_test = train_test_split(all_vectors, review_data.sentiment, 
-                                                            test_size=0.1, random_state=1)
+    def check(self, model, X_test, y_test):
+        model_score = model.score(X_test, y_test)
+        assert model_score > 0.9, ("Your model accuracy should be about 94%. "
+            "Instead it was {}. Something isn't right.".format(model_score))
 
-        model_score = model.score(X_test, y_test) 
-        assert model_score > 0.9, ("Your model accuracy should be about 94%. " 
-            "Your model's accuracy was {}. Something isn't right.".format(model_score))
-                                    
 
 class MakeAPrediction(EqualityCheckProblem):
     _var = "sentiment"
@@ -45,11 +42,11 @@ class MakeAPrediction(EqualityCheckProblem):
 
 class CenteringVectors(ThoughtExperiment):
     _solution = """
-    Sometimes your documents will already be fairly similar. For example, this data set 
-    is all reviews of businesses. There will be stong similarities between the documents 
-    compared to news articles, technical manuals, and recipes. You end up with all the 
-    similarities between 0.8 and 1 and no anti-similar documents (similarity < 0). When the 
-    vectors are centered, you are comparing documents within your dataset as opposed to all 
+    Sometimes your documents will already be fairly similar. For example, this data set
+    is all reviews of businesses. There will be stong similarities between the documents
+    compared to news articles, technical manuals, and recipes. You end up with all the
+    similarities between 0.8 and 1 and no anti-similar documents (similarity < 0). When the
+    vectors are centered, you are comparing documents within your dataset as opposed to all
     possible documents.
     """
 
@@ -81,14 +78,13 @@ class SimilarReview(EqualityCheckProblem):
 
 class OtherSimilarReviews(ThoughtExperiment):
     _solution = """
-    Reviews for coffee shops will also be similar to our tea house review because 
-    coffee and tea are semantically similar. Most cafes serve both coffee and tea 
+    Reviews for coffee shops will also be similar to our tea house review because
+    coffee and tea are semantically similar. Most cafes serve both coffee and tea
     so you'll see the terms appearing together often.
     """
 
 qvars = bind_exercises(globals(), [
     TrainAModel,
-    MakeAPrediction,
     CenteringVectors,
     SimilarReview,
     OtherSimilarReviews
