@@ -2,6 +2,11 @@ from learntools.core import *
 import textwrap
 import numpy as np
 
+class MenuAnalysisPlan(ThoughtExperiment):
+    _solution = """You could group reviews by what menu items they mention, and then calculate average rating
+    for reviews that mentioned each item. You can tell which foods are mentioned in reviews with low scores,
+    so the restaurant can fix the recipe or remove those foods from the menu."""
+
 class SingleReviewMatch(CodingProblem):
     _var = "matches"
     _hint = ("You should set the attr keyword argument to 'LOWER' so matching is case insensitive. "
@@ -13,16 +18,16 @@ class SingleReviewMatch(CodingProblem):
     import spacy
     from spacy.matcher import PhraseMatcher
 
-    nlp = spacy.load('en_core_web_sm')
-    review_doc = nlp(data.iloc[4].text)
+    nlp = spacy.blank('en')
+    review_doc = nlp(data.iloc[14].text)
 
     matcher = PhraseMatcher(nlp.vocab, attr='LOWER')
-    patterns = [nlp(item) for item in menu]
-    matcher.add("MENU", None, *patterns)
+    menu_tokens_list = [nlp(item) for item in menu]
+    matcher.add("MENU", None, *menu_tokens_list)
     matches = matcher(review_doc))"""))
     
     def check(self, matches):
-        correct = [(6, 7), (51, 52), (70, 71), (98, 99)]
+        correct = [(2, 3), (16, 17), (58, 59)]
         assert [(match[1], match[2]) for match in matches] == correct
 
 class MatchAllDataset(CodingProblem):
@@ -97,53 +102,18 @@ class MatchAllDataset(CodingProblem):
         assert len(means) == len(correct), f"Please add items to item_ratings. You should have {len(correct)} items."
         assert np.allclose(means, correct)
 
-class BestReviewedItems(EqualityCheckProblem):
-    _var = "best_items"
+class WorstReviewedItem(EqualityCheckProblem):
+    _var = "worst_item"
     _hint = ("Loop through each item in item_ratings and calculate the mean, "
              "the sum of the ratings divided by the number of ratings. This is easiest "
              "using a dictionary comprehension. Then use the `sorted` function to sort "
              "the dictionary keys based on the dictionary values.")
     _solution = CS(textwrap.dedent("""
+    # There are many ways to do this. Here is one.
     mean_ratings = {item: sum(ratings)/len(ratings) for item, ratings in item_ratings.items()}
-    best_items = sorted(mean_ratings, key=mean_ratings.get, reverse=True)
+    worst_item = sorted(mean_ratings, key=mean_ratings.get)[0]
     """))
-    _expected = ['artichoke salad',
-                'fettuccini alfredo',
-                'turkey breast',
-                'corned beef',
-                'reuben',
-                'pastrami',
-                'chicken salad',
-                'purista',
-                'prosciutto',
-                'chicken pesto',
-                'chicken spinach salad',
-                'grilled veggie',
-                'gnocchi',
-                'lasagna',
-                'cheesesteak',
-                'pizzas',
-                'pasta',
-                'mac and cheese',
-                'calzone',
-                'cannoli',
-                'pizza',
-                'tiramisu',
-                'ziti',
-                'chicken parmigiana',
-                'salami',
-                'italian sausage',
-                'roast beef',
-                'portobello',
-                'meatball',
-                'garlic bread',
-                'italian beef',
-                'tuna salad',
-                'eggplant',
-                'italian combo',
-                'spaghetti',
-                'turkey sandwich',
-                'chicken cutlet']
+    _expected = 'chicken cutlet'
 
 class CountImportanceQuestion(ThoughtExperiment):
     _solution = """
@@ -151,9 +121,10 @@ class CountImportanceQuestion(ThoughtExperiment):
     """
 
 qvars = bind_exercises(globals(), [
+    MenuAnalysisPlan,
     SingleReviewMatch,
     MatchAllDataset,
-    BestReviewedItems,
+    WorstReviewedItem,
     CountImportanceQuestion
     ],
     var_format='q_{n}',
