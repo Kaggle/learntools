@@ -68,17 +68,9 @@ class Problem(ABC):
 
 class ThoughtExperiment(Problem):
 
-    # By default, ThoughtExperiment subclasses have no bearing on progress tracking.
-    _counts_for_points = False
-    
+    show_solution_on_correct = True
     def check(self, *args):
-        # TODO: Would be nice to be able to put the variable name this problem is
-        # bound to here. (If we want to do that, it should probably live up one
-        # level in the ProblemView?)
-        msg = ("Nothing to check! (Just do this one in your head, then"
-                " call `.solution()` to see if your prediction was correct.)")
-        raise Uncheckable(msg)
-
+        pass
 
 # TODO: apply directly to EqualityCheckProblem.check etc.?
 def injected(method):
