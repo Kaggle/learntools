@@ -1,5 +1,4 @@
 from learntools.core import *
-import sys
 import numpy as np
     
 class MyConfig(object):
