@@ -157,7 +157,7 @@ or this board: \n
 - the only move that is available to the agent is one where, once played, the opponent can win in the next move.
 """)
 
-class JustSubmit(CodingProblem):
+class JustSubmitEx1(CodingProblem):
     _hint = "Follow the instructions to submit your agent to the competition."
     _solution = "Follow the instructions to submit your agent to the competition."
     _congrats = "Thank you for submitting your agent to the competition!"
@@ -169,7 +169,7 @@ qvars = bind_exercises(globals(), [
     SelectWinning, 
     BlockOpponent, 
     WhyNotOptimal, 
-    JustSubmit
+    JustSubmitEx1
     ],
     var_format='q_{n}',
     )
