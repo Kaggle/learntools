@@ -1,7 +1,7 @@
 # See also examples/example_track/example_meta.py for a longer, commented example
 track = dict(
     author_username='dansbecker',
-    course_name='Machine Learning',
+    course_name='Introduction to Machine Learning',
     course_url='https://www.kaggle.com/learn/intro-to-machine-learning'
 )
 
