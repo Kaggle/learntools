@@ -74,7 +74,7 @@ class TryVGG(CodingProblem):
     _solution = CS(
 """
 from tensorflow.keras.applications import VGG16
-vgg16_model = VGG16('../input/vgg16/vgg16_weights_tf_dim_ordering_tf_kernels.h5')
+vgg16_model = VGG16(weights='../input/vgg16/vgg16_weights_tf_dim_ordering_tf_kernels.h5')
 vgg16_accuracy = calc_accuracy(vgg16_model, hot_dog_paths, not_hot_dog_paths)
 """
     )

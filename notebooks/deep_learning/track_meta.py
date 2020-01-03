@@ -50,8 +50,8 @@ notebooks = [
 	enable_gpu=True,
 	scriptid=521452,
 	dataset_sources = [
-	    "keras/resnet50",
-	    "keras/vgg16",
+	    "alexisbcook/resnet50",
+	    "alexisbcook/vgg16",
 	    "dansbecker/hot-dog-not-hot-dog"
 	  ],
     ),
@@ -70,7 +70,7 @@ notebooks = [
         type='exercise',
 	scriptid=532365,
 	dataset_sources = [
-	    "keras/resnet50",
+	    "alexisbcook/resnet50",
 	    "dansbecker/dogs-gone-sideways"
 	  ],
 	enable_gpu=True,
@@ -91,7 +91,7 @@ notebooks = [
 	enable_gpu=True,
 	scriptid=536195,
        	dataset_sources = [
-	    "keras/resnet50",
+	    "alexisbcook/resnet50",
 	    "dansbecker/dogs-gone-sideways"
 	  ],
  ),
