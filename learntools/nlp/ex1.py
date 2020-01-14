@@ -3,7 +3,7 @@ import textwrap
 import numpy as np
 
 class MenuAnalysisPlan(ThoughtExperiment):
-    _solution = """You could group reviews by what menu items they mention, and then calculate average rating
+    _solution = """You could group reviews by what menu items they mention, and then calculate the average rating
     for reviews that mentioned each item. You can tell which foods are mentioned in reviews with low scores,
     so the restaurant can fix the recipe or remove those foods from the menu."""
 
@@ -19,12 +19,12 @@ class SingleReviewMatch(CodingProblem):
     from spacy.matcher import PhraseMatcher
 
     nlp = spacy.blank('en')
-    review_doc = nlp(data.iloc[14].text)
+    review_doc = nlp(text_to_test_on)
 
     matcher = PhraseMatcher(nlp.vocab, attr='LOWER')
     menu_tokens_list = [nlp(item) for item in menu]
     matcher.add("MENU", None, *menu_tokens_list)
-    matches = matcher(review_doc))"""))
+    matches = matcher(review_doc)"""))
     
     def check(self, matches):
         correct = [(2, 3), (16, 17), (58, 59)]

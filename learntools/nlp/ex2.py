@@ -57,14 +57,14 @@ def train_func(model, train_data, optimizer, batch_size=8):
 class EvaluateFeedbackFormApproach(ThoughtExperiment):
     _solution = ("Any way of setting up an ML problem will have multiple strengths and weaknesses.  "
                  "So you may have thought of different issues than listed here.\n\nThe strength of this "
-                 "approach is that it allows you to distinguish positive email messages from negative emais "
+                 "approach is that it allows you to distinguish positive email messages from negative emails "
                  "even though you don't have historical emails that you have labeled as positive or negative.\n\n"
                  "The weakness of this approach is that emails may be systematically different from Yelp reviews "
                  "in ways that make your model less accurate. For example, customers might generally use different "
                  "words or slang in emails, and the model based on Yelp reviews won't have seen these words.\n\n"
-                 "If you wanted to see hwo serious this issue is, you could compare word frequencies between the two sources. "
+                 "If you wanted to see how serious this issue is, you could compare word frequencies between the two sources. "
                  "In practice, manually reading a few emails from each source may be enough to see if it's a serious issue. \n\n"
-                 "If you wanted to do something fancier, you could cretae a dataset that contains both Yelp reviews and emails "
+                 "If you wanted to do something fancier, you could create a dataset that contains both Yelp reviews and emails "
                  "and see whether a model can tell a reviews source from the text content. Ideally, you'd like to find "
                  "that model didn't perform well, because it would mean your data sources are similar. That approach seems "
                  "unnecessarily complex here.")
@@ -107,7 +107,7 @@ class TrainFunction(CodingProblem):
     _var = 'train'
     _hint = ("Use minibatch to create the batches. You can use the zip method to split the "
              "train_data list into two separate lists. For training the model, model.update "
-             "takes the texts and labels. Be sure to use a batch size of 8, and dropout 0.2")
+             "takes the texts and labels. Be sure to use a batch size of 8, and dropout 0.2.")
     _solution = CS("""
     def train(model, train_data, optimizer, batch_size=8):
         losses = {}
