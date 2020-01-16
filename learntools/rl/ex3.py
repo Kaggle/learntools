@@ -1,13 +1,13 @@
 from learntools.core import *
 
 class NumLeaves(EqualityCheckProblem):
-    _var = num_leaves
+    _var = "num_leaves"
     _expected = 7**3
     _hint =  "Try drawing the game tree.  How many moves (columns) are possible at each turn?"
     _solution = CS("num_leaves = 7*7*7")
     
 class AlphaBeta(CodingProblem):
-    _var = 
+    _var = "tbd"
     _hint = ""
     _solution = ""
     def check(self):
@@ -23,7 +23,7 @@ class JustSubmitEx3(CodingProblem):
 
 qvars = bind_exercises(globals(), [
     NumLeaves, 
-    BothLose,
+    AlphaBeta,
     JustSubmitEx3
     ],
     var_format='q_{n}',

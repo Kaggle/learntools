@@ -5,15 +5,14 @@ import random
 
 
 # Calculates score if agent drops piece in selected column
-def score_move(A, B, C, D, E, F, prev_grid, col, mark, config):
+def score_move(A, B, C, D, E, prev_grid, col, mark, config):
     grid = drop_piece(prev_grid, col, mark, config)
     num_twos = count_windows(grid, 2, mark, config)
     num_threes = count_windows(grid, 3, mark, config)
     num_fours = count_windows(grid, 4, mark, config)
     num_twos_opp = count_windows(grid, 2, mark%2+1, config)
     num_threes_opp = count_windows(grid, 3, mark%2+1, config)
-    num_fours_opp = count_windows(grid, 4, mark%2+1, config)
-    score = A*num_fours + B*num_threes + C*num_twos + D*num_twos_opp + E*num_threes_opp + F*num_fours_opp
+    score = A*num_fours + B*num_threes + C*num_twos + D*num_twos_opp + E*num_threes_opp 
     return score
 
 # Helper function for score_move: gets board at next step if agent drops piece in selected column
@@ -58,10 +57,10 @@ def count_windows(grid, num_discs, piece, config):
                 num_windows += 1
     return num_windows    
 
-def my_agent(obs, config, A, B, C, D, E, F):
+def my_agent(obs, config, A, B, C, D, E):
     valid_moves = [c for c in range(config.columns) if obs.board[c] == 0]
     grid = np.asarray(obs.board).reshape(config.rows, config.columns)
-    scores = dict(zip(valid_moves, [score_move(A, B, C, D, E, F, grid, col, obs.mark, config) for col in valid_moves]))
+    scores = dict(zip(valid_moves, [score_move(A, B, C, D, E, grid, col, obs.mark, config) for col in valid_moves]))
     max_cols = [key for key in scores.keys() if scores[key] == max(scores.values())]
     move = random.choice(max_cols)
     return move
@@ -78,9 +77,9 @@ def get_win_percentage(agent1, agent2, n_rounds=50):
 ########################################################################
 
 class BetterHeuristic(CodingProblem):
-    _vars = ["A", "B", "C", "D", "E", "F"]
+    _vars = ["A", "B", "C", "D", "E"]
     _hint =  "Use the agent from the tutorial as a starting point \
-    (`A = 1e6`, `B = 1`, `C = 0`, `D = 0`, `E = -1e2`, `F = -1e4`)."
+    (`A = 1e6`, `B = 1`, `C = 0`, `D = 0`, `E = -1e2`)."
     _solution = CS(
 """# There are many values that can work, but here is one solution
 A = 1e10
@@ -88,14 +87,13 @@ B = 1e4
 C = 1e2
 D = -1
 E = -1e6
-F = -1e8
 """)
-    def check(self, A, B, C, D, E, F):
+    def check(self, A, B, C, D, E):
         random.seed(0)
         def tutorial_agent(obs, config):
-            return my_agent(obs, config, 1e6, 1, 0, 0, -1e2, -1e4)
+            return my_agent(obs, config, 1e6, 1, 0, 0, -1e2)
         def exercise_agent(obs, config):
-            return my_agent(obs, config, A, B, C, D, E, F)
+            return my_agent(obs, config, A, B, C, D, E)
         # C and D are nonzero
         assert C != 0, "`C` must be nonzero."
         assert D != 0, "`D` must be nonzero."
