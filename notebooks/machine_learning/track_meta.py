@@ -31,7 +31,7 @@ notebooks = [
         filename='ex2.ipynb',
         lesson_idx=1,
         type='exercise',
-        scriptid=1258954
+        scriptid=2604739
     ),
     dict(
         filename='tut3.ipynb',
@@ -42,7 +42,7 @@ notebooks = [
         filename='ex3.ipynb',
         lesson_idx=2,
         type='exercise',
-        scriptid=400771
+        scriptid=1404276
     ),
     dict(
         filename='tut4.ipynb',
