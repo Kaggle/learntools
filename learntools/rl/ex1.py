@@ -170,6 +170,7 @@ class SubmissionEx1(CodingProblem):
     _hint = "Follow the instructions to create a submission file."
     _solution = "Follow the instructions to create a submission file."
     _congrats = "Thank you for creating a submission file!"
+    _correct_message = ""
     def check(self):
         assert os.path.exists("./submission.py"), "You do not yet have a submission file."
 
