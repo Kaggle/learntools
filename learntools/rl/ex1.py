@@ -1,5 +1,6 @@
 from learntools.core import *
 import numpy as np
+import os
     
 class MyConfig(object):
     def __init__(self):
