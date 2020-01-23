@@ -157,19 +157,27 @@ or this board: \n
 - the only move that is available to the agent is one where, once played, the opponent can win in the next move.
 """)
 
-class JustSubmitEx1(CodingProblem):
-    _hint = "Follow the instructions to submit your agent to the competition."
-    _solution = "Follow the instructions to submit your agent to the competition."
-    _congrats = "Thank you for submitting your agent to the competition!"
+class CreateAgentEx1(CodingProblem):
+    _hint = "Follow the instructions to create an agent."
+    _solution = "Follow the instructions to create an agent."
+    _congrats = "Thank you for creating an agent!"
     _correct_message = ""
     def check(self):
         pass
+    
+class SubmissionEx1(CodingProblem):
+    _hint = "Follow the instructions to create a submission file."
+    _solution = "Follow the instructions to create a submission file."
+    _congrats = "Thank you for creating a submission file!"
+    def check(self):
+        assert os.path.exists("./submission.py"), "You do not yet have a submission file."
 
 qvars = bind_exercises(globals(), [
     SelectWinning, 
     BlockOpponent, 
     WhyNotOptimal, 
-    JustSubmitEx1
+    CreateAgentEx1,
+    SubmissionEx1
     ],
     var_format='q_{n}',
     )

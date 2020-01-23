@@ -6,7 +6,7 @@ track = dict(
 )
 
 lessons = [ {'topic': topic_name} for topic_name in
-                    ["Let's Play a Game!",
+                    ["Play the Game",
                      "One-Step Lookahead",
                      "N-Step Lookahead",
                      "Deep Reinforcement Learning"
@@ -59,3 +59,6 @@ notebooks = [
         scriptid=-1
         ),
 ]
+
+for nb in notebooks:
+    nb['competition_sources'] = ["connectx"]
