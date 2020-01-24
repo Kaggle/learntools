@@ -1,6 +1,6 @@
 from learntools.core import *
 import numpy as np
-from kaggle_simulations import evaluate
+from kaggle_environments import evaluate
 import random
 
 
@@ -132,10 +132,10 @@ class BothLose(ThoughtExperiment):
                  "from the tutorial (and yet, for this board, it's guaranteed "
                  "to make the wrong decision).")
 
-class JustSubmitEx2(CodingProblem):
-    _hint = "Follow the instructions to submit your agent to the competition."
-    _solution = "Follow the instructions to submit your agent to the competition."
-    _congrats = "Thank you for submitting your agent to the competition!"
+class CreateAgentEx2(CodingProblem):
+    _hint = "Follow the instructions to create an agent."
+    _solution = "Follow the instructions to create an agent."
+    _congrats = "Thank you for creating an agent!"
     _correct_message = ""
     def check(self):
         pass
@@ -143,7 +143,7 @@ class JustSubmitEx2(CodingProblem):
 qvars = bind_exercises(globals(), [
     BetterHeuristic, 
     BothLose,
-    JustSubmitEx2
+    CreateAgentEx2
     ],
     var_format='q_{n}',
     )
