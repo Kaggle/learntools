@@ -213,7 +213,7 @@ class BlackJackProblem(CodingProblem):
 
 
     def check(self, should_hit):
-        raise Uncheckable
+        pass
 
     def is_legacy(self, phit):
         # Check for old call signature of should_hit
