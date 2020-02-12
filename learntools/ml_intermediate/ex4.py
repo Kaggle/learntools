@@ -46,7 +46,7 @@ model = RandomForestRegressor(n_estimators=100, random_state=0)
         assert try_pipeline(categorical_transformer) == True, \
         "`categorical_transformer` is not a valid preprocessor."
 
-        assert type(model) == sklearn.ensemble.forest.RandomForestRegressor, \
+        assert type(model) == sklearn.ensemble.RandomForestRegressor, \
         "Please change `model` to a random forest model with scikit-learn."
 
 
