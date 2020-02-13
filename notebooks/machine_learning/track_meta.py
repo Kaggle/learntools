@@ -1,7 +1,7 @@
 # See also examples/example_track/example_meta.py for a longer, commented example
 track = dict(
     author_username='dansbecker',
-    course_name='Introduction to Machine Learning',
+    course_name='Intro to Machine Learning',
     course_url='https://www.kaggle.com/learn/intro-to-machine-learning'
 )
 
@@ -13,7 +13,7 @@ lessons = [ {'topic': topic_name} for topic_name in
                     'Underfitting and Overfitting',
                     'Random Forests',
                     'Machine Learning Competitions',
-                    'Classification']
+                    'Getting Started with Titanic']
             ]
 
 notebooks = [
@@ -42,7 +42,7 @@ notebooks = [
         filename='ex3.ipynb',
         lesson_idx=2,
         type='exercise',
-        scriptid=1404276
+        scriptid=400771
     ),
     dict(
         filename='tut4.ipynb',
@@ -82,14 +82,9 @@ notebooks = [
         type='exercise',
         scriptid=1259198
         ),
-    dict(filename='tut8.ipynb',
+    dict(filename='tut_titanic.ipynb',
         lesson_idx=7,
         type='tutorial'
-        ),
-    dict(filename='ex8.ipynb',
-        lesson_idx=7,
-        type='exercise',
-        scriptid=3685412
         ),
 ]
 
@@ -102,3 +97,7 @@ for nb in notebooks:
     # ex7 is special case with only comp dataset, to allow submission from kernel
     if nb['filename'] == 'ex7.ipynb':
         nb['dataset_sources'] = []
+        
+    if nb['filename'] == 'tut_titanic.ipynb':
+        nb['dataset_sources'] = []
+        nb['competition_sources'] = ["titanic"]
