@@ -25,8 +25,8 @@ class WhichMove(CodingProblem):
         try: 
             move = int(ans)
         except:
-            assert 1==0, "Your answer should be one of `'1'`, `'2'`, or `'3'`."
-        assert move in [1, 2, 3], "Your answer should be one of `'1'`, `'2'`, or `'3'`."
+            assert 1==0, "Your answer should be one of `1`, `2`, or `3`."
+        assert move in [1, 2, 3], "Your answer should be one of `1`, `2`, or `3`."
         assert move == 3, "{} is incorrect.  Please try again.".format(move)
         
 class Assumptions(ThoughtExperiment):
