@@ -91,6 +91,10 @@ notebooks = [
         type='exercise',
         scriptid=3685412
         ),
+    dict(filename='tut_titanic.ipynb',
+        lesson_idx=8,
+        type='tutorial'
+        ),
 ]
 
 for nb in notebooks:
@@ -102,3 +106,7 @@ for nb in notebooks:
     # ex7 is special case with only comp dataset, to allow submission from kernel
     if nb['filename'] == 'ex7.ipynb':
         nb['dataset_sources'] = []
+        
+    if nb['filename'] == 'tut_titanic.ipynb':
+        nb['dataset_sources'] = []
+        nb['competition_sources'] = ["titanic"]

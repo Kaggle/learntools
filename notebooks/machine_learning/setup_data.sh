@@ -20,7 +20,7 @@ do
     kaggle d download -p $dest --unzip $slug
 done
 
-COMPDATASETS="home-data-for-ml-course"
+COMPDATASETS="home-data-for-ml-course titanic"
 
 for comp in $COMPDATASETS
 do 
