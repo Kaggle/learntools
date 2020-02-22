@@ -1,11 +1,7 @@
 import logging
 
-# TODO XXX: Currently a pretty bad issue where globals binding doesn't work if you
-# don't order imports and call to binder.bind() carefully. Should make sure that
-# gets resolved. Soln might be to set binder.g to some mutable 'set-once' globals
-# wrapper, so that if some obj binds to the result of binder.readonly_globals() before
-# any calls to .bind(), they'll have a reference to (what eventually ends up being) the
-# real deal. bleh.
+# This method captures a reference to the globals dict so it can be seen by checking code
+
 class Binder:
     
     def __init__(self):

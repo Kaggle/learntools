@@ -1,8 +1,4 @@
 from abc import ABC, abstractmethod
-# An annoying limitation of abc is that I can't mark an attribute as abstract, only a property.
-# And I don't want to impose on each problem subclass to go to the work of defining a property for stuff like
-# vars, expected.
-# cf. https://stackoverflow.com/questions/43790040/how-to-create-an-abstract-class-attribute-potentially-read-only
 from typing import List
 import functools
 
@@ -72,17 +68,9 @@ class Problem(ABC):
 
 class ThoughtExperiment(Problem):
 
-    # By default, ThoughtExperiment subclasses have no bearing on progress tracking.
-    _counts_for_points = False
-    
+    show_solution_on_correct = True
     def check(self, *args):
-        # TODO: Would be nice to be able to put the variable name this problem is
-        # bound to here. (If we want to do that, it should probably live up one
-        # level in the ProblemView?)
-        msg = ("Nothing to check! (Just do this one in your head, then"
-                " call `.solution()` to see if your prediction was correct.)")
-        raise Uncheckable(msg)
-
+        pass
 
 # TODO: apply directly to EqualityCheckProblem.check etc.?
 def injected(method):
