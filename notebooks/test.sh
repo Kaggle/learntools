@@ -22,7 +22,7 @@ TMP_DIR=`mktemp -d`
 pip install -q -r requirements.txt
 
 
-TRACKS="deep_learning embeddings pandas python machine_learning sql data_viz_to_coder ml_intermediate sql_advanced feature_engineering geospatial nlp rl"
+TRACKS="deep_learning embeddings pandas python machine_learning sql data_viz_to_coder ml_intermediate sql_advanced feature_engineering geospatial nlp game_ai"
 
 
 for track in $TRACKS
