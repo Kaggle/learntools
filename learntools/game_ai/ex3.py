@@ -30,8 +30,16 @@ class WhichMove(CodingProblem):
         assert move == 3, "{} is incorrect.  Please try again.".format(move)
         
 class Assumptions(ThoughtExperiment):
-    _hint = "hi"
-    _solution = "yo!"
+    _hint = "What happened in the tutorial when the minimax agent played against a random opponent?"
+    _solution = ("We can still expect the minimax agent to perform well. On a high level, "
+                 "assuming an optimal opponent simply overestimates the opponent, but does not "
+                 "break the algorithm.  The effect of overestimating the opponent is merely that "
+                 "the minimax agent will take longer to win, than if it had a more accurate understanding "
+                 "of its opponent.  For instance, the minimax agent is highly unlikely to select the same column "
+                 "three times in "
+                 "its first three moves (since it assumes an optimal opponent that will certainly block the "
+                 "winning play in the next move), but this is not a bad initial strategy for playing against an agent that "
+                 "selects columns completely at random.")
 
 class JustSubmitEx3(CodingProblem):
     _hint = "Follow the instructions to create an agent."
