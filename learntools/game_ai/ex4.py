@@ -6,7 +6,7 @@ class PickBestOption(CodingProblem):
     _correct_message = "If we use a similar network as in the tutorial, the network should output a probability for each possible move."
     def check(self, ans):
         assert ans in ['A', 'B', 'C', 'D'], "Your answer should be one of `'A'`, `'B'`, `'C'`, or `'D'`."
-        assert ans == 'C', "{} is incorrect.  Please try again.".format(move)
+        assert ans == 'C', "{} is incorrect.  Please try again.".format(ans)
     
 class DecideReward(ThoughtExperiment):
     _solution = ("Here's a possible solution - after each move, we give the agent a reward that tells it how well it did:\n"
