@@ -227,7 +227,7 @@ def expert_finder(topic, client):
     # Set up the query (a real service would have good error handling for 
     # queries that scan too much data)
     safe_config = bigquery.QueryJobConfig(maximum_bytes_billed=10**10)      
-    my_query_job = client.query(my_query, job_config=safe_config)
+    my_query_job = client.query(my_query.format(topic=topic), job_config=safe_config)
     
     # API request - run the query, and return a pandas DataFrame
     results = my_query_job.to_dataframe()
