@@ -144,6 +144,11 @@ class CatBoostEncodings(EqualityCheckProblem):
     "encoding and a `.transform` method to apply the encoding. Also note that you'll need to tell it "
     "which columns are categorical variables.")
     _solution = CS("""
+    # remove IP from the encoded features
+    cat_features = ['app', 'device', 'os', 'channel']
+
+    train, valid, test = get_data_splits(clicks)
+    
     # Have to tell it which features are categorical when they aren't strings
     cb_enc = ce.CatBoostEncoder(cols=cat_features, random_state=7)
 
