@@ -55,7 +55,7 @@ class CountEncodings(EqualityCheckProblem):
     "index using `.join` and add suffixes to columns names with `.add_suffix`")
     _solution = CS("""
     # Create the count encoder
-    count_enc = CountEncoder(cols=cat_features)
+    count_enc = ce.CountEncoder(cols=cat_features)
 
     # Learn encoding from the training set
     count_enc.fit(train[cat_features])
