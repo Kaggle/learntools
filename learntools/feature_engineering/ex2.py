@@ -55,7 +55,7 @@ class CountEncodings(EqualityCheckProblem):
     "index using `.join` and add suffixes to columns names with `.add_suffix`")
     _solution = CS("""
     # Create the count encoder
-    count_enc = CountEncoder(cols=cat_features)
+    count_enc = ce.CountEncoder(cols=cat_features)
 
     # Learn encoding from the training set
     count_enc.fit(train[cat_features])
@@ -144,6 +144,11 @@ class CatBoostEncodings(EqualityCheckProblem):
     "encoding and a `.transform` method to apply the encoding. Also note that you'll need to tell it "
     "which columns are categorical variables.")
     _solution = CS("""
+    # remove IP from the encoded features
+    cat_features = ['app', 'device', 'os', 'channel']
+
+    train, valid, test = get_data_splits(clicks)
+    
     # Have to tell it which features are categorical when they aren't strings
     cb_enc = ce.CatBoostEncoder(cols=cat_features, random_state=7)
 
