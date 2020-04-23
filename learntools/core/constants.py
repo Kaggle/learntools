@@ -1,3 +1,5 @@
+# This file defines ____ which we use in courses as a sentinel indicating a user hasn't
+# attempted an exercise.
 
 class PlaceholderValue(object):
 

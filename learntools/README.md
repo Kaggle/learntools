@@ -1,24 +1,6 @@
 `learntools.core` contains the basic elements of exercise checking, shared across all Learn micro-courses and exercises.
 
-The remaining sub-packages correspond to Kaggle Learn courses in various stages of development.
+The course-specific directories subclass ProblemViews from `learntools.core`. Examples of types of ProblemViews are `CodingProblem`, `EqualityCheckProblem` and `ThoughtExperiment`.
 
-## Live
+The `ProblemView` provides an interface that wraps a `learntools.core.Problem`. The interface it provides generally includes `hint()`, `check()` and `solution()` methods. The behavior of these is determined by the values for `var`, `_hint` and `_solution` in the checking code written by the couse author.
 
-The following sub-packages correspond to courses that are live at https://www.kaggle.com/learn/overview
-
-- `deep_learning`
-- `embeddings`
-- `machine_learning`
-- `ml_explainability`
-- `pandas`
-- `python`
-- `time_series_with_siraj`
-
-## In development
-
-- `gans`
-
-## Deprecated
-
-- `advanced_pandas`: Old checking code for the Pandas course (predating the existence of `learntools.core` infrastructure)
-- `ml_insights`: Previous name used (during the 4-day-challenge launch) for what is now `ml_explainability` (this is just a symlink to `ml_explainability`)

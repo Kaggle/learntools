@@ -1,8 +1,8 @@
 # See also examples/example_track/example_meta.py for a longer, commented example
 track = dict(
     author_username='alexisbcook',
-    course_name='Game AI and Reinforcement Learning',
-    course_url='https://www.kaggle.com/learn/game-ai-and-rl'
+    course_name='Intro to Game AI and Reinforcement Learning',
+    course_url='https://www.kaggle.com/learn/intro-to-game-ai-and-reinforcement-learning'
 )
 
 lessons = [ {'topic': topic_name} for topic_name in
@@ -23,7 +23,7 @@ notebooks = [
         filename='ex1.ipynb',
         lesson_idx=0,
         type='exercise',
-        scriptid=-1
+        scriptid=7677818
         ),
     dict(
         filename='tut2.ipynb',
@@ -34,7 +34,7 @@ notebooks = [
         filename='ex2.ipynb',
         lesson_idx=1,
         type='exercise',
-        scriptid=-1
+        scriptid=8139646
         ),
     dict(
         filename='tut3.ipynb',
@@ -45,7 +45,7 @@ notebooks = [
         filename='ex3.ipynb',
         lesson_idx=2,
         type='exercise',
-        scriptid=-1
+        scriptid=8139647
         ),
     dict(
         filename='tut4.ipynb',
@@ -56,7 +56,7 @@ notebooks = [
         filename='ex4.ipynb',
         lesson_idx=3,
         type='exercise',
-        scriptid=-1
+        scriptid=8222487
         ),
 ]
 
