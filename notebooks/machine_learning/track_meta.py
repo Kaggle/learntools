@@ -13,7 +13,7 @@ lessons = [ {'topic': topic_name} for topic_name in
                     'Underfitting and Overfitting',
                     'Random Forests',
                     'Machine Learning Competitions',
-                    'Classification']
+                    'Getting Started with Titanic']
             ]
 
 notebooks = [
@@ -82,17 +82,17 @@ notebooks = [
         type='exercise',
         scriptid=1259198
         ),
-    dict(filename='tut8.ipynb',
-        lesson_idx=7,
-        type='tutorial'
-        ),
-    dict(filename='ex8.ipynb',
-        lesson_idx=7,
-        type='exercise',
-        scriptid=3685412
-        ),
+#    dict(filename='tut8.ipynb',
+#        lesson_idx=7,
+#        type='tutorial'
+#        ),
+#    dict(filename='ex8.ipynb',
+#        lesson_idx=7,
+#        type='exercise',
+#        scriptid=3685412
+#        ),
     dict(filename='tut_titanic.ipynb',
-        lesson_idx=8,
+        lesson_idx=7,
         type='tutorial'
         ),
 ]
