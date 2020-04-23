@@ -108,5 +108,5 @@ for nb in notebooks:
         nb['dataset_sources'] = []
         
     if nb['filename'] == 'tut_titanic.ipynb':
-        nb['dataset_sources'] = []
+        nb['dataset_sources'] = ["dansbecker/melbourne-housing-snapshot"]
         nb['competition_sources'] = ["titanic"]
