@@ -13,7 +13,7 @@ lessons = [ {'topic': topic_name} for topic_name in
                     'Underfitting and Overfitting',
                     'Random Forests',
                     'Machine Learning Competitions',
-                    'Classification']
+                    'Getting Started with Titanic']
             ]
 
 notebooks = [
@@ -82,14 +82,18 @@ notebooks = [
         type='exercise',
         scriptid=1259198
         ),
-    dict(filename='tut8.ipynb',
+#    dict(filename='tut8.ipynb',
+#        lesson_idx=7,
+#        type='tutorial'
+#        ),
+#    dict(filename='ex8.ipynb',
+#        lesson_idx=7,
+#        type='exercise',
+#        scriptid=3685412
+#        ),
+    dict(filename='tut_titanic.ipynb',
         lesson_idx=7,
         type='tutorial'
-        ),
-    dict(filename='ex8.ipynb',
-        lesson_idx=7,
-        type='exercise',
-        scriptid=3685412
         ),
 ]
 
@@ -102,3 +106,7 @@ for nb in notebooks:
     # ex7 is special case with only comp dataset, to allow submission from kernel
     if nb['filename'] == 'ex7.ipynb':
         nb['dataset_sources'] = []
+        
+    if nb['filename'] == 'tut_titanic.ipynb':
+        nb['dataset_sources'] = ["dansbecker/melbourne-housing-snapshot"]
+        nb['competition_sources'] = ["titanic"]
