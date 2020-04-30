@@ -1,8 +1,9 @@
-import math, io
+import math, io, os
 import numpy as np
 import skimage.io
 import matplotlib.pyplot as plt
 import tensorflow as tf
+os.system("pip install --quiet tensorflow-datasets")
 import tensorflow_datasets as tfds
 
 ## Dataset ##
@@ -89,18 +90,6 @@ def _simple_image(filename):
     image = tfds.core.lazy_imports.skimage.img_as_ubyte(image)
     return image
 
-
-## Utilities ##
-
-def show_supervised_examples(ds, rows=4, cols=4):
-    examples = list(tfds.as_numpy(ds.take(rows * cols)))
-    plt.figure(figsize=(15, (15 * rows) // cols))
-    for i, (image, label) in enumerate(examples):
-        plt.subplot(rows, cols, i+1)
-        plt.axis('off')
-        plt.imshow(image)
-        plt.title(label)
-        plt.show()
 
 ## DataGenerator ##
 
@@ -189,7 +178,7 @@ def make_augmentor(# rotation_range=0,
 def apply_affine_transform(x,
                            theta=0, tx=0, ty=0, shear=0, zx=1, zy=1,
                            row_axis=0, col_axis=1, channel_axis=2,
-                           fill_method='replicate', cval=0.,
+                           fill_method='reflect', cval=0.,
                            interpolation_method='nearest'):
     """ Apply an affine transformation to an image x. """
 
@@ -271,16 +260,13 @@ def _get_inverse_affine_transform(theta, tx, ty, shear, zx, zy):
     return transform_matrix
 
 
-def _apply_inverse_affine_transform(A, Ti,
-                      fill_method='replicate',
-                      interpolation_method='nearest'):
-
+def _apply_inverse_affine_transform(A, Ti, fill_method, interpolation_method):
     """Perform an affine transformation of the image A defined by a
 transform whose inverse is Ti. The matrix Ti is assumed to be in
 homogeneous coordinate form.
 
-    Fill methods other than "replicate" and interpolation methods
-    other than "nearest" are not implemented.
+    Available fill methods are "replicate" and "reflect" (default).
+    Available interpolation method is "nearest".
 
     """
     nrows, ncols, _ = A.shape
@@ -324,3 +310,104 @@ def _reflect_index(i, n):
     x = tf.floormod(x-n, 2*n)
     x = tf.abs(x - n)
     return tf.floor(x)
+
+
+## CALLBACKS ##
+
+def exponential_lr(epoch,
+         start_lr = 0.00001,
+         min_lr = 0.00001,
+         max_lr = 0.00005,
+         num_replicas_in_sync = 1,
+         rampup_epochs = 5,
+         sustain_epochs = 0,
+         exp_decay = 0.8):
+    max_lr = max_lr*num_replicas_in_sync
+    def lr(epoch,
+           start_lr,
+           min_lr,
+           max_lr,
+           rampup_epochs,
+           sustain_epochs,
+           exp_decay):
+        # linear increase from start to rampup_epochs
+        if epoch < rampup_epochs:
+            lr = ((max_lr - start_lr) /
+                  rampup_epochs * epoch + start_lr)
+        # constant max_lr during sustain_epochs
+        elif epoch < rampup_epochs + sustain_epochs:
+            lr = max_lr
+        # exponential decay towards min_lr
+        else:
+            lr = ((max_lr - min_lr) *
+                  exp_decay**(epoch - rampup_epochs - sustain_epochs) +
+                  min_lr)
+        return lr
+    return lr(epoch,
+              start_lr,
+              min_lr,
+              max_lr,
+              rampup_epochs,
+              sustain_epochs,
+              exp_decay)
+
+# Use like:
+# exponential_lr_callback = (
+#     tf.keras
+#     .callbacks
+#     .LearningRateScheduler(lambda epoch: exponential_lr(epoch),
+#                            verbose=True)
+# )
+
+
+## AUGMENTATION ##
+
+def show_supervised_examples(ds, rows=4, cols=4):
+    examples = list(tfds.as_numpy(ds.take(rows * cols)))
+    plt.figure(figsize=(15, (15 * rows) // cols))
+    for i, (image, label) in enumerate(examples):
+        plt.subplot(rows, cols, i+1)
+        plt.axis('off')
+        plt.imshow(image)
+        plt.title(label)
+    plt.show()
+
+# def show_feature_maps(image, layer, cols=8, cmap='magma'):
+#     num_images = layer.shape[3]
+#     rows = math.ceil(num_images / cols)
+#     plt.figure(figsize=(15, (15 * rows) // cols))
+#     for channel in range(num_images):
+#         plt.subplot(rows, cols, channel+1)
+#         plt.axis('off')
+#         plt.imshow(layer[0, :, :, channel], cmap=cmap)
+#     plt.subplots_adjust(wspace=None, hspace=0.2)
+#     plt.title(layer.name)
+#     plt.show()
+
+# From Chollet. "Deep Learning with Python"
+def show_feature_maps(model, activations, images_per_row=16, scale_factor=2.0):
+    layer_names = []
+    for layer in model.layers[:8]:
+        layer_names.append(layer.name)
+    for layer_name, layer_activation in zip(layer_names, activations):
+        n_features = layer_activation.shape[-1]
+        size = layer_activation.shape[1]
+        n_cols = n_features // images_per_row
+        display_grid = np.zeros((size * n_cols, images_per_row * size))
+
+        for col in range(n_cols):
+            for row in range(images_per_row):
+                channel_image = layer_activation[0, :, :, col * images_per_row + row]
+                channel_image -= channel_image.mean()
+                channel_image /= channel_image.std()
+                channel_image *= 64
+                channel_image += 128
+                channel_image = np.clip(channel_image, 0, 255).astype('uint8')
+                display_grid[col * size : (col + 1) * size,
+                             row * size : (row + 1) * size] = channel_image
+        scale = 1. / size
+        plt.figure(figsize=(scale * display_grid.shape[1],
+                            scale * display_grid.shape[0]))
+        plt.title(layer_name)
+        plt.grid(False)
+        plt.imshow(display_grid, aspect='auto', cmap='magma')
