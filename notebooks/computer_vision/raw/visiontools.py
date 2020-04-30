@@ -385,9 +385,14 @@ def show_supervised_examples(ds, rows=4, cols=4):
 #     plt.show()
 
 # From Chollet. "Deep Learning with Python"
-def show_feature_maps(model, activations, images_per_row=16, scale_factor=2.0):
+def show_feature_maps(model, activations, layer_index=None, images_per_row=16, scale_factor=2.0):
+    if layer_index is not None:
+        activations = [activations[i] for i in layer_index]
+        layers = [model.layers[i] for i in layer_index]
+    else:
+        layers = model.layers
     layer_names = []
-    for layer in model.layers[:8]:
+    for layer in layers:
         layer_names.append(layer.name)
     for layer_name, layer_activation in zip(layer_names, activations):
         n_features = layer_activation.shape[-1]
@@ -410,4 +415,7 @@ def show_feature_maps(model, activations, images_per_row=16, scale_factor=2.0):
                             scale * display_grid.shape[0]))
         plt.title(layer_name)
         plt.grid(False)
+        plt.axis('off')
         plt.imshow(display_grid, aspect='auto', cmap='magma')
+
+
