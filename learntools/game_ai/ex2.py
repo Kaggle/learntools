@@ -69,9 +69,9 @@ def get_win_percentage(agent1, agent2, n_rounds=50):
     config = {'rows': 6, 'columns': 7, 'inarow': 4}
     outcomes = evaluate("connectx", [agent1, agent2], config, [], n_rounds//2)
     outcomes += [[b,a] for [a,b] in evaluate("connectx", [agent2, agent1], config, [], n_rounds-n_rounds//2)]
-    print("Your Agent's Win Percentage (in 50 game rounds):", np.round(outcomes.count([1,0])/len(outcomes), 2))
-    print("Tutorial Agent's Win Percentage (in 50 game rounds):", np.round(outcomes.count([0,1])/len(outcomes), 2))
-    exercise_agent_win_percentage = np.round(outcomes.count([1,0])/len(outcomes), 2)
+    print("Your Agent's Win Percentage (in 50 game rounds):", np.round(outcomes.count([1,-1])/len(outcomes), 2))
+    print("Tutorial Agent's Win Percentage (in 50 game rounds):", np.round(outcomes.count([-1,1])/len(outcomes), 2))
+    exercise_agent_win_percentage = np.round(outcomes.count([1,-1])/len(outcomes), 2)
     return exercise_agent_win_percentage
 
 ########################################################################
