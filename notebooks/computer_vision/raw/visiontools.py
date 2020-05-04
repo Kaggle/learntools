@@ -360,7 +360,7 @@ def exponential_lr(epoch,
 # )
 
 
-## AUGMENTATION ##
+## VISUALIZATION ##
 
 def show_supervised_examples(ds, rows=4, cols=4):
     examples = list(tfds.as_numpy(ds.take(rows * cols)))
@@ -418,4 +418,77 @@ def show_feature_maps(model, activations, layer_index=None, images_per_row=16, s
         plt.axis('off')
         plt.imshow(display_grid, aspect='auto', cmap='magma')
 
+# Filter Visualization #
 
+def score(image, model):
+    activation = model(image)
+    scr = tf.math.reduce_mean(activation)
+#    scr = tf.image.total_variation(activation)
+    return scr
+
+def deprocess(x):
+    x = x.numpy()
+    x -= x.mean()
+    x /= (x.std() + 1e-5)
+    x *= 0.1
+    
+    x += 0.5
+    x *= np.clip(x, 0, 1)
+    
+    x *= 255
+    x = np.clip(x, 0, 255).astype('uint8')
+    return x
+
+def train(model, image, step_size=0.01):
+    with tf.GradientTape() as t:
+        current_score = score(image, model)
+    grads = t.gradient(current_score, image)
+#    grads /= tf.math.reduce_std(grads) + 1e-8
+    grads /= (tf.math.sqrt(tf.math.reduce_mean(tf.math.square(grads)) + 1e-5))
+    image.assign_add(grads * step_size)
+#    image.assign(tf.clip_by_value(image, -5, 5))
+
+
+def make_blank_image(size, minval=0.45, maxval=0.55, channels=3):
+    # Generate noise as starting input 
+    image = tf.Variable(
+        tf.random.uniform(shape=[1, *size, channels],
+                          minval=minval,
+                          maxval=maxval,
+                          dtype=tf.float32)
+    )
+    return image
+
+def train_filter(base_model, 
+                 layer_name, 
+                 filter_index, 
+                 image,
+                 epochs=500,
+                 step_size=0.01,
+                 log_delta=None,
+                 ):
+    
+    outputs=base_model.get_layer(layer_name).output[:,:,:,filter_index]
+#    outputs=base_model.get_layer(layer_name).output
+    model = tf.keras.Model(inputs=base_model.inputs, outputs=outputs)
+
+    for epoch in range(epochs):
+        current_score = score(image, model)
+        train(model, image, step_size=step_size)
+        if log_delta is not None and epoch % log_delta == 0: 
+            print('Epoch %2d, score=%2.5f' % (epoch, current_score))
+    
+    return image
+
+def get_component_outputs(model, layer, channel=None, neuron=None):
+    if type(layer) is str:
+        layer = model.get_layer(layer)
+    else:
+        layer = model.layers[layer]
+    if channel is None:
+        output = layer.output
+    elif neuron is None:
+        output = layer.output[:, :, :, channel]
+    else:
+        output = layer.output[:, *neuron, channel] # TODO: check x, y
+    return output
