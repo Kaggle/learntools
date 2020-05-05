@@ -43,7 +43,7 @@ class CenteredPrice(EqualityCheckProblem):
 # 5
 class BargainWine(CodingProblem):
     _var = 'bargain_wine'
-    _hint = "The [`idxmax` method](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.Series.idxmax.html) may be useful here."
+    _hint = "The `idxmax` method may be useful here."
     _solution = CS('''\
 bargain_idx = (reviews.points / reviews.price).idxmax()
 bargain_wine = reviews.loc[bargain_idx, 'title']''')
