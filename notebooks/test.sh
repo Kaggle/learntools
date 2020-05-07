@@ -1,19 +1,21 @@
 #!/bin/bash
 #
 # Run automated testing for our notebooks.
-set -e
+#set -e
 set -x
 
 # path to the notebook/ directory.
 DIR=`dirname "${BASH_SOURCE[0]}"`
 # Path to the parent (learntools) dir
 LT=$(readlink -f $DIR/..)
-# Install learntools branch
-pip install $DIR/..
 # The learntools repo is cloned to a read-only location. Various testing steps involve writing,
 # so copy the whole notebooks directory to a writeable location and work from there.
 WORKING_DIR=`mktemp -d`
 cp -r $LT $WORKING_DIR
+
+# Install learntools branch
+pip install $WORKING_DIR/input
+
 cd $WORKING_DIR/input/notebooks
 
 TMP_DIR=`mktemp -d`
