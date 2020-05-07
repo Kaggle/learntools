@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Run automated testing for our notebooks.
-#set -e
+set -e
 set -x
 
 # path to the notebook/ directory.
