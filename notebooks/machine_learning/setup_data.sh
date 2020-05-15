@@ -31,5 +31,18 @@ do
     unzip ${comp}.zip
     chmod 700 *.csv
     cp *.csv ..
+    cd ../..
+done
+
+COMPDATASET="titanic"
+
+for comp in $COMPDATASET
+do 
+    dest="input/$comp"
+    mkdir -p $dest
+    kaggle competitions download $comp -p $dest
+    cd $dest
+    unzip ${comp}.zip
+    chmod 700 *.csv
     cd ..
 done
