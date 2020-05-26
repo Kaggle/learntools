@@ -1,16 +1,27 @@
-import math, io, os
+import math, os
 import numpy as np
-import skimage.io
 import matplotlib.pyplot as plt
 import tensorflow as tf
-os.system("pip install --quiet tensorflow-datasets")
-import tensorflow_datasets as tfds
+import tensorflow.keras.backend as K
+from functools import singledispatch
+
+# TFDS might not be installed
+try:
+    import tensorflow_datasets as tfds
+except:
+    os.system("pip install --quiet tensorflow-datasets")
+    import tensorflow_datasets as tfds
 
 ## Dataset ##
 
 _DATA_OPTIONS = ['simple', 'full']
-_SIMPLE_LABELS = ['Convertible', 'SUV', 'Wagon']
-_SIMPLE_SIZE = (128, 128, 3)
+_SIMPLE_LABELS = ['Car', 'Truck']
+_SIMPLE_LABEL_DICT = {
+    'Sedan': 'Car',
+    'Coupe': 'Car',
+    'Cab': 'Truck',
+    'SUV': 'Truck',
+}
 
 class StanfordCarsConfig(tfds.core.BuilderConfig):
     """BuilderConfig for StanfordCars."""
@@ -31,7 +42,7 @@ class StanfordCars(tfds.image.Cars196):
     BUILDER_CONFIGS = [
         StanfordCarsConfig(
             name='simple',
-            description="Convertibles, SUVs, and Wagons",
+            description="'Cars and Trucks' binary classification.",
             selection='simple',
         ),
         StanfordCarsConfig(
@@ -62,13 +73,14 @@ class StanfordCars(tfds.image.Cars196):
         """Generate examples for simple or full config."""
         if self.builder_config.selection is 'simple':
             for image_name, features in super()._generate_examples(**kwargs):
-                label = features['label'].split(' ')[-2]
                 # names are 'Make Model Type Year'
                 # so get the type of car
-                if label in _SIMPLE_LABELS:
+                label = features['label'].split(' ')[-2]
+                if label in _SIMPLE_LABEL_DICT.keys():
                     features ={
-                        'label': label,
-                        'image': _simple_image(features['image']),
+                        'label': _SIMPLE_LABEL_DICT[label],
+#                        'image': _simple_image(features['image']),
+                        'image': features['image'],
                         'bbox': features['bbox'],
                     }
                     yield image_name, features
@@ -77,62 +89,68 @@ class StanfordCars(tfds.image.Cars196):
         else:
             for x in super()._generate_examples(**kwargs): yield x
 
-
-def _simple_image(filename):
+# Unused right now
+def _simple_image(filename, bbox):
     image = tfds.core.lazy_imports.skimage.io.imread(
         filename,
         as_gray=False,
     )
-    image = tfds.core.lazy_imports.skimage.transform.resize(
-        image=image,
-        output_shape=_SIMPLE_SIZE,
-    )
     image = tfds.core.lazy_imports.skimage.img_as_ubyte(image)
+    image = tf.image.crop_to_bounding_box()
     return image
-
-
-## DataGenerator ##
-
-class ImageDataGenerator():
-    def __init__(self,
-        # featurewise_center=False,
-        # samplewise_center=False,
-        # featurewise_std_normalization=False,
-        # samplewise_std_normalization=False,
-        # zca_whitening=False,
-        # zca_epsilon=1e-06,
-        rotation_range=0,
-        width_shift_range=0.0,
-        height_shift_range=0.0,
-        brightness_range=None,
-        shear_range=0.0,
-        zoom_range=0.0,
-        channel_shift_range=0.0,
-        fill_mode='nearest',
-        cval=0.0,
-        horizontal_flip=False,
-        vertical_flip=False,
-        rescale=None,
-        preprocessing_function=None,
-        validation_split=0.0):
-        pass
 
 
 ## AUGMENTATION ##
 
+def _random_crop_to_bounding_box(image, bbox, min_object_covered=1.0,
+                                aspect_ratio_range=[0.75, 1.33]):
+    bbox = tf.reshape(bbox, [1, 1, -1])
+    # Generate a single distorted bounding box.
+    begin, size, bbox_for_draw = tf.image.sample_distorted_bounding_box(
+            tf.shape(image),
+            bounding_boxes=bbox,
+            min_object_covered=min_object_covered,
+            aspect_ratio_range=aspect_ratio_range)
+    image = tf.slice(image, begin, size)
+    return image
+
 def make_preprocessor(size):
-    def preprocessor(image, label):
+    # Generic
+    @singledispatch
+    def preprocessor(example):
+        raise TypeError
+
+    # Dispatch on supervised examples, type: (image, label)
+    @preprocessor.register(tuple)
+    def _(example: tuple):
+        image, label = example
         # Convert Int to Float and scale from [0, 255] to [0.0, 1.0]
         image = tf.image.convert_image_dtype(image,
                                              dtype=tf.float32)
         # Resize the image to size=[width, height]
         image = tf.image.resize(image,
                                 size=size,
-                                method="nearest",
+                                method='nearest',
                                 preserve_aspect_ratio=False)
         return image, label
+
+    # Dispatch on unsupervised examples with bounding boxes
+    @preprocessor.register(dict)
+    def _(example: dict):
+        image = example['image']
+        bbox = example['bbox']
+        label = example['label']
+        
+        image = tf.image.convert_image_dtype(image, dtype=tf.float32)
+        image = _random_crop_to_bounding_box(image, bbox)
+        image = tf.image.resize_with_pad(image,
+                                         target_height=size[0],
+                                         target_width=size[1],
+                                         method='nearest')
+        return image, label
     return preprocessor
-# TODO - Research aspect ratio. One of Martin's notebooks had one that
+
+# TODO: Research aspect ratio. One of Martin's notebooks had one that
 # preserved aspect ratio through filling.
 
 def make_augmentor(# rotation_range=0,
@@ -307,9 +325,9 @@ homogeneous coordinate form.
 
 def _reflect_index(i, n):
     """Reflect the index i across dimensions [0, n]."""
-    x = tf.floormod(x-n, 2*n)
-    x = tf.abs(x - n)
-    return tf.floor(x)
+    x = tf.math.floormod(x-n, 2*n)
+    x = tf.math.abs(x - n)
+    return tf.math.floor(x)
 
 
 ## CALLBACKS ##
@@ -362,14 +380,80 @@ def exponential_lr(epoch,
 
 ## VISUALIZATION ##
 
-def show_supervised_examples(ds, rows=4, cols=4):
+def show_supervised_examples(ds, ds_info, rows=4, cols=4):
     examples = list(tfds.as_numpy(ds.take(rows * cols)))
     plt.figure(figsize=(15, (15 * rows) // cols))
     for i, (image, label) in enumerate(examples):
         plt.subplot(rows, cols, i+1)
         plt.axis('off')
         plt.imshow(image)
-        plt.title(label)
+        plt.title(ds_info.features['label'].int2str(label))
+    plt.show()
+
+def get_labels(model, dataset,
+               probabilities=None, type='binary'):
+    # Predicted labels
+    if probabilities is None:
+        probabilities = model.predict(dataset)
+    if type is 'binary':
+        predicted_labels = np.rint(probabilities).astype('uint8')
+    elif type is 'sparse':
+        predicted_labels = np.argmax(probabilities, axis=-1).astype('uint8')
+
+    # True labels
+    num_labels = len(probabilities)
+    true_labels = dataset.map(lambda image, label: label)
+    true_labels = next(iter(true_labels.unbatch().batch(num_labels)))
+    true_labels = true_labels.numpy()
+
+    return true_labels, predicted_labels
+    
+def show_predictions(model, dataset, dataset_info):
+    pass
+
+def set_style():
+    # plt.rc('figure', autolayout=True)
+    # plt.rc('axes', labelweight='bold', labelsize='large',
+    #        titleweight='bold', titlesize=22, titlepad=10)
+    # plt.rc('image', cmap='magma')
+    # TODO: def set_style(). create a style dictionary for rcparams
+    pass
+
+def show_extraction(image, kernel):
+# ```kernel = tf.constant([[-1, -1, -1],
+#                       [-1, 8, -1],
+#                       [-1, -1, -1]], dtype=tf.float32)
+
+# show_extraction_backend(image, kernel)```
+    # Format for TF
+    image = tf.expand_dims(image, axis=0)
+    image = tf.image.convert_image_dtype(image, dtype=tf.float32)
+    kernel = tf.reshape(kernel, [*kernel.shape, 1, 1])
+    
+    # Extract Feature
+    image_filter = K.conv2d(image,
+                            kernel=kernel,
+                            strides=1,
+                            dilation_rate=1,
+                            padding='same')
+    image_detect = K.relu(image_filter)
+    image_condense = K.pool2d(image_detect,
+                              pool_size=(2, 2),
+                              padding='same',
+                              pool_mode='max')
+    
+    # Format for plotting
+    images = map(tf.squeeze,
+                [image, image_filter, image_detect, image_condense])
+    images = zip(['Input', 'Filter', 'Detect', 'Condense'], images)
+    
+    # Plot
+    plt.figure(figsize=(14, 14))
+    for i, (title, img) in enumerate(images):
+        plt.subplot(2, 2, i+1)
+        plt.imshow(img)
+        plt.axis('off')
+        plt.title(title)
     plt.show()
 
 # def show_feature_maps(image, layer, cols=8, cmap='magma'):
@@ -417,78 +501,3 @@ def show_feature_maps(model, activations, layer_index=None, images_per_row=16, s
         plt.grid(False)
         plt.axis('off')
         plt.imshow(display_grid, aspect='auto', cmap='magma')
-
-# Filter Visualization #
-
-def score(image, model):
-    activation = model(image)
-    scr = tf.math.reduce_mean(activation)
-#    scr = tf.image.total_variation(activation)
-    return scr
-
-def deprocess(x):
-    x = x.numpy()
-    x -= x.mean()
-    x /= (x.std() + 1e-5)
-    x *= 0.1
-    
-    x += 0.5
-    x *= np.clip(x, 0, 1)
-    
-    x *= 255
-    x = np.clip(x, 0, 255).astype('uint8')
-    return x
-
-def train(model, image, step_size=0.01):
-    with tf.GradientTape() as t:
-        current_score = score(image, model)
-    grads = t.gradient(current_score, image)
-#    grads /= tf.math.reduce_std(grads) + 1e-8
-    grads /= (tf.math.sqrt(tf.math.reduce_mean(tf.math.square(grads)) + 1e-5))
-    image.assign_add(grads * step_size)
-#    image.assign(tf.clip_by_value(image, -5, 5))
-
-
-def make_blank_image(size, minval=0.45, maxval=0.55, channels=3):
-    # Generate noise as starting input 
-    image = tf.Variable(
-        tf.random.uniform(shape=[1, *size, channels],
-                          minval=minval,
-                          maxval=maxval,
-                          dtype=tf.float32)
-    )
-    return image
-
-def train_filter(base_model, 
-                 layer_name, 
-                 filter_index, 
-                 image,
-                 epochs=500,
-                 step_size=0.01,
-                 log_delta=None,
-                 ):
-    
-    outputs=base_model.get_layer(layer_name).output[:,:,:,filter_index]
-#    outputs=base_model.get_layer(layer_name).output
-    model = tf.keras.Model(inputs=base_model.inputs, outputs=outputs)
-
-    for epoch in range(epochs):
-        current_score = score(image, model)
-        train(model, image, step_size=step_size)
-        if log_delta is not None and epoch % log_delta == 0: 
-            print('Epoch %2d, score=%2.5f' % (epoch, current_score))
-    
-    return image
-
-def get_component_outputs(model, layer, channel=None, neuron=None):
-    if type(layer) is str:
-        layer = model.get_layer(layer)
-    else:
-        layer = model.layers[layer]
-    if channel is None:
-        output = layer.output
-    elif neuron is None:
-        output = layer.output[:, :, :, channel]
-    else:
-        output = layer.output[:, *neuron, channel] # TODO: check x, y
-    return output
