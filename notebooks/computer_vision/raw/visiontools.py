@@ -2,7 +2,6 @@ import math, os
 import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
-import tensorflow.keras.backend as K
 from functools import singledispatch
 
 # TFDS might not be installed
@@ -390,6 +389,23 @@ def show_supervised_examples(ds, ds_info, rows=4, cols=4):
         plt.title(ds_info.features['label'].int2str(label))
     plt.show()
 
+def show_kernel(kernel):
+    kernel = np.array(kernel)
+    cmap = plt.get_cmap('Blues_r')
+    plt.imshow(kernel, cmap=cmap)
+    rows, cols = kernel.shape
+    thresh = (kernel.max()+kernel.min())/2
+    for i in range(rows):
+        for j in range(cols):
+            val = kernel[i, j]
+            color = cmap(0) if val > thresh else cmap(255)
+            plt.text(j, i, val, 
+                     color=color, size=28,
+                     horizontalalignment='center', verticalalignment='center')
+    plt.xticks([])
+    plt.yticks([])
+    plt.show()
+
 def get_labels(model, dataset,
                probabilities=None, type='binary'):
     # Predicted labels
@@ -419,28 +435,32 @@ def set_style():
     # TODO: def set_style(). create a style dictionary for rcparams
     pass
 
-def show_extraction(image, kernel):
-# ```kernel = tf.constant([[-1, -1, -1],
-#                       [-1, 8, -1],
-#                       [-1, -1, -1]], dtype=tf.float32)
 
-# show_extraction_backend(image, kernel)```
+def show_extraction(image, kernel):
+    # Create Layers
+    model = tf.keras.Sequential([
+                    tf.keras.layers.Conv2D(filters=1,
+                                  kernel_size=3,
+                                  padding='same',
+                                  use_bias=False,
+                                  input_shape=image.shape),
+                    tf.keras.layers.Activation('relu'),
+                    tf.keras.layers.MaxPool2D(pool_size=2,
+                                     padding='same'),
+                   ])
+
+    layer_filter, layer_detect, layer_condense = model.layers
+    kernel = tf.reshape(kernel, [*kernel.shape, 1, 1])
+    layer_filter.set_weights([kernel])
+
     # Format for TF
     image = tf.expand_dims(image, axis=0)
-    image = tf.image.convert_image_dtype(image, dtype=tf.float32)
-    kernel = tf.reshape(kernel, [*kernel.shape, 1, 1])
+    image = tf.image.convert_image_dtype(image, dtype=tf.float32) 
     
     # Extract Feature
-    image_filter = K.conv2d(image,
-                            kernel=kernel,
-                            strides=1,
-                            dilation_rate=1,
-                            padding='same')
-    image_detect = K.relu(image_filter)
-    image_condense = K.pool2d(image_detect,
-                              pool_size=(2, 2),
-                              padding='same',
-                              pool_mode='max')
+    image_filter = layer_filter(image)
+    image_detect = layer_detect(image_filter)
+    image_condense = layer_condense(image_detect)
     
     # Format for plotting
     images = map(tf.squeeze,
@@ -448,7 +468,7 @@ def show_extraction(image, kernel):
     images = zip(['Input', 'Filter', 'Detect', 'Condense'], images)
     
     # Plot
-    plt.figure(figsize=(14, 14))
+    plt.figure(figsize=(10, 10))
     for i, (title, img) in enumerate(images):
         plt.subplot(2, 2, i+1)
         plt.imshow(img)
