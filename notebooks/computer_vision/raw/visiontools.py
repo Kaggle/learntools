@@ -435,18 +435,46 @@ def set_style():
     # TODO: def set_style(). create a style dictionary for rcparams
     pass
 
+def extract_feature(image, kernel, pool_size=2):
+    model = tf.keras.Sequential([
+        tf.keras.layers.Conv2D(filters=1,
+                               kernel_size=kernel.shape,
+                               padding='same',
+                               use_bias=False,
+                               input_shape=image.shape),
+        tf.keras.layers.Activation('relu'),
+        tf.keras.layers.MaxPool2D(pool_size=,
+                                  padding='same'),
+    ])
 
-def show_extraction(image, kernel):
+    layer_filter, layer_detect, layer_condense = model.layers
+    kernel = tf.reshape(kernel, [*kernel.shape, 1, 1])
+    layer_filter.set_weights([kernel])
+
+    # Format for TF
+    image = tf.expand_dims(image, axis=0)
+    image = tf.image.convert_image_dtype(image, dtype=tf.float32) 
+    
+    # Extract Feature
+    image_filter = layer_filter(image)
+    image_detect = layer_detect(image_filter)
+    image_condense = layer_condense(image_detect)
+    return tf.squeeze(image_condense, axis=0)
+
+
+def show_extraction(image, kernel,
+                    figsize=(10, 10),
+                    ops=['Input', 'Filter', 'Detect', 'Condense']):
     # Create Layers
     model = tf.keras.Sequential([
                     tf.keras.layers.Conv2D(filters=1,
-                                  kernel_size=3,
+                                  kernel_size=kernel.shape,
                                   padding='same',
                                   use_bias=False,
                                   input_shape=image.shape),
                     tf.keras.layers.Activation('relu'),
                     tf.keras.layers.MaxPool2D(pool_size=2,
-                                     padding='same'),
+                                              padding='same'),
                    ])
 
     layer_filter, layer_detect, layer_condense = model.layers
@@ -468,7 +496,7 @@ def show_extraction(image, kernel):
     images = zip(['Input', 'Filter', 'Detect', 'Condense'], images)
     
     # Plot
-    plt.figure(figsize=(10, 10))
+    plt.figure(figsize=figsize)
     for i, (title, img) in enumerate(images):
         plt.subplot(2, 2, i+1)
         plt.imshow(img)
@@ -476,48 +504,27 @@ def show_extraction(image, kernel):
         plt.title(title)
     plt.show()
 
-# def show_feature_maps(image, layer, cols=8, cmap='magma'):
-#     num_images = layer.shape[3]
-#     rows = math.ceil(num_images / cols)
-#     plt.figure(figsize=(15, (15 * rows) // cols))
-#     for channel in range(num_images):
-#         plt.subplot(rows, cols, channel+1)
-#         plt.axis('off')
-#         plt.imshow(layer[0, :, :, channel], cmap=cmap)
-#     plt.subplots_adjust(wspace=None, hspace=0.2)
-#     plt.title(layer.name)
-#     plt.show()
+def show_feature_maps(image, model, layer_name,
+                      rows=3, cols=3, width=12,
+                      gamma=0.5):
+    
+    outputs = model.get_layer(layer_name).output
+    activation_model = tf.keras.Model(inputs=model.input,
+                                      outputs=outputs)
+    feature_maps = activation_model(tf.expand_dims(image, axis=0))
 
-# From Chollet. "Deep Learning with Python"
-def show_feature_maps(model, activations, layer_index=None, images_per_row=16, scale_factor=2.0):
-    if layer_index is not None:
-        activations = [activations[i] for i in layer_index]
-        layers = [model.layers[i] for i in layer_index]
-    else:
-        layers = model.layers
-    layer_names = []
-    for layer in layers:
-        layer_names.append(layer.name)
-    for layer_name, layer_activation in zip(layer_names, activations):
-        n_features = layer_activation.shape[-1]
-        size = layer_activation.shape[1]
-        n_cols = n_features // images_per_row
-        display_grid = np.zeros((size * n_cols, images_per_row * size))
-
-        for col in range(n_cols):
-            for row in range(images_per_row):
-                channel_image = layer_activation[0, :, :, col * images_per_row + row]
-                channel_image -= channel_image.mean()
-                channel_image /= channel_image.std()
-                channel_image *= 64
-                channel_image += 128
-                channel_image = np.clip(channel_image, 0, 255).astype('uint8')
-                display_grid[col * size : (col + 1) * size,
-                             row * size : (row + 1) * size] = channel_image
-        scale = 1. / size
-        plt.figure(figsize=(scale * display_grid.shape[1],
-                            scale * display_grid.shape[0]))
-        plt.title(layer_name)
-        plt.grid(False)
-        plt.axis('off')
-        plt.imshow(display_grid, aspect='auto', cmap='magma')
+    if rows is None:
+        num_features = feature_maps.shape[3]
+        rows = math.ceil(num_features / cols)
+    
+    gs = gridspec.GridSpec(rows, cols, wspace=0.01, hspace=0.01)
+    plt.figure(figsize=(width, (width * rows) / cols))
+    for i in range(rows):
+        for j in range(cols):
+            plt.subplot(gs[i, j])
+            plt.imshow(
+                tf.image.adjust_gamma(
+                    feature_maps[0][:,:,i+j*cols],
+                    gamma,
+                ))
+            plt.axis('off')
