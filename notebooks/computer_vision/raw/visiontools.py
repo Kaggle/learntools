@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
 from functools import singledispatch
+from matplotlib import gridspec
 
 # TFDS might not be installed
 try:
@@ -387,7 +388,6 @@ def show_supervised_examples(ds, ds_info, rows=4, cols=4):
         plt.axis('off')
         plt.imshow(image)
         plt.title(ds_info.features['label'].int2str(label))
-    plt.show()
 
 def show_kernel(kernel):
     kernel = np.array(kernel)
@@ -404,7 +404,6 @@ def show_kernel(kernel):
                      horizontalalignment='center', verticalalignment='center')
     plt.xticks([])
     plt.yticks([])
-    plt.show()
 
 def get_labels(model, dataset,
                probabilities=None, type='binary'):
@@ -443,7 +442,7 @@ def extract_feature(image, kernel, pool_size=2):
                                use_bias=False,
                                input_shape=image.shape),
         tf.keras.layers.Activation('relu'),
-        tf.keras.layers.MaxPool2D(pool_size=,
+        tf.keras.layers.MaxPool2D(pool_size=pool_size,
                                   padding='same'),
     ])
 
@@ -502,7 +501,7 @@ def show_extraction(image, kernel,
         plt.imshow(img)
         plt.axis('off')
         plt.title(title)
-    plt.show()
+
 
 def show_feature_maps(image, model, layer_name,
                       rows=3, cols=3, width=12,
