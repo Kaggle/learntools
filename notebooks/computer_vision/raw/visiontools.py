@@ -14,7 +14,7 @@ except:
 
 ## Dataset ##
 
-_DATA_OPTIONS = ['simple', 'full']
+_DATA_OPTIONS = ['simple', 'full', 'simple_2']
 _SIMPLE_LABELS = ['Car', 'Truck']
 _SIMPLE_LABEL_DICT = {
     'Sedan': 'Car',
@@ -22,6 +22,7 @@ _SIMPLE_LABEL_DICT = {
     'Cab': 'Truck',
     'SUV': 'Truck',
 }
+_SIMPLE_2_LABELS = ['Convertible', 'Wagon']
 
 class StanfordCarsConfig(tfds.core.BuilderConfig):
     """BuilderConfig for StanfordCars."""
@@ -50,6 +51,12 @@ class StanfordCars(tfds.image.Cars196):
             description="Full version",
             selection='full',
         ),
+        StanfordCarsConfig(
+            name='simple_2',
+            description="'Hatchback or Wagon' binary classification.",
+            selection='simple_2',
+        ),
+        
     ]
     def _info(self):
         """Define the dataset info."""
@@ -66,6 +73,19 @@ class StanfordCars(tfds.image.Cars196):
                 homepage=ds_info.homepage,
                 citation=ds_info.citation,
             )
+        if self.builder_config.selection is 'simple_2':
+            ds_info = super()._info()
+            features_dict = ds_info.features._feature_dict
+            features_dict['label'] = tfds.features.ClassLabel(names=_SIMPLE_2_LABELS)
+            features = tfds.features.FeaturesDict(features_dict)
+            return tfds.core.DatasetInfo(
+                builder=self,
+                description=ds_info.description,
+                features=features,
+                supervised_keys=ds_info.supervised_keys,
+                homepage=ds_info.homepage,
+                citation=ds_info.citation,
+            )        
         else:
             return super()._info()
 
@@ -86,6 +106,20 @@ class StanfordCars(tfds.image.Cars196):
                     yield image_name, features
                 else:
                     pass
+        if self.builder_config.selection is 'simple_2':
+            for image_name, features in super()._generate_examples(**kwargs):
+                # names are 'Make Model Type Year'
+                # so get the type of car
+                label = features['label'].split(' ')[-2]
+                if label in _SIMPLE_2_LABELS:
+                    features ={
+                        'label': label,
+                        'image': features['image'],
+                        'bbox': features['bbox'],
+                    }
+                    yield image_name, features
+                else:
+                    pass                
         else:
             for x in super()._generate_examples(**kwargs): yield x
 
