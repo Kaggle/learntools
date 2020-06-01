@@ -8,20 +8,18 @@ track = dict(
 lessons = [
         dict(
             # By convention, this should be a lowercase noun-phrase.
-            topic='First Notebook',
+            topic='Testing',
             ),
 ]
 
 notebooks = [
     dict(
-        filename='computer_vision.ipynb',
+        filename='test.ipynb',
         lesson_idx=0,
-        type='tutorial',
+        type='exercise',
         scriptid=1,
         ),
 ]
 
 for nb in notebooks:
     nb['dataset_sources'] = ["ryanholbrook/stanford-cars-for-learn"]
-
-
