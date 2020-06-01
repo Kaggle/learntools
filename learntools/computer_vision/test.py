@@ -43,8 +43,8 @@ variable_1 = 3
         print("Checking your answer.")
         your_answer = function_1(variable_1)
         assert (your_answer is not None), ("You didn't return an answer!")
-        assert (your_answer < 4), ("{} is too small!".format(your_answer))
-        assert (your_answer > 4), ("{} is too big!".format(your_answer))
+        assert (your_answer-1 < 4), ("{} is too big!".format(your_answer))
+        assert (your_answer+1 > 4), ("{} is too small!".format(your_answer))
         print("The value of `correct_answer` is {}.".format(correct_answer))
 
 
