@@ -55,10 +55,9 @@ class Q5B(FunctionProblem):
 Q5 = MultipartProblem(Q5A, Q5B)
 
 
-qvars = bind_exercises(
-    globals(), [
+qvars = bind_exercises(globals(), [
         Q1, Q2, Q3, Q4, Q5,
     ],
-    var_format='q_(n)',
+    var_format='q_{n}',
 )
 __all__ = list(qvars)
