@@ -9,7 +9,8 @@ lessons = [ {'topic': topic_name} for topic_name in
                     ["Play the Game",
                      "One-Step Lookahead",
                      "N-Step Lookahead",
-                     "Deep Reinforcement Learning"
+                     "Deep Reinforcement Learning",
+                     "Getting Started with Halite"
                      ]
             ]
 
@@ -58,7 +59,15 @@ notebooks = [
         type='exercise',
         scriptid=8222487
         ),
+    dict(
+        filename='tut5.ipynb',
+        lesson_idx=4,
+        type='tutorial',
+        ),
 ]
 
 for nb in notebooks:
-    nb['competition_sources'] = ["connectx"]
+    if "tut5" not in nb['filename']:
+        nb['competition_sources'] = ["connectx"]
+    else:
+        nb['competition_sources'] = ["halite"]
