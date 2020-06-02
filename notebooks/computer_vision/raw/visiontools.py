@@ -14,7 +14,7 @@ except:
 
 ## Dataset ##
 
-_DATA_OPTIONS = ['simple', 'full', 'simple_2']
+_DATA_OPTIONS = ['full', 'simple', 'simple_complement']
 _SIMPLE_LABELS = ['Car', 'Truck']
 _SIMPLE_LABEL_DICT = {
     'Sedan': 'Car',
@@ -22,7 +22,6 @@ _SIMPLE_LABEL_DICT = {
     'Cab': 'Truck',
     'SUV': 'Truck',
 }
-_SIMPLE_2_LABELS = ['Convertible', 'Wagon']
 
 class StanfordCarsConfig(tfds.core.BuilderConfig):
     """BuilderConfig for StanfordCars."""
@@ -52,9 +51,9 @@ class StanfordCars(tfds.image.Cars196):
             selection='full',
         ),
         StanfordCarsConfig(
-            name='simple_2',
+            name='simple_complement',
             description="'Hatchback or Wagon' binary classification.",
-            selection='simple_2',
+            selection='simple_complement',
         ),
         
     ]
@@ -73,10 +72,12 @@ class StanfordCars(tfds.image.Cars196):
                 homepage=ds_info.homepage,
                 citation=ds_info.citation,
             )
-        if self.builder_config.selection is 'simple_2':
+        if self.builder_config.selection is 'simple_complement':
             ds_info = super()._info()
             features_dict = ds_info.features._feature_dict
-            features_dict['label'] = tfds.features.ClassLabel(names=_SIMPLE_2_LABELS)
+            names = [label for label in ds_info.features['label'].names
+                     if label.split(' ')[-2] not in _SIMPLE_LABEL_DICT]
+            features_dict['label'] = tfds.features.ClassLabel(names=names)
             features = tfds.features.FeaturesDict(features_dict)
             return tfds.core.DatasetInfo(
                 builder=self,
@@ -96,7 +97,7 @@ class StanfordCars(tfds.image.Cars196):
                 # names are 'Make Model Type Year'
                 # so get the type of car
                 label = features['label'].split(' ')[-2]
-                if label in _SIMPLE_LABEL_DICT.keys():
+                if label in _SIMPLE_LABEL_DICT:
                     features ={
                         'label': _SIMPLE_LABEL_DICT[label],
 #                        'image': _simple_image(features['image']),
@@ -106,14 +107,14 @@ class StanfordCars(tfds.image.Cars196):
                     yield image_name, features
                 else:
                     pass
-        if self.builder_config.selection is 'simple_2':
+        if self.builder_config.selection is 'simple_complement':
             for image_name, features in super()._generate_examples(**kwargs):
                 # names are 'Make Model Type Year'
                 # so get the type of car
                 label = features['label'].split(' ')[-2]
-                if label in _SIMPLE_2_LABELS:
+                if label not in _SIMPLE_LABEL_DICT:
                     features ={
-                        'label': label,
+                        'label': features['label'],
                         'image': features['image'],
                         'bbox': features['bbox'],
                     }
