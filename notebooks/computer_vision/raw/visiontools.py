@@ -498,6 +498,7 @@ def extract_feature(image, kernel, pool_size=2):
 
 def show_extraction(image, kernel,
                     figsize=(10, 10),
+                    subplot_shape=(2, 2),
                     ops=['Input', 'Filter', 'Detect', 'Condense']):
     # Create Layers
     model = tf.keras.Sequential([
@@ -532,7 +533,7 @@ def show_extraction(image, kernel,
     # Plot
     plt.figure(figsize=figsize)
     for i, (title, img) in enumerate(images):
-        plt.subplot(2, 2, i+1)
+        plt.subplot(*subplot_shape, i+1)
         plt.imshow(img)
         plt.axis('off')
         plt.title(title)
