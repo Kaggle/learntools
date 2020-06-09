@@ -503,20 +503,33 @@ def extract_feature(image, kernel, pool_size=2):
     image_condense = layer_condense(image_detect)
     return tf.squeeze(image_condense, axis=0)
 
-def show_extraction(image, kernel,
+def show_extraction(image,
+                    kernel,
+                    conv_stride=1,
+                    activation='relu',
+                    pool_size=2,
+                    pool_stride=2,
+                    padding='same',
                     figsize=(10, 10),
                     subplot_shape=(2, 2),
-                    ops=['Input', 'Filter', 'Detect', 'Condense']):
+                    ops=['Input', 'Filter', 'Detect', 'Condense'],
+                    gamma=1.0):
     # Create Layers
     model = tf.keras.Sequential([
-                    tf.keras.layers.Conv2D(filters=1,
-                                  kernel_size=kernel.shape,
-                                  padding='same',
-                                  use_bias=False,
-                                  input_shape=image.shape),
-                    tf.keras.layers.Activation('relu'),
-                    tf.keras.layers.MaxPool2D(pool_size=2,
-                                              padding='same'),
+                    tf.keras.layers.Conv2D(
+                        filters=1,
+                        kernel_size=kernel.shape,
+                        strides=conv_stride,
+                        padding=padding,
+                        use_bias=False,
+                        input_shape=image.shape,
+                    ),
+                    tf.keras.layers.Activation(activation),
+                    tf.keras.layers.MaxPool2D(
+                        pool_size=pool_size,
+                        strides=pool_stride,
+                        padding='same',
+                    ),
                    ])
 
     layer_filter, layer_detect, layer_condense = model.layers
@@ -538,16 +551,16 @@ def show_extraction(image, kernel,
     if 'Filter' in ops:
         images.update({'Filter': (image_filter, 1.0)})
     if 'Detect' in ops:
-        images.update({'Detect': (image_detect, 0.5)})
+        images.update({'Detect': (image_detect, gamma)})
     if 'Condense' in ops:
-        images.update({'Condense': (image_condense, 0.5)})
+        images.update({'Condense': (image_condense, gamma)})
     
     # Plot
     plt.figure(figsize=figsize)
     for i, title in enumerate(ops):
-        img, g = images[title]
+        image, gamma = images[title]
         plt.subplot(*subplot_shape, i+1)
-        plt.imshow(tf.image.adjust_gamma(tf.squeeze(img), g))
+        plt.imshow(tf.image.adjust_gamma(tf.squeeze(image), gamma))
         plt.axis('off')
         plt.title(title)
 
