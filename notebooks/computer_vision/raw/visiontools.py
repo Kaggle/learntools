@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
 from functools import singledispatch
+from itertools import product
 from matplotlib import gridspec
 
 # TFDS might not be installed
@@ -22,6 +23,14 @@ _SIMPLE_LABEL_DICT = {
     'Cab': 'Truck',
     'SUV': 'Truck',
 }
+_SIMPLE_COMPLEMENT_LABELS = [
+    'Hatchback',
+    'Convertible',
+    'Wagon',
+    'Minivan',
+    'Van',
+]
+
 
 class StanfordCarsConfig(tfds.core.BuilderConfig):
     """BuilderConfig for StanfordCars."""
@@ -52,7 +61,7 @@ class StanfordCars(tfds.image.Cars196):
         ),
         StanfordCarsConfig(
             name='simple_complement',
-            description="'Hatchback or Wagon' binary classification.",
+            description="Everything else.",
             selection='simple_complement',
         ),
         
@@ -75,9 +84,7 @@ class StanfordCars(tfds.image.Cars196):
         if self.builder_config.selection is 'simple_complement':
             ds_info = super()._info()
             features_dict = ds_info.features._feature_dict
-            names = [label for label in ds_info.features['label'].names
-                     if label.split(' ')[-2] not in _SIMPLE_LABEL_DICT]
-            features_dict['label'] = tfds.features.ClassLabel(names=names)
+            features_dict['label'] = tfds.features.ClassLabel(names=_SIMPLE_COMPLEMENT_LABELS)
             features = tfds.features.FeaturesDict(features_dict)
             return tfds.core.DatasetInfo(
                 builder=self,
@@ -112,15 +119,16 @@ class StanfordCars(tfds.image.Cars196):
                 # names are 'Make Model Type Year'
                 # so get the type of car
                 label = features['label'].split(' ')[-2]
-                if label not in _SIMPLE_LABEL_DICT:
+                if label in _SIMPLE_COMPLEMENT_LABELS:
                     features ={
-                        'label': features['label'],
+                        'label': label,
+#                        'image': _simple_image(features['image']),
                         'image': features['image'],
                         'bbox': features['bbox'],
                     }
                     yield image_name, features
                 else:
-                    pass                
+                    pass
         else:
             for x in super()._generate_examples(**kwargs): yield x
 
@@ -495,7 +503,6 @@ def extract_feature(image, kernel, pool_size=2):
     image_condense = layer_condense(image_detect)
     return tf.squeeze(image_condense, axis=0)
 
-
 def show_extraction(image, kernel,
                     figsize=(10, 10),
                     subplot_shape=(2, 2),
@@ -525,20 +532,26 @@ def show_extraction(image, kernel,
     image_detect = layer_detect(image_filter)
     image_condense = layer_condense(image_detect)
     
-    # Format for plotting
-    images = map(tf.squeeze,
-                [image, image_filter, image_detect, image_condense])
-    images = zip(['Input', 'Filter', 'Detect', 'Condense'], images)
+    images = {}
+    if 'Input' in ops:
+        images.update({'Input': (image, 1.0)})
+    if 'Filter' in ops:
+        images.update({'Filter': (image_filter, 1.0)})
+    if 'Detect' in ops:
+        images.update({'Detect': (image_detect, 0.5)})
+    if 'Condense' in ops:
+        images.update({'Condense': (image_condense, 0.5)})
     
     # Plot
     plt.figure(figsize=figsize)
-    for i, (title, img) in enumerate(images):
+    for i, title in enumerate(ops):
+        img, g = images[title]
         plt.subplot(*subplot_shape, i+1)
-        plt.imshow(img)
+        plt.imshow(tf.image.adjust_gamma(tf.squeeze(img), g))
         plt.axis('off')
         plt.title(title)
 
-
+        
 def show_feature_maps(image, model, layer_name,
                       rows=3, cols=3, width=12,
                       gamma=0.5):
@@ -563,3 +576,139 @@ def show_feature_maps(image, model, layer_name,
                     gamma,
                 ))
             plt.axis('off')
+
+
+# Filter Visualization #
+
+def random_transform(image, jitter, rotate, scale, fill_method):
+    jx = tf.random.uniform([], -jitter, jitter)
+    jy = tf.random.uniform([], -jitter, jitter)
+    r = tf.random.uniform([], -rotate, rotate)
+    s = tf.random.uniform([], 1.0, scale)
+    image = apply_affine_transform(image,
+                                   theta=r,
+                                   tx=jx, ty=jy,
+                                   zx=s, zy=s,
+                                   fill_method=fill_method)
+    return image
+
+def score(image, model):
+    image = tf.squeeze(image)
+    image = random_transform(image,
+                             jitter=10, scale=1.2,
+                             rotate=1.0,
+                             fill_method='reflect')
+    image = tf.expand_dims(image, 0)
+    activation = model(image)    
+    scr = tf.math.reduce_mean(activation)
+    return scr
+
+def deprocess(image):
+    image = image.numpy()
+    image -= image.mean()
+    image /= (image.std() + 1e-5)
+    image *= 0.15
+    
+    # Center crop
+    image = image[25:-25, 25:-25, :]
+    
+    # Clip to [0, 1]
+    image += 0.5
+    image *= np.clip(image, 0, 1)
+    
+    # Convert to RGB array
+    image *= 255
+    image = np.clip(image, 0, 255).astype('uint8')
+    return image
+
+def normalize_gradients(grads, method='l2'):
+    if method is 'l2':
+        grads = tf.math.l2_normalize(grads)
+    elif method is 'std':
+        grads /= tf.math.reduce_std(grads) + 1e-8
+    elif method is 'rms':
+        grads /= (tf.math.sqrt(tf.math.reduce_mean(tf.math.square(grads)) + 1e-5))
+    return grads
+
+def train(model, image, step_size):
+    with tf.GradientTape() as t:
+        current_score = score(image, model)
+    grads = t.gradient(current_score, image)
+    grads = normalize_gradients(grads)
+    image.assign_add(grads * step_size)
+#    image.assign(tf.clip_by_value(image, -5, 5))
+    return current_score, image
+
+
+def initialize_image(size, minval=-0.125, maxval=0.125):
+    # image = (np.random.random((1, *size, 3)) * 20 + 128) / 255
+    image = tf.random.uniform(shape=[1, *size, 3], 
+                              minval=minval, maxval=maxval, 
+                              dtype=tf.float32)
+    return tf.Variable(image, dtype=tf.float32, trainable=True)
+
+
+def visualize_filter(base_model, 
+                     layer_name, 
+                     filter_index=None,
+                     size=[200, 200],
+                     epochs=50,
+                     step_size=10,
+                     log=True,
+                    ):
+
+    image = initialize_image(size)
+    
+    if filter_index is None:
+        outputs = base_model.get_layer(layer_name).output
+    else:
+        outputs = base_model.get_layer(layer_name).output[:,:,:,filter_index]
+    model = tf.keras.Model(inputs=base_model.inputs, outputs=outputs)
+
+    for epoch in range(epochs):
+        current_score, image = train(model, image, step_size=step_size)
+        if log and epoch % 100 == 0: 
+            print('Epoch %2d, score=%2.5f' % (epoch, current_score))
+
+    return deprocess(tf.squeeze(image))
+
+
+def show_filters(model, layer_name,
+                 rows=3, cols=3, width=12,
+                 **kwargs):
+    gs = gridspec.GridSpec(rows, cols, wspace=0.01, hspace=0.01)
+    plt.figure(figsize=(width, (width * rows) / cols))
+    for f, (r, c) in enumerate(product(range(rows), range(cols))):
+        filter_viz = visualize_filter(model, layer_name, **kwargs)
+        plt.subplot(gs[r, c])
+        plt.imshow(filter_viz)
+        plt.axis('off')
+
+
+# Features and Images #
+
+def show_image(image):
+    pass #TODO
+
+def two_dots(size, x=3, y=5):
+    two_dots = np.zeros(size)
+    two_dots[x, y] = 1
+    two_dots[y, x] = 1
+    return two_dots
+        
+def circle(size, val=None):
+    circle = np.zeros([size[0]+1, size[1]+1])
+    rr, cc = draw.circle_perimeter(
+        size[0]//2, size[1]//2,
+        radius=size[0]//2,
+        shape=[size[0]+1, size[1]+1],
+    )
+    if val is None:
+        circle[rr, cc] = np.random.uniform(size=circle.shape)[rr, cc]
+    else:
+        circle[rr, cc] = 1.0
+    circle = transform.resize(circle, size, order=0)
+    return circle
+
+
+
