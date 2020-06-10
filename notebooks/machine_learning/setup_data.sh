@@ -34,7 +34,7 @@ do
     cd ../..
 done
 
-COMPDATASET="titanic"
+COMPDATASET="titanic new-york-city-taxi-fare-prediction house-prices-advanced-regression-techniques"
 
 for comp in $COMPDATASET
 do 
@@ -44,5 +44,16 @@ do
     cd $dest
     unzip ${comp}.zip
     chmod 700 *.csv
-    cd ..
+    cd ../..
 done
+
+SCRIPTS="alexisbcook/automl-tables-wrapper"
+
+for script in $SCRIPTS
+do
+    name=`echo $script | cut -d '/' -f 2`
+    dest="usr/lib"
+    mkdir -p $dest
+    kaggle kernels pull $script -p $dest
+done
+    
