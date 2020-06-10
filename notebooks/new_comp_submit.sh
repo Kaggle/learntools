@@ -1,13 +1,14 @@
 #!/bin/bash
 
-# Need to first update the macro at
+# Need to first update the macro 
 # Then run this file.
 
 set -e
 
-# ex 7
+# ex 7, ex automl
 python prepare_push.py machine_learning
 kaggle k push -p machine_learning/prod/kernels_api_metadata/ex7
+kaggle k push -p machine_learning/prod/kernels_api_metadata/ex_automl
 
 # ex1, ex2, ex3, ex4
 python prepare_push.py ml_intermediate
