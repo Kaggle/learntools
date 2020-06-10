@@ -125,9 +125,9 @@ for nb in notebooks:
         
     if nb['filename'] == 'tut_automl.ipynb':
         nb['competition_sources'] = ["new-york-city-taxi-fare-prediction"]
-        nb['dataset_sources'] = []
+        nb['kernel_sources'] = ['alexisbcook/automl-tables-wrapper']
         
     if nb['filename'] == 'ex_automl.ipynb':
         nb['competition_sources'] = ["house-prices-advanced-regression-techniques"]
-        nb['dataset_sources'] = []
+        nb['kernel_sources'] = ['alexisbcook/automl-tables-wrapper']
     
