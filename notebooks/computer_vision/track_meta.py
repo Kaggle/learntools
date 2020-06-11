@@ -1,4 +1,3 @@
-# See also examples/example_track/track_meta.py for a longer, commented example
 track = dict(
     author_username='ryanholbrook',
     course_name='Computer Vision',
@@ -6,32 +5,41 @@ track = dict(
 )
 
 TOPICS = [
-    ('The Convolutional Classifier', 1),
-    ('Convnet Architecture', 2),
-    ('Filter, Detect, Condense', 3),
-    ('Convolution and Pooling', 4),
-    # ('Exploring Convnets', 5),
-    ('Transfer Learning', 6),
-    ('Data Augmentation', 7),
+    'The Convolutional Classifier',
+    'Convnet Architecture',
+    'Filter, Detect, Condense',
+    'Convolution and Pooling',
+    'Filters and Features',
+    'Transfer Learning',
+    'Data Augmentation',
 ]
 
 
-lessons = [{'topic': topic_name} for topic_name, _ in TOPICS]
+lessons = [{'topic': topic_name} for topic_name in TOPICS]
 
 
 notebooks = []
 
-for _, i in TOPICS:
-    notebooks.append(
+for i, _ in enumerate(TOPICS):
+    notebooks + [
         dict(
-            filename="tut{}.ipynb".format(i),
-            lesson_idx=i-1,
+            filename="tut{}.ipynb".format(i+1),
+            lesson_idx=i,
             type='tutorial',
-        )
-    )
+        ),
+        # dict(
+        #     filename="ex{}.ipynb".format(i+1),
+        #     lesson_idx=i,
+        #     type='exercise',
+        #     scriptid=____,
+        # ),
+    ]
 
 for nb in notebooks:
     nb['dataset_sources'] = [
-        "ryanholbrook/stanford-cars-for-learn",
-        "ryanholbrook/computer-vision-resources",
+        'ryanholbrook/stanford-cars-for-learn',
+        'ryanholbrook/computer-vision-resources',
+    ]
+    nb['kernel_sources'] =[
+        'ryanholbrook/visiontools',
     ]
