@@ -60,7 +60,7 @@ notebooks = [
         scriptid=8222487
         ),
     dict(
-        filename='tut5.ipynb',
+        filename='tut_halite.ipynb',
         lesson_idx=4,
         type='tutorial',
         ),
