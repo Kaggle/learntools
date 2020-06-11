@@ -39,6 +39,7 @@ for nb in notebooks:
     nb['dataset_sources'] = [
         'ryanholbrook/stanford-cars-for-learn',
         'ryanholbrook/computer-vision-resources',
+        'ryanholbrook/cv-course-models',
     ]
     nb['kernel_sources'] =[
         'ryanholbrook/visiontools',
