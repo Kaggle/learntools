@@ -3,8 +3,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
 from functools import singledispatch
-from itertools import product
+from itertools import product, chain
 from matplotlib import gridspec
+from skimage import draw, transform
 
 # TFDS might not be installed
 try:
@@ -368,9 +369,9 @@ homogeneous coordinate form.
 
 def _reflect_index(i, n):
     """Reflect the index i across dimensions [0, n]."""
-    x = tf.math.floormod(x-n, 2*n)
-    x = tf.math.abs(x - n)
-    return tf.math.floor(x)
+    i = tf.math.floormod(i-n, 2*n)
+    i = tf.math.abs(i - n)
+    return tf.math.floor(i)
 
 
 ## CALLBACKS ##
@@ -411,6 +412,7 @@ def exponential_lr(epoch,
               rampup_epochs,
               sustain_epochs,
               exp_decay)
+
 
 # Use like:
 # exponential_lr_callback = (
@@ -565,7 +567,7 @@ def show_extraction(image,
         plt.title(title)
 
         
-def show_feature_maps(image, model, layer_name,
+def show_feature_maps(image, model, layer_name, offset=0,
                       rows=3, cols=3, width=12,
                       gamma=0.5):
     
@@ -580,15 +582,14 @@ def show_feature_maps(image, model, layer_name,
     
     gs = gridspec.GridSpec(rows, cols, wspace=0.01, hspace=0.01)
     plt.figure(figsize=(width, (width * rows) / cols))
-    for i in range(rows):
-        for j in range(cols):
-            plt.subplot(gs[i, j])
-            plt.imshow(
-                tf.image.adjust_gamma(
-                    feature_maps[0][:,:,i+j*cols],
-                    gamma,
-                ))
-            plt.axis('off')
+    for f, (r, c) in enumerate(product(range(rows), range(cols))):
+        plt.subplot(gs[r, c])
+        plt.imshow(
+            tf.image.adjust_gamma(
+                feature_maps[0][:,:,f+offset],
+                gamma,
+            ))
+        plt.axis('off')
 
 
 # Filter Visualization #
@@ -667,7 +668,7 @@ def visualize_filter(base_model,
                      size=[200, 200],
                      epochs=50,
                      step_size=10,
-                     log=True,
+                     log=False,
                     ):
 
     image = initialize_image(size)
@@ -686,13 +687,17 @@ def visualize_filter(base_model,
     return deprocess(tf.squeeze(image))
 
 
-def show_filters(model, layer_name,
+def show_filters(model, layer_name, offset=0
                  rows=3, cols=3, width=12,
                  **kwargs):
     gs = gridspec.GridSpec(rows, cols, wspace=0.01, hspace=0.01)
     plt.figure(figsize=(width, (width * rows) / cols))
     for f, (r, c) in enumerate(product(range(rows), range(cols))):
-        filter_viz = visualize_filter(model, layer_name, **kwargs)
+        filter_viz = visualize_filter(
+            model,
+            layer_name,
+            filter_index = f + offset,
+            **kwargs)
         plt.subplot(gs[r, c])
         plt.imshow(filter_viz)
         plt.axis('off')
