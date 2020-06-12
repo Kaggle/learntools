@@ -67,7 +67,7 @@ notebooks = [
 ]
 
 for nb in notebooks:
-    if "tut5" not in nb['filename']:
+    if "tut_halite" not in nb['filename']:
         nb['competition_sources'] = ["connectx"]
     else:
         nb['competition_sources'] = ["halite"]
