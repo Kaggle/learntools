@@ -21,7 +21,7 @@ lessons = [{'topic': topic_name} for topic_name in TOPICS]
 notebooks = []
 
 for i, _ in enumerate(TOPICS):
-    notebooks + [
+    notebooks += [
         dict(
             filename="tut{}.ipynb".format(i+1),
             lesson_idx=i,
