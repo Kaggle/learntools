@@ -687,7 +687,7 @@ def visualize_filter(base_model,
     return deprocess(tf.squeeze(image))
 
 
-def show_filters(model, layer_name, offset=0
+def show_filters(model, layer_name, offset=0,
                  rows=3, cols=3, width=12,
                  **kwargs):
     gs = gridspec.GridSpec(rows, cols, wspace=0.01, hspace=0.01)
@@ -705,8 +705,15 @@ def show_filters(model, layer_name, offset=0
 
 # Features and Images #
 
+def read_image(path, channels=0):
+    image = tf.io.read_file(path)
+    image = tf.io.decode_image(image, channels=channels)
+    return image
+
 def show_image(image):
-    pass #TODO
+    image = tf.squeeze(image)
+    plt.imshow(image)
+    plt.axis('off')
 
 def two_dots(size, x=3, y=5):
     two_dots = np.zeros(size)
