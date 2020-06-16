@@ -24,3 +24,15 @@ kaggle datasets download -d dansbecker/urban-and-rural-photos -p input/urban-and
 unzip -q input/urban-and-rural-photos/rural_and_urban_photos.zip -d input/urban-and-rural-photos/
 rm -r input/urban-and-rural-photos/__MACOSX/
 rm input/urban-and-rural-photos/*.zip
+
+# Add utility script
+
+SCRIPTS="ryanholbrook/petal_tools"
+
+for script in $SCRIPTS
+do
+    name=`echo $script | cut -d '/' -f 2`
+    dest="usr/lib"
+    mkdir -p $dest
+    kaggle kernels pull $script -p $dest
+done
