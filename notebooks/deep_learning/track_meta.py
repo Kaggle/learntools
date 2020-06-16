@@ -129,6 +129,20 @@ notebooks = [
         type='exercise',
 	scriptid=663261,
 	competition_sources=['digit-recognizer'],
-    dataset_sources = ['zalando-research/fashionmnist'],
+        dataset_sources = ['zalando-research/fashionmnist'],
         ),
+    dict(
+        filename='tut_tpus.ipynb',
+        lesson_idx=8,
+        type='tutorial',
+        competition_sources=['tpu-getting-started'],
+        kernel_sources=['ryanholbrook/petal-helper'],
+    ),
+    dict(
+        filename='ex_tpus.ipynb',
+        lesson_idx=8,
+        type='exercise',
+        scriptid=-1,
+        competition_sources=['tpu-getting-started'],
+        kernel_sources=['ryanholbrook/petal-helper'],        
 ]
