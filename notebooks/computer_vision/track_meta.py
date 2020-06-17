@@ -6,11 +6,10 @@ track = dict(
 
 TOPICS = [
     'The Convolutional Classifier',
-    'Convnet Architecture',
-    'Filter, Detect, Condense',
-    'Convolution and Pooling',
-    'Filters and Features',
-    'Transfer Learning',
+    'Convolution and ReLU',
+    'Convolution and Moving Windows',
+    'Maximum Pooling',
+    'Custom Convnets',
     'Data Augmentation',
 ]
 
