@@ -68,7 +68,7 @@ class LearnLessonPreprocessor(Preprocessor):
         header_content = course_link + horizontal_line_break
         footer_content = horizontal_line_break + course_link
 
-        forum_cta = """\n\n\n\n*Have questions or comments? Visit the [Learn Discussion forum](https://www.kaggle.com/learn-forum) to chat with other Learners.*"""
+        forum_cta = """\n\n\n\n*Have questions or comments? Visit the [Learn Discussion forum]({}) to chat with other Learners.*""".format(self.course_forum_url)
         footer_content += forum_cta
         header_cell = self.make_cell(cell_type='markdown', source=header_content)
         footer_cell = self.make_cell(cell_type='markdown', source=footer_content)

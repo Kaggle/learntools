@@ -2,7 +2,8 @@
 track = dict(
     author_username='matleonard',
     course_name='Feature Engineering',
-    course_url='https://www.kaggle.com/learn/feature-engineering'
+    course_url='https://www.kaggle.com/learn/feature-engineering',
+    course_forum_url='https://www.kaggle.com/learn-forum'
 )
 
 lessons = [ {'topic': topic_name} for topic_name in
