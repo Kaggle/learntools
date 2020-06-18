@@ -14,7 +14,7 @@ lessons = [ {'topic': topic_name} for topic_name in
 			'A Deeper Understanding of Deep Learning',
 			'Deep Learning from Scratch',
 			'Dropout and Strides for Larger Models',
-            'Getting Started with TPUs'
+            'Create Your First Submission'
 			]
             ]
 
