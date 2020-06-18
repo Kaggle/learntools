@@ -17,8 +17,9 @@ kaggle k push -p ml_intermediate/default/kernels_api_metadata/ex2
 kaggle k push -p ml_intermediate/default/kernels_api_metadata/ex3
 kaggle k push -p ml_intermediate/default/kernels_api_metadata/ex4
 
-# ex1, ex2, ex3
+# ex1, ex2, ex3, tut_halite
 python prepare_push.py game_ai
 kaggle k push -p game_ai/default/kernels_api_metadata/ex1
 kaggle k push -p game_ai/default/kernels_api_metadata/ex2
 kaggle k push -p game_ai/default/kernels_api_metadata/ex3
+kaggle k push -p game_ai/default/kernels_api_metadata/tut_halite
