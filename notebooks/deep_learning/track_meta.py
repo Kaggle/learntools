@@ -138,6 +138,7 @@ notebooks = [
         type='tutorial',
         competition_sources=['tpu-getting-started'],
         kernel_sources=['ryanholbrook/petal-helper'],
+        enable_internet=True
         ),
     dict(
         filename='ex_tpus.ipynb',
@@ -145,6 +146,7 @@ notebooks = [
         type='exercise',
         scriptid=10204702,
         competition_sources=['tpu-getting-started'],
-        kernel_sources=['ryanholbrook/petal-helper'],        
+        kernel_sources=['ryanholbrook/petal-helper'],  
+        enable_internet=True      
         )
     ]
