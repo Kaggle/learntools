@@ -143,7 +143,7 @@ notebooks = [
         filename='ex_tpus.ipynb',
         lesson_idx=8,
         type='exercise',
-        scriptid=-1,
+        scriptid=10204702,
         competition_sources=['tpu-getting-started'],
         kernel_sources=['ryanholbrook/petal-helper'],        
         )
