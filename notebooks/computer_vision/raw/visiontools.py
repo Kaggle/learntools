@@ -703,7 +703,7 @@ def show_filters(model, layer_name, offset=0,
         plt.axis('off')
 
 
-# Features and Images #
+# Images #
 
 def read_image(path, channels=0):
     image = tf.io.read_file(path)
@@ -721,19 +721,57 @@ def two_dots(size, x=3, y=5):
     two_dots[y, x] = 1
     return two_dots
         
-def circle(size, val=None):
+def circle(size, val=None, r_shrink=0):
     circle = np.zeros([size[0]+1, size[1]+1])
     rr, cc = draw.circle_perimeter(
         size[0]//2, size[1]//2,
-        radius=size[0]//2,
+        radius=size[0]//2 - r_shrink,
         shape=[size[0]+1, size[1]+1],
     )
     if val is None:
         circle[rr, cc] = np.random.uniform(size=circle.shape)[rr, cc]
     else:
-        circle[rr, cc] = 1.0
+        circle[rr, cc] = val
     circle = transform.resize(circle, size, order=0)
     return circle
+
+
+# Kernels #
+
+# Edge detection
+edge = tf.constant(
+    [[-1, -1, -1],
+     [-1, 8, -1],
+     [-1, -1, -1]],
+)
+
+# Blur
+blur = tf.constant(
+    [[0.0625, 0.125, 0.0625],
+     [0.125, 0.25, 0.125],
+     [0.0625, 0.125, 0.0625]],
+)
+
+# Bottom sobel
+bottom_sobel = tf.constant(
+    [[-1, -2, -1],
+     [0, 0, 0],
+     [1, 2, 1]],
+)
+
+# Emboss South-East
+emboss = tf.constant(
+    [[-2, -1, 0],
+     [-1, 1, 1],
+     [0, 1, 2]],
+)
+
+# Sharpen
+sharpen = tf.constant(
+    [[0, -1, 0],
+     [-1, 5, -1],
+     [0, -1, 0]],
+)
 
 
 
