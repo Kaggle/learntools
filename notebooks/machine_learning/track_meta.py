@@ -13,7 +13,8 @@ lessons = [ {'topic': topic_name} for topic_name in
                     'Underfitting and Overfitting',
                     'Random Forests',
                     'Machine Learning Competitions',
-                    'Getting Started with Titanic']
+                    'Intro to AutoML',
+                    'Getting Started with Titanic',]
             ]
 
 notebooks = [
@@ -91,8 +92,19 @@ notebooks = [
 #        type='exercise',
 #        scriptid=3685412
 #        ),
-    dict(filename='tut_titanic.ipynb',
+    dict(
+        filename='tut_automl.ipynb',
         lesson_idx=7,
+        type='tutorial',
+        ),
+    dict(
+        filename='ex_automl.ipynb',
+        lesson_idx=7,
+        type='exercise',
+        scriptid=10027938
+        ),
+    dict(filename='tut_titanic.ipynb',
+        lesson_idx=8,
         type='tutorial'
         ),
 ]
@@ -110,3 +122,14 @@ for nb in notebooks:
     if nb['filename'] == 'tut_titanic.ipynb':
         nb['dataset_sources'] = ["dansbecker/melbourne-housing-snapshot"]
         nb['competition_sources'] = ["titanic"]
+        
+    if nb['filename'] == 'tut_automl.ipynb':
+        nb['competition_sources'] = ["new-york-city-taxi-fare-prediction"]
+        nb['kernel_sources'] = ['alexisbcook/automl-tables-wrapper']
+        nb['dataset_sources'] = []
+        
+    if nb['filename'] == 'ex_automl.ipynb':
+        nb['competition_sources'] = ["house-prices-advanced-regression-techniques"]
+        nb['kernel_sources'] = ['alexisbcook/automl-tables-wrapper']
+        nb['dataset_sources'] = []
+    
