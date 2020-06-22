@@ -7,8 +7,8 @@ track = dict(
 TOPICS = [
     'The Convolutional Classifier',
     'Convolution and ReLU',
-    'Convolution and Moving Windows',
     'Maximum Pooling',
+    'Convolution and Moving Windows',
     'Custom Convnets',
     'Data Augmentation',
 ]
