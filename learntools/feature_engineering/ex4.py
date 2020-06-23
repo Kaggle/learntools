@@ -16,7 +16,7 @@ def get_data_splits(dataframe, valid_fraction=0.1):
     # valid size == test size, last two sections of the data
     valid = dataframe[-valid_rows * 2:-valid_rows]
     test = dataframe[-valid_rows:]
-    
+
     return train, valid, test
 
 class FeatureSelectionData(ThoughtExperiment):
@@ -42,8 +42,8 @@ class UnivariateSelection(CodingProblem):
     X_new = selector.fit_transform(train[feature_cols], train['is_attributed'])
 
     # Get back the features we've kept, zero out all other features
-    selected_features = pd.DataFrame(selector.inverse_transform(X_new), 
-                                    index=train.index, 
+    selected_features = pd.DataFrame(selector.inverse_transform(X_new),
+                                    index=train.index,
                                     columns=feature_cols)
 
     # Dropped columns have values of all 0s, so var is 0, drop them
@@ -51,7 +51,7 @@ class UnivariateSelection(CodingProblem):
 
     def check(self, train, dropped_columns_):
 
-        assert dropped_columns_.shape[0] == 51, "Please choose to keep 40 columns" 
+        assert dropped_columns_.shape[0] == 51, "Please choose to keep 40 columns"
 
         feature_cols = train.columns.drop(['click_time', 'attributed_time', 'is_attributed'])
         # Do feature extraction on the training data only!
@@ -59,8 +59,8 @@ class UnivariateSelection(CodingProblem):
         X_new = selector.fit_transform(train[feature_cols], train['is_attributed'])
 
         # Get back the features we've kept, zero out all other features
-        selected_features = pd.DataFrame(selector.inverse_transform(X_new), 
-                                         index=train.index, 
+        selected_features = pd.DataFrame(selector.inverse_transform(X_new),
+                                         index=train.index,
                                          columns=feature_cols)
 
         # Dropped columns have values of all 0s, so var is 0, drop them
@@ -95,40 +95,41 @@ class L1Regularization(CodingProblem):
         model = SelectFromModel(logistic, prefit=True)
 
         X_new = model.transform(X)
-        
+
         # Get back the kept features as a DataFrame with dropped columns as all 0s
-        selected_features = pd.DataFrame(model.inverse_transform(X_new), 
+        selected_features = pd.DataFrame(model.inverse_transform(X_new),
                                         index=X.index,
                                         columns=X.columns)
-        
-        # Dropped columns have values of all 0s, keep other columns 
+
+        # Dropped columns have values of all 0s, keep other columns
         cols_to_keep = selected_features.columns[selected_features.var() != 0]
-        
+
         return cols_to_keep""")
 
     def check(self, student_func, train):
         def select_features_l1(X, y):
             logistic_model = LogisticRegression(C=0.1,
-                                                penalty="l1", 
+                                                penalty="l1",
                                                 random_state=7).fit(X, y)
             model = SelectFromModel(logistic_model, prefit=True)
 
             X_new = model.transform(X)
-            
+
             # Get back the kept features as a DataFrame with dropped columns as all 0s
-            selected_features = pd.DataFrame(model.inverse_transform(X_new), 
+            selected_features = pd.DataFrame(model.inverse_transform(X_new),
                                             index=X.index,
                                             columns=X.columns)
-            
-            # Dropped columns have values of all 0s, keep other columns 
+
+            # Dropped columns have values of all 0s, keep other columns
             cols_to_keep = selected_features.columns[selected_features.var() != 0]
-            
+
             return cols_to_keep
 
-        feature_cols = train.columns.drop(['click_time', 'attributed_time', 
+        feature_cols = train.columns.drop(['click_time', 'attributed_time',
                                            'is_attributed'])
 
-        X, y = train[feature_cols][:10000], train['is_attributed'][:10000]
+        n_samples = 10000
+        X, y = train[feature_cols][:n_samples], train['is_attributed'][:n_samples]
 
         selected = select_features_l1(X, y)
         selected_student = student_func(X, y)
@@ -137,7 +138,7 @@ class L1Regularization(CodingProblem):
 
         message = ("Your result isn't quite right. Make sure you're using a logistic "
                   "regression model with an l1 penalty. Set the random state to 7 and "
-                  "the regularization parameter to 0.1.") 
+                  "the regularization parameter to 0.1.")
         assert selected.equals(selected_student), message
 
 
