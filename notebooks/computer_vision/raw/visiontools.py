@@ -6,6 +6,8 @@ from functools import singledispatch
 from itertools import product, chain
 from matplotlib import gridspec
 from skimage import draw, transform
+from scipy import signal
+
 
 # TFDS might not be installed
 try:
@@ -144,7 +146,7 @@ def _simple_image(filename, bbox):
     return image
 
 
-## AUGMENTATION ##
+## PREPROCESSING ##
 
 def _random_crop_to_bounding_box(image, bbox, min_object_covered=1.0,
                                 aspect_ratio_range=[0.75, 1.33]):
@@ -193,9 +195,6 @@ def make_preprocessor(size):
                                          method='nearest')
         return image, label
     return preprocessor
-
-# TODO: Research aspect ratio. One of Martin's notebooks had one that
-# preserved aspect ratio through filling.
 
 def make_augmentor(# rotation_range=0,
                    # width_shift_range=0,
@@ -425,6 +424,17 @@ def exponential_lr(epoch,
 
 ## VISUALIZATION ##
 
+def set_style():
+    # plt.rc('figure', autolayout=True)
+    # plt.rc('axes', labelweight='bold', labelsize='large',
+    #        titleweight='bold', titlesize=22, titlepad=10)
+    # plt.rc('image', cmap='magma')
+    # TODO: def set_style(). create a style dictionary for rcparams
+    pass
+
+
+# Dataset #
+
 def show_supervised_examples(ds, ds_info, rows=4, cols=4):
     examples = list(tfds.as_numpy(ds.take(rows * cols)))
     plt.figure(figsize=(15, (15 * rows) // cols))
@@ -434,21 +444,8 @@ def show_supervised_examples(ds, ds_info, rows=4, cols=4):
         plt.imshow(image)
         plt.title(ds_info.features['label'].int2str(label))
 
-def show_kernel(kernel):
-    kernel = np.array(kernel)
-    cmap = plt.get_cmap('Blues_r')
-    plt.imshow(kernel, cmap=cmap)
-    rows, cols = kernel.shape
-    thresh = (kernel.max()+kernel.min())/2
-    for i in range(rows):
-        for j in range(cols):
-            val = kernel[i, j]
-            color = cmap(0) if val > thresh else cmap(255)
-            plt.text(j, i, val, 
-                     color=color, size=28,
-                     horizontalalignment='center', verticalalignment='center')
-    plt.xticks([])
-    plt.yticks([])
+
+# Classification #
 
 def get_labels(model, dataset,
                probabilities=None, type='binary'):
@@ -471,13 +468,30 @@ def get_labels(model, dataset,
 def show_predictions(model, dataset, dataset_info):
     pass
 
-def set_style():
-    # plt.rc('figure', autolayout=True)
-    # plt.rc('axes', labelweight='bold', labelsize='large',
-    #        titleweight='bold', titlesize=22, titlepad=10)
-    # plt.rc('image', cmap='magma')
-    # TODO: def set_style(). create a style dictionary for rcparams
-    pass
+
+# Feature Extraction #
+
+def show_kernel(kernel, label=True, digits=None, text_size=28):
+    # Format kernel
+    kernel = np.array(kernel)
+    if digits is not None:
+        kernel = kernel.round(digits)
+
+    # Plot kernel
+    cmap = plt.get_cmap('Blues_r')
+    plt.imshow(kernel, cmap=cmap)
+    rows, cols = kernel.shape
+    thresh = (kernel.max()+kernel.min())/2
+    # Optionally, add value labels
+    if label:
+        for i, j in product(range(rows), range(cols)):
+            val = kernel[i, j]
+            color = cmap(0) if val > thresh else cmap(255)
+            plt.text(j, i, val, 
+                     color=color, size=text_size,
+                     horizontalalignment='center', verticalalignment='center')
+    plt.xticks([])
+    plt.yticks([])
 
 def extract_feature(image, kernel, pool_size=2):
     model = tf.keras.Sequential([
@@ -566,7 +580,9 @@ def show_extraction(image,
         plt.axis('off')
         plt.title(title)
 
-        
+
+# Feature Maps #
+
 def show_feature_maps(image, model, layer_name, offset=0,
                       rows=3, cols=3, width=12,
                       gamma=0.5):
@@ -592,7 +608,7 @@ def show_feature_maps(image, model, layer_name, offset=0,
         plt.axis('off')
 
 
-# Filter Visualization #
+# Optimal Neuron/Filter/Layer Images #
 
 def random_transform(image, jitter, rotate, scale, fill_method):
     jx = tf.random.uniform([], -jitter, jitter)
@@ -703,7 +719,7 @@ def show_filters(model, layer_name, offset=0,
         plt.axis('off')
 
 
-# Images #
+# Image Utilities #
 
 def read_image(path, channels=0):
     image = tf.io.read_file(path)
@@ -714,6 +730,9 @@ def show_image(image):
     image = tf.squeeze(image)
     plt.imshow(image)
     plt.axis('off')
+
+
+# PREDEFINED FEATURES #
 
 def two_dots(size, x=3, y=5):
     two_dots = np.zeros(size)
@@ -736,7 +755,7 @@ def circle(size, val=None, r_shrink=0):
     return circle
 
 
-# Kernels #
+# PREDEFINED KERNELS #
 
 # Edge detection
 edge = tf.constant(
@@ -773,5 +792,12 @@ sharpen = tf.constant(
      [0, -1, 0]],
 )
 
-
+# Gaussian (blur) kernel
+def gaussian(kernlen=3, std=1, normalize=True):
+    """Returns a 2D Gaussian kernel array."""
+    gkern1d = signal.gaussian(kernlen, std=std).T
+    if normalize:
+        gkern1d /= np.trapz(gkern1d)
+    gkern2d = np.outer(gkern1d, gkern1d)
+    return gkern2d
 
