@@ -59,7 +59,7 @@ class LabelEncoding(CodingProblem):
         for feature in cat_features:
             col = feature + '_labels'
             assert col in list(answer.columns), "{} column is missing".format(col)
-            assert answer[col] == clicks_label[col], "{} column does not have the correct values".format(col)
+            assert set(answer[col]) == set(clicks_label[col]), "{} column does not have the correct values".format(col)
 
 class OnehotEncoding(ThoughtExperiment):
     _solution = """
