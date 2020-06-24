@@ -8,7 +8,7 @@ TOPICS = [
     'The Convolutional Classifier',
     'Convolution and ReLU',
     'Maximum Pooling',
-    'Convolution and Moving Windows',
+    'The Moving Window',
     'Custom Convnets',
     'Data Augmentation',
 ]
