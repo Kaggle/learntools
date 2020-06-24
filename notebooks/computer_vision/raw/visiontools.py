@@ -235,6 +235,19 @@ def make_augmentor(# rotation_range=0,
         return image, label
     return augmentor
 
+def random_transform(image, jitter=0, rotate=0, scale=1, **kwargs):
+    jx = tf.random.uniform([], -jitter, jitter)
+    jy = tf.random.uniform([], -jitter, jitter)
+    r = tf.random.uniform([], -rotate, rotate)
+    s = tf.random.uniform([], 1.0, scale)
+    image = apply_affine_transform(
+        image,
+        theta=r,
+        tx=jx, ty=jy,
+        zx=s, zy=s,
+        **kwargs,
+    )
+    return image
 
 def apply_affine_transform(x,
                            theta=0, tx=0, ty=0, shear=0, zx=1, zy=1,
