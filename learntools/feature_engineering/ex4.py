@@ -91,7 +91,7 @@ class L1Regularization(CodingProblem):
              "all zeros.")
     _solution = CS("""
     def select_features_l1(X, y):
-        logistic = LogisticRegression(C=0.1, penalty="l1", random_state=7).fit(X, y)
+        logistic = LogisticRegression(C=0.1, penalty="l1", random_state=7, solver='liblinear').fit(X, y)
         model = SelectFromModel(logistic, prefit=True)
 
         X_new = model.transform(X)
@@ -110,7 +110,8 @@ class L1Regularization(CodingProblem):
         def select_features_l1(X, y):
             logistic_model = LogisticRegression(C=0.1,
                                                 penalty="l1",
-                                                random_state=7).fit(X, y)
+                                                random_state=7,
+                                               solver='liblinear').fit(X, y)
             model = SelectFromModel(logistic_model, prefit=True)
 
             X_new = model.transform(X)
