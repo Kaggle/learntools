@@ -30,6 +30,7 @@ class TrackMeta(object):
         self.track = track
         self.course_name = track['course_name']
         self.course_url = track['course_url']
+        self.course_forum_url = track['course_forum_url']
 
         self.lessons = [Lesson(**lmeta) for lmeta in lessons_meta]
         # Add convenience next/prev pointers to lessons

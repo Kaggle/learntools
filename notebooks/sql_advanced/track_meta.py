@@ -2,7 +2,8 @@
 track = dict(
     author_username='alexisbcook',
     course_name='Advanced SQL',
-    course_url='https://www.kaggle.com/learn/advanced-sql'
+    course_url='https://www.kaggle.com/learn/advanced-sql',
+    course_forum_url='https://www.kaggle.com/learn-forum'
 )
 
 lessons = [ {'topic': topic_name} for topic_name in
