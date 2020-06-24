@@ -40,6 +40,7 @@ def label_encoding_soln():
         encoded = label_encoder.fit_transform(clicks[feature])
         clicks[feature + '_labels'] = encoded
     return clicks
+clicks_label = label_encoding_soln()
 
 class LabelEncoding(CodingProblem):
     _var = 'clicks'
@@ -52,13 +53,13 @@ class LabelEncoding(CodingProblem):
         encoded = label_encoder.fit_transform(clicks[feature])
         clicks[feature + '_labels'] = encoded
     """)
-    clicks = label_encoding_soln()
+    
     def check(self, answer):
         cat_features = ['ip', 'app', 'device', 'os', 'channel']
         for feature in cat_features:
             col = feature + '_labels'
             assert col in list(answer.columns), "{} column is missing".format(col)
-            assert answer[col] == clicks[col], "{} column does not have the correct values".format(col)
+            assert answer[col] == clicks_label[col], "{} column does not have the correct values".format(col)
 
 class OnehotEncoding(ThoughtExperiment):
     _solution = """
