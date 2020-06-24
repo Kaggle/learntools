@@ -57,7 +57,7 @@ class LabelEncoding(CodingProblem):
         cat_features = ['ip', 'app', 'device', 'os', 'channel']
         for feature in cat_features:
             col = feature + '_labels'
-            assert 'col' in list(answer.columns), "{} column is missing".format(col)
+            assert col in list(answer.columns), "{} column is missing".format(col)
             assert answer[col] == clicks[col], "{} column does not have the correct values".format(col)
 
 class OnehotEncoding(ThoughtExperiment):
