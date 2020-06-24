@@ -1,7 +1,8 @@
 track = dict(
     author_username='residentmario',
     course_name='Pandas',
-    course_url='https://www.kaggle.com/learn/pandas'
+    course_url='https://www.kaggle.com/learn/pandas',
+    course_forum_url='https://www.kaggle.com/learn-forum'
 )
 
 lessons = []
