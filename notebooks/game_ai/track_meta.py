@@ -53,6 +53,7 @@ notebooks = [
         filename='tut4.ipynb',
         lesson_idx=3,
         type='tutorial',
+        enable_internet=True
         ),
     dict(
         filename='ex4.ipynb',

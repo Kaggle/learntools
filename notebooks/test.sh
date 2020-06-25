@@ -50,7 +50,7 @@ do
         # First python exercise notebook uses google/tinyquickdraw dataset, which
         # is 11 GB. Downloading it would probably slow down testing unacceptably.
         # AutoML notebooks also run for hours.
-        if [[ ( $nb =~ "ex_1" && $track == "python" ) ]] || [[ ( $nb =~ "ex_automl") ]] || [[ ( $nb =~ "tut_automl") ]]
+        if [[ ( $nb =~ "ex_1" && $track == "python" ) ]] || [[ ( $nb =~ "ex_automl") ]] || [[ ( $nb =~ "tut_automl") ]] || [[ ( $nb =~ "tut_4" && $track == "game_ai" ) ]]
         then
             echo "Warning: skipping $nb in track $track"
             continue
