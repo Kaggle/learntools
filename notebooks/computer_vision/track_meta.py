@@ -42,4 +42,5 @@ for nb in notebooks:
     ]
     nb['kernel_sources'] =[
         'ryanholbrook/visiontools',
+        'ryanholbrook/cv-prelude',
     ]

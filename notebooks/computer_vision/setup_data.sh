@@ -9,11 +9,11 @@ then
 fi
 
 
-# Add utility script
+# Add utility scripts
 
-SCRIPTS="ryanholbrook/visiontools"
+SCRIPTS=arr("ryanholbrook/visiontools" "ryanholbrook/cv-prelude")
 
-for script in $SCRIPTS
+for script in "${SCRIPTS[@]}"
 do
     name=`echo $script | cut -d '/' -f 2`
     dest="usr/lib"
