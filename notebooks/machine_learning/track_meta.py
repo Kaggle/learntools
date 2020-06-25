@@ -3,7 +3,7 @@ track = dict(
     author_username='dansbecker',
     course_name='Introduction to Machine Learning',
     course_url='https://www.kaggle.com/learn/intro-to-machine-learning',
-    course_forum_url='https://www.kaggle.com/learn-forum'
+    course_forum_url='https://www.kaggle.com/learn-forum/161285'
 )
 
 lessons = [ {'topic': topic_name} for topic_name in
@@ -97,6 +97,7 @@ notebooks = [
         filename='tut_automl.ipynb',
         lesson_idx=7,
         type='tutorial',
+        enable_internet=True
         ),
     dict(
         filename='ex_automl.ipynb',
