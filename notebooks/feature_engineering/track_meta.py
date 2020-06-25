@@ -56,7 +56,8 @@ notebooks = [
         filename='ex4.ipynb',
         lesson_idx=3,
         type='exercise',
-        scriptid=5407500
+        scriptid=5407500,
+        enable_internet=True
         )
 ]
 
