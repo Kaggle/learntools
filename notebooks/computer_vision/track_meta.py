@@ -25,6 +25,7 @@ for i, _ in enumerate(TOPICS):
             filename="tut{}.ipynb".format(i+1),
             lesson_idx=i,
             type='tutorial',
+            enable_gpu=True,
         ),
         # dict(
         #     filename="ex{}.ipynb".format(i+1),
