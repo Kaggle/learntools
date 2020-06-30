@@ -44,3 +44,12 @@ accuracy = 'binary_accuracy'
 class Q4(ThoughtExperiment):
     _solution = """ That the training loss and validation loss stay fairly close is evidence that the model isn't just memorizing the training data, but rather learning general properties of the two classes. But, because this model converges at a loss greater than the VGG16 model, it's likely that it is underfitting some, and could benefit from some extra capacity.
 """
+
+    
+qvars = bind_exercises(
+    globals(),
+    [Q1, Q2, Q3, Q4],
+    var_format='q_{n}',
+)
+
+__all__ = list(qvars)
