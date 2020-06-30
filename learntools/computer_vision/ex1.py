@@ -1,12 +1,12 @@
 from learntools.core import *
 
-class Q1(EqualityCheckProblem):
-    _var = 'pretrained_base.trainable'
-    _expected = False
+class Q1(CodingProblem):
+    _var = 'pretrained_base'
     _hint = """ When doing transfer learning, it's generally not a good idea to retrain the entire base -- at least not without some care. The reason is that the random weights in the head will initially create large gradient updates, which propogate back into the base layers and destroy much of the pretraining. Using techniques known as **fine tuning** it's possible to further train the base on new data, but this requires some care to do well.
 """
     _solution = CS('pretrained_base.trainable = False')
-
+    def check(self, pretrained_base):
+        assert (not pretrained_base.trainable)
 
 class Q2(CodingProblem):
     _var = 'model'
