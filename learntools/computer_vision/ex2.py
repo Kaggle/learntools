@@ -4,6 +4,14 @@ import tensorflow as tf
 
 class Q1(CodingProblem):
     _var = 'kernel'
+    _hint = CS("""
+# Your solution should look something like:
+kernel = tf.constant([
+    [ numbers ],
+    [ numbers ],
+    [ numbers ],
+])
+""")
     _solution = CS("""
 # This is just one possibility.
 kernel = tf.constant([
@@ -21,8 +29,16 @@ kernel = tf.constant([
                  "`[[1, 2], [3, 4]].` See the kernel in the tutorial for a guide."))
 
 class Q2(CodingProblem):
-    _var = 'image_filter'
-    _hint = ""
+    _vars = ['image_filter', 'image']
+    _hint = CS("""
+# Your solution should look something like:
+image_filter = tf.nn.conv2d(
+    input=____,
+    filters=____,
+    strides=____,
+    padding=____,
+)
+""")
     _solution = CS("""
 image_filter = tf.nn.conv2d(
     input=image,
@@ -31,18 +47,28 @@ image_filter = tf.nn.conv2d(
     padding='SAME',
 )
 """)
-    def check(self, image_filter):
-        pass # TODO: Q2 check
+    def check(self, image_filter, image):
+        assert ((image_filter.shape == image.shape),
+                ("Using the settings in the tutorial, the shapes of `image_filter`" +
+                 "and `image` should be the same. The shape of `image` is {} while " +
+                 "the shape of `image_filter` is {}. Did you use 'SAME' for padding " +
+                 "and keep the strides at 1?".filter(image.shape, image_filter.shape)))
 
 
 class Q3(CodingProblem):
-    _var = 'image_detect'
-    _hint = ""
+    _vars = ['image_detect', 'image_filter', 'image']
+    _hint = CS("""
+# Your solution should look something like:
+image_detect = tf.nn.relu(____)
+""")
     _solution = CS("""
 image_detect = tf.nn.relu(image_filter)
 """)        
-    def check(self, image_detect):
-        pass # TODO: Q3 check
+    def check(self, image_detect, image_filter, image):
+        assert((image_detect != tf.nn.relu(image)),
+               ("It looks like you might have applied the ReLU to `image` instead " +
+                "of `image_filter`. Remember that the input to ReLU is the output " +
+                "of the convolution."))
 
 
 class Q4A(CodingProblem):
