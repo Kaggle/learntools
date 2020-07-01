@@ -35,6 +35,22 @@ for i, _ in enumerate(TOPICS):
         # ),
     ]
 
+notebooks += [
+    dict(
+        filename="ex1.ipynb",
+        lesson_idx=0,
+        type='exercise',
+        enable_gpu=True,
+    ),
+    dict(
+        filename="ex2.ipynb",
+        lesson_idx=1,
+        type='exercise',
+        enable_gpu=True,
+    ),    
+]
+    
+
 for nb in notebooks:
     nb['dataset_sources'] = [
         'ryanholbrook/stanford-cars-for-learn',
