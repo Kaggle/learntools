@@ -46,7 +46,11 @@ notebooks += [
         filename="ex2.ipynb",
         lesson_idx=1,
         type='exercise',
-        enable_gpu=True,
+    ),
+    dict(
+        filename="ex3.ipynb",
+        lesson_idx=2,
+        type='exercise',
     ),    
 ]
     
