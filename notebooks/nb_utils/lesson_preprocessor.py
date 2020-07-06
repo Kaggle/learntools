@@ -68,7 +68,7 @@ class LearnLessonPreprocessor(Preprocessor):
         header_content = course_link + horizontal_line_break
         footer_content = horizontal_line_break + course_link
 
-        forum_cta = """\n\n\n\n*Have questions or comments? Visit the [Learn Discussion forum](https://www.kaggle.com/learn-forum) to chat with other Learners.*"""
+        forum_cta = """\n\n\n\n*Have questions or comments? Visit the [Learn Discussion forum]({}) to chat with other Learners.*""".format(self.track.course_forum_url)
         footer_content += forum_cta
         header_cell = self.make_cell(cell_type='markdown', source=header_content)
         footer_cell = self.make_cell(cell_type='markdown', source=footer_content)
@@ -260,3 +260,14 @@ You are ready for **[{}]({}).**
 
         # Alternative formulation (used on days 5 and 6 of Python challenge):
         # Want feedback on your code? To share it with others or ask for help, you'll need to make it public. Save a version of your notebook that shows your current work by hitting the "Commit & Run" button. Once your notebook is finished running, go to the Settings tab in the panel to the left (you may have to expand it by hitting the [<] button next to the "Commit & Run" button) and set the "Visibility" dropdown to "Public".
+
+    def SUBMIT_TO_COMP(self, **kwargs):
+        return ("1. Begin by clicking on the blue **Save Version** button in the top right corner of the window.  This will generate a pop-up window.  \n"
+"2. Ensure that the **Save and Run All** option is selected, and then click on the blue **Save** button.\n"
+"3. This generates a window in the bottom left corner of the notebook.  After it has finished running, click on the number to the right of the **Save Version** button.  This pulls up a list of versions on the right of the screen.  Click on the ellipsis **(...)** to the right of the most recent version, and select **Open in Viewer**.  This brings you into view mode of the same page. You will need to scroll down to get back to these instructions.\n"
+"4. Click on the **Output** tab on the right of the screen.  Then, click on the blue **Submit** button to submit your results to the leaderboard.\n"
+"\n"
+"You have now successfully submitted to the competition!\n"
+"\n"
+"If you want to keep working to improve your performance, select the blue **Edit** button in the top right of the screen. Then you can change your code and repeat the process. There's a lot of room to improve, and you will climb up the leaderboard as you work.\n")
+

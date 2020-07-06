@@ -2,7 +2,8 @@
 track = dict(
     author_username='matleonard',
     course_name='Natural Language Processing',
-    course_url='https://www.kaggle.com/learn/natural-language-processing'
+    course_url='https://www.kaggle.com/learn/natural-language-processing',
+    course_forum_url='https://www.kaggle.com/learn-forum'
 )
 
 lessons = [ {'topic': topic_name} for topic_name in

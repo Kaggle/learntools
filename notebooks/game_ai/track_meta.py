@@ -2,14 +2,16 @@
 track = dict(
     author_username='alexisbcook',
     course_name='Intro to Game AI and Reinforcement Learning',
-    course_url='https://www.kaggle.com/learn/intro-to-game-ai-and-reinforcement-learning'
+    course_url='https://www.kaggle.com/learn/intro-to-game-ai-and-reinforcement-learning',
+    course_forum_url='https://www.kaggle.com/learn-forum'
 )
 
 lessons = [ {'topic': topic_name} for topic_name in
                     ["Play the Game",
                      "One-Step Lookahead",
                      "N-Step Lookahead",
-                     "Deep Reinforcement Learning"
+                     "Deep Reinforcement Learning",
+                     "Getting Started with Halite"
                      ]
             ]
 
@@ -58,7 +60,15 @@ notebooks = [
         type='exercise',
         scriptid=8222487
         ),
+    dict(
+        filename='tut_halite.ipynb',
+        lesson_idx=4,
+        type='tutorial',
+        ),
 ]
 
 for nb in notebooks:
-    nb['competition_sources'] = ["connectx"]
+    if "tut_halite" not in nb['filename']:
+        nb['competition_sources'] = ["connectx"]
+    else:
+        nb['competition_sources'] = ["halite"]
