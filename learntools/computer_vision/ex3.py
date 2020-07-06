@@ -32,7 +32,7 @@ image_condense = tf.nn.pool(
             strides=(2, 2),
             padding='SAME',
         )
-        assert ((image_condense_ == image_condense)
+        assert ((image_condense_ == image_condense),
                 ("Something went wrong. The image you produced doesn't match the " +
                  "image I was expecting. Are your parameter values okay?"))
 
