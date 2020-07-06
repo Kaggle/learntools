@@ -623,18 +623,6 @@ def show_feature_maps(image, model, layer_name, offset=0,
 
 # Optimal Neuron/Filter/Layer Images #
 
-def random_transform(image, jitter, rotate, scale, fill_method):
-    jx = tf.random.uniform([], -jitter, jitter)
-    jy = tf.random.uniform([], -jitter, jitter)
-    r = tf.random.uniform([], -rotate, rotate)
-    s = tf.random.uniform([], 1.0, scale)
-    image = apply_affine_transform(image,
-                                   theta=r,
-                                   tx=jx, ty=jy,
-                                   zx=s, zy=s,
-                                   fill_method=fill_method)
-    return image
-
 def score(image, model):
     image = tf.squeeze(image)
     image = random_transform(image,
