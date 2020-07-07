@@ -50,7 +50,7 @@ class Q3(ThoughtExperiment):
 
 On the other hand, with average pooling, high activation pixels grouped together would retain most of their activation, while isolated pixels would tend to vanish. Maximum pooling would tend to destroy this information. 
 
-Which of these behaviors is desireable would depend on circumstances. With classification problems, experience has show that the combination of convolution, ReLU (or a variation), and maximum pooling produce the best results in classification problems. With another problem, some other combination might work better. Intuition can be a valuble guide, but the parts of a machine learning model can interact in ways that are hard to predict. The surest way to know if something works? Try it and find out!
+Which of these behaviors is desireable would depend on circumstances. With classification problems, experience has show that the combination of convolution, ReLU (or a variation), and maximum pooling produce the best results. With another problem, some other combination might work better. Intuition can be a valuble guide, but the parts of a machine learning model can interact in ways that are hard to predict. The surest way to know if something works? Try it and find out!
 """
 
 
@@ -60,17 +60,13 @@ class Q4A(CodingProblem):
     _solution = ""
     def check(self):
         pass
-
-class Q4B(CodingProblem):
-    _hint = ""
-    _solution = ""
-    def check(self):
-        pass
     
-class Q4C(ThoughtExperiment):
-    _solution = ""
+class Q4B(ThoughtExperiment):
+    _hint = """VGG16 creates 512 features maps from an image, which might represent something like a wheel or a window. Each square in *Pooled Feature Maps* represents a feature. What would a large value for a feature mean?"""
+    _solution = """The VGG16 base produces 512 feature maps. We can think of each feature map as representing some high-level visual feature in the original image -- maybe a wheel or window. Pooling a map gives us a single number, which we could think of as a *score* for that feature: large if the feature is present, small if it is absent. Cars tend to score high with one set of features, and Trucks score high with another. Now, instead of trying to map raw features to classes, the head only has to work with these scores that `GlobalAvgPool2D` produced, a much easier problem for it to solve.
+"""
 
-Q4 = MultipartProblem(Q4A, Q4B, Q4C)
+Q4 = MultipartProblem(Q4A, Q4B)
 
 
 qvars = bind_exercises(globals(), [
