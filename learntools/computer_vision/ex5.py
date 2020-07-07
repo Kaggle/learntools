@@ -72,8 +72,8 @@ model = keras.Sequential([
                ))
 
         # Check activations
-        activations = [model.activation.__name__[2],
-                       model.activation.__name__[3]]
+        activations = [model.layers[2].activation.__name__,
+                       model.layers[3].activation.__name__]
         assert((activations[0] is 'relu' and activations[1] is 'relu'),
                ("Your convolutional layers should both have `'relu'` activation."
                ))
