@@ -30,15 +30,27 @@ model = Sequential([
                 "The two layers you add should both be `Dense` layers. You added a {} layer and a {} layer.".format(layer_classes[2], layer_classes[3]))
         # assert ( , ) # TODO: parameter check
 
-# TODO: change to coding problem
-class Q3(EqualityCheckProblem):
-    _vars = ['loss', 'accuracy']
-    _expected = ['binary_crossentropy', 'binary_accuracy']
-    _hint = "These are the same as in the tutorial."
+
+class Q3(CodingProblem):
+    _hint = "This is a *binary* classification problem."
     _solution = CS("""
-loss = 'binary_crossentropy'
-accuracy = 'binary_accuracy'
+model.compile(
+    optimizer='adam',
+    loss='binary_crossentropy',
+    metrics=['binary_accuracy'],
+)
 """)
+    _var = "model"
+    def check(self, model):
+        loss = model.compiled_loss._losses
+        assert((loss == 'binary_crossentropy'),
+               ("The loss should be `'binary_crossentropy'`. " +
+                "You gave {}".format(loss)))
+
+        metric = model.compiled_metrics._metrics
+        assert((metric == 'binary_accuracy'),
+               ("The metrics should be `['binary_accuracy']`. " +
+                "You gave {}".format(metric)))
 
 
 class Q4(ThoughtExperiment):

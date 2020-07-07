@@ -31,6 +31,7 @@ class Q4(CodingProblem):
     def check(self):
         pass
 
+
 qvars = bind_exercises(globals(), [
         Q1, Q2, Q3, Q4,
     ],

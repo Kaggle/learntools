@@ -8,7 +8,7 @@ class Q1(CodingProblem):
 import tensorflow.keras as keras
 import tensorflow.keras.layers as layers
 
-model = Sequential([
+model = keras.Sequential([
     # Block One
     layers.Conv2D(filters=64, kernel_size=5, activation='relu', padding='same',
                   input_shape=[192, 192, 3]),
