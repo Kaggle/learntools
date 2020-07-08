@@ -22,7 +22,10 @@ Q2 = MultipartProblem(Q2A, Q2B)
 
 
 class Q3(CodingProblem):
-    pass
+    _solution = ""
+    _hint = ""
+    def check(self):
+        pass
 
 
 qvars = bind_exercises(globals(), [
