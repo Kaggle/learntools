@@ -21,12 +21,17 @@ class Q2B(ThoughtExperiment):
 Q2 = MultipartProblem(Q2A, Q2B)
 
 
-class Q3(CodingProblem):
+class Q3A(CodingProblem):
     _solution = ""
     _hint = ""
     def check(self):
         pass
 
+class Q3B(ThoughtExperiment):
+    _hint = ""
+    _solution = ""
+
+Q3 = MultipartProblem(Q3A, Q3B)    
 
 qvars = bind_exercises(globals(), [
         Q1, Q2, Q3,
