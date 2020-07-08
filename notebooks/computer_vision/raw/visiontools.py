@@ -621,103 +621,202 @@ def show_feature_maps(image, model, layer_name, offset=0,
         plt.axis('off')
 
 
-# Optimal Neuron/Filter/Layer Images #
+# Optimization Visualization #
 
-def score(image, model):
-    image = tf.squeeze(image)
-    image = random_transform(image,
-                             jitter=10, scale=1.2,
-                             rotate=1.0,
-                             fill_method='reflect')
-    image = tf.expand_dims(image, 0)
-    activation = model(image)    
-    scr = tf.math.reduce_mean(activation)
-    return scr
 
-def deprocess(image):
-    image = image.numpy()
-    image -= image.mean()
-    image /= (image.std() + 1e-5)
-    image *= 0.15
+# Model
+class OptVis(object):
+    def __init__(self, model, layer, filter, neuron=False, size=[128, 128], fft=True, scale=0.01):
+        
+        # Create activation model
+        activations = model.get_layer(layer).output
+        if len(activations.shape) == 4:
+            activations = activations[:,:,:,filter]
+        if neuron:
+            _, y, x = activations.shape
+            activations = activations[:, y//2, x//2]
+        else:
+            raise ValueError("Activation shapes other than 4 not implemented.")
+        self.activation_model = keras.Model(
+            inputs=model.inputs,
+            outputs=activations
+        )
+
+        # Create buffer with random RGB values
+        self.shape = [1, *size, 3]
+        self.fft = fft
+        self.image = init_buffer(height=size[0], width=size[1], fft=fft, scale=scale)
+
+    def __call__(self):
+        # Preprocessing
+        # 
+
+        image = self.activation_model(self.image)
+        
+        return image
+
+    def compile(self, optimizer):
+        self.optimizer = optimizer
     
-    # Center crop
-    image = image[25:-25, 25:-25, :]
+    def train_step(self):
+        # Compute loss
+        with tf.GradientTape() as tape:
+            image = self.image
+            if self.fft:
+                image = fft_to_rgb(shape=self.shape, buffer=image)
+            image = to_valid_rgb(image)
+            image = random_transform(
+                tf.squeeze(image),
+                jitter=8, 
+                scale=1.1,
+                rotate=1.0,
+                fill_method='reflect')
+            image = tf.expand_dims(image, 0)
+            loss = clip_gradients(score(self.activation_model(image)))
     
-    # Clip to [0, 1]
-    image += 0.5
-    image *= np.clip(image, 0, 1)
+        # Apply gradient
+        grads = tape.gradient(loss, self.image)
+        self.optimizer.apply_gradients([(-grads, self.image)])
+        
+        return {'loss': loss}
+
+#     def train_step(self):
+#         loss_fn = lambda: -score(self.activation_model(to_valid_rgb(self.image)))
+#         self.optimizer.minimize(loss_fn, self.image)
+        
+#         return {'loss': loss_fn()}
+
+    def fit(self, epochs=1, log=False):
+        for epoch in tf.range(epochs):
+            loss = self.train_step()
+            if log: print('Score: {}'.format(loss['loss']))
+        
+        image = self.image
+        if self.fft:
+            image = fft_to_rgb(shape=self.shape, buffer=image)
+        return to_valid_rgb(image)
     
-    # Convert to RGB array
-    image *= 255
-    image = np.clip(image, 0, 255).astype('uint8')
-    return image
+# Score
+
+def score(x):
+    s = tf.math.reduce_mean(x)
+    return s
+
+@tf.custom_gradient
+def clip_gradients(y):
+    def backward(dy):
+        return tf.clip_by_norm(dy, 1.0)
+    return y, backward
 
 def normalize_gradients(grads, method='l2'):
     if method is 'l2':
         grads = tf.math.l2_normalize(grads)
     elif method is 'std':
         grads /= tf.math.reduce_std(grads) + 1e-8
-    elif method is 'rms':
-        grads /= (tf.math.sqrt(tf.math.reduce_mean(tf.math.square(grads)) + 1e-5))
+    elif method is 'clip':
+        grads = tf.clip_by_norm(grads, 1.0)
     return grads
 
-def train(model, image, step_size):
-    with tf.GradientTape() as t:
-        current_score = score(image, model)
-    grads = t.gradient(current_score, image)
-    grads = normalize_gradients(grads)
-    image.assign_add(grads * step_size)
-#    image.assign(tf.clip_by_value(image, -5, 5))
-    return current_score, image
 
+# Color
 
-def initialize_image(size, minval=-0.125, maxval=0.125):
-    # image = (np.random.random((1, *size, 3)) * 20 + 128) / 255
-    image = tf.random.uniform(shape=[1, *size, 3], 
-                              minval=minval, maxval=maxval, 
-                              dtype=tf.float32)
-    return tf.Variable(image, dtype=tf.float32, trainable=True)
+# ImageNet statistics
+color_correlation_svd_sqrt = np.asarray(
+    [[0.26, 0.09, 0.02],
+     [0.27, 0.00, -0.05],
+     [0.27, -0.09, 0.03]]
+).astype("float32")
+max_norm_svd_sqrt = np.max(np.linalg.norm(color_correlation_svd_sqrt, axis=0))
+color_correlation_normalized = color_correlation_svd_sqrt / max_norm_svd_sqrt
+color_mean = np.asarray([0.485, 0.456, 0.406])
+color_std = np.asarray([0.229, 0.224, 0.225])
 
+def correlate_color(image):
+    image_flat = tf.reshape(image, [-1, 3])
+    image_flat = tf.matmul(image_flat, color_correlation_normalized.T)
+    image = tf.reshape(image_flat, tf.shape(image))
+    return image
 
-def visualize_filter(base_model, 
-                     layer_name, 
-                     filter_index=None,
-                     size=[200, 200],
-                     epochs=50,
-                     step_size=10,
-                     log=False,
-                    ):
+def normalize(image):
+    return (image - color_mean) / color_std
 
-    image = initialize_image(size)
+def to_valid_rgb(image, crop=False):
+    if crop:
+        image = image[:, 25:-25, 25:-25, :]
+    image = correlate_color(image)
+    image = tf.nn.sigmoid(image)
+    return image
+
+# Image Buffers
+
+def init_buffer(height, width=None, batches=1, channels=3, scale=0.01, fft=True):
+    """Initialize an image buffer."""
+    width = width or height
+    shape = [batches, height, width, channels]
+    fn = init_fft if fft else init_pixel
     
-    if filter_index is None:
-        outputs = base_model.get_layer(layer_name).output
+    buffer = fn(shape, scale)
+    
+    return tf.Variable(buffer, trainable=True)
+
+
+def init_pixel(shape, scale=None):
+    batches, h, w, ch = shape
+#     initializer = tf.initializers.VarianceScaling(scale=scale)
+    initializer = tf.random.uniform
+    buffer = initializer(shape=[batches, h, w, ch],
+                         dtype=tf.float32)
+    return buffer
+
+# FFT
+
+# Adapted from https://github.com/tensorflow/lucid/blob/master/lucid/optvis/param/spatial.py
+# and https://github.com/elichen/Feature-visualization/blob/master/optvis.py
+def rfft2d_freqs(h, w):
+    """Computes 2D spectrum frequencies."""
+
+    fy = np.fft.fftfreq(h)[:, np.newaxis]
+    # when we have an odd input dimension we need to keep one additional
+    # frequency and later cut off 1 pixel
+    if w % 2 == 1:
+        fx = np.fft.fftfreq(w)[: w // 2 + 2]
     else:
-        outputs = base_model.get_layer(layer_name).output[:,:,:,filter_index]
-    model = tf.keras.Model(inputs=base_model.inputs, outputs=outputs)
-
-    for epoch in range(epochs):
-        current_score, image = train(model, image, step_size=step_size)
-        if log and epoch % 100 == 0: 
-            print('Epoch %2d, score=%2.5f' % (epoch, current_score))
-
-    return deprocess(tf.squeeze(image))
+        fx = np.fft.fftfreq(w)[: w // 2 + 1]
+        
+    return np.sqrt(fx * fx + fy * fy)
 
 
-def show_filters(model, layer_name, offset=0,
-                 rows=3, cols=3, width=12,
-                 **kwargs):
-    gs = gridspec.GridSpec(rows, cols, wspace=0.01, hspace=0.01)
-    plt.figure(figsize=(width, (width * rows) / cols))
-    for f, (r, c) in enumerate(product(range(rows), range(cols))):
-        filter_viz = visualize_filter(
-            model,
-            layer_name,
-            filter_index = f + offset,
-            **kwargs)
-        plt.subplot(gs[r, c])
-        plt.imshow(filter_viz)
-        plt.axis('off')
+def init_fft(shape, scale=0.1):
+    """Initialize FFT image buffer."""
+    
+    batch, h, w, ch = shape
+    freqs = rfft2d_freqs(h, w)
+    init_val_size = (2, batch, ch) + freqs.shape
+
+    buffer = np.random.normal(size=init_val_size, scale=scale).astype(np.float32)
+    
+    return buffer
+
+
+def fft_to_rgb(shape, buffer, decay_power=1.0):
+    """Convert FFT spectrum buffer to RGB image buffer."""
+    
+    batch, h, w, ch = shape
+    freqs = rfft2d_freqs(h, w)
+    
+    scale = 1.0 / np.maximum(freqs, 1.0 / max(w, h)) ** decay_power
+    scale *= np.sqrt(w * h)
+    spectrum = tf.complex(buffer[0], buffer[1]) * scale
+    
+    image = tf.signal.irfft2d(spectrum)
+    image = tf.transpose(image, (0, 2, 3, 1))
+    
+    # in case of odd spatial input dimensions we need to crop
+    image = image[:batch, :h, :w, :ch]
+    image = image / 4.0  # TODO: is that a magic constant?
+    
+    return image
+
 
 
 # Image Utilities #
@@ -755,6 +854,13 @@ def circle(size, val=None, r_shrink=0):
     circle = transform.resize(circle, size, order=0)
     return circle
 
+def random_map(size, scale=0.5, decay_power=1.0):
+    h, w = size
+    img = init_buffer(h, w, scale=scale)
+    img = fft_to_rgb([1, h, w, 3], img, decay_power=decay_power)
+    img = to_valid_rgb(img)
+    img = img[0,:,:,0]
+    return img
 
 # PREDEFINED KERNELS #
 
