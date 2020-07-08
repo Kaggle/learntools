@@ -7,7 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import gridspec
 import visiontools
-from visiontools import StanfordCars
+from visiontools import StanfordCars, read_image, show_image
 import tensorflow as tf
 import tensorflow_datasets as tfds
 
