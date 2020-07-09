@@ -30,29 +30,29 @@ model = Sequential([
     def check(self, model):
         hidden_units = 6
         assert (len(model.layers) == 4), \
-               ("You should have four lines inside of `Sequential`. " +
-                 "You had {}."
-                 .format(len(model.layers)))
+               (("You should have four lines inside of `Sequential`. " +
+                 "You had {}.")
+                .format(len(model.layers)))
 
         layer_classes = [layer.__class__.__name__ for layer in model.layers]
         assert (layer_classes[2] == 'Dense' and layer_classes[3] == 'Dense'), \
-               ("The two layers you add should both be `Dense` layers. " +
-                 "You added a {} layer and a {} layer."
-                 .format(layer_classes[2], layer_classes[3]))
+               (("The two layers you add should both be `Dense` layers. " +
+                 "You added a {} layer and a {} layer.")
+                .format(layer_classes[2], layer_classes[3]))
 
         dense_1 = model.layers[-2]
         assert (dense_1.units == hidden_units and
                 dense_1.activation.__name__ == 'relu'), \
-                ("The first dense layer should have {} units with {} activation. " +
-                 "Yours had {} units and {} activation."
+                (("The first dense layer should have {} units with {} activation. " +
+                  "Yours had {} units and {} activation.")
                  .format(hidden_units, 'relu',
                          dense_1.units, dense_1.activation.__name__))
         
         dense_2 = model.layers[-1]
         assert (dense_2.units == 1 and
-                dense_2.activation.__name__ == 'sigmoid'), \
-                ("The second dense layer should have {} units with {} activation. " +
-                 "Yours had {} units and {} activation."
+                dense_2.activation.__name__ == 'snigmoid'), \
+                (("The second dense layer should have {} units with {} activation. " +
+                  "Yours had {} units and {} activation.")
                  .format(hidden_units, 'sigmoid',
                          dense_2.units, dense_2.activation.__name__))
 
@@ -72,13 +72,13 @@ model.compile(
     def check(self, model):
         loss = model.compiled_loss._losses
         assert (loss == 'binary_crossentropy'), \
-            ("The loss should be `'binary_crossentropy'`. " +
-             "You gave {}".format(loss))
+            (("The loss should be `'binary_crossentropy'`. " +
+              "You gave {}").format(loss))
 
         metric = model.compiled_metrics._metrics
         assert (metric == 'binary_accuracy'), \
-            ("The metrics should be `['binary_accuracy']`. " +
-             "You gave {}".format(metric))
+            (("The metrics should be `['binary_accuracy']`. " +
+              "You gave {}").format(metric))
 
 
 class Q4(ThoughtExperiment):
