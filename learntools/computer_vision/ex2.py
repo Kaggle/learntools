@@ -31,9 +31,10 @@ kernel = tf.constant([
              .format(kernel.dtype))
         assert (len(kernel.shape) == 2), \
             ("Your kernel needs to have have a shape with only two dimensions, " +
-             "but you defined a kernel with shape {}, which has {} dimensions. " +
-             "You should have only one level of nesting in your brackets, like " +
-             "`[[1, 2], [3, 4]].` See the kernel in the tutorial for a guide.")
+             "but you defined a kernel with shape `{}`, which has `{}` dimensions. " +
+             "Be sure to have only one level of nesting in your brackets, like " +
+             "`[[1, 2], [3, 4]].` See the kernel in the tutorial for a guide."
+             .format(kernel.shape, len(kernel.shape)))
 
 class Q2(CodingProblem):
     _vars = ['image_filter']
@@ -59,15 +60,15 @@ image_filter = tf.nn.conv2d(
     def check(self, image_filter):
         # Default size defined in the exercise.
         size = [400, 400]
-        image_size = image_filter.shape.as_list()[:2]
+        image_size = tf.squeeze(image_filter).shape.as_list()
         assert image_size == size, \
-            ("The size of `image_filter` should be `{}`, but actually is {}." +
+            ("The size of `image_filter` should be `{}`, but actually is `{}`." +
              "Did you use `padding='SAME'` and `strides=1`?"
              .format(size, image_size))
 
 
 class Q3(CodingProblem):
-    _vars = ['image_detect', 'image_filter', 'image']
+    _vars = ['image_detect']
     _hint = """
 Your solution should look something like:
 ```python
@@ -77,12 +78,8 @@ image_detect = tf.nn.relu(____)
     _solution = CS("""
 image_detect = tf.nn.relu(image_filter)
 """)        
-    def check(self, image_detect, image_filter, image):
-        assert image_detect != tf.nn.relu(image), \
-            ("It looks like you might have applied the ReLU to `image` instead " +
-             "of `image_filter`. Remember that the input to ReLU is the output " +
-             "of the convolution.")
-
+    def check(self, image_detect):
+        assert tf.reduce_min(image_detect).numpy() >= 0.0
 
 class Q4A(CodingProblem):
     _hint = ""
