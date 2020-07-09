@@ -50,9 +50,9 @@ model = Sequential([
         
         dense_2 = model.layers[-1]
         assert (dense_2.units == 1 and
-                dense_2.activation.__name__ == 'snigmoid'), \
-                (("The second dense layer should have {} units with {} activation. " +
-                  "Yours had {} units and {} activation.")
+                dense_2.activation.__name__ == 'sigmoid'), \
+                (("The second dense layer should have {} units with `{}` activation. " +
+                  "Yours had {} units and `{}` activation.")
                  .format(hidden_units, 'sigmoid',
                          dense_2.units, dense_2.activation.__name__))
 
@@ -73,12 +73,12 @@ model.compile(
         loss = model.compiled_loss._losses
         assert (loss == 'binary_crossentropy'), \
             (("The loss should be `'binary_crossentropy'`. " +
-              "You gave {}").format(loss))
+              "You gave `{}`").format(loss))
 
-        metric = model.compiled_metrics._metrics
-        assert (metric == 'binary_accuracy'), \
+        metrics = model.compiled_metrics._metrics
+        assert (metrics == ['binary_accuracy']), \
             (("The metrics should be `['binary_accuracy']`. " +
-              "You gave {}").format(metric))
+              "You gave `{}`").format(metrics))
 
 
 class Q4(ThoughtExperiment):
