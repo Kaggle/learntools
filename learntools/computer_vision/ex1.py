@@ -12,9 +12,9 @@ class Q1(CodingProblem):
 
 
 class Q2(CodingProblem):
-    self.hidden_units = 6
+    hidden_units = 6
     _var = 'model'
-    _hint = "You need to add two new `Dense` layers. The first should have `units={}` and `activation='relu'`. The second should have `units=1` and `activation='sigmoid'`.".format(self.hidden_units)
+    _hint = "You need to add two new `Dense` layers. The first should have `units={}` and `activation='relu'`. The second should have `units=1` and `activation='sigmoid'`.".format(hidden_units)
     _solution = CS(""" 
 import tensorflow.keras as keras
 import tensorflow.keras.layers as layers
@@ -28,6 +28,7 @@ model = Sequential([
 """.format(hidden_units))
 
     def check(self, model):
+        hidden_units = 6
         assert ((len(model.layers) == 4),
                 ("You should have four lines inside of `Sequential`. " +
                  "You had {}."
@@ -40,11 +41,11 @@ model = Sequential([
                  .format(layer_classes[2], layer_classes[3])))
 
         dense_1 = model.layers[-2]
-        assert ((dense_1.units == self.hidden_units and
+        assert ((dense_1.units == hidden_units and
                  dense_1.activation.__name__ == 'relu'),
                 ("The first dense layer should have {} units with {} activation. " +
                  "Yours had {} units and {} activation."
-                 .format(self.hidden_units, 'relu',
+                 .format(hidden_units, 'relu',
                          dense_1.units, dense_1.activation.__name__)))
         
         dense_2 = model.layers[-1]
@@ -52,7 +53,7 @@ model = Sequential([
                  dense_2.activation.__name__ == 'sigmoid'),
                 ("The second dense layer should have {} units with {} activation. " +
                  "Yours had {} units and {} activation."
-                 .format(self.hidden_units, 'sigmoid',
+                 .format(hidden_units, 'sigmoid',
                          dense_2.units, dense_2.activation.__name__)))
 
 
