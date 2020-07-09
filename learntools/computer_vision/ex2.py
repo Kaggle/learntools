@@ -27,13 +27,13 @@ kernel = tf.constant([
             ("Your kernel needs to be a TensorFlow tensor. Be sure to keep the " +
              "`tf.constant` when giving your answer.")
         assert (kernel.dtype.is_floating or kernel.dtype.is_integer), \
-            ("You need to define a numeric tensor. Your tensor has type `{}`."
+            (("You need to define a numeric tensor. Your tensor has type `{}`.")
              .format(kernel.dtype))
         assert (len(kernel.shape) == 2), \
-            ("Your kernel needs to have have a shape with only two dimensions, " +
-             "but you defined a kernel with shape `{}`, which has `{}` dimensions. " +
-             "Be sure to have only one level of nesting in your brackets, like " +
-             "`[[1, 2], [3, 4]].` See the kernel in the tutorial for a guide."
+            (("Your kernel needs to have have a shape with only two dimensions, " +
+              "but you defined a kernel with shape `{}`, which has `{}` dimensions. " +
+              "Be sure to have only one level of nesting in your brackets, like " +
+              "`[[1, 2], [3, 4]].` See the kernel in the tutorial for a guide.")
              .format(kernel.shape, len(kernel.shape)))
 
 class Q2(CodingProblem):
@@ -62,8 +62,8 @@ image_filter = tf.nn.conv2d(
         size = [400, 400]
         image_size = tf.squeeze(image_filter).shape.as_list()
         assert image_size == size, \
-            ("The size of `image_filter` should be `{}`, but actually is `{}`." +
-             "Did you use `padding='SAME'` and `strides=1`?"
+            (("The size of `image_filter` should be `{}`, but actually is `{}`." +
+              "Did you use `padding='SAME'` and `strides=1`?")
              .format(size, image_size))
 
 
