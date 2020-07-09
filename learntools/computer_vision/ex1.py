@@ -1,16 +1,20 @@
 from learntools.core import *
 
+
 class Q1(CodingProblem):
     _var = 'pretrained_base'
-    _hint = """ When doing transfer learning, it's generally not a good idea to retrain the entire base -- at least not without some care. The reason is that the random weights in the head will initially create large gradient updates, which propogate back into the base layers and destroy much of the pretraining. Using techniques known as **fine tuning** it's possible to further train the base on new data, but this requires some care to do well.
-"""
+    _hint = "`True` or `False`?"
+    _correct_message = """When doing transfer learning, it's generally not a good idea to retrain the entire base -- at least not without some care. The reason is that the random weights in the head will initially create large gradient updates, which propogate back into the base layers and destroy much of the pretraining. Using techniques known as **fine tuning** it's possible to further train the base on new data, but this requires some care to do well."""
     _solution = CS('pretrained_base.trainable = False')
     def check(self, pretrained_base):
-        assert (not pretrained_base.trainable)
+        assert ((not pretrained_base.trainable),
+                ("""The base should not be trainable. Since it's already been pretrained on a large dataset, you can expect that it will be hard to improve."""))
+
 
 class Q2(CodingProblem):
+    hidden_units = 6
     _var = 'model'
-    _hint = "You need to add two new `Dense` layers. Everything in `Sequential` should end up the same as in the tutorial."
+    _hint = "You need to add two new `Dense` layers. The first should have `units={}` and `activation='relu'`. The second should have `units=1` and `activation='sigmoid'.".format(hidden_units)
     _solution = CS(""" 
 import tensorflow.keras as keras
 import tensorflow.keras.layers as layers
@@ -18,17 +22,39 @@ import tensorflow.keras.layers as layers
 model = Sequential([
     pretrained_base,
     layers.Flatten(),
-    layers.Dense(8, activation='relu'),
+    layers.Dense({}, activation='relu'),
     layers.Dense(1, activation='sigmoid'),
 ])
-""")
+""".format(hidden_units))
+
     def check(self, model):
+        assert ((len(model.layers) == 4),
+                ("You should have four lines inside of `Sequential`. " +
+                 "You had {}."
+                 .format(len(model.layers))))
+
         layer_classes = [layer.__class__.__name__ for layer in model.layers]
-        assert (len(model.layers) == 4,
-                "You should have four lines inside of `Sequential`. You had {}.".format(len(model.layers)))
-        assert (layer_classes[2] == 'Dense' and layer_classes[3] == 'Dense',
-                "The two layers you add should both be `Dense` layers. You added a {} layer and a {} layer.".format(layer_classes[2], layer_classes[3]))
-        # assert ( , ) # TODO: parameter check
+        assert ((layer_classes[2] == 'Dense' and layer_classes[3] == 'Dense'),
+                ("The two layers you add should both be `Dense` layers. " +
+                 "You added a {} layer and a {} layer."
+                 .format(layer_classes[2], layer_classes[3])))
+
+        dense_1 = model.layers[-2]
+        assert ((dense_1.units == hidden_units and
+                 dense_1.activation.__name__ == 'relu'),
+                ("The first dense layer should have {} units with {} activation. " +
+                 "Yours had {} units and {} activation."
+                 .format(hidden_units, 'relu',
+                         dense_1.units, dense_1.activation.__name__)))
+        
+        dense_2 = model.layers[-1]
+        assert ((dense_2.units == 1 and
+                 dense_2.activation.__name__ == 'sigmoid'),
+                ("The second dense layer should have {} units with {} activation. " +
+                 "Yours had {} units and {} activation."
+                 .format(hidden_units, 'sigmoid',
+                         dense_2.units, dense_2.activation.__name__)))
+
 
 
 class Q3(CodingProblem):
