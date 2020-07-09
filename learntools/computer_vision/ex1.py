@@ -7,8 +7,8 @@ class Q1(CodingProblem):
     _correct_message = """When doing transfer learning, it's generally not a good idea to retrain the entire base -- at least not without some care. The reason is that the random weights in the head will initially create large gradient updates, which propogate back into the base layers and destroy much of the pretraining. Using techniques known as **fine tuning** it's possible to further train the base on new data, but this requires some care to do well."""
     _solution = CS('pretrained_base.trainable = False')
     def check(self, pretrained_base):
-        assert ((not pretrained_base.trainable),
-                ("""The base should not be trainable. Since it's already been pretrained on a large dataset, you can expect that it will be hard to improve."""))
+        assert (not pretrained_base.trainable), \
+               ("""The base should not be trainable. Since it's already been pretrained on a large dataset, you can expect that it will be hard to improve.""")
 
 
 class Q2(CodingProblem):
@@ -29,32 +29,32 @@ model = Sequential([
 
     def check(self, model):
         hidden_units = 6
-        assert ((len(model.layers) == 4),
-                ("You should have four lines inside of `Sequential`. " +
+        assert (len(model.layers) == 4), \
+               ("You should have four lines inside of `Sequential`. " +
                  "You had {}."
-                 .format(len(model.layers))))
+                 .format(len(model.layers)))
 
         layer_classes = [layer.__class__.__name__ for layer in model.layers]
-        assert ((layer_classes[2] == 'Dense' and layer_classes[3] == 'Dense'),
-                ("The two layers you add should both be `Dense` layers. " +
+        assert (layer_classes[2] == 'Dense' and layer_classes[3] == 'Dense'), \
+               ("The two layers you add should both be `Dense` layers. " +
                  "You added a {} layer and a {} layer."
-                 .format(layer_classes[2], layer_classes[3])))
+                 .format(layer_classes[2], layer_classes[3]))
 
         dense_1 = model.layers[-2]
-        assert ((dense_1.units == hidden_units and
-                 dense_1.activation.__name__ == 'relu'),
+        assert (dense_1.units == hidden_units and
+                dense_1.activation.__name__ == 'relu'), \
                 ("The first dense layer should have {} units with {} activation. " +
                  "Yours had {} units and {} activation."
                  .format(hidden_units, 'relu',
-                         dense_1.units, dense_1.activation.__name__)))
+                         dense_1.units, dense_1.activation.__name__))
         
         dense_2 = model.layers[-1]
-        assert ((dense_2.units == 1 and
-                 dense_2.activation.__name__ == 'sigmoid'),
+        assert (dense_2.units == 1 and
+                dense_2.activation.__name__ == 'sigmoid'), \
                 ("The second dense layer should have {} units with {} activation. " +
                  "Yours had {} units and {} activation."
                  .format(hidden_units, 'sigmoid',
-                         dense_2.units, dense_2.activation.__name__)))
+                         dense_2.units, dense_2.activation.__name__))
 
 
 
@@ -68,16 +68,17 @@ model.compile(
 )
 """)
     _var = "model"
+
     def check(self, model):
         loss = model.compiled_loss._losses
-        assert((loss == 'binary_crossentropy'),
-               ("The loss should be `'binary_crossentropy'`. " +
-                "You gave {}".format(loss)))
+        assert (loss == 'binary_crossentropy'), \
+            ("The loss should be `'binary_crossentropy'`. " +
+             "You gave {}".format(loss))
 
         metric = model.compiled_metrics._metrics
-        assert((metric == 'binary_accuracy'),
-               ("The metrics should be `['binary_accuracy']`. " +
-                "You gave {}".format(metric)))
+        assert (metric == 'binary_accuracy'), \
+            ("The metrics should be `['binary_accuracy']`. " +
+             "You gave {}".format(metric))
 
 
 class Q4(ThoughtExperiment):
