@@ -3,7 +3,7 @@ track = dict(
     author_username='alexisbcook',
     course_name='Geospatial Analysis',
     course_url='https://www.kaggle.com/learn/geospatial-analysis',
-    course_forum_url='https://www.kaggle.com/learn-forum'
+    course_forum_url='https://www.kaggle.com/learn-forum/161464'
 )
 
 lessons = [ {'topic': topic_name} for topic_name in
@@ -60,6 +60,7 @@ notebooks = [
         lesson_idx=3,
         type='tutorial',
         dataset_sources = ["alexisbcook/geospatial-learn-course-data", "alexisbcook/data-for-datavis"],
+        enable_internet=True
         ),
     dict(
         filename='ex4.ipynb',
