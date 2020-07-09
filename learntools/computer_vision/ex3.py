@@ -2,40 +2,27 @@ from learntools.core import *
 import tensorflow as tf
 
 class Q1(CodingProblem):
-    _vars = ['image_condense', 'image_detect', 'image_filter', 'image']
+    _vars = ['image_condense']
     _hint = """
-Your solution should look something like:
-```python
-image_condense = tf.nn.pool(
-    input=____,
-    window_shape=____,
-    pooling_type=____,
-    strides=____,
-    padding=____,
-)
-```
+You'll need `window_shape=2` and `pooling_type='MAX'`.
 """
     _solution = CS("""
 image_condense = tf.nn.pool(
     input=image_detect,
-    window_shape=(2, 2),
+    window_shape=2, # or (2, 2)
     pooling_type='MAX',
-    strides=(2, 2),
+    strides=2, # or (2, 2)
     padding='SAME',
 )
 """)
-    def check(self, image_condense, image_detect, image_filter, image):
-        image_condense_ = tf.nn.pool(
-            input=image_detect,
-            window_shape=(2, 2),
-            pooling_type='MAX',
-            strides=(2, 2),
-            padding='SAME',
-        )
-        assert ((image_condense_ == image_condense),
-                ("Something went wrong. The image you produced doesn't match the " +
-                 "image I was expecting. Are your parameter values okay?"))
 
+    def check(self, image_condense):
+        size = [99, 99]
+        image_size = tf.squeeze(image_condense).shape.as_list()
+        assert image_size == size, \
+            (("The size of `image_condense` should be `{}`, but actually is `{}`." +
+              "Did you use `padding='SAME'` and `strides=2`?")
+             .format(size, image_size))
 
         
 class Q2(ThoughtExperiment):

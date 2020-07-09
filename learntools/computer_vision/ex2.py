@@ -26,15 +26,24 @@ kernel = tf.constant([
         assert isinstance(kernel, tf.Tensor), \
             ("Your kernel needs to be a TensorFlow tensor. Be sure to keep the " +
              "`tf.constant` when giving your answer.")
+
         assert (kernel.dtype.is_floating or kernel.dtype.is_integer), \
             (("You need to define a numeric tensor. Your tensor has type `{}`.")
              .format(kernel.dtype))
-        assert (len(kernel.shape) == 2), \
+
+        shape = kernel.shape.as_list()
+        assert (len(shape) == 2), \
             (("Your kernel needs to have have a shape with only two dimensions, " +
               "but you defined a kernel with shape `{}`, which has `{}` dimensions. " +
               "Be sure to have only one level of nesting in your brackets, like " +
               "`[[1, 2], [3, 4]].` See the kernel in the tutorial for a guide.")
-             .format(kernel.shape, len(kernel.shape)))
+             .format(shape, len(shape)))
+        
+        assert shape == [3, 3] \
+            (("Your kernel needs a shape `[3, 3]`, but yours has shape {}. " +
+              "Remember that you need 3 rows and 3 columns.")
+              .format(shape))
+
 
 class Q2(CodingProblem):
     _vars = ['image_filter']
@@ -45,7 +54,7 @@ image_filter = tf.nn.conv2d(
     input=____,
     filters=____,
     strides=1,
-    padding='SAME',
+    padding='VALID',
 )
 ```
 """
@@ -54,16 +63,16 @@ image_filter = tf.nn.conv2d(
     input=image,
     filters=kernel,
     strides=1, # or (1, 1)
-    padding='SAME',
+    padding='VALID',
 )
 """)
     def check(self, image_filter):
         # Default size defined in the exercise.
-        size = [400, 400]
+        size = [398, 398]
         image_size = tf.squeeze(image_filter).shape.as_list()
         assert image_size == size, \
             (("The size of `image_filter` should be `{}`, but actually is `{}`." +
-              "Did you use `padding='SAME'` and `strides=1`?")
+              "Did you use `padding='VALID'` and `strides=1`?")
              .format(size, image_size))
 
 
@@ -77,9 +86,18 @@ image_detect = tf.nn.relu(____)
 """
     _solution = CS("""
 image_detect = tf.nn.relu(image_filter)
-""")        
+""")
+
     def check(self, image_detect):
-        assert tf.reduce_min(image_detect).numpy() >= 0.0
+        assert isinstance(image_detect, tf.Tensor), \
+            (("`image_detect` should be the output of `tf.nn.relu`, which " +
+              " is a `tf.Tensor`. You have `image_detect` as a `{}`. Did " +
+              " you use the `tf.nn.relu` function?")
+             .format(image_detect.__class__.__name__))
+        assert tf.reduce_min(image_detect).numpy() >= 0.0, \
+            ("All the values of `image_detect` should be greater than or " +
+             "equal to 0. Did you use the `tf.nn.relu` function?")
+
 
 class Q4A(CodingProblem):
     _hint = ""

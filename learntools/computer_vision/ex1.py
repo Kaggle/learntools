@@ -14,7 +14,7 @@ class Q1(CodingProblem):
 class Q2(CodingProblem):
     hidden_units = 6
     _var = 'model'
-    _hint = "You need to add two new `Dense` layers. The first should have `units={}` and `activation='relu'`. The second should have `units=1` and `activation='sigmoid'`.".format(hidden_units)
+    _hint = "You need to add two new `Dense` layers. The first should have {} units and `'relu'` activation. The second should have 1 unit and `'sigmoid'` activation.".format(hidden_units)
     _solution = CS(""" 
 import tensorflow.keras as keras
 import tensorflow.keras.layers as layers
@@ -30,21 +30,21 @@ model = Sequential([
     def check(self, model):
         hidden_units = 6
         assert (len(model.layers) == 4), \
-               (("You should have four lines inside of `Sequential`. " +
-                 "You had {}.")
+               (("You should have 4 layers total (including `pretrained_base`). " +
+                 "You had {}")
                 .format(len(model.layers)))
 
         layer_classes = [layer.__class__.__name__ for layer in model.layers]
         assert (layer_classes[2] == 'Dense' and layer_classes[3] == 'Dense'), \
                (("The two layers you add should both be `Dense` layers. " +
-                 "You added a {} layer and a {} layer.")
+                 "You added a `{}` layer and a `{}` layer.")
                 .format(layer_classes[2], layer_classes[3]))
 
         dense_1 = model.layers[-2]
         assert (dense_1.units == hidden_units and
                 dense_1.activation.__name__ == 'relu'), \
-                (("The first dense layer should have {} units with {} activation. " +
-                  "Yours had {} units and {} activation.")
+                (("The first dense layer should have {} units with `{}` activation. " +
+                  "Yours had {} units and `{}` activation.")
                  .format(hidden_units, 'relu',
                          dense_1.units, dense_1.activation.__name__))
         
@@ -52,8 +52,8 @@ model = Sequential([
         assert (dense_2.units == 1 and
                 dense_2.activation.__name__ == 'sigmoid'), \
                 (("The second dense layer should have {} units with `{}` activation. " +
-                  "Yours had {} units and `{}` activation.")
-                 .format(hidden_units, 'sigmoid',
+                  "Yours had {} unit and `{}` activation.")
+                 .format(1, 'sigmoid',
                          dense_2.units, dense_2.activation.__name__))
 
 
