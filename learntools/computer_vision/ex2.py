@@ -23,23 +23,28 @@ kernel = tf.constant([
 ])
 """)
     def check(self, kernel):
-        assert (isinstance(kernel, tf.Tensor))
-        assert ((len(kernel.shape) == 2),
-                ("Your kernel needs to have have a shape with only two dimensions, " +
-                 "but you defined a kernel with shape {}, which has {} dimensions. " +
-                 "You should have only one level of nesting in your brackets, like " +
-                 "`[[1, 2], [3, 4]].` See the kernel in the tutorial for a guide."))
+        assert isinstance(kernel, tf.Tensor), \
+            ("Your kernel needs to be a TensorFlow tensor. Be sure to keep the " +
+             "`tf.constant` when giving your answer.")
+        assert (kernel.dtype.is_floating or kernel.dtype.is_integer), \
+            ("You need to define a numeric tensor. Your tensor has type `{}`."
+             .format(kernel.dtype))
+        assert (len(kernel.shape) == 2), \
+            ("Your kernel needs to have have a shape with only two dimensions, " +
+             "but you defined a kernel with shape {}, which has {} dimensions. " +
+             "You should have only one level of nesting in your brackets, like " +
+             "`[[1, 2], [3, 4]].` See the kernel in the tutorial for a guide.")
 
 class Q2(CodingProblem):
-    _vars = ['image_filter', 'image', 'kernel']
+    _vars = ['image_filter']
     _hint = """
 Your solution should look something like:
 ```python
 image_filter = tf.nn.conv2d(
     input=____,
     filters=____,
-    strides=____,
-    padding=____,
+    strides=1,
+    padding='SAME',
 )
 ```
 """
@@ -51,27 +56,21 @@ image_filter = tf.nn.conv2d(
     padding='SAME',
 )
 """)
-    def check(self, image_filter, image, kernel):
-        assert ((image_filter.shape == image.shape),
-                ("Using the settings in the tutorial, the shapes of `image_filter`" +
-                 "and `image` should be the same. The shape of `image` is {} while " +
-                 "the shape of `image_filter` is {}. Did you use 'SAME' for padding " +
-                 "and keep the strides at 1?".format(image.shape, image_filter.shape)))
-        image_filter_ = tf.nn.conv2d(
-            input=image,
-            filters=kernel,
-            strides=1,
-            padding='SAME',
-        )
-        assert ((image_filter_ == image_filter),
-                ("Something went wrong. The image you produced doesn't match the " +
-                 "image I was expecting. Are your parameter values okay?"))
+    def check(self, image_filter):
+        # Default size defined in the exercise.
+        size = [400, 400]
+        image_size = image_filter.shape.as_list()[:2]
+        assert image_size == size, \
+            ("The size of `image_filter` should be `{}`, but actually is {}." +
+             "Did you use `padding='SAME'` and `strides=1`?"
+             .format(size, image_size))
 
 
 class Q3(CodingProblem):
     _vars = ['image_detect', 'image_filter', 'image']
     _hint = """
 Your solution should look something like:
+```python
 image_detect = tf.nn.relu(____)
 ```
 """
@@ -79,10 +78,10 @@ image_detect = tf.nn.relu(____)
 image_detect = tf.nn.relu(image_filter)
 """)        
     def check(self, image_detect, image_filter, image):
-        assert((image_detect != tf.nn.relu(image)),
-               ("It looks like you might have applied the ReLU to `image` instead " +
-                "of `image_filter`. Remember that the input to ReLU is the output " +
-                "of the convolution."))
+        assert image_detect != tf.nn.relu(image), \
+            ("It looks like you might have applied the ReLU to `image` instead " +
+             "of `image_filter`. Remember that the input to ReLU is the output " +
+             "of the convolution.")
 
 
 class Q4A(CodingProblem):
