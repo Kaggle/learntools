@@ -94,7 +94,7 @@ model.compile(
              .format(loss))
 
         metric = model.compiled_metrics._metrics
-        assert (metric == 'binary_accuracy'), \
+        assert (metric == ['binary_accuracy']), \
             ("The metrics should be `['binary_accuracy']`. " +
              "You gave {}").format(metric)
 
