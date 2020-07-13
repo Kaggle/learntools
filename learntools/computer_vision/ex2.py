@@ -39,64 +39,28 @@ kernel = tf.constant([
               "`[[1, 2], [3, 4]].` See the kernel in the tutorial for a guide.")
              .format(shape, len(shape)))
         
-        assert shape == [3, 3] \
+        assert shape == [3, 3], \
             (("Your kernel needs a shape `[3, 3]`, but yours has shape {}. " +
               "Remember that you need 3 rows and 3 columns.")
               .format(shape))
 
 
 class Q2(CodingProblem):
-    _vars = ['image_filter']
-    _hint = """
-Your solution should look something like:
-```python
-image_filter = tf.nn.conv2d(
-    input=____,
-    filters=____,
-    strides=1,
-    padding='VALID',
-)
-```
-"""
+    _vars = ['conv_fn']
+    _hint = "The function is in the `tf.nn` module."
     _solution = CS("""
-image_filter = tf.nn.conv2d(
-    input=image,
-    filters=kernel,
-    strides=1, # or (1, 1)
-    padding='VALID',
-)
+conv_fn = tf.nn.conv2d
 """)
-    def check(self, image_filter):
-        # Default size defined in the exercise.
-        size = [398, 398]
-        image_size = tf.squeeze(image_filter).shape.as_list()
-        assert image_size == size, \
-            (("The size of `image_filter` should be `{}`, but actually is `{}`." +
-              "Did you use `padding='VALID'` and `strides=1`?")
-             .format(size, image_size))
-
+    def check(self, conv_fn):
+        assert conv_fn is tf.nn.conv2d
 
 class Q3(CodingProblem):
-    _vars = ['image_detect']
-    _hint = """
-Your solution should look something like:
-```python
-image_detect = tf.nn.relu(____)
-```
-"""
-    _solution = CS("""
-image_detect = tf.nn.relu(image_filter)
-""")
+    _vars = ['relu_fn']
+    _hint = "The function is in the `tf.nn` module.`"
+    _solution = CS("relu_fn = tf.nn.relu")
 
-    def check(self, image_detect):
-        assert isinstance(image_detect, tf.Tensor), \
-            (("`image_detect` should be the output of `tf.nn.relu`, which " +
-              " is a `tf.Tensor`. You have `image_detect` as a `{}`. Did " +
-              " you use the `tf.nn.relu` function?")
-             .format(image_detect.__class__.__name__))
-        assert tf.reduce_min(image_detect).numpy() >= 0.0, \
-            ("All the values of `image_detect` should be greater than or " +
-             "equal to 0. Did you use the `tf.nn.relu` function?")
+    def check(self, relu_fn):
+        assert relu_fn is tf.nn.relu
 
 
 class Q4A(CodingProblem):
