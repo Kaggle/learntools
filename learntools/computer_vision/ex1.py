@@ -30,9 +30,17 @@ model = Sequential([
     def check(self, model):
         hidden_units = 6
         assert (len(model.layers) == 4), \
-               (("You should have 4 layers total (including `pretrained_base`). " +
-                 "You had {}")
-                .format(len(model.layers)))
+               ("""
+You've added an incorrect number of layers. Try something like:
+```python
+model = Sequential([
+    pretrained_base,
+    layers.Flatten(),
+    layers.Dense({}, activation='relu'),
+    layers.Dense(1, activation='sigmoid'),
+])
+```
+""".format(hidden_units))
 
         layer_classes = [layer.__class__.__name__ for layer in model.layers]
         assert (layer_classes[2] == 'Dense' and layer_classes[3] == 'Dense'), \
