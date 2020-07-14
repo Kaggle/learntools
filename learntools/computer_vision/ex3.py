@@ -17,7 +17,7 @@ image_condense = tf.nn.pool(
 """)
 
     def check(self, image_condense):
-        size = [99, 99]
+        size = [199, 199]
         image_size = tf.squeeze(image_condense).shape.as_list()
         assert image_size == size, \
             (("The size of `image_condense` should be `{}`, but actually is `{}`." +
