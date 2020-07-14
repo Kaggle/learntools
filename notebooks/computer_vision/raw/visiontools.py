@@ -1,5 +1,6 @@
 import math, os
 import numpy as np
+import random
 import matplotlib.pyplot as plt
 import tensorflow as tf
 from functools import singledispatch
@@ -535,10 +536,11 @@ def extract_feature(image, kernel, pool_size=2):
 def show_extraction(image,
                     kernel,
                     conv_stride=1,
+                    conv_padding='valid',
                     activation='relu',
                     pool_size=2,
                     pool_stride=2,
-                    padding='same',
+                    pool_padding='same',
                     figsize=(10, 10),
                     subplot_shape=(2, 2),
                     ops=['Input', 'Filter', 'Detect', 'Condense'],
@@ -549,7 +551,7 @@ def show_extraction(image,
                         filters=1,
                         kernel_size=kernel.shape,
                         strides=conv_stride,
-                        padding=padding,
+                        padding=conv_padding,
                         use_bias=False,
                         input_shape=image.shape,
                     ),
@@ -557,7 +559,7 @@ def show_extraction(image,
                     tf.keras.layers.MaxPool2D(
                         pool_size=pool_size,
                         strides=pool_stride,
-                        padding='same',
+                        padding=pool_padding,
                     ),
                    ])
 
@@ -824,6 +826,7 @@ def fft_to_rgb(shape, buffer, decay_power=1.0):
 def read_image(path, channels=0):
     image = tf.io.read_file(path)
     image = tf.io.decode_image(image, channels=channels)
+    image = tf.image.convert_image_dtype(image, dtype=tf.float32)
     return image
 
 def show_image(image):
@@ -861,6 +864,7 @@ def random_map(size, scale=0.5, decay_power=1.0):
     img = to_valid_rgb(img)
     img = img[0,:,:,0]
     return img
+
 
 # PREDEFINED KERNELS #
 
@@ -908,3 +912,33 @@ def gaussian(kernlen=3, std=1, normalize=True):
     gkern2d = np.outer(gkern1d, gkern1d)
     return gkern2d
 
+
+def random_kernel(model, layer=None):
+    """Choose a random convolutional kernel from a model."""
+
+    if layer is not None:
+        # get specified layer
+        layer = model.get_layer(layer)
+    else:
+        # choose a random convolutional layer
+        layer = random.choice(
+            [layer for layer in model.layers
+             if layer.__class__.__name__ is 'Conv2D']
+        )
+
+    # and get its filters
+    filters = layer.get_weights()[0]
+    # choose an input channel
+    input_index = np.random.randint(0, filters.shape[2])
+    # choose a filter
+    filter_index = np.random.randint(0, filters.shape[3])
+    
+    # get kernel and normalize
+    krn = filters[:, :, input_index, filter_index]
+    krn -= krn.mean()
+    krn /= (krn.std() + 1e-5)
+    krn = krn.round(decimals=1)
+    
+    print("Layer: {}  Input Channel: {}  Filter: {}"
+          .format(layer.name, input_index, filter_index))
+    return krn
