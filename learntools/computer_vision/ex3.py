@@ -9,9 +9,9 @@ You'll need `window_shape=2` and `pooling_type='MAX'`.
     _solution = CS("""
 image_condense = tf.nn.pool(
     input=image_detect,
-    window_shape=2, # or (2, 2)
+    window_shape=(2, 2),
     pooling_type='MAX',
-    strides=2, # or (2, 2)
+    strides=(2, 2),
     padding='SAME',
 )
 """)
