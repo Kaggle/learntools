@@ -32,32 +32,24 @@ class Q2(ThoughtExperiment):
 Note, however, that this invariance only applies over *small* distances. Translating the circle by a larger amount actually could improve the classification. In fact, this method of transforming an image in random ways whenever it's used in training is known as **data augmentation**. Data augmentation is a common way of improving a classifier. You'll learn how to use it in Keras in Lesson 6.
 """
 
-class Q3(ThoughtExperiment):
-    _solution = """All else being equal, we might guess that average pooling would not be an improvement over maximum pooling, since maximum pooling attempts to retain only the *most important* pixels (those with greatest activation), while average pooling mixes together all kinds of pixels indiscriminantly.
-
-On the other hand, with average pooling, high activation pixels grouped together would retain most of their activation, while isolated pixels would tend to vanish. Maximum pooling would tend to destroy this information. 
-
-Which of these behaviors is desireable would depend on circumstances. With classification problems, experience has show that the combination of convolution, ReLU (or a variation), and maximum pooling produce the best results. With another problem, some other combination might work better. Intuition can be a valuble guide, but the parts of a machine learning model can interact in ways that are hard to predict. The surest way to know if something works? Try it and find out!
-"""
-
 
 # Free
-class Q4A(CodingProblem):
+class Q3A(CodingProblem):
     _hint = ""
     _solution = ""
     def check(self):
         pass
     
-class Q4B(ThoughtExperiment):
+class Q3B(ThoughtExperiment):
     _hint = """VGG16 creates 512 features maps from an image, which might represent something like a wheel or a window. Each square in *Pooled Feature Maps* represents a feature. What would a large value for a feature mean?"""
     _solution = """The VGG16 base produces 512 feature maps. We can think of each feature map as representing some high-level visual feature in the original image -- maybe a wheel or window. Pooling a map gives us a single number, which we could think of as a *score* for that feature: large if the feature is present, small if it is absent. Cars tend to score high with one set of features, and Trucks score high with another. Now, instead of trying to map raw features to classes, the head only has to work with these scores that `GlobalAvgPool2D` produced, a much easier problem for it to solve.
 """
 
-Q4 = MultipartProblem(Q4A, Q4B)
+Q3 = MultipartProblem(Q3A, Q3B)
 
 
 qvars = bind_exercises(globals(), [
-        Q1, Q2, Q3, Q4,
+        Q1, Q2, Q3,
     ],
     var_format='q_{n}',
 )
