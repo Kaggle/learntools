@@ -10,24 +10,23 @@ import tensorflow.keras.layers as layers
 
 model = keras.Sequential([
     # Block One
-    layers.Conv2D(filters=64, kernel_size=5, activation='relu', padding='same',
-                  input_shape=[192, 192, 3]),
+    layers.Conv2D(filters=32, kernel_size=3, activation='relu', padding='same',
+                  input_shape=[128, 128, 3]),
     layers.MaxPool2D(),
 
     # Block Two
-    layers.Conv2D(filters=256, kernel_size=3, activation='relu', padding='same'),
-    layers.Conv2D(filters=256, kernel_size=3, activation='relu', padding='same'),
+    layers.Conv2D(filters=64, kernel_size=3, activation='relu', padding='same'),
     layers.MaxPool2D(),
 
     # Block Three
-    layers.Conv2D(filters=512, kernel_size=3, activation='relu', padding='same'),
-    layers.Conv2D(filters=512, kernel_size=3, activation='relu', padding='same'),
-    layers.Conv2D(filters=512, kernel_size=3, activation='relu', padding='same'),
+    layers.Conv2D(filters=128, kernel_size=3, activation='relu', padding='same'),
+    layers.Conv2D(filters=128, kernel_size=3, activation='relu', padding='same'),
     layers.MaxPool2D(),
 
     # Head
     layers.Flatten(),
     layers.Dense(6, activation='relu'),
+    layers.Dropout(0.2),
     layers.Dense(1, activation='sigmoid'),
 ])
 """)
@@ -36,24 +35,24 @@ model = keras.Sequential([
     def check(self, model):
         # Check for correct number of layers
         num_layers = len(model.layers)
-        assert num_layers == 12, \
-            ("Your model should have 12 layers, but your model has {}."
+        assert num_layers == 11, \
+            ("Your model should have 11 layers, but your model has {}."
              .format(num_layers))
         
         # Check for correct layer types
         layer_classes = [layer.__class__.__name__ for layer in model.layers]
         assert all([
-            layer_classes[2] == 'Conv2D',
-            layer_classes[3] == 'Conv2D',
-            layer_classes[4] == 'MaxPooling2D',
+            layer_classes[4] == 'Conv2D',
+            layer_classes[5] == 'Conv2D',
+            layer_classes[6] == 'MaxPooling2D',
         ]), \
         ("Your model doesn't have the right kind of layers. " +
          "For the second block, you should have two convolutional layers " +
          "and then a maximum pooling layer.")
 
         # Check kernel size
-        kernel_sizes = [model.layers[2].kernel_size,
-                        model.layers[3].kernel_size]
+        kernel_sizes = [model.layers[4].kernel_size,
+                        model.layers[5].kernel_size]
         assert (kernel_sizes[0] == (3, 3) and kernel_sizes[1] == (3, 3)), \
             (("Your convolutional layers don't have the right kernel size. " +
               "You should have `kernel_size=3` or `kernel_size=(3, 3) for both." +
@@ -61,17 +60,17 @@ model = keras.Sequential([
              .format(kernel_sizes[0], kernel_sizes[1]))
 
         # Check filters
-        filters = [model.layers[2].filters,
-                   model.layers[3].filters]
-        assert (filters[0] == 256 and filters[1] == 256), \
+        filters = [model.layers[4].filters,
+                   model.layers[5].filters]
+        assert (filters[0] == 128 and filters[1] == 128), \
             (("Your convolutional layers don't have the right number of filters." +
-              "You should have 256 for both. Your model has {} for the first " +
+              "You should have 128 for both. Your model has {} for the first " +
               "and {} for the second.")
              .format(filters[0], filters[1]))
 
         # Check activations
-        activations = [model.layers[2].activation.__name__,
-                       model.layers[3].activation.__name__]
+        activations = [model.layers[4].activation.__name__,
+                       model.layers[5].activation.__name__]
         assert (activations[0] is 'relu' and activations[1] is 'relu'), \
             ("Your convolutional layers should both have `'relu'` activation.")
 
@@ -100,7 +99,9 @@ model.compile(
 
 
 class Q3(ThoughtExperiment):
-    _solution = "TODO" # TODO
+    _solution = """
+
+"""
 
 
 qvars = bind_exercises(globals(), [

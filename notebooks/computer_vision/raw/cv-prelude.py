@@ -33,15 +33,15 @@ warnings.filterwarnings("ignore") # to clean up output cells
 
 # Load training and validation sets
 DATA_DIR = '/kaggle/input/stanford-cars-for-learn/'
-# read_config = tfds.ReadConfig(shuffle_seed=seed)
+read_config = tfds.ReadConfig(shuffle_seed=seed)
 
 (ds_train_, ds_valid_), ds_info = tfds.load(
     'stanford_cars/simple',
     split=['train', 'test'],
-    shuffle_files=False,
+    shuffle_files=True,
     with_info=True,
     data_dir=DATA_DIR,
-    # read_config=read_config,
+    read_config=read_config,
 )
 print(("Loaded {} training examples " +
        "and {} validation examples " +
@@ -54,7 +54,7 @@ print(("Loaded {} training examples " +
 # Create data pipeline
 BATCH_SIZE = 128
 AUTO = tf.data.experimental.AUTOTUNE
-SIZE = [192, 192]
+SIZE = [128, 128]
 preprocess = visiontools.make_preprocessor(size=SIZE)
 
 ds_train = (ds_train_
@@ -67,7 +67,6 @@ ds_train = (ds_train_
 ds_valid = (ds_valid_
             .map(preprocess)
             .cache()
-            .shuffle(ds_info.splits['test'].num_examples)             
             .batch(BATCH_SIZE)
             .prefetch(AUTO))
 print(("Created training pipeline as `ds_train`.\n"+
