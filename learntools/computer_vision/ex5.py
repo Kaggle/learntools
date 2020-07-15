@@ -100,7 +100,7 @@ model.compile(
 
 class Q3(ThoughtExperiment):
     _solution = """
-
+The learning curves for the model from the tutorial diverged fairly rapidly. This would indicate that it was prone to overfitting and in need of some regularization. The additional layer in our new model would make it even more prone to overfitting. However, adding some regularization with the `Dropout` layer helped prevent this. These changes improved the validation accuracy of the model by several points.
 """
 
 
