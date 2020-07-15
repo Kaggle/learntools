@@ -40,8 +40,9 @@ def label_encoding_soln():
         encoded = label_encoder.fit_transform(clicks[feature])
         clicks[feature + '_labels'] = encoded
     return clicks
+clicks_label = label_encoding_soln()
 
-class LabelEncoding(EqualityCheckProblem):
+class LabelEncoding(CodingProblem):
     _var = 'clicks'
     _hint = ("Try looping through each of the categorical features and using the "
              " using LabelEncoder's .fit_transform method")
@@ -52,7 +53,13 @@ class LabelEncoding(EqualityCheckProblem):
         encoded = label_encoder.fit_transform(clicks[feature])
         clicks[feature + '_labels'] = encoded
     """)
-    _expected = label_encoding_soln()
+    
+    def check(self, answer):
+        cat_features = ['ip', 'app', 'device', 'os', 'channel']
+        for feature in cat_features:
+            col = feature + '_labels'
+            assert col in list(answer.columns), "{} column is missing".format(col)
+            assert set(answer[col]) == set(clicks_label[col]), "{} column does not have the correct values".format(col)
 
 class OnehotEncoding(ThoughtExperiment):
     _solution = """
@@ -71,45 +78,6 @@ class TrainTestSplits(ThoughtExperiment):
     sets, then future data will leak in to the model and our validation results will 
     overestimate the performance on new data.
     """
-
-# class CreateSplits(CodingProblem):
-#     _vars = ['train', 'valid', 'test']
-#     _hint = ("You can sort dataframes with the `.sort_values` method. Then find how many rows "
-#              "are 10% of the data (as an integer) and use that to slice the dataframe "
-#              "appropriately. You can index starting from the end of the dataframe using negative "
-#              "values, for example `df[-1000:]` will return the last 1000 rows.")
-
-#     _solution = CS("""
-#     valid_fraction = 0.1
-#     sorted_clicks = clicks.sort_values('click_time')
-#     valid_rows = int(len(sorted_clicks) * valid_fraction)
-#     train = sorted_clicks[:-valid_rows * 2]
-#     # valid size == test size, last two sections of the data
-#     valid = sorted_clicks[-valid_rows * 2:-valid_rows]
-#     test = sorted_clicks[-valid_rows:]
-#     """)
-
-#     def check(self, train_, valid_, test_):
-#         sorted_clicks = click_data.sort_values('click_time')
-
-#         valid_fraction = 0.1
-#         valid_rows = int(len(sorted_clicks) * valid_fraction)
-#         train = sorted_clicks[:-valid_rows * 2]
-#         # valid size == test size, last two sections of the data
-#         valid = sorted_clicks[-valid_rows * 2:-valid_rows]
-#         test = sorted_clicks[-valid_rows:]
-
-#         assert train_.shape[0] == train.shape[0], "The train set isn't 80% of the data"
-#         assert valid_.shape[0] == valid.shape[0], "The validation set isn't 10% of the data"
-#         assert test_.shape[0] == test.shape[0], "The test set isn't 10% of the data"
-
-#         assert (train_['click_time'].values == train['click_time'].values).all(), (""
-#             "The click times aren't properly sorted in the train set")
-#         assert (valid_['click_time'].values == valid['click_time'].values).all(), (""
-#             "The click times aren't properly sorted in the validation set")
-#         assert (test_['click_time'].values == test['click_time'].values).all(), (""
-#             "The click times aren't properly sorted in the test set")
-
 
 qvars = bind_exercises(globals(), [
     TimestampFeatures,

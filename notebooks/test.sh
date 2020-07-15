@@ -33,7 +33,7 @@ do
     python3 prepare_push.py $track
 done
 
-TESTABLE_NOTEBOOK_TRACKS="python pandas machine_learning data_viz_to_coder ml_intermediate geospatial nlp"
+TESTABLE_NOTEBOOK_TRACKS="python pandas machine_learning data_viz_to_coder ml_intermediate geospatial nlp feature_engineering game_ai"
 
 for track in $TESTABLE_NOTEBOOK_TRACKS
 do
@@ -50,7 +50,7 @@ do
         # First python exercise notebook uses google/tinyquickdraw dataset, which
         # is 11 GB. Downloading it would probably slow down testing unacceptably.
         # AutoML notebooks also run for hours.
-        if [[ ( $nb =~ "ex_1" && $track == "python" ) ]] || [[ ( $nb =~ "ex_automl") ]] || [[ ( $nb =~ "tut_automl") ]]
+        if [[ ( $nb =~ "ex_1" && $track == "python" ) ]] || [[ ( $nb =~ "ex_automl") ]] || [[ ( $nb =~ "tut_automl") ]] || [[ ( $nb =~ "tut3" && $track == "game_ai" ) ]] || [[ ( $nb =~ "tut4" && $track == "game_ai" ) ]] 
         then
             echo "Warning: skipping $nb in track $track"
             continue

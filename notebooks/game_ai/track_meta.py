@@ -2,7 +2,8 @@
 track = dict(
     author_username='alexisbcook',
     course_name='Intro to Game AI and Reinforcement Learning',
-    course_url='https://www.kaggle.com/learn/intro-to-game-ai-and-reinforcement-learning'
+    course_url='https://www.kaggle.com/learn/intro-to-game-ai-and-reinforcement-learning',
+    course_forum_url='https://www.kaggle.com/learn-forum/161477'
 )
 
 lessons = [ {'topic': topic_name} for topic_name in
@@ -52,6 +53,7 @@ notebooks = [
         filename='tut4.ipynb',
         lesson_idx=3,
         type='tutorial',
+        enable_internet=True
         ),
     dict(
         filename='ex4.ipynb',
