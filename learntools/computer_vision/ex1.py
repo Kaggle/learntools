@@ -36,11 +36,11 @@ You've added an incorrect number of layers. Try something like:
 model = Sequential([
     pretrained_base,
     layers.Flatten(),
-    layers.Dense({}, activation='relu'),
-    layers.Dense(1, activation='sigmoid'),
+    layers.Dense(____),
+    layers.Dense(____),
 ])
 ```
-""".format(hidden_units))
+""")
 
         layer_classes = [layer.__class__.__name__ for layer in model.layers]
         assert (layer_classes[2] == 'Dense' and layer_classes[3] == 'Dense'), \
@@ -60,7 +60,7 @@ model = Sequential([
         assert (dense_2.units == 1 and
                 dense_2.activation.__name__ == 'sigmoid'), \
                 (("The second dense layer should have {} units with `{}` activation. " +
-                  "Yours had {} unit and `{}` activation.")
+                  "Yours had {} units and `{}` activation.")
                  .format(1, 'sigmoid',
                          dense_2.units, dense_2.activation.__name__))
 
