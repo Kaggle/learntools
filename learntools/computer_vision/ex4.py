@@ -2,14 +2,11 @@ from learntools.core import *
 import tensorflow as tf
 
 
-class Q1A(ThoughtExperiment):
+# Free
+class Q1(CodingProblem):
     _solution = ""
-
-
-class Q1B(ThoughtExperiment):
-    _solution = ""
-
-Q1 = MultipartProblem(Q1A, Q1B)
+    def check(self):
+        pass
 
 class Q2A(ThoughtExperiment):
     _hint = r"Stacking the second layer expanded the receptive field by one neuron on each side, giving $3+1+1=5$ for each dimension. If you expanded by one neuron again, what would you get?"
