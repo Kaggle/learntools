@@ -24,10 +24,13 @@ image_condense = tf.nn.pool(
               "Did you use `padding='SAME'` and `strides=2`?")
              .format(size, image_size))
 
-        
-class Q2(ThoughtExperiment):
+class Q2A(ThoughtExperiment):
+    _solution = """In the tutorial, we talked about how maximum pooling creates **translation invariance** over small distances. This means that we would expect small shifts to disappear after repeated maximum pooling. If you run the cell multiple times, you can see the resulting image is always the same; the pooling operation destroys those small translations.
+"""
+
+class Q2B(ThoughtExperiment):
     _hint = "If you only had the final output to look at, would you be able to pick which circle originally produced it?"
-    _solution ="""It would not be helpful. This exercise illustrates how maximum pooling creates the *translation invariance over small distances* we discussed in the tutorial. The maximum pooling operations reduce each of the inputs to an identical output. There wouldn't be any extra information being passed on to the head for classification.
+    _solution ="""They are unlikely to be helpful. This exercise illustrates how maximum pooling creates the *translation invariance over small distances* we discussed in the tutorial. The maximum pooling operations reduce each of the inputs to an identical output. There wouldn't be any extra information being passed on to the head for classification.
 
 Note, however, that this invariance only applies over *small* distances. Translating the circle by a larger amount actually could improve the classification. In fact, this method of transforming an image in random ways whenever it's used in training is known as **data augmentation**. Data augmentation is a common way of improving a classifier. You'll learn how to use it in Keras in Lesson 6.
 """
