@@ -35,6 +35,7 @@ class Q2B(ThoughtExperiment):
 Note, however, that this invariance only applies over *small* distances. Translating the circle by a larger amount actually could improve the classification. In fact, this method of transforming an image in random ways whenever it's used in training is known as **data augmentation**. Data augmentation is a common way of improving a classifier. You'll learn how to use it in Keras in Lesson 6.
 """
 
+Q2 = MultipartProblem(Q2A, Q2B)
 
 # Free
 class Q3A(CodingProblem):
