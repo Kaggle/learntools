@@ -4,7 +4,7 @@ import tensorflow as tf
 class Q1(CodingProblem):
     _vars = ['image_condense']
     _hint = """
-You'll need `window_shape=2` and `pooling_type='MAX'`.
+You'll need `window_shape=(2, 2)` and `pooling_type='MAX'`.
 """
     _solution = CS("""
 image_condense = tf.nn.pool(
