@@ -36,9 +36,15 @@ model = keras.Sequential([
         # Check for correct number of layers
         num_layers = len(model.layers)
         assert num_layers == 11, \
-            ("Your model should have 11 layers, but your model has {}."
-             .format(num_layers))
-        
+("""You've added an incorrect number of layers. For `# Block Three`, try something like:
+
+```python
+layers.Conv2D(____),
+layers.Conv2D(____),
+layers.MaxPool2D(),
+```
+""")
+
         # Check for correct layer types
         layer_classes = [layer.__class__.__name__ for layer in model.layers]
         assert all([
