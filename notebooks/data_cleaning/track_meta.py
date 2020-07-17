@@ -43,12 +43,13 @@ notebooks = [
         filename='tut3.ipynb',
         lesson_idx=2,
         type='tutorial',
-        dataset_sources=['nasa/landslide-events', 'usgs/earthquake-database', 'smithsonian/volcanic-eruptions']
+        dataset_sources=['nasa/landslide-events']
     ),
     dict(
         filename='ex3.ipynb',
         lesson_idx=2,
         type='exercise',
+        dataset_sources=['usgs/earthquake-database', 'smithsonian/volcanic-eruptions'],
         scriptid=-1
     ),
     dict(
