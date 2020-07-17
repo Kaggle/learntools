@@ -89,31 +89,34 @@ q_3.a.assert_check_passed()
     def check(self, model):
         # Check for correct number of layers
         num_layers = len(model.layers)
-        assert num_layers == 1, \
-            ("Your model should have 1 layers, but your model has {}. " +
+        assert num_layers == 17, \
+            ("Your model doesn't have the right number of layers." +
              "Did you add all three preprocessing layers?")
 
         # Check for correct layer types
         layer_classes = [layer.__class__.__name__ for layer in model.layers]
         assert all([
-            layer_classes[1] == 'RandomContrast',
-            layer_classes[2] == 'RandomFlip',
-            layer_classes[3] == 'RandomRotation',
+            layer_classes[0] == 'RandomContrast',
+            layer_classes[1] == 'RandomFlip',
+            layer_classes[2] == 'RandomRotation',
         ]), \
         ("Your model doesn't have the right kind of preprocessing layers. " +
          "You should have `RandomContrast`, `RandomFlip`, and `RandomRotation`, " +
          "in that order, for the second, third, and fourth layers.")
 
         # Check for correct parameters
-        contrast = model.layers[1]
-        flip = model.layers[2]
-        rotation = model.layers[3]
-        assert contrast, \
-            ""
-        assert flip, \
-            ""
-        assert rotation, \
-            ""
+        contrast = model.layers[0].factor
+        flip = model.layers[1].mode
+        rotation = model.layers[2].factor
+        assert contrast == 0.1, \
+            ("Be sure to use a contrast factor of 0.1. You used {}."
+             .format(contrast))
+        assert flip == 'horizontal', \
+            ("Be sure to use a `'horizaontal'` flip. You used `{}`."
+             .format(flip))
+        assert rotation == 0.1, \
+            ("Be sure to use a rotation factor of 0.1. You used {}."
+             .format(rotation))
         
 
 class Q3B(ThoughtExperiment):
