@@ -121,8 +121,9 @@ q_3.a.assert_check_passed()
 
 class Q3B(ThoughtExperiment):
     _solution = """
+The learning curves in this model stayed close together for much longer than in previous models. This suggests that the augmentation helped prevent overfitting, allowing the model to continue improving.
 
-
+And notice that this model achieved the highest accuracy of all the models in the course! This won't always be the case, but it shows that a well-designed custom convnet can sometimes perform as well or better than a much larger pretrained model. Depending on your application, having a smaller model (which requires fewer resources) could be a big advantage.
 """
 
 Q3 = MultipartProblem(Q3A, Q3B)    
