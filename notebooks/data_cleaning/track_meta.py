@@ -18,24 +18,25 @@ notebooks = [
         filename='tut1.ipynb',
         lesson_idx=0,
         type='tutorial',
-        dataset_sources=['maxhorowitz/nflplaybyplay2009to2016', 'aparnashastry/building-permit-applications-data']
+        dataset_sources=['maxhorowitz/nflplaybyplay2009to2016'],
         ),
     dict(
         filename='ex1.ipynb',
         lesson_idx=0,
         type='exercise',
+        dataset_sources=['aparnashastry/building-permit-applications-data'],
         scriptid=-1
     ),
     dict(
         filename='tut2.ipynb',
         lesson_idx=1,
         type='tutorial',
-        dataset_sources=['aaronschlegel/seattle-pet-licenses', 'kemical/kickstarter-projects']
         ),
     dict(
         filename='ex2.ipynb',
         lesson_idx=1,
         type='exercise',
+        dataset_sources=['kemical/kickstarter-projects'],
         scriptid=-1
     ),
     dict(
