@@ -74,6 +74,7 @@ notebooks = [
         filename='ex5.ipynb',
         lesson_idx=4,
         type='exercise',
+        dataset_sources=['zusmani/pakistansuicideattacks'],
         scriptid=-1
         ),
 ]
