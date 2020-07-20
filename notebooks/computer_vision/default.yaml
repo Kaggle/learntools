@@ -4,7 +4,7 @@ public: false
 # If true, then exercise kernels synced to kaggle will have internet enabled and will begin
 # with a cell that pip installs the current learntools branch. (Useful for testing 
 # notebooks on Kernels without requiring image docker deploy for every learntools change)
-development: true
+development: false
 # By itself, this flag does nothing. But it can be useful to have 'testing' cells in exercise
 # notebooks (testing the checking code on various correct and incorrect solutions) whose 
 # inclusion in the rendered notebook is conditioned on this flag (using a macro like #%%RM_IF(PROD)%%
@@ -20,4 +20,4 @@ testing: false
 # should keep their original slugs under author B's namespace. But if author A wants to push
 # new testing versions of the notebook, they can set author: author_A in testing.yaml to generate
 # new versions of the kernels under their own username.
-#author: jane_doe
+author: ryanholbrook
