@@ -3,6 +3,7 @@ from learntools.core import *
 import pandas as pd
 import numpy as np
 import chardet
+import os
 np.random.seed(0)
 
 sample_entry = b'\xa7A\xa6n'
@@ -24,7 +25,9 @@ class ReadIn(EqualityCheckProblem):
     _var = 'police_killings'
     _expected = police_killings
     _hint = "If you try to guess the encoding with the first 10,000 bytes of the file, it might give you the wrong answer.  Try using 100,000 or more lines of the file."
-    _solution = "police_killings = pd.read_csv(\"../input/fatal-police-shootings-in-the-us/PoliceKillingsUS.csv\", encoding='Windows-1252')"
+    _solution = CS(
+"""police_killings = pd.read_csv("../input/fatal-police-shootings-in-the-us/PoliceKillingsUS.csv", encoding='Windows-1252')
+""")
     
 class SaveCSV(CodingProblem):
     def check(self):

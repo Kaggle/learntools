@@ -56,12 +56,13 @@ notebooks = [
         filename='tut4.ipynb',
         lesson_idx=3,
         type='tutorial',
-        dataset_sources=['kemical/kickstarter-projects', 'kwullum/fatal-police-shootings-in-the-us']
+        dataset_sources=['kemical/kickstarter-projects']
     ),
     dict(
         filename='ex4.ipynb',
         lesson_idx=3,
         type='exercise',
+        dataset_sources=['kwullum/fatal-police-shootings-in-the-us'],
         scriptid=-1
     ),
     dict(
