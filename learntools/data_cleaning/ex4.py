@@ -30,6 +30,11 @@ class ReadIn(EqualityCheckProblem):
 """)
     
 class SaveCSV(CodingProblem):
+    _hint = "Use `.to_csv().`"
+    _solution = CS(
+"""
+police_killings.to_csv("my_file.csv")
+""")
     def check(self):
         assert len(os.listdir('../working')) > 0, \
         "Please attach save a CSV file and run this code cell again to get credit!"  
