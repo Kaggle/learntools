@@ -32,3 +32,6 @@ do
     mkdir -p $dest
     kaggle kernels pull $script -p $dest
 done
+
+echo "Contents of usr/lib"
+ls usr/lib
