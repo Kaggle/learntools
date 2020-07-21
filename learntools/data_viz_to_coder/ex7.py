@@ -7,7 +7,7 @@ from learntools.core import *
 class AttachData(CodingProblem):
     def check(self):
         assert len(os.listdir('../input')) > 0, \
-        "Please save a CSV file and run this code cell again to get credit!"  
+        "Please attach a dataset and run this code cell again to get credit!"  
         
         # check if CSV file attached to notebook
         has_csv = False
