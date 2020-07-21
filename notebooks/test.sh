@@ -24,7 +24,7 @@ TMP_DIR=`mktemp -d`
 pip install -q -r requirements.txt
 
 
-TRACKS="deep_learning embeddings pandas python machine_learning sql data_viz_to_coder ml_intermediate sql_advanced feature_engineering geospatial nlp game_ai"
+TRACKS="deep_learning embeddings pandas python machine_learning sql data_viz_to_coder ml_intermediate sql_advanced feature_engineering geospatial nlp game_ai data_cleaning"
 
 
 for track in $TRACKS
@@ -33,7 +33,7 @@ do
     python3 prepare_push.py $track
 done
 
-TESTABLE_NOTEBOOK_TRACKS="python pandas machine_learning data_viz_to_coder ml_intermediate geospatial nlp feature_engineering game_ai"
+TESTABLE_NOTEBOOK_TRACKS="python pandas machine_learning data_viz_to_coder ml_intermediate geospatial nlp feature_engineering game_ai data_cleaning"
 
 for track in $TESTABLE_NOTEBOOK_TRACKS
 do
