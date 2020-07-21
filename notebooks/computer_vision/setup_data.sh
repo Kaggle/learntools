@@ -8,10 +8,22 @@ then
     exit 0
 fi
 
+# Setup Datsets
+mkdir -p input
 
-# Add utility scripts
+DATASETS=("ryanholbrook/stanford-cars-for-learn" "cv-course-models" "computer-vision-resources")
 
-SCRIPTS=arr("ryanholbrook/visiontools" "ryanholbrook/cv-prelude")
+for dataset in "${DATASETS[@]}"
+do
+    name=`echo $dataset | cut -d '/' -f 2`
+    dest="input/$name"
+    mkdir -p $dest
+    kaggle d download -p $dest --unzip $dataset
+done
+
+
+# Setup Utility Scripts
+SCRIPTS=("ryanholbrook/visiontools" "ryanholbrook/cv-prelude")
 
 for script in "${SCRIPTS[@]}"
 do
