@@ -36,18 +36,18 @@ class SaveCSV(CodingProblem):
 police_killings.to_csv("my_file.csv")
 """)
     def check(self):
-        assert len(os.listdir('../working')) > 0, \
+        # Test 1: does the file exist?
+        csv_working = [i for i in os.listdir("../working") if i.endswith('csv')]
+        assert len(csv_working) > 0, \
         "Please attach save a CSV file and run this code cell again to get credit!"  
         
-        # check if CSV file attached to notebook
-        has_csv = False
-        for dirpath, dirnames, filenames in os.walk('../working'):
-            if any([f.endswith(".csv") for f in filenames]):
-                has_csv = True
-                break
-        
-        assert has_csv == True, \
-        "Please save the DataFrame to a CSV file."
+        # Test 2: correct encoding?
+        for i in csv_working:
+            filepath = '../working/' + i
+            try: 
+                df = pd.read_csv(filepath)
+            except:
+                assert True==False, "It looks like you used the wrong encoding when saving your CSV file."
 
 qvars = bind_exercises(globals(), [
     EncodingsIntro,
