@@ -32,7 +32,7 @@ warnings.filterwarnings("ignore") # to clean up output cells
 
 
 # Load training and validation sets
-DATA_DIR = '/kaggle/input/stanford-cars-for-learn/'
+DATA_DIR = '../input/stanford-cars-for-learn/'
 read_config = tfds.ReadConfig(shuffle_seed=seed)
 
 (ds_train_, ds_valid_), ds_info = tfds.load(
@@ -41,6 +41,7 @@ read_config = tfds.ReadConfig(shuffle_seed=seed)
     shuffle_files=True,
     with_info=True,
     data_dir=DATA_DIR,
+    download=false,
     read_config=read_config,
 )
 print(("Loaded {} training examples " +
