@@ -72,11 +72,7 @@ for nb in notebooks:
         'ryanholbrook/computer-vision-resources',
         'ryanholbrook/cv-course-models',
     ]
-    nb['kernel_sources'] = [
-        'ryanholbrook/visiontools',
-        'ryanholbrook/cv-prelude',
-    ]
-
+ 
 # Add extra datasets to Exercise 6
 notebooks[-1]['dataset_sources'] += [
     'ryanholbrook/tensorflow-flowers',    

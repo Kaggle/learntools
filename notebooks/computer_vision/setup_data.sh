@@ -20,18 +20,3 @@ do
     mkdir -p $dest
     kaggle d download -p $dest --unzip $dataset
 done
-
-
-# Setup Utility Scripts
-SCRIPTS=("ryanholbrook/visiontools" "ryanholbrook/cv-prelude")
-
-for script in "${SCRIPTS[@]}"
-do
-    name=`echo $script | cut -d '/' -f 2`
-    dest="usr/lib"
-    mkdir -p $dest
-    kaggle kernels pull $script -p $dest
-done
-
-echo "Contents of usr/lib"
-ls usr/lib
