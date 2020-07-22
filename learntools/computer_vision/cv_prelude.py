@@ -41,7 +41,7 @@ read_config = tfds.ReadConfig(shuffle_seed=seed)
     shuffle_files=True,
     with_info=True,
     data_dir=DATA_DIR,
-    download=false,
+    download=False,
     read_config=read_config,
 )
 print(("Loaded {} training examples " +
