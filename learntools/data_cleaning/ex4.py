@@ -39,7 +39,7 @@ police_killings.to_csv("my_file.csv")
         # Test 1: does the file exist?
         csv_working = [i for i in os.listdir("../working") if i.endswith('csv')]
         assert len(csv_working) > 0, \
-        "Please attach save a CSV file and run this code cell again to get credit!"  
+        "Please save a CSV file and run this code cell again to get credit!"  
         
         # Test 2: correct encoding?
         for i in csv_working:
