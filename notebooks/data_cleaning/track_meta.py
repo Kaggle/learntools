@@ -1,6 +1,6 @@
 track = dict(
     author_username='alexisbcook',
-    course_name='Intro to Data Cleaning',
+    course_name='Data Cleaning',
     course_url='https://www.kaggle.com/learn/data-cleaning',
     course_forum_url='https://www.kaggle.com/learn-forum'
 )
