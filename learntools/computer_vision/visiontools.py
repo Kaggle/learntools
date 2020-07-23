@@ -14,7 +14,7 @@ from scipy import signal
 try:
     import tensorflow_datasets as tfds
 except:
-    os.system("pip install --quiet tensorflow-datasets")
+    os.system("pip install --quiet '../input/computer-vision-resources/tensorflow_datasets-3.2.1-py3-none-any.whl'")
     import tensorflow_datasets as tfds
 
 ## Dataset ##
