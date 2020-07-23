@@ -1,6 +1,6 @@
 track = dict(
-    author_username='rtatman',
-    course_name='Data Cleaning',
+    author_username='alexisbcook',
+    course_name='Intro to Data Cleaning',
     course_url='https://www.kaggle.com/learn/data-cleaning',
     course_forum_url='https://www.kaggle.com/learn-forum'
 )
@@ -25,7 +25,7 @@ notebooks = [
         lesson_idx=0,
         type='exercise',
         dataset_sources=['aparnashastry/building-permit-applications-data'],
-        scriptid=-1
+        scriptid=10824396
     ),
     dict(
         filename='tut2.ipynb',
@@ -37,7 +37,7 @@ notebooks = [
         lesson_idx=1,
         type='exercise',
         dataset_sources=['kemical/kickstarter-projects'],
-        scriptid=-1
+        scriptid=10824404
     ),
     dict(
         filename='tut3.ipynb',
@@ -50,7 +50,7 @@ notebooks = [
         lesson_idx=2,
         type='exercise',
         dataset_sources=['usgs/earthquake-database', 'smithsonian/volcanic-eruptions'],
-        scriptid=-1
+        scriptid=10824403
     ),
     dict(
         filename='tut4.ipynb',
@@ -63,7 +63,7 @@ notebooks = [
         lesson_idx=3,
         type='exercise',
         dataset_sources=['kwullum/fatal-police-shootings-in-the-us'],
-        scriptid=-1
+        scriptid=10824401
     ),
     dict(
         filename='tut5.ipynb',
@@ -76,6 +76,6 @@ notebooks = [
         lesson_idx=4,
         type='exercise',
         dataset_sources=['zusmani/pakistansuicideattacks'],
-        scriptid=-1
+        scriptid=10824407
         ),
 ]
