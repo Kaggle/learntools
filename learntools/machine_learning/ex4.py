@@ -54,10 +54,10 @@ class ValPreds(CodingProblem):
     _solution = CS("""val_predictions = iowa_model.predict(val_X)""")
 
     def check(self, val_predictions, iowa_model, val_X):
-        assert val_predictions.size == 365, "`val_predictions` is wrong size. Did you predict with the wrong data?"
+        assert val_predictions.size == 365, "`val_predictions` is wrong size. Did you predict with the correct data? The dataset `val_X` contains the validation observations."
         comparison_val_preds = iowa_model.predict(val_X)
         assert all(comparison_val_preds == val_predictions), ("Predictions do not match expectations. "
-                                                             "Did you supply the right data?")
+                                                             "Did you supply the right data? The dataset `val_X` contains the validation observations.")
 
 class MAE(EqualityCheckProblem):
     _var = 'val_mae'
