@@ -70,7 +70,7 @@ def calc_accuracy(model, paths_to_hotdog_images, paths_to_other_images):
 
 class TryVGG(CodingProblem):
     _vars = ['vgg16_accuracy', 'vgg16_model', 'calc_accuracy']
-    _hint = ("One line of your code is `vgg16_model = VGG16('../input/vgg16/vgg16_weights_tf_dim_ordering_tf_kernels.h5')`. ")
+    _hint = ("One line of your code is `vgg16_model = VGG16(weights='../input/vgg16/vgg16_weights_tf_dim_ordering_tf_kernels.h5')`. ")
     _solution = CS(
 """
 from tensorflow.keras.applications import VGG16

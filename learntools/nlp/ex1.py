@@ -23,7 +23,7 @@ class SingleReviewMatch(CodingProblem):
 
     matcher = PhraseMatcher(nlp.vocab, attr='LOWER')
     menu_tokens_list = [nlp(item) for item in menu]
-    matcher.add("MENU", None, *menu_tokens_list)
+    matcher.add("MENU", menu_tokens_list)
     matches = matcher(review_doc)"""))
     
     def check(self, matches):
