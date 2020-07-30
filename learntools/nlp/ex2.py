@@ -149,19 +149,19 @@ class TrainFunction(CodingProblem):
 
 class PredictFunction(CodingProblem):
     _var = 'predict'
-    _hint = ("You can use model.tokenizer on each text example to tokenize the input data. "
-             "To make predictions, you want to get the TextCategorizer object from the model "
-             "with model.get_pipe. The use .predict on the TextCategorizer to get the scores. "
+    _hint = ("You can use `nlp.tokenizer()` on each text example to tokenize the input data. "
+             "To make predictions, you want to get the TextCategorizer object "
+             "with `nlp.get_pipe()`. The use .predict on the TextCategorizer to get the scores. "
              "With the scores array, the .argmax method will return the index of the highest "
              "value. Take note of the axis argument in .argmax so you're finding the max index "
              "for each example")
     _solution = CS("""
-        def predict(model, texts):
+        def predict(nlp, texts):
             # Use the tokenizer to tokenize each input text example
-            docs = [model.tokenizer(text) for text in texts]
+            docs = [nlp.tokenizer(text) for text in texts]
             
             # Use textcat to get the scores for each doc
-            textcat = model.get_pipe('textcat')
+            textcat = nlp.get_pipe('textcat')
             scores, _ = textcat.predict(docs)
             
             # From the scores, find the class with the highest score/probability
@@ -171,12 +171,12 @@ class PredictFunction(CodingProblem):
 
     def check(self, predict):
         
-        def soln_func(model, texts):
+        def soln_func(nlp, texts):
             # Use the tokenizer to tokenize each input text example
-            docs = [model.tokenizer(text) for text in texts]
+            docs = [nlp.tokenizer(text) for text in texts]
             
             # Use textcat to get the scores for each doc
-            textcat = model.get_pipe('textcat')
+            textcat = nlp.get_pipe('textcat')
             scores, _ = textcat.predict(docs)
             
             # From the scores, find the class with the highest score/probability
