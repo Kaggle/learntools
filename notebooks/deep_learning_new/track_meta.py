@@ -6,28 +6,23 @@ track = dict(
     course_forum_url='https://www.kaggle.com/learn-forum',
 )
 
-lessons = [ {'topic': topic_name} for topic_name in
-            ["Linear Regression as a Neural Network", # 1
-             # "Making Models Deep",                    # 2
-             # "Practical SGD",                         # 3
-             # "Overfitting and Underfitting",          # 4
-             # "Improving Optimization",                # 5
-             # "Deep Classifiers",                      # 6
-            ]
-]
+topics = ["Linear Regression as a Neural Network", # 1
+          "Making Models Deep",                    # 2
+          "Practical SGD",                         # 3
+          "Overfitting and Underfitting",          # 4
+          "Improving Optimization",                # 5
+          # "Deep Classifiers",                      # 6
+          ]
 
-notebooks = [
-    dict(
-        filename='tut1.ipynb',
-        lesson_idx=0,
-        type='tutorial',
+lessons = [{'topic': topic_name} for topic_name in topics]
+
+notebooks = []
+for i, _ in enumerate(topics):
+    notebooks += [
+        dict(
+            filename="tut{}.ipynb".format(i+1),
+            lesson_idx=i,
+            type='tutorial',
         ),
-    # dict(
-    #     filename='ex1.ipynb',
-    #     lesson_idx=0,
-    #     type='exercise',
-    #     scriptid=1,
-    #     ),
-]
-
+    ]
 
