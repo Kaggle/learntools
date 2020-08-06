@@ -69,13 +69,13 @@ notebooks = [
         filename='tut5.ipynb',
         lesson_idx=4,
         type='tutorial',
-        dataset_sources=['zusmani/pakistansuicideattacks']
+        dataset_sources=['alexisbcook/pakistan-intellectual-capital']
         ),
     dict(
         filename='ex5.ipynb',
         lesson_idx=4,
         type='exercise',
-        dataset_sources=['zusmani/pakistansuicideattacks'],
+        dataset_sources=['alexisbcook/pakistan-intellectual-capital'],
         scriptid=10824407
         ),
 ]
