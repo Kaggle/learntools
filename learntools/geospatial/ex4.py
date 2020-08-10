@@ -8,6 +8,14 @@ from learntools.geospatial.tools import geocode
 congrats_map_completion = "Thank you for creating a map!"
 correct_message_map_completion = ""
 
+def check_gdf_equal(gdf1, gdf2):
+    df1 = pd.DataFrame(gdf1.drop(columns='geometry'))
+    df2 = pd.DataFrame(gdf2.drop(columns='geometry'))
+    assert df1.equals(df2), "The results don't look right.  Try again."
+    geom1 = gdf1.geometry
+    geom2 = gdf2.geometry
+    assert geom1.equals(geom2).all(), "The results don't look right.  Try again."
+
 # Q1
 starbucks = pd.read_csv("../input/geospatial-learn-course-data/starbucks_locations.csv")
 rows_with_missing = starbucks[starbucks["City"]=="Berkeley"]
@@ -92,7 +100,8 @@ CA_stats = CA_counties.merge(cols_to_add, on="GEOID")
         
         my_cols = list(CA_stats.columns)
         soln = CA_stats.loc[:, my_cols].sort_values("GEOID")
-        assert soln.equals(results.loc[:, my_cols].sort_values("GEOID")), "The results don't look right. Try again."
+        to_check = results.loc[:, my_cols].sort_values("GEOID")
+        check_gdf_equal(to_check, soln)
 
 class Q4(CodingProblem):
     _var = "sel_counties"
