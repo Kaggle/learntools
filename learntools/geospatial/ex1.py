@@ -1,9 +1,19 @@
 from learntools.core import *
 
 import geopandas as gpd
+import pandas as pd
 
 congrats_map_completion = "Thank you for creating a map!"
 correct_message_map_completion = ""
+
+def check_gdf_equal(gdf1, gdf2, name):
+    assert type(gdf1)==gpd.geodataframe.GeoDataFrame, "`{}` is not a GeoDataFrame.".format(name)
+    df1 = pd.DataFrame(gdf1.drop(columns='geometry'))
+    df2 = pd.DataFrame(gdf2.drop(columns='geometry'))
+    assert df1==df2, "The results don't look right.  Try again."
+    geom1 = gdf1.geometry
+    geom2 = gdf2.geometry
+    assert geom1.equals(geom2).all(), "The results don't look right.  Try again."
 
 # Q1
 world_loans = gpd.read_file("../input/geospatial-learn-course-data/kiva_loans/kiva_loans/kiva_loans.shp")
@@ -21,7 +31,7 @@ class Q1(CodingProblem):
 world_loans = gpd.read_file(loans_filepath)
 """)
     def check(self, world_loans_submit):
-        assert world_loans_submit.shape == world_loans.shape, "The results don't look right.  Please try again."
+        check_gdf_equal(world_loans_submit, world_loans, "world_loans")
 
 class Q2(CodingProblem):
     _hint = "Use the `plot()` method of each GeoDataFrame."
