@@ -116,14 +116,13 @@ protected_areas.plot(ax=ax, alpha=0.4)
     def check(self):
         pass
     
-class Q7(CodingProblem):
+class Q7(EqualityCheckProblem):
     _var = "totalArea"
+    _expected = totalArea
     _hint = ("Use the `to_crs()` method to change the CRS to EPSG 3035.")
     _solution = CS(
 """totalArea = sum(south_america.geometry.to_crs(epsg=3035).area) / 10**6
 """)
-    def check(self, totalArea_submit):
-        check_gdf_equal(totalArea_submit, totalArea, "totalArea")
     
 class Q8(CodingProblem):
     _hint = "When in South America, the birds are south of the equator."
