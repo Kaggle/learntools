@@ -44,14 +44,15 @@ world_loans.plot(ax=ax, markersize=2)
     def check(self):
         pass 
 
-class Q3(EqualityCheckProblem):
+class Q3(CodingProblem):
     _var = "PHL_loans"
-    _expected = PHL_loans
     _hint = ("Check out [this tutorial](https://www.kaggle.com/residentmario/indexing-selecting-assigning/), "
              "if you need to review conditional selection for DataFrames (and GeoDataFrames).")
     _solution = CS(
 """PHL_loans = world_loans.loc[world_loans.country=="Philippines"].copy()
 """)
+    def check(self, PHL_loans_submit):
+        check_gdf_equal(PHL_loans_submit, PHL_loans, "PHL_loans")
 
 class Q4P(CodingProblem):
     _hint = "Use the `plot()` method of each GeoDataFrame."
