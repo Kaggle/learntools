@@ -79,8 +79,7 @@ end_gdf.crs = {'init': 'epsg:4326'}
         "Don't forget to set the CRS to `{'init': 'epsg:4326'}`."
         sorted_end_gdf = end_gdf.sort_values(by='tag-local-identifier')
         sorted_results = results.sort_values(by='tag-local-identifier')
-        assert sorted_end_gdf.equals(sorted_results), \
-        "The results don't look right.  Please try again."
+        check_gdf_equal(sorted_end_gdf, sorted_results, "end_gdf")
 
 class Q4(CodingProblem):
     _hint = "Use the `plot()` method of each GeoDataFrame."
