@@ -13,14 +13,15 @@ world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
 PHL = world.loc[world.iso_a3=="PHL"].copy()
 PHL_loans = world_loans.loc[world_loans.country=="Philippines"].copy()
 
-class Q1(EqualityCheckProblem):
+class Q1(CodingProblem):
     _var = "world_loans"
-    _expected = world_loans
     _hint = "Use `gpd.read_file()`."
     _solution = CS(
 """# Load the data
 world_loans = gpd.read_file(loans_filepath)
 """)
+    def check(self, world_loans_submit):
+        assert world_loans_submit.shape == world_loans.shape, "The results don't look right.  Please try again."
 
 class Q2(CodingProblem):
     _hint = "Use the `plot()` method of each GeoDataFrame."
