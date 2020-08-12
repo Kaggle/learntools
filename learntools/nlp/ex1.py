@@ -18,6 +18,9 @@ class SingleReviewMatch(CodingProblem):
     import spacy
     from spacy.matcher import PhraseMatcher
 
+    index_of_review_to_test_on = 14
+    text_to_test_on = data.text.iloc[index_of_review_to_test_on]
+
     nlp = spacy.blank('en')
     review_doc = nlp(text_to_test_on)
 
