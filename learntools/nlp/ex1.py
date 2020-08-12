@@ -42,6 +42,8 @@ class MatchAllDataset(CodingProblem):
              "items in the review, create a list of all the matched phrases, and convert that "
              "into a set. Finally for each of those items, append the review's rating to " "item_ratings. Make sure to add the item string in lowercase. ")
     _solution = CS(textwrap.dedent("""
+    from collections import defaultdict
+    
     item_ratings = defaultdict(list)
 
     for idx, review in data.iterrows():
