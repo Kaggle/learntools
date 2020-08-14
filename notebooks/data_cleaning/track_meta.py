@@ -2,7 +2,7 @@ track = dict(
     author_username='alexisbcook',
     course_name='Data Cleaning',
     course_url='https://www.kaggle.com/learn/data-cleaning',
-    course_forum_url='https://www.kaggle.com/learn-forum'
+    course_forum_url='https://www.kaggle.com/learn-forum/172650'
 )
 
 lessons = [ {'topic': topic_name} for topic_name in
@@ -69,13 +69,13 @@ notebooks = [
         filename='tut5.ipynb',
         lesson_idx=4,
         type='tutorial',
-        dataset_sources=['zusmani/pakistansuicideattacks']
+        dataset_sources=['alexisbcook/pakistan-intellectual-capital']
         ),
     dict(
         filename='ex5.ipynb',
         lesson_idx=4,
         type='exercise',
-        dataset_sources=['zusmani/pakistansuicideattacks'],
+        dataset_sources=['alexisbcook/pakistan-intellectual-capital'],
         scriptid=10824407
         ),
 ]
