@@ -26,3 +26,8 @@ for i, _ in enumerate(topics):
         ),
     ]
 
+for nb in notebooks:
+    nb['dataset_sources'] = [
+        'ryanholbrook/dl-course-data',
+    ]
+
