@@ -48,9 +48,9 @@ ax[1].set_title("Normalized data")
         
 class NormOrScale(ThoughtExperiment):
     _hint = ("Do any of the examples use models that assume the data is normally distributed?")
-    _solution = ("In the first example, normalization makes sense, since linear regression will assume "
-                 "the data is normally distributed.  In the second example, scaling makes sense, so that "
-                 "we can compare differences in jumping jacks and push-ups on equal footing.")
+    _solution = ("In the second example, scaling makes sense, so that "
+                 "we can compare differences in jumping jacks and push-ups on equal footing.  As for the first example, "
+                 "note that an older version of this course implied that normalization was required.  However, this is not the case.")
                
 qvars = bind_exercises(globals(), [
     TryScaling,
