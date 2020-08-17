@@ -6,12 +6,12 @@ track = dict(
     course_forum_url='https://www.kaggle.com/learn-forum',
 )
 
-topics = ["Linear Regression as a Neural Network", # 1
-          "Making Models Deep",                    # 2
-          "Practical SGD",                         # 3
-          "Overfitting and Underfitting",          # 4
-          "Improving Optimization",                # 5
-          # "Deep Classifiers",                      # 6
+topics = ["A Single Neuron",              # 1
+          "Making Models Deep",           # 2
+          "Practical SGD",                # 3
+          "Overfitting and Underfitting", # 4
+          "Improving the Loss Surface",   # 5
+          # "Deep Classifiers",             # 6
           ]
 
 lessons = [{'topic': topic_name} for topic_name in topics]
