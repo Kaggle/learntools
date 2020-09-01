@@ -7,11 +7,11 @@ track = dict(
 )
 
 topics = ["A Single Neuron",              # 1
-          "Making Models Deep",           # 2
+          "Making Networks Deep",         # 2
           "Practical SGD",                # 3
           "Underfitting and Overfitting", # 4
           "Special Layers",               # 5
-          # "Deep Classifiers",             # 6
+          "Deep Classifiers",             # 6
           ]
 
 lessons = [{'topic': topic_name} for topic_name in topics]
