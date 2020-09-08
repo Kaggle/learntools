@@ -92,7 +92,7 @@ CA_stats = CA_counties.merge(cols_to_add, on="GEOID")
 """)
     def check(self, results):
         assert set(CA_stats.columns)==set(results.columns), "The columns don't look right.  They should be {}, but your columns were {}".format(list(CA_stats.columns), list(results.columns))
-        assert results.crs == {'init': 'epsg:4326'}, \
+        assert '4326' in results.crs.to_string(), \
         ("Please set the CRS of `CA_stats` to EPSG 4326 by running "
          "`CA_stats.crs = {'init': 'epsg:4326'}`.")
         assert len(CA_stats)==len(results), \
