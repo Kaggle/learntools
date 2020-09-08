@@ -7,8 +7,8 @@ track = dict(
 )
 
 topics = ["A Single Neuron",              # 1
-          "Making Networks Deep",         # 2
-          "Practical SGD",                # 3
+          "Deep Neural Networks",         # 2
+          "Stochastic Gradient Descent",  # 3
           "Underfitting and Overfitting", # 4
           "Special Layers",               # 5
           "Deep Classifiers",             # 6
