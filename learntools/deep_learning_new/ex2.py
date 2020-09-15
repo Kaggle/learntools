@@ -122,7 +122,7 @@ q_2.a.assert_check_passed()
             input_shape = model.layers[0].input_shape
         except:
             input_shape = None
-        assert (model.layers[0].input_shape == (None, 8)), \
+        assert (input_shape == (None, 8)), \
             ("Your model should have 8 inputs. Did you include the input shape to the first layer?")
         dense_activations = [layer.activation.__name__ for layer in model.layers]
         true_activations = ['linear', 'relu', 'linear', 'relu', 'linear']
