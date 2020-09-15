@@ -7,7 +7,7 @@ from learntools.core import *
 inputs = 11
 
 # Linear Models
-class Q1A(CodingProblem):
+class Q1(CodingProblem):
     _var = "input_shape"
     _hint = "Remember to *only* count the input features when determining `input_shape`. You should not count the target (the `quality` column)."
     _solution = CS("""
@@ -27,7 +27,7 @@ input_shape = [____]
             ("""Remember that you should *not* count the target when determining the value for `input_shape`. How many columns are there excluding `quality`?
 """)
 
-class Q1B(CodingProblem):
+class Q2(CodingProblem):
     _hint = """Your answer should look something like:
 ```python
 model = keras.Sequential([
@@ -42,7 +42,6 @@ from tensorflow.keras import layers
 model = keras.Sequential([
     layers.Dense(units=1, input_shape=[{}])
 ])
-q_1.b.assert_check_passed()
 """.format(inputs))
     _var = "model"
     def check(self, model):
@@ -60,13 +59,11 @@ q_1.b.assert_check_passed()
         assert (dense_layer.units == 1), \
             ("Your layer should have only a single unit: `units=1`.")
         assert (input_shape == (None, inputs)), \
-            ("Your model should have {} inputs. Make sure you answered the previous question correctly!".format(inputs))
-
-Q1 = MultipartProblem(Q1A, Q1B)
+            ("Your model should have {} inputs. Make sure you answered the previous question correctly!".format(inputs)
 
 
 # Weights and Biases
-class Q2(CodingProblem):
+class Q3(CodingProblem):
     _hint = "You can get the attribute of an object using the 'dot' notation: like `object.attribute`."
     _solution = CS("""
 # Uncomment if you need the model from the previous question:
@@ -96,14 +93,14 @@ w, b = model.____
 
 
 # Linear Models Produce Lines
-class Q3(CodingProblem):
+class Q4(CodingProblem):
     _solution = ""
     def check(self):
         pass
 
 
 qvars = bind_exercises(globals(), [
-        Q1, Q2, Q3,
+        Q1, Q2, Q3, Q4
     ],
     var_format='q_{n}',
 )
