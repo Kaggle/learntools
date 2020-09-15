@@ -78,6 +78,10 @@ notebooks = [
         type='exercise',
         scriptid=1259186
         ),
+    dict(filename='tut7.ipynb',
+        lesson_idx=6,
+        type='tutorial'
+        ),
     dict(
         filename='ex7.ipynb',
         lesson_idx=6,
@@ -122,7 +126,7 @@ for nb in notebooks:
         nb['dataset_sources'] = []
         
     if nb['filename'] == 'tut_titanic.ipynb':
-        nb['dataset_sources'] = ["dansbecker/melbourne-housing-snapshot"]
+        nb['dataset_sources'] = []
         nb['competition_sources'] = ["titanic"]
         
     if nb['filename'] == 'tut_automl.ipynb':
