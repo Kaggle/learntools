@@ -59,7 +59,7 @@ model = keras.Sequential([
         assert (dense_layer.units == 1), \
             ("Your layer should have only a single unit: `units=1`.")
         assert (input_shape == (None, inputs)), \
-            ("Your model should have {} inputs. Make sure you answered the previous question correctly!".format(inputs)
+            ("Your model should have {} inputs. Make sure you answered the previous question correctly!".format(inputs))
 
 
 # Weights and Biases
