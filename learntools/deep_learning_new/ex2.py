@@ -7,7 +7,7 @@ from learntools.core import *
 inputs = 8
 
 # Building Sequential Models
-class Q1A(CodingProblem):
+class Q1(CodingProblem):
     _var = "input_shape"
     _expected = [inputs]
     _hint = "Remember to *only* count the input features when determining `input_shape`. You should not count the target (the `quality` column)."
@@ -28,7 +28,7 @@ input_shape = [____]
             ("""Remember that you should *not* count the target when determining the value for `input_shape`. How many columns are there excluding `quality`?
 """)
 
-class Q1B(CodingProblem):
+class Q2(CodingProblem):
     _hint = """Your answer should look something like:
 ```python
 model = keras.Sequential([
@@ -77,17 +77,15 @@ model = keras.Sequential([
         assert (layer_units == true_units), \
             ("Your model doesn't have the correct number of units. The units of the `Dense` layers should be 512, 512, 512, and 1, in that order.")
 
-class Q1C(CodingProblem):
+class Q3(CodingProblem):
     hint = ""
     solution = ""
     def check(self):
-        pass
-
-Q1 = MultipartProblem(Q1A, Q1B, Q1C)        
+        pass        
 
 
 # Activation Functions
-class Q2A(CodingProblem):
+class Q4(CodingProblem):
     _hidden_units = 32
     hint = """Your model should look something like:
 ```python
@@ -108,7 +106,6 @@ model = keras.Sequential([
     layers.Activation('relu'),
     layers.Dense(1),
 ])
-q_2.a.assert_check_passed()
 """)
     _var = "model"
     def check(self, model):
@@ -136,17 +133,14 @@ q_2.a.assert_check_passed()
             ("Your model doesn't have the correct number of units. The units in the `Dense` layers should be 32, 32, and 1, in that order.")
 
 
-class Q2B(CodingProblem):
+class Q5(CodingProblem):
     hint = ""
     solution = ""
     def check(self):
         pass
 
-Q2 = MultipartProblem(Q2A, Q2B)
-
-
 qvars = bind_exercises(globals(), [
-        Q1, Q2,
+        Q1, Q2, Q3, Q4, Q5
     ],
     var_format='q_{n}',
 )
