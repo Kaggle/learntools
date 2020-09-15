@@ -44,7 +44,7 @@ model = keras.Sequential([
     layers.Dense(512, activation='relu'),    
     layers.Dense(1),
 ])
-""".format(inputs))
+""")
     _var = "model"
     def check(self, model):
         assert (len(model.layers) == 1), \
