@@ -16,6 +16,8 @@ input_shape = [{inputs}]
 # you could also use a 1-tuple, like input_shape = ({inputs},)
 """.format(inputs=inputs))
     def check(self, input_shape):
+        assert (type(input_shape) [list, tuple]), \
+            ("""The input shape should be a list (or tuple) with a single integer, like `[__]`.""")
         assert (len(input_shape) == 1), \
             ("""You should use a list of length 1 here. Each entry in the `input_shape` list says how many input values you have in that dimension. The inputs here are numbers (one dimensional) and so your answer should look something like:
 ```python
@@ -47,17 +49,27 @@ model = keras.Sequential([
 """)
     _var = "model"
     def check(self, model):
-        assert (len(model.layers) == 1), \
-            ("Your model should have only one layer, a `Dense` layer.")
-        
+        assert (len(model.layers) == 4), \
+            ("Your model should four layers in all. The first three are the hidden layers and the last is the output layer. The output layer looks like `layers.Dense(1)`.")
         dense_layer = model.layers[0]
         layer_class = dense_layer.__class__.__name__
-        assert (layer_class == "Dense"), \
-            ("The only layer in this model should be a `Dense` layer")
-        assert (dense_layer.units == 1), \
-            ("Your layer should have only a single unit: `units=1`.")
-        assert (dense_layer.input_shape == (None, inputs)), \
+        layer_classes = [layer.__class__.__name__ for layer in model.layers]
+        true_classes = ['Dense', 'Dense', 'Dense', 'Dense']
+        assert (layer_classes == true_classes), \
+            ("Your model doesn't have the correct kinds of layers. You should have five layers with classes: Dense, Activation, Dense, Activation, Dense.")
+        try:
+            input_shape = dense_layer.input_shape
+        except:
+            input_shape = None
+        assert (input_shape == (None, inputs)), \
             ("Your model should have {} inputs. Make sure you answered the previous question correctly!".format(inputs))
+        your_inputs = input_shape[1]
+        assert (your_inputs == inputs), \
+            ("Your model should have {} inputs, but you gave {}.".format(inputs, your_inputs))
+        dense_activations = [layer.activation.__name__ for layer in model.layers]
+        true_activations = ['relu', 'relu', 'relu', 'linear']
+        assert (dense_activations == true_activations), \
+            ("Your model doesn't have the correct activations. The hidden `Dense` layers should be have `'relu'` activation, while the output layer should be linear (no activation).")
 
 class Q1C(CodingProblem):
     hint = ""
@@ -100,9 +112,12 @@ q_2.a.assert_check_passed()
         assert (layer_classes == true_classes), \
             ("Your model doesn't have the correct kinds of layers. You should have five layers with classes: Dense, Activation, Dense, Activation, Dense.")
 
+        try:
+            input_shape = model.layers[0].input_shape
+        except:
+            input_shape = None
         assert (model.layers[0].input_shape == (None, 8)), \
             ("Your model should have 8 inputs. Did you include the input shape to the first layer?")
-
         dense_activations = [layer.activation.__name__ for layer in model.layers]
         true_activations = ['linear', 'relu', 'linear', 'relu', 'linear']
         assert (dense_activations == true_activations), \

@@ -15,7 +15,7 @@ input_shape = [{inputs}]
 # you could also use a 1-tuple, like input_shape = ({inputs},)
 """.format(inputs=inputs))
     def check(self, input_shape):
-        assert (type(input_shape) in [int, list]), \
+        assert (type(input_shape) [list, tuple]), \
             ("""The input shape should be a list (or tuple) with a single integer, like `[__]`.""")
         assert (len(input_shape) == 1), \
             ("""You should use a list of length 1 here. Each entry in the `input_shape` list says how many input values you have in that dimension. The inputs here are numbers (one dimensional) and so your answer should look something like:
@@ -51,11 +51,15 @@ q_1.b.assert_check_passed()
         
         dense_layer = model.layers[0]
         layer_class = dense_layer.__class__.__name__
+        try:
+            input_shape = dense_layer.input_shape
+        except:
+            input_shape = None
         assert (layer_class == "Dense"), \
             ("The only layer in this model should be a `Dense` layer")
         assert (dense_layer.units == 1), \
             ("Your layer should have only a single unit: `units=1`.")
-        assert (dense_layer.input_shape == (None, inputs)), \
+        assert (input_shape == (None, inputs)), \
             ("Your model should have {} inputs. Make sure you answered the previous question correctly!".format(inputs))
 
 Q1 = MultipartProblem(Q1A, Q1B)
