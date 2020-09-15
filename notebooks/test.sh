@@ -33,7 +33,7 @@ do
     python3 prepare_push.py $track
 done
 
-TESTABLE_NOTEBOOK_TRACK="deep_learning_new geospatial python pandas machine_learning data_viz_to_coder ml_intermediate nlp feature_engineering game_ai data_cleaning"
+TESTABLE_NOTEBOOK_TRACKS="deep_learning_new geospatial python pandas machine_learning data_viz_to_coder ml_intermediate nlp feature_engineering game_ai data_cleaning"
 
 for track in $TESTABLE_NOTEBOOK_TRACKS
 do
