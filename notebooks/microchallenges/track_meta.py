@@ -1,6 +1,6 @@
 # See also examples/example_track/track_meta.py for a longer, commented example
 track = dict(
-    author_username='dansbecker',
+    author_username='alexisbcook',
     course_name='Microchallenges',
     course_url='https://www.kaggle.com/learn/microchallenges',
     course_forum_url='https://www.kaggle.com/learn-forum'
