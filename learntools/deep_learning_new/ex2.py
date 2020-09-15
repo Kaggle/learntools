@@ -55,21 +55,27 @@ model = keras.Sequential([
         layer_class = dense_layer.__class__.__name__
         layer_classes = [layer.__class__.__name__ for layer in model.layers]
         true_classes = ['Dense', 'Dense', 'Dense', 'Dense']
+        # Check layer class
         assert (layer_classes == true_classes), \
             ("Your model doesn't have the correct kinds of layers. You should have five layers with classes: Dense, Activation, Dense, Activation, Dense.")
+        # Check input shape
         try:
             input_shape = dense_layer.input_shape
         except:
             input_shape = None
         assert (input_shape == (None, inputs)), \
             ("Your model should have {} inputs. Make sure you answered the previous question correctly!".format(inputs))
-        your_inputs = input_shape[1]
-        assert (your_inputs == inputs), \
-            ("Your model should have {} inputs, but you gave {}.".format(inputs, your_inputs))
+        # Check activation functions
         dense_activations = [layer.activation.__name__ for layer in model.layers]
         true_activations = ['relu', 'relu', 'relu', 'linear']
         assert (dense_activations == true_activations), \
             ("Your model doesn't have the correct activations. The hidden `Dense` layers should be have `'relu'` activation, while the output layer should be linear (no activation).")
+
+        # Check number of units
+        layer_units = [layer.units for layer in model.layers]
+        true_units = [512, 512, 512, 1]
+        assert (layer_units == true_units), \
+            ("Your model doesn't have the correct number of units. The units of the `Dense` layers should be 512, 512, 512, and 1, in that order.")
 
 class Q1C(CodingProblem):
     hint = ""
@@ -122,6 +128,13 @@ q_2.a.assert_check_passed()
         true_activations = ['linear', 'relu', 'linear', 'relu', 'linear']
         assert (dense_activations == true_activations), \
             ("Your model doesn't have the correct activations. The `Dense` layers should be linear (that is, no activation), while the `Activation` layers should be `'relu'`")
+        # Check number of units
+        layer_units = [layer.units for layer in model.layers
+                       if layer.__class__.__name__ is 'Dense']
+        true_units = [32, 32, 1]
+        assert (layer_units == true_units), \
+            ("Your model doesn't have the correct number of units. The units in the `Dense` layers should be 32, 32, and 1, in that order.")
+
 
 class Q2B(CodingProblem):
     hint = ""
