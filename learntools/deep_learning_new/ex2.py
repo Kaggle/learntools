@@ -16,7 +16,7 @@ input_shape = [{inputs}]
 # you could also use a 1-tuple, like input_shape = ({inputs},)
 """.format(inputs=inputs))
     def check(self, input_shape):
-        assert (type(input_shape) [list, tuple]), \
+        assert (type(input_shape) in [list, tuple]), \
             ("""The input shape should be a list (or tuple) with a single integer, like `[__]`.""")
         assert (len(input_shape) == 1), \
             ("""You should use a list of length 1 here. Each entry in the `input_shape` list says how many input values you have in that dimension. The inputs here are numbers (one dimensional) and so your answer should look something like:
@@ -123,7 +123,6 @@ q_2.a.assert_check_passed()
         assert (dense_activations == true_activations), \
             ("Your model doesn't have the correct activations. The `Dense` layers should be linear (that is, no activation), while the `Activation` layers should be `'relu'`")
 
-
 class Q2B(CodingProblem):
     hint = ""
     solution = ""
@@ -131,7 +130,6 @@ class Q2B(CodingProblem):
         pass
 
 Q2 = MultipartProblem(Q2A, Q2B)
-
 
 
 qvars = bind_exercises(globals(), [

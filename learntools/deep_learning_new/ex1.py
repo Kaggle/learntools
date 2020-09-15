@@ -15,7 +15,7 @@ input_shape = [{inputs}]
 # you could also use a 1-tuple, like input_shape = ({inputs},)
 """.format(inputs=inputs))
     def check(self, input_shape):
-        assert (type(input_shape) [list, tuple]), \
+        assert (type(input_shape) in [list, tuple]), \
             ("""The input shape should be a list (or tuple) with a single integer, like `[__]`.""")
         assert (len(input_shape) == 1), \
             ("""You should use a list of length 1 here. Each entry in the `input_shape` list says how many input values you have in that dimension. The inputs here are numbers (one dimensional) and so your answer should look something like:
@@ -91,7 +91,7 @@ print("Weights\n{}\n\nBias\n{}".format(w, b))
 w, b = model.____
 ```
 """)
-        assert (w.shape == tf.TensorShape([inputs])), \
+        assert (w.shape == tf.TensorShape([inputs, 1])), \
             ("""Your weight tensor `w` doesn't have the correct shape. Make sure you're using the model defined previously, with {} inputs and 1 unit.""".format(inputs))
 
 
