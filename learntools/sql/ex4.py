@@ -46,7 +46,7 @@ class EducationSpending(CodingProblem):
         submitted_number = float(round(results.loc[results["country_name"] == test_country]["avg_ed_spending_pct"].values[0], 2))
         assert(submitted_number==correct_number), ("The results don't look right. Try again.")
 
-    _hint = "The part before `FROM` should be `SELECT country_name, AVG(value) avg_ed_spending_pct`."
+    _hint = "The part before `FROM` should be `SELECT country_name, AVG(value) AS avg_ed_spending_pct`."
     _solution = CS(\
 """
 country_spend_pct_query = \"""

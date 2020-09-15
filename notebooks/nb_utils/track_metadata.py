@@ -30,6 +30,7 @@ class TrackMeta(object):
         self.track = track
         self.course_name = track['course_name']
         self.course_url = track['course_url']
+        self.course_forum_url = track['course_forum_url']
 
         self.lessons = [Lesson(**lmeta) for lmeta in lessons_meta]
         # Add convenience next/prev pointers to lessons
@@ -129,7 +130,7 @@ class Notebook(object):
 
     def __init__(self, cfg, filename, type, author=None, title=None, lesson=None,
             slug=None, scriptid=1, kernel_sources=(), dataset_sources=(),
-            competition_sources=(), keywords=(), enable_gpu=False,
+            competition_sources=(), keywords=(), enable_gpu=False, enable_internet=None,
             ):
         self.cfg = cfg
         self.filename = filename
@@ -168,6 +169,7 @@ class Notebook(object):
         self.competition_sources = list(competition_sources)
         self.keywords = list(keywords)
         self.enable_gpu = bool(enable_gpu)
+        self.enable_internet = enable_internet
 
     @staticmethod
     def _topic_to_title(topic):
@@ -212,11 +214,12 @@ class Notebook(object):
                 # Enable internet in development mode so we can pip install learntools
                 # TODO: Actually, probably only needs to be turned on if we're in
                 # development mode AND this is an exercise kernel.
-                enable_internet=dev,
+                enable_internet=dev if self.enable_internet is None else self.enable_internet,
                 kernel_type='notebook',
                 title=title,
                 dataset_sources=sorted(self.dataset_sources),
                 competition_sources=sorted(self.competition_sources),
                 kernel_sources=sorted(self.kernel_sources),
                 keywords=sorted(self.keywords),
+                docker_image_pinning_type="latest",
                 )

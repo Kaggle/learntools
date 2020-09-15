@@ -8,12 +8,14 @@ set -x
 DIR=`dirname "${BASH_SOURCE[0]}"`
 # Path to the parent (learntools) dir
 LT=$(readlink -f $DIR/..)
-# Install learntools branch
-pip install $DIR/..
 # The learntools repo is cloned to a read-only location. Various testing steps involve writing,
 # so copy the whole notebooks directory to a writeable location and work from there.
 WORKING_DIR=`mktemp -d`
 cp -r $LT $WORKING_DIR
+
+# Install learntools branch
+pip install $WORKING_DIR/input
+
 cd $WORKING_DIR/input/notebooks
 
 TMP_DIR=`mktemp -d`
@@ -21,7 +23,9 @@ TMP_DIR=`mktemp -d`
 # Install packages the notebook pipeline depends on but which aren't installed with the learntools package.
 pip install -q -r requirements.txt
 
-TRACKS="deep_learning pandas python machine_learning sql data_viz_to_coder ml_intermediate sql_advanced feature_engineering geospatial nlp"
+
+TRACKS="deep_learning embeddings pandas python machine_learning sql data_viz_to_coder ml_intermediate sql_advanced feature_engineering geospatial nlp game_ai data_cleaning"
+
 
 for track in $TRACKS
 do
@@ -29,7 +33,8 @@ do
     python3 prepare_push.py $track
 done
 
-TESTABLE_NOTEBOOK_TRACKS="python pandas machine_learning data_viz_to_coder ml_intermediate geospatial nlp"
+TESTABLE_NOTEBOOK_TRACKS="geospatial python pandas machine_learning data_viz_to_coder ml_intermediate nlp feature_engineering game_ai data_cleaning"
+
 for track in $TESTABLE_NOTEBOOK_TRACKS
 do
     # Running the deep learning notebooks is fairly slow (~10-20 minutes), so only
@@ -44,7 +49,8 @@ do
     do
         # First python exercise notebook uses google/tinyquickdraw dataset, which
         # is 11 GB. Downloading it would probably slow down testing unacceptably.
-        if [[ ( $nb =~ "ex_1" && $track == "python" ) ]]
+        # AutoML notebooks also run for hours.
+        if [[ ( $nb =~ "ex_1" && $track == "python" ) ]] || [[ ( $nb =~ "ex_automl") ]] || [[ ( $nb =~ "tut_automl") ]] || [[ ( $nb =~ "tut4" && $track == "game_ai" ) ]] || [[ ( $nb =~ "tut4" && $track == "data_cleaning" ) ]]
         then
             echo "Warning: skipping $nb in track $track"
             continue

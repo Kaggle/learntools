@@ -1,7 +1,8 @@
 track = dict(
     author_username='residentmario',
     course_name='Pandas',
-    course_url='https://www.kaggle.com/learn/pandas'
+    course_url='https://www.kaggle.com/learn/pandas',
+    course_forum_url='https://www.kaggle.com/learn-forum/161299'
 )
 
 lessons = []
@@ -69,13 +70,13 @@ notebooks = [
         filename='tut_4.ipynb',
         lesson_idx=4,
         type='tutorial',
-        scriptid=598826
+        scriptid=598827
         ),
     dict(
         filename='ex_4.ipynb',
         lesson_idx=4,
         type='exercise',
-        scriptid=598827
+        scriptid=598826
         ),
     dict(
         filename='tut_5.ipynb',
