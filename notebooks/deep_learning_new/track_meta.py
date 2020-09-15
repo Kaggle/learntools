@@ -6,23 +6,35 @@ track = dict(
     course_forum_url='https://www.kaggle.com/learn-forum',
 )
 
-topics = ["A Single Neuron",              # 1
-          "Making Networks Deep",         # 2
-          "Practical SGD",                # 3
-          "Underfitting and Overfitting", # 4
-          "Special Layers",               # 5
-          "Deep Classifiers",             # 6
+TOPICS = ["A Single Neuron",                 # 1
+          "Deep Neural Networks",            # 2
+          "Stochastic Gradient Descent",     # 3
+          "Underfitting and Overfitting",    # 4
+          "Dropout and Batch Normalization", # 5
+          "Binary Classification",           # 6
           ]
-
-lessons = [{'topic': topic_name} for topic_name in topics]
+lessons = [{'topic': topic_name} for topic_name in TOPICS]
 
 notebooks = []
-for i, _ in enumerate(topics):
+GPU_TUTORIAL = []
+for i, _ in enumerate(TOPICS):
     notebooks += [
         dict(
             filename="tut{}.ipynb".format(i+1),
             lesson_idx=i,
             type='tutorial',
+            enable_gpu=(i+1 in GPU_TUTORIAL),
+        ),
+    ]
+
+GPU_EXERCISE = [3, 4, 5, 6]
+for i, _ in enumerate(TOPICS):
+    notebooks += [
+        dict(
+            filename="ex{}.ipynb".format(i+1),
+            lesson_idx=i,
+            type='exercise',
+            enable_gpu=(i+1 in GPU_EXERCISE),
         ),
     ]
 
