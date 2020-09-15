@@ -78,6 +78,10 @@ notebooks = [
         type='exercise',
         scriptid=1259186
         ),
+    dict(filename='tut7.ipynb',
+        lesson_idx=6,
+        type='tutorial'
+        ),
     dict(
         filename='ex7.ipynb',
         lesson_idx=6,
