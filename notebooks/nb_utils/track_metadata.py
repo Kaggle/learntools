@@ -221,4 +221,5 @@ class Notebook(object):
                 competition_sources=sorted(self.competition_sources),
                 kernel_sources=sorted(self.kernel_sources),
                 keywords=sorted(self.keywords),
+                docker_image_pinning_type="latest",
                 )
