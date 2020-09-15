@@ -2,26 +2,26 @@
 track = dict(
     author_username='dansbecker',
     course_name='Microchallenges',
-    course_url='https://www.kaggle.com/learn/microchallenges'
+    course_url='https://www.kaggle.com/learn/microchallenges',
+    course_forum_url='https://www.kaggle.com/learn-forum'
 )
 
 lessons = [ {'topic': topic_name} for topic_name in
                     ['Blackjack Microchallenge',
                     'Airline Price Optimization Microchallenge',
                     ]
+          ]
 
 notebooks = [
     dict(
-        filename='ex1.ipynb',
+        filename='tut1.ipynb',
         lesson_idx=0,
-        type='exercise',
-        scriptid=1,
+        type='tutorial',
         ),
     dict(
-        filename='ex2.ipynb',
+        filename='tut2.ipynb',
         lesson_idx=1,
-        type='exercise',
-        scriptid=1,
+        type='tutorial',
         ),
 ]
 
