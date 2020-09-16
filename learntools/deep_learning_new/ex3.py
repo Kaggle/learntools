@@ -110,8 +110,16 @@ q_4.assert_check_passed()
 """)
     _var = "model"
     def check(self, model):
-        optimizer = (model.optimizer.__class__.__name__)
-        loss = model.compiled_loss._losses
+        try:
+            optimizer = model.optimizer.__class__.__name__
+        except:
+            optimizer = None
+        try:
+            loss = model.compiled_loss._losses
+        except:
+            loss = None
+        assert (optimizer is not None and loss is not None), \
+        ("You are missing the loss or the optimizer.")
         assert (loss.lower() == 'mae'), \
             ("The loss should be `'mae'`. You gave `{}`".format(loss))
         assert (optimizer.lower() == 'adam'), \
