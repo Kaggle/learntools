@@ -1,6 +1,6 @@
 from learntools.core import *
 
-_inputs = 50
+inputs = 50
 
 # Data Preparation
 class Q1(CodingProblem):
@@ -19,7 +19,7 @@ class Q2(CodingProblem):
 input_shape = [{inputs}]
 # or,
 input_shape = [X_train.shape[1]]
-""".format(inputs=_inputs))
+""".format(inputs=inputs))
 
     def check(self, input_shape):
         assert (type(input_shape) [list, tuple]), \
@@ -32,11 +32,11 @@ input_shape = [X_train.shape[1]]
 input_shape = [____]
 ```
 """)
-        assert (input_shape[0] == _inputs), \
-            ("The number of inputs should be {good_inputs}, but you gave {bad_inputs}".format(good_inputs=_inputs, bad_inputs=input_shape[0]))
+        assert (input_shape[0] == inputs), \
+            ("The number of inputs should be {good_inputs}, but you gave {bad_inputs}".format(good_inputs=inputs, bad_inputs=input_shape[0]))
 
 
-# Fuel Economy Prediction
+# Model for Fuel Economy Prediction
 class Q3(CodingProblem):
     _hint = """Your answer should look something like:
 ```python
@@ -60,7 +60,7 @@ model = keras.Sequential([
     layers.Dense(64, activation='relu'),    
     layers.Dense(1),
 ])
-""".format(_inputs))
+""".format(inputs))
     _var = "model"
     def check(self, model):
         assert (len(model.layers) == 4), \
@@ -69,37 +69,82 @@ model = keras.Sequential([
         layer_class = dense_layer.__class__.__name__
         layer_classes = [layer.__class__.__name__ for layer in model.layers]
         true_classes = ['Dense', 'Dense', 'Dense', 'Dense']
+        # Check layer class
         assert (layer_classes == true_classes), \
-            ("Your model doesn't have the correct kinds of layers. You should have five layers with classes: Dense, Activation, Dense, Activation, Dense.")
-        your_inputs = model.layers[0].input_shape[0]
-        assert (your_inputs == _inputs), \
-            ("Your model should have {} inputs, but you gave {}.".format(_inputs, your_inputs))
-        dense_activations = [layer.activation.__name__ for layer in model.layers]
-        true_activations = ['relu', 'relu', 'relu', 'linear']
-        assert (dense_activations == true_activations), \
-            ("Your model doesn't have the correct activations. The hidden `Dense` layers should be have `'relu'` activation, while the output layer should be linear (no activation).")
+            ("Your model doesn't have the correct kinds of layers. You should have four layers with classes: Dense, Dense, Dense, Dense.")
+        # Check input shape
         try:
             input_shape = dense_layer.input_shape
         except:
             input_shape = None
+        assert (input_shape == (None, inputs)), \
+            ("Your model should have {} inputs.".format(inputs))
+        # Check activation functions
+        dense_activations = [layer.activation.__name__ for layer in model.layers]
+        true_activations = ['relu', 'relu', 'relu', 'linear']
+        assert (dense_activations == true_activations), \
+            ("Your model doesn't have the correct activations. The hidden `Dense` layers should be have `'relu'` activation, while the output layer should be linear (no activation).")
 
+        # Check number of units
+        layer_units = [layer.units for layer in model.layers]
+        true_units = [512, 512, 512, 1]
+        assert (layer_units == true_units), \
+            ("Your model doesn't have the correct number of units. The units of the `Dense` layers should be 64, 64, 64, and 1, in that order.")
+
+# Compile
 class Q4(CodingProblem):
-    _hint = ""
-    _solution = ""
+    _hint = """Your code should look something like:
+```python
+model.compile(
+____,
+____,
+)
+```
+"""
+    _solution = CS("""
+model.compile(
+    optimizer='adam',
+    loss='mae'
+)
+q_4.assert_check_passed()
+""")
     _var = "model"
     def check(self, model):
-        pass
+        optimizer = (model.optimizer.__class__.__name__)
+        loss = model.compiled_loss._losses
+        assert (loss.lower() == 'mae'), \
+            ("The loss should be `'mae'`. You gave {}".format(loss))
+        assert (optimizer.lower() == 'adam'), \
+            ("The optimizer should be `'adam'`. You gave {}".format(optimizer))
 
+
+# Train the model
 class Q5(CodingProblem):
-    pass
+    _hint = ""
+    _solution = ""
+    _var = "history"
+    def check(self, history):
+        # Batch size
+        epochs = history.params['epochs']
+        true_epochs = 100
+        assert (epochs == true_epochs), \
+            ("You have the incorrect number of epochs. You gave {}, but there should be {}.".format(epochs, true_epochs))
+        # (examples * batch_percent) // epochs
+        batch_size = (1107 * 0.75) // true_epochs
+        true_batch_size = 128
+        assert (batch_size == 8.0), \
+            ("You have the incorrect number of batches. You gave {}, but there should be {}".format(batch_size, true_batch_size))
 
+# Evaluate training
 class Q6(ThoughtExperiment):
-    pass
+    _solution = "Most likely not. Once the learning curves level off, there won't usually be any advantage to training for additional epochs."
 
-
-# Learning Rate and Batch Size
-class Q7(ThoughtExperiment):
-    pass
+# Learning rate and batch size
+class Q7(CodingProblem):
+    _hint = ""
+    _solution = ""
+    def check(self):
+        pass
 
 
 qvars = bind_exercises(globals(), [
