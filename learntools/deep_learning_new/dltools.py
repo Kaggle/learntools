@@ -11,9 +11,8 @@ plt.style.use('seaborn-whitegrid')
 
 # NUM_EXAMPLES = 256
 # BATCH_SIZE = 8
-# STEPS = 50 # actually steps
+# STEPS = 50
 # LR = 0.1
-
 
 def animate_sgd(num_examples, batch_size, steps, learning_rate,
                 true_w=3.0, true_b=2.0, seed=0):
