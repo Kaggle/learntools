@@ -57,7 +57,7 @@ model = keras.Sequential([
         true_classes = ['Dense', 'Dense', 'Dense', 'Dense']
         # Check layer class
         assert (layer_classes == true_classes), \
-            ("Your model doesn't have the correct kinds of layers. You should have five layers with classes: Dense, Activation, Dense, Activation, Dense.")
+            ("Your model doesn't have the correct kinds of layers. You should have five layers with classes: Dense, Dense, Dense, Dense.")
         # Check input shape
         try:
             input_shape = dense_layer.input_shape
