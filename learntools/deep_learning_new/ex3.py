@@ -128,8 +128,26 @@ q_4.assert_check_passed()
 
 # Train the model
 class Q5(CodingProblem):
-    _hint = ""
-    _solution = ""
+    _hint = """
+Your solution should look something like:
+```python
+history = model.fit(
+    ____, # training data
+    ____, # validation data
+    ____, # batch size
+    ____, # epochs
+)
+```
+
+"""
+    _solution = CS("""
+history = model.fit(
+    X_train, y_train,
+    validation_data=(X_valid, y_valid),
+    batch_size=128,
+    epochs=100,
+)
+""")
     _var = "history"
     def check(self, history):
         # Epochs
