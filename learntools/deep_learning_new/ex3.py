@@ -22,7 +22,7 @@ input_shape = [X_train.shape[1]]
 """.format(inputs=inputs))
 
     def check(self, input_shape):
-        assert (type(input_shape) [list, tuple]), \
+        assert (type(input_shape) in [list, tuple]), \
             ("""The input shape should be a list (or tuple) with a single integer, like `[__]`.""")
         assert (input_shape[0] not in [13, 14]), \
             ("Look at the columns of `X_train` for the number of input features, since `X_train` (the processed data) is what is actually being used as input.")
@@ -87,7 +87,7 @@ model = keras.Sequential([
 
         # Check number of units
         layer_units = [layer.units for layer in model.layers]
-        true_units = [512, 512, 512, 1]
+        true_units = [64, 64, 64, 1]
         assert (layer_units == true_units), \
             ("Your model doesn't have the correct number of units. The units of the `Dense` layers should be 64, 64, 64, and 1, in that order.")
 
@@ -113,9 +113,9 @@ q_4.assert_check_passed()
         optimizer = (model.optimizer.__class__.__name__)
         loss = model.compiled_loss._losses
         assert (loss.lower() == 'mae'), \
-            ("The loss should be `'mae'`. You gave {}".format(loss))
+            ("The loss should be `'mae'`. You gave `{}`".format(loss))
         assert (optimizer.lower() == 'adam'), \
-            ("The optimizer should be `'adam'`. You gave {}".format(optimizer))
+            ("The optimizer should be `'adam'`. You gave `{}`".format(optimizer))
 
 
 # Train the model
@@ -124,16 +124,21 @@ class Q5(CodingProblem):
     _solution = ""
     _var = "history"
     def check(self, history):
-        # Batch size
+        # Epochs
         epochs = history.params['epochs']
         true_epochs = 100
         assert (epochs == true_epochs), \
             ("You have the incorrect number of epochs. You gave {}, but there should be {}.".format(epochs, true_epochs))
+        # Batch Size
         # (examples * batch_percent) // epochs
         batch_size = (1107 * 0.75) // true_epochs
         true_batch_size = 128
         assert (batch_size == 8.0), \
             ("You have the incorrect number of batches. You gave {}, but there should be {}".format(batch_size, true_batch_size))
+        # Validation Data
+        assert ('val_loss' in history.history.keys()), \
+            ("You need to include the validation data. Use the argument `validation_data=(X_train, y_train)`")
+
 
 # Evaluate training
 class Q6(ThoughtExperiment):
