@@ -43,13 +43,13 @@ model = keras.Sequential([
                        for layer in model.layers
                        if layer.__class__.__name__ is 'Dense']
         true_units = [128, 64, 1]
-        assert (layer_units == true_units), \
+        assert (dense_units == true_units), \
             ("Your model doesn't have the correct number of units. The units of the `Dense` layers should be {}.".format(true_units))
         # Check dropout rates
         dropout_rates = [layer.rate
                          for layer in model.layers
                          if layer.__class__.__name__ is 'Dropout']
-        true_rates = [0.3, 0.3, 0.3]
+        true_rates = [0.3, 0.3]
         assert (dropout_rates == true_rates), \
             ("Your model doesn't have the correct dropout rates. The rates of the `Dropout` layers should be {}.".format(true_rates))
 
@@ -110,7 +110,7 @@ model = keras.Sequential([
                        for layer in model.layers
                        if layer.__class__.__name__ is 'Dense']
         true_units = [512, 512, 512, 1]
-        assert (layer_units == true_units), \
+        assert (dense_units == true_units), \
             ("Your model doesn't have the correct number of units. The units of the `Dense` layers should be {}.".format(true_units))
 
 # Evaluate BatchNormalization
