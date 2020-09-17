@@ -51,7 +51,6 @@ model.compile(
     optimizer='adam',
     loss='mae'
 )
-q_4.assert_check_passed()
 """)
     _var = "model"
     def check(self, model):
