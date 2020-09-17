@@ -62,8 +62,10 @@ model.compile(
             loss = model.compiled_loss._losses
         except:
             loss = None
-        assert (optimizer is not None and loss is not None), \
-        ("You are missing the loss or the optimizer.")
+        assert (optimizer is not None), \
+        ("You are missing the optimizer.")
+        assert (loss is not None), \
+        ("You are missing the loss.")
         assert (loss.lower() == 'mae'), \
             ("The loss should be `'mae'`. You gave `{}`".format(loss))
         assert (optimizer.lower() == 'adam'), \
@@ -95,26 +97,20 @@ history = model.fit(
     def check(self, history):
         # Epochs
         epochs = history.params['epochs']
-        true_epochs = 100
+        true_epochs = 200
         assert (epochs == true_epochs), \
             ("You have the incorrect number of epochs. You gave {}, but there should be {}.".format(epochs, true_epochs))
-        # Batch Size
-        # (examples * batch_percent) // epochs
-        batch_size = (1107 * 0.75) // true_epochs
-        true_batch_size = 128
-        assert (batch_size == 8.0), \
-            ("You have the incorrect number of batches. You gave {}, but there should be {}".format(batch_size, true_batch_size))
 
 # Evaluate training
 class Q3(ThoughtExperiment):
-    _solution = "Most likely not. Once the learning curves level off, there won't usually be any advantage to training for additional epochs."
+    _solution = "This depends on how the loss has evolved during training: if the learning curves have levelled off, there won't usually be any advantage to training for additional epochs.  Conversely, if the loss appears to still be decreasing, then training for longer could be advantageous."
 
 # Learning rate and batch size
 class Q4(ThoughtExperiment):
     _solution = """
 You probably saw that smaller batch sizes gave noisier weight updates and loss curves. This is because each batch is a small *sample* of data and smaller samples tend to give noisier estimates. Smaller batches can have an "averaging" effect though which can be beneficial.
 
-Smaller learning rates make the updates smaller and the training takes longer to converge. Large learning rates can speed up training, but don't "settle in" to a minimum as well. When the learning rate is too large, the training can fail completely. (If you compared 0.9 to 0.99 you might have seen this.)
+Smaller learning rates make the updates smaller and the training takes longer to converge. Large learning rates can speed up training, but don't "settle in" to a minimum as well. When the learning rate is too large, the training can fail completely. (Try setting the learning rate to a large value like 0.99 to see this.)
 """
 
 
