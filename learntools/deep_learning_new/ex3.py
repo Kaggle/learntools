@@ -36,63 +36,8 @@ input_shape = [____]
             ("The number of inputs should be {good_inputs}, but you gave {bad_inputs}".format(good_inputs=inputs, bad_inputs=input_shape[0]))
 
 
-# Model for Fuel Economy Prediction
-class Q3(CodingProblem):
-    _hint = """Your answer should look something like:
-```python
-model = keras.Sequential([
-    # Hidden layers
-    layers.Dense(____),
-    layers.Dense(____),
-    layers.Dense(____),
-    # Output layer
-    layers.Dense(1),
-])
-```
-"""
-    _solution = CS("""
-from tensorflow import keras
-from tensorflow.keras import layers
-
-model = keras.Sequential([
-    layers.Dense(64, activation='relu', input_shape=input_shape),
-    layers.Dense(64, activation='relu'),
-    layers.Dense(64, activation='relu'),    
-    layers.Dense(1),
-])
-""".format(inputs))
-    _var = "model"
-    def check(self, model):
-        assert (len(model.layers) == 4), \
-            ("Your model should four layers in all. The first three are the hidden layers and the last is the output layer. The output layer looks like `layers.Dense(1)`.")
-        dense_layer = model.layers[0]
-        layer_class = dense_layer.__class__.__name__
-        layer_classes = [layer.__class__.__name__ for layer in model.layers]
-        true_classes = ['Dense', 'Dense', 'Dense', 'Dense']
-        # Check layer class
-        assert (layer_classes == true_classes), \
-            ("Your model doesn't have the correct kinds of layers. You should have four layers with classes: Dense, Dense, Dense, Dense.")
-        # Check input shape
-        try:
-            input_shape = dense_layer.input_shape
-        except:
-            input_shape = None
-        assert (input_shape == (None, inputs)), \
-            ("Your model should have {} inputs.".format(inputs))
-        # Check activation functions
-        dense_activations = [layer.activation.__name__ for layer in model.layers]
-        true_activations = ['relu', 'relu', 'relu', 'linear']
-        assert (dense_activations == true_activations), \
-            ("Your model doesn't have the correct activations. The hidden `Dense` layers should be have `'relu'` activation, while the output layer should be linear (no activation).")
-
-        # Check number of units
-        layer_units = [layer.units for layer in model.layers]
-        true_units = [64, 64, 64, 1]
-        assert (layer_units == true_units), \
-            ("Your model doesn't have the correct number of units. The units of the `Dense` layers should be 64, 64, 64, and 1, in that order.")
-
 # Compile
-class Q4(CodingProblem):
+class Q1(CodingProblem):
     _hint = """Your code should look something like:
 ```python
 model.compile(
@@ -125,9 +70,8 @@ q_4.assert_check_passed()
         assert (optimizer.lower() == 'adam'), \
             ("The optimizer should be `'adam'`. You gave `{}`".format(optimizer))
 
-
 # Train the model
-class Q5(CodingProblem):
+class Q2(CodingProblem):
     _hint = """
 Your solution should look something like:
 ```python
@@ -161,25 +105,22 @@ history = model.fit(
         true_batch_size = 128
         assert (batch_size == 8.0), \
             ("You have the incorrect number of batches. You gave {}, but there should be {}".format(batch_size, true_batch_size))
-        # Validation Data
-        assert ('val_loss' in history.history.keys()), \
-            ("You need to include the validation data. Use the argument `validation_data=(X_train, y_train)`")
-
 
 # Evaluate training
-class Q6(ThoughtExperiment):
+class Q3(ThoughtExperiment):
     _solution = "Most likely not. Once the learning curves level off, there won't usually be any advantage to training for additional epochs."
 
 # Learning rate and batch size
-class Q7(CodingProblem):
-    _hint = ""
-    _solution = ""
-    def check(self):
-        pass
+class Q4(ThoughtExperiment):
+    _solution = """
+You probably saw that smaller batch sizes gave noisier weight updates and loss curves. This is because each batch is a small *sample* of data and smaller samples tend to give noisier estimates. Smaller batches can have an "averaging" effect though which can be beneficial.
+
+Smaller learning rates make the updates smaller and the training takes longer to converge. Large learning rates can speed up training, but don't "settle in" to a minimum as well. When the learning rate is too large, the training can fail completely. (If you compared 0.9 to 0.99 you might have seen this.)
+"""
 
 
 qvars = bind_exercises(globals(), [
-        Q1, Q2, Q3, Q4, Q5, Q6, Q7,
+        Q1, Q2, Q3, Q4,
     ],
     var_format='q_{n}',
 )
