@@ -116,9 +116,7 @@ model = keras.Sequential([
 # Evaluate BatchNormalization
 class Q4(ThoughtExperiment):
     _solution = """
-Depending on how the weights were initialized, the training will usually fail completely (loss diverges to inf/nan); when it works at all, it tends to converge at a very large loss.
-
-Conditions make the training very unstable.
+You can see that adding batch normalization was a big improvement on the first attempt! By adaptively scaling the data as it passes through the network, batch normalization can let you train models on difficult datasets.
 """
 
 
