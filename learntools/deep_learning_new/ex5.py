@@ -56,7 +56,7 @@ model = keras.Sequential([
 # Evaluate Dropout
 class Q2(ThoughtExperiment):
     _solution = """
-From the learning curves, you can see that the validation loss remains near a constant minimum even though the training loss continues to decrease. So we can see that adding dropout did prevent overfitting this time. Moreover, by making it harder for the network to fit spurious patters, dropout may have encouraged the network to seek out more of the true patterns, possibly improving the validation loss some as well).
+From the learning curves, you can see that the validation loss remains near a constant minimum even though the training loss continues to decrease. So we can see that adding dropout did prevent overfitting this time. Moreover, by making it harder for the network to fit spurious patterns, dropout may have encouraged the network to seek out more of the true patterns, possibly improving the validation loss some as well).
 """
 
 # Add BatchNormalization
