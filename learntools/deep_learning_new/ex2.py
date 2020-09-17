@@ -28,6 +28,8 @@ input_shape = [____]
             ("""Remember that you should *not* count the target when determining the value for `input_shape`. How many columns are there excluding `quality`?
 """)
 
+
+# Define a Model
 class Q2(CodingProblem):
     _hint = """Your answer should look something like:
 ```python
@@ -77,9 +79,11 @@ model = keras.Sequential([
         assert (layer_units == true_units), \
             ("Your model doesn't have the correct number of units. The units of the `Dense` layers should be 512, 512, 512, and 1, in that order.")
 
+
+# Getting Information
 class Q3(CodingProblem):
-    hint = ""
-    solution = ""
+    _hint = ""
+    _solution = ""
     def check(self):
         pass        
 
@@ -87,7 +91,7 @@ class Q3(CodingProblem):
 # Activation Functions
 class Q4(CodingProblem):
     _hidden_units = 32
-    hint = """Your model should look something like:
+    _hint = """Your model should look something like:
 ```python
 model = keras.Sequential([
     layers.Dense(____),
@@ -98,7 +102,7 @@ model = keras.Sequential([
 ])
 ```
 """
-    solution = CS("""
+    _solution = CS("""
 model = keras.Sequential([
     layers.Dense(32, input_shape=[8]),
     layers.Activation('relu'),
@@ -133,11 +137,13 @@ model = keras.Sequential([
             ("Your model doesn't have the correct number of units. The units in the `Dense` layers should be 32, 32, and 1, in that order.")
 
 
+# Alternative to ReLU
 class Q5(CodingProblem):
-    hint = ""
-    solution = ""
+    _hint = ""
+    _solution = ""
     def check(self):
         pass
+
 
 qvars = bind_exercises(globals(), [
         Q1, Q2, Q3, Q4, Q5

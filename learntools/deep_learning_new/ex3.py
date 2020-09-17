@@ -2,40 +2,6 @@ from learntools.core import *
 
 inputs = 50
 
-# Data Preparation
-class Q1(CodingProblem):
-    _hint = ""
-    _solution = ""
-    def check(self):
-        pass
-
-class Q2(CodingProblem):
-    _var = "input_shape"
-    _hints = [
-        "Think about whether you should look at the processed data `X_train` or the original data `fuel`.",
-        "You should look at the processed data `X_train`, since that is the data actually going into the network. Since the target was already removed, you can just look at the second entry in `X_train.shape` (the columns) to find the number of features."
-    ]
-    _solution = CS("""
-input_shape = [{inputs}]
-# or,
-input_shape = [X_train.shape[1]]
-""".format(inputs=inputs))
-
-    def check(self, input_shape):
-        assert (type(input_shape) in [list, tuple]), \
-            ("""The input shape should be a list (or tuple) with a single integer, like `[__]`.""")
-        assert (input_shape[0] not in [13, 14]), \
-            ("Look at the columns of `X_train` for the number of input features, since `X_train` (the processed data) is what is actually being used as input.")
-        assert (len(input_shape) == 1), \
-            ("""You should use a list of length 1 here. Each entry in the `input_shape` list says how many input values you have in that dimension. The inputs here are numbers (one dimensional) and so your answer should look something like:
-```python
-input_shape = [____]
-```
-""")
-        assert (input_shape[0] == inputs), \
-            ("The number of inputs should be {good_inputs}, but you gave {bad_inputs}".format(good_inputs=inputs, bad_inputs=input_shape[0]))
-
-
 # Compile
 class Q1(CodingProblem):
     _hint = """Your code should look something like:

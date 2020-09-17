@@ -1,12 +1,15 @@
 from learntools.core import *
 
 
+# Evaluate Baseline
 class Q1(ThoughtExperiment):
     _solution = "The gap between these curves is quite small and the validation loss never increases, so it's more likely that the network is underfitting."
 
+# Add Capacity
 class Q2(ThoughtExperiment):
     _solution = "Now the validation loss begins to rise very early, while the training loss continues to decrease. This indicates that the network has begun to overfit. At this point, we would need to try something to prevent it, either by reducing the number of units or through a method like early stopping. (We'll see another in the next lesson!)"
 
+# Define Early Stopping
 class Q3(CodingProblem):
     _hint = ""
     _solution = CS("")
@@ -19,6 +22,7 @@ class Q3(CodingProblem):
         assert(early_stopping.restore_best_weights), \
             ("The `restore_best_weights` argument should be `True`.")
 
+# Train and Interpret
 class Q4(ThoughtExperiment):
     _solution = "The early stopping callback did stop the training once the network began overfitting. Moreover, by including `restore_best_weights` we still get to keep the model where validation loss was lowest."
     

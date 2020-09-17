@@ -53,11 +53,13 @@ model = keras.Sequential([
         assert (dropout_rates == true_rates), \
             ("Your model doesn't have the correct dropout rates. The rates of the `Dropout` layers should be {}.".format(true_rates))
 
+
 # Evaluate Dropout
 class Q2(ThoughtExperiment):
     _solution = """
 From the learning curves, you can see that the validation loss remains near a constant minimum even though the training loss continues to decrease. So we can see that adding dropout did prevent overfitting this time. Moreover, by making it harder for the network to fit spurious patterns, dropout may have encouraged the network to seek out more of the true patterns, possibly improving the validation loss some as well).
 """
+
 
 # Add BatchNormalization
 class Q3(CodingProblem):
@@ -112,6 +114,7 @@ model = keras.Sequential([
         true_units = [512, 512, 512, 1]
         assert (dense_units == true_units), \
             ("Your model doesn't have the correct number of units. The units of the `Dense` layers should be {}.".format(true_units))
+
 
 # Evaluate BatchNormalization
 class Q4(ThoughtExperiment):
