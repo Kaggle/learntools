@@ -78,6 +78,10 @@ notebooks = [
         type='exercise',
         scriptid=1259186
         ),
+    dict(filename='tut7.ipynb',
+        lesson_idx=6,
+        type='tutorial'
+        ),
     dict(
         filename='ex7.ipynb',
         lesson_idx=6,
@@ -114,15 +118,14 @@ notebooks = [
 for nb in notebooks:
     nb['competition_sources'] = ["home-data-for-ml-course"]
     nb['dataset_sources'] = ["dansbecker/melbourne-housing-snapshot",
-                             "iabhishekofficial/mobile-price-classification",
-                             "pavanraj159/predicting-a-pulsar-star"]
+                             "iabhishekofficial/mobile-price-classification"]
 
     # ex7 is special case with only comp dataset, to allow submission from kernel
     if nb['filename'] == 'ex7.ipynb':
         nb['dataset_sources'] = []
         
     if nb['filename'] == 'tut_titanic.ipynb':
-        nb['dataset_sources'] = ["dansbecker/melbourne-housing-snapshot"]
+        nb['dataset_sources'] = []
         nb['competition_sources'] = ["titanic"]
         
     if nb['filename'] == 'tut_automl.ipynb':
