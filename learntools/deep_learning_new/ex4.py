@@ -12,7 +12,12 @@ class Q2(ThoughtExperiment):
 # Define Early Stopping
 class Q3(CodingProblem):
     _hint = ""
-    _solution = CS("")
+    _solution = CS("""
+early_stopping = callbacks.EarlyStopping(
+    patience=5,
+    min_delta=0.001,
+    restore_best_weights=True,
+)""")
     _var = "early_stopping"
     def check(self, early_stopping):
         assert(early_stopping.patience == 5), \
