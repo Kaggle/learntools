@@ -3,7 +3,7 @@ from learntools.core import *
 
 # Evaluate Baseline
 class Q1(ThoughtExperiment):
-    _solution = "The gap between these curves is quite small and the validation loss never increases, so it's more likely that the network is underfitting."
+    _solution = "The gap between these curves is quite small and the validation loss never increases, so it's more likely that the network is underfitting than overfitting. It would be worth experimenting with more capacity to see if that's the case."
 
 # Add Capacity
 class Q2(ThoughtExperiment):
@@ -11,7 +11,17 @@ class Q2(ThoughtExperiment):
 
 # Define Early Stopping
 class Q3(CodingProblem):
-    _hint = ""
+    _hint = """
+Your solution should look something like:
+
+```python
+early_stopping = callbacks.EarlyStopping(
+    patience=____,
+    min_delta=____,
+    restore_best_weights=____,
+)
+```
+"""
     _solution = CS("""
 early_stopping = callbacks.EarlyStopping(
     patience=5,
