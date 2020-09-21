@@ -10,7 +10,7 @@ inputs = 8
 class Q1(CodingProblem):
     _var = "input_shape"
     _expected = [inputs]
-    _hint = "Remember to *only* count the input features when determining `input_shape`. You should not count the target (the `quality` column)."
+    _hint = "Remember to *only* count the input features when determining `input_shape`. You should not count the target (the `CompressiveStrength` column)."
     _solution = CS("""
 input_shape = [{inputs}]
 # you could also use a 1-tuple, like input_shape = ({inputs},)
@@ -25,7 +25,7 @@ input_shape = [____]
 ```
 """)
         assert (input_shape[0] == inputs), \
-            ("""Remember that you should *not* count the target when determining the value for `input_shape`. How many columns are there excluding `quality`?
+            ("""Remember that you should *not* count the target when determining the value for `input_shape`. How many columns are there excluding `CompressiveStrength`?
 """)
 
 
@@ -77,19 +77,11 @@ model = keras.Sequential([
         layer_units = [layer.units for layer in model.layers]
         true_units = [512, 512, 512, 1]
         assert (layer_units == true_units), \
-            ("Your model doesn't have the correct number of units. The units of the `Dense` layers should be 512, 512, 512, and 1, in that order.")
-
-
-# Getting Information
-class Q3(CodingProblem):
-    _hint = ""
-    _solution = ""
-    def check(self):
-        pass        
+            ("Your model doesn't have the correct number of units. The units of the `Dense` layers should be 512, 512, 512, and 1, in that order.")       
 
 
 # Activation Functions
-class Q4(CodingProblem):
+class Q3(CodingProblem):
     _hidden_units = 32
     _hint = """Your model should look something like:
 ```python
@@ -137,16 +129,8 @@ model = keras.Sequential([
             ("Your model doesn't have the correct number of units. The units in the `Dense` layers should be 32, 32, and 1, in that order.")
 
 
-# Alternative to ReLU
-class Q5(CodingProblem):
-    _hint = ""
-    _solution = ""
-    def check(self):
-        pass
-
-
 qvars = bind_exercises(globals(), [
-        Q1, Q2, Q3, Q4, Q5
+        Q1, Q2, Q3
     ],
     var_format='q_{n}',
 )

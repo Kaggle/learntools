@@ -92,15 +92,8 @@ w, b = model.____
             ("""Your weight tensor `w` doesn't have the correct shape. Make sure you're using the model defined previously, with {} inputs and 1 unit.""".format(inputs))
 
 
-# Linear Models Produce Lines
-class Q4(CodingProblem):
-    _solution = ""
-    def check(self):
-        pass
-
-
 qvars = bind_exercises(globals(), [
-        Q1, Q2, Q3, Q4
+        Q1, Q2, Q3
     ],
     var_format='q_{n}',
 )
