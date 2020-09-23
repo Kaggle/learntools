@@ -60,7 +60,7 @@ notebooks = [
         filename='ex4.ipynb',
         lesson_idx=3,
         type='exercise',
-        scriptid=-1,
+        scriptid=11906770,
         enable_gpu=True
     ),
     dict(
