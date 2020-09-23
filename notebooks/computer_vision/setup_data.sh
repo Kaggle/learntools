@@ -11,7 +11,7 @@ fi
 # Setup Datsets
 mkdir -p input
 
-DATASETS=("ryanholbrook/stanford-cars-for-learn" "ryanholbrook/cv-course-models" "ryanholbrook/computer-vision-resources")
+DATASETS=("ryanholbrook/car-or-truck" "ryanholbrook/cv-course-models" "ryanholbrook/computer-vision-resources")
 
 for dataset in "${DATASETS[@]}"
 do
