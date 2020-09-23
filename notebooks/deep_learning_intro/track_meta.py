@@ -2,7 +2,7 @@
 track = dict(
     author_username='ryanholbrook',
     course_name="Intro to Deep Learning",
-    course_url='https://www.kaggle.com/learn/deep-learning',
+    course_url='https://www.kaggle.com/learn/intro-to-deep-learning',
     course_forum_url='https://www.kaggle.com/learn-forum',
 )
 
