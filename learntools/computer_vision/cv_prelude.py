@@ -1,28 +1,22 @@
 # This script accompanies Kaggle's Computer Vision course.
 
+
+import os, sys
+os.system("pip install -U -t /kaggle/working/ git+https://github.com/Kaggle/learntools.git@cv-course")
+sys.path.append('kaggle/working')
+
 # Imports
-import os
 import warnings
-import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib import gridspec
 import learntools.computer_vision.visiontools as visiontools
-from learntools.computer_vision.visiontools import StanfordCars, read_image, show_image
+from learntools.computer_vision.visiontools import read_image, show_image, set_seed
+
+import numpy as np
 import tensorflow as tf
-import tensorflow_datasets as tfds
+from tensorflow.keras.preprocessing import image_dataset_from_directory
 
-
-# Ensure reproducibility
-def set_seed(seed=31415):
-    np.random.seed(seed)
-    tf.random.set_seed(seed)
-    os.environ['PYTHONHASHSEED'] = str(seed)
-    os.environ['TF_DETERMINISTIC_OPS'] = '1'
-
-seed = 31415
-set_seed(seed)
-
-
+# Reproducability
+set_seed(31415)
 # Set Matplotlib defaults
 plt.rc('figure', autolayout=True)
 plt.rc('axes', labelweight='bold', labelsize='large',
@@ -32,44 +26,41 @@ warnings.filterwarnings("ignore") # to clean up output cells
 
 
 # Load training and validation sets
-DATA_DIR = '../input/stanford-cars-for-learn/'
-read_config = tfds.ReadConfig(shuffle_seed=seed)
-
-(ds_train_, ds_valid_), ds_info = tfds.load(
-    'stanford_cars/simple',
-    split=['train', 'test'],
-    shuffle_files=True,
-    with_info=True,
-    data_dir=DATA_DIR,
-    download=False,
-    read_config=read_config,
+ds_train_ = image_dataset_from_directory(
+    '../input/car-or-truck/train',
+    labels='inferred',
+    label_mode='binary',
+    image_size=[128, 128],
+    interpolation='nearest',
+    batch_size=64,
+    shuffle=True,
 )
-print(("Loaded {} training examples " +
-       "and {} validation examples " +
-       "with classes {}.").format(
-           ds_info.splits['train'].num_examples,
-           ds_info.splits['test'].num_examples,
-           ds_info.features['label'].names))
+ds_valid_ = image_dataset_from_directory(
+    '../input/car-or-truck/valid',
+    labels='inferred',
+    label_mode='binary',
+    image_size=[128, 128],
+    interpolation='nearest',
+    batch_size=64,
+    shuffle=False,
+)
 
+# # Data Pipeline #
+def convert_to_float(image, label):
+    image = tf.image.convert_image_dtype(image, dtype=tf.float32)
+    return image, label
 
-# Create data pipeline
-BATCH_SIZE = 128
-AUTO = tf.data.experimental.AUTOTUNE
-SIZE = [128, 128]
-preprocess = visiontools.make_preprocessor(size=SIZE)
+AUTOTUNE = tf.data.experimental.AUTOTUNE
+ds_train = (
+    ds_train_
+    .map(convert_to_float)
+    .cache()
+    .prefetch(buffer_size=AUTOTUNE)
+)
+ds_valid = (
+    ds_valid_
+    .map(convert_to_float)
+    .cache()
+    .prefetch(buffer_size=AUTOTUNE)
+)
 
-ds_train = (ds_train_
-            .map(preprocess)
-            .cache()
-            .shuffle(ds_info.splits['train'].num_examples)
-            .batch(BATCH_SIZE)
-            .prefetch(AUTO))
-
-ds_valid = (ds_valid_
-            .map(preprocess)
-            .cache()
-            .batch(BATCH_SIZE)
-            .prefetch(AUTO))
-print(("Created training pipeline as `ds_train`.\n"+
-       "Created validation pipline as `ds_valid`.\n"
-       "Batch Size: {}  Image Size: {}".format(BATCH_SIZE, SIZE)))
