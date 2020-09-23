@@ -12,6 +12,7 @@ TOPICS = ["A Single Neuron",                 # 1
           "Overfitting and Underfitting",    # 4
           "Dropout and Batch Normalization", # 5
           "Binary Classification",           # 6
+          "Getting Started with TPUs"        # 7
           ]
 lessons = [{'topic': topic_name} for topic_name in TOPICS]
     
