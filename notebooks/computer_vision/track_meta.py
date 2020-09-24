@@ -68,7 +68,7 @@ notebooks += [
 
 for nb in notebooks:
     nb['dataset_sources'] = [
-        'ryanholbrook/stanford-cars-for-learn',
+        'ryanholbrook/car-or-truck',
         'ryanholbrook/computer-vision-resources',
         'ryanholbrook/cv-course-models',
     ]
