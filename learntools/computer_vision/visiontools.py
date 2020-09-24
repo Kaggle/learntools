@@ -233,8 +233,10 @@ def circle(size, val=None, r_shrink=0):
 
 def random_map(size, scale=0.5, decay_power=1.0):
     h, w = size
+    shape = [1, h, w, 3]
+    fft = fft_scale(h, w, decay_power=decay_power)
     img = init_buffer(h, w, scale=scale)
-    img = fft_to_rgb([1, h, w, 3], img, decay_power=decay_power)
+    img = fft_to_rgb(shape, img, fft)
     img = to_valid_rgb(img)
     img = img[0,:,:,0]
     return img
@@ -478,3 +480,98 @@ def _reflect_index(i, n):
     i = tf.math.floormod(i-n, 2*n)
     i = tf.math.abs(i - n)
     return tf.math.floor(i)
+
+
+# Random Image Buffers #
+def init_buffer(height, width=None, batches=1, channels=3, scale=0.01, fft=True):
+    """Initialize an image buffer."""
+    width = width or height
+    shape = [batches, height, width, channels]
+    fn = init_fft if fft else init_pixel
+    
+    buffer = fn(shape, scale)
+    
+    return tf.Variable(buffer, trainable=True)
+
+def init_pixel(shape, scale=None):
+    batches, h, w, ch = shape
+#     initializer = tf.initializers.VarianceScaling(scale=scale)
+    initializer = tf.random.uniform
+    buffer = initializer(shape=[batches, h, w, ch],
+                         dtype=tf.float32)
+    return buffer
+
+
+def init_fft(shape, scale=0.1):
+    """Initialize FFT image buffer."""
+    
+    batch, h, w, ch = shape
+    freqs = rfft2d_freqs(h, w)
+    init_val_size = (2, batch, ch) + freqs.shape
+
+    buffer = np.random.normal(size=init_val_size, scale=scale).astype(np.float32)
+    return buffer
+
+
+# Adapted from https://github.com/tensorflow/lucid/blob/master/lucid/optvis/param/spatial.py
+# and https://github.com/elichen/Feature-visualization/blob/master/optvis.py
+def rfft2d_freqs(h, w):
+    """Computes 2D spectrum frequencies."""
+
+    fy = np.fft.fftfreq(h)[:, np.newaxis]
+    # when we have an odd input dimension we need to keep one additional
+    # frequency and later cut off 1 pixel
+    if w % 2 == 1:
+        fx = np.fft.fftfreq(w)[: w // 2 + 2]
+    else:
+        fx = np.fft.fftfreq(w)[: w // 2 + 1]
+        
+    return np.sqrt(fx * fx + fy * fy)
+
+def fft_scale(h, w, decay_power=1.0):
+    freqs = rfft2d_freqs(h, w)
+    scale = 1.0 / np.maximum(freqs, 1.0 / max(w, h)) ** decay_power
+    scale *= np.sqrt(w * h)
+    return tf.convert_to_tensor(scale, dtype=tf.complex64)
+
+def fft_to_rgb(shape, buffer, fft_scale):
+    """Convert FFT spectrum buffer to RGB image buffer."""
+    
+    batch, h, w, ch = shape
+
+    spectrum = tf.complex(buffer[0], buffer[1]) * fft_scale
+    image = tf.signal.irfft2d(spectrum)
+    image = tf.transpose(image, (0, 2, 3, 1))
+    
+    # in case of odd spatial input dimensions we need to crop
+    image = image[:batch, :h, :w, :ch]
+    image = image / 4.0  # TODO: is that a magic constant?
+    
+    return image
+
+# Color Transforms #
+color_correlation_svd_sqrt = np.asarray(
+    [[0.26, 0.09, 0.02],
+     [0.27, 0.00, -0.05],
+     [0.27, -0.09, 0.03]]
+).astype("float32")
+max_norm_svd_sqrt = np.max(np.linalg.norm(color_correlation_svd_sqrt, axis=0))
+color_correlation_normalized = color_correlation_svd_sqrt / max_norm_svd_sqrt
+color_mean = np.asarray([0.485, 0.456, 0.406])
+color_std = np.asarray([0.229, 0.224, 0.225])
+
+def correlate_color(image):
+    image_flat = tf.reshape(image, [-1, 3])
+    image_flat = tf.matmul(image_flat, color_correlation_normalized.T)
+    image = tf.reshape(image_flat, tf.shape(image))
+    return image
+
+def normalize(image):
+    return (image - color_mean) / color_std
+
+def to_valid_rgb(image, crop=False):
+    if crop:
+        image = image[:, 25:-25, 25:-25, :]
+    image = correlate_color(image)
+    image = tf.nn.sigmoid(image)
+    return image

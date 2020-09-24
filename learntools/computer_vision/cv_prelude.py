@@ -1,13 +1,19 @@
 # This script accompanies Kaggle's Computer Vision course.
 
 
-import os, sys
-os.system("pip install -U -t /kaggle/working/ git+https://github.com/Kaggle/learntools.git@cv-course")
-sys.path.append('kaggle/working')
+# import os, sys
+# os.system("pip install -U -t /kaggle/working/ git+https://github.com/Kaggle/learntools.git@cv-course")
+# sys.path.append('kaggle/working')
+
+import tensorflow as tf
+config = tf.compat.v1.ConfigProto()
+config.gpu_options.allow_growth = True
+session = tf.compat.v1.InteractiveSession(config=config)
 
 # Imports
 import warnings
 import matplotlib.pyplot as plt
+from matplotlib import gridspec
 import learntools.computer_vision.visiontools as visiontools
 from learntools.computer_vision.visiontools import read_image, show_image, set_seed
 
