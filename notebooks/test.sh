@@ -55,7 +55,8 @@ do
             echo "Warning: skipping $nb in track $track"
             continue
         fi
-        jupyter nbconvert --output-dir "$TMP_DIR" --execute $nb --ExecutePreprocessor.timeout=1000
+        # jupyter nbconvert --output-dir "$TMP_DIR" --execute $nb --ExecutePreprocessor.timeout=1000
+        jupyter nbconvert --output-dir "$TMP_DIR" --execute $nb --ExecutePreprocessor.timeout=2500
     done
     cd ../
 done
