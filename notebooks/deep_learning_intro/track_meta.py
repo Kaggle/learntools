@@ -2,7 +2,7 @@
 track = dict(
     author_username='ryanholbrook',
     course_name="Intro to Deep Learning",
-    course_url='https://www.kaggle.com/learn/deep-learning',
+    course_url='https://www.kaggle.com/learn/intro-to-deep-learning',
     course_forum_url='https://www.kaggle.com/learn-forum',
 )
 
@@ -60,7 +60,7 @@ notebooks = [
         filename='ex4.ipynb',
         lesson_idx=3,
         type='exercise',
-        scriptid=-1,
+        scriptid=11906770,
         enable_gpu=True
     ),
     dict(
@@ -88,12 +88,12 @@ notebooks = [
         ),
     dict(filename='tut_tpus.ipynb',
         lesson_idx=6,
-        type='tutorial'
+        type='tutorial',
+        competition_sources=['tpu-getting-started']
         ),
 ]
 
 for nb in notebooks:
-    nb['dataset_sources'] = [
-        'ryanholbrook/dl-course-data',
-    ]
-
+    if nb['filename'] != "tut_tpus.ipynb":
+        nb['dataset_sources'] = ['ryanholbrook/dl-course-data']
+    
