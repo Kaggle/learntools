@@ -82,8 +82,6 @@ class MacroProcessor(object):
         def transform(arg):
             if arg == 'PROD':
                 return not self.cfg.get('testing', False)
-            if arg == 'TESTING':
-                return self.cfg.get('testing', False)
             if arg == 'DAILY':
                 return self.cfg.get('daily', False)
             if arg == 'NOTDAILY':
