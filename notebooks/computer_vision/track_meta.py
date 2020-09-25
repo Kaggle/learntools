@@ -19,16 +19,41 @@ lessons = [{'topic': topic_name} for topic_name in TOPICS]
 
 
 notebooks = []
-
-for i, _ in enumerate(TOPICS):
-    notebooks += [
-        dict(
-            filename="tut{}.ipynb".format(i+1),
-            lesson_idx=i,
-            type='tutorial',
-            enable_gpu=True,
-        ),
-    ]
+notebooks += [
+    dict(
+        filename="tut1.ipynb",
+        lesson_idx=0,
+        type='tutorial',
+        enable_gpu=True,
+    ),
+    dict(
+        filename="tut2.ipynb",
+        lesson_idx=1,
+        type='tutorial',
+    ),
+    dict(
+        filename="tut3.ipynb",
+        lesson_idx=2,
+        type='tutorial',
+    ),
+    dict(
+        filename="tut4.ipynb",
+        lesson_idx=3,
+        type='tutorial',
+    ),
+    dict(
+        filename="tut5.ipynb",
+        lesson_idx=4,
+        type='tutorial',
+        enable_gpu=True,
+    ),
+    dict(
+        filename="tut6.ipynb",
+        lesson_idx=5,
+        type='tutorial',
+        enable_gpu=True,
+    ),    
+]
 
 notebooks += [
     dict(
