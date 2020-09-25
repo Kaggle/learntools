@@ -50,18 +50,7 @@ do
         # First python exercise notebook uses google/tinyquickdraw dataset, which
         # is 11 GB. Downloading it would probably slow down testing unacceptably.
         # AutoML notebooks also run for hours.
-        if [[ ( $nb =~ "ex_1" && $track == "python" ) ]] \
-               || [[ ( $nb =~ "ex_automl") ]] || [[ ( $nb =~ "tut_automl") ]] \
-               || [[ ( $nb =~ "tut4" && $track == "game_ai" ) ]] \
-               || [[ ( $nb =~ "tut4" && $track == "data_cleaning" ) ]] \
-               || [[ ( $nb =~ "ex8" && $track == "machine_learning" ) ]] \
-               || [[ $nb =~ "tut_tpus" ]] || [[ $nb =~ "ex_tpus" ]] \
-               || [[ ( $nb =~ "tut1" && $track == "deep_learning_intro" ) ]] \
-               || [[ ( $nb =~ "tut5" && $track == "deep_learning_intro" ) ]] \
-               || [[ ( $nb =~ "tut6" && $track == "deep_learning_intro" ) ]] \
-               || [[ ( $nb =~ "ex1" && $track == "deep_learning_intro" ) ]] \
-               || [[ ( $nb =~ "ex5" && $track == "deep_learning_intro" ) ]] \
-               || [[ ( $nb =~ "ex6" && $track == "deep_learning_intro" ) ]]
+        if [[ ( $nb =~ "ex_1" && $track == "python" ) ]] || [[ ( $nb =~ "ex_automl") ]] || [[ ( $nb =~ "tut_automl") ]] || [[ ( $nb =~ "tut4" && $track == "game_ai" ) ]] || [[ ( $nb =~ "tut4" && $track == "data_cleaning" ) ]] || [[ ( $nb =~ "ex8" && $track == "machine_learning" ) ]] || [[ $nb =~ "tut_tpus" ]] || [[ $nb =~ "ex_tpus" ]] || [[ ( $nb =~ "tut1" && $track == "deep_learning_intro" ) ]] || [[ ( $nb =~ "tut5" && $track == "deep_learning_intro" ) ]] || [[ ( $nb =~ "tut6" && $track == "deep_learning_intro" ) ]] || [[ ( $nb =~ "ex1" && $track == "deep_learning_intro" ) ]] || [[ ( $nb =~ "ex5" && $track == "deep_learning_intro" ) ]] || [[ ( $nb =~ "ex6" && $track == "deep_learning_intro" ) ]] 
         then
             echo "Warning: skipping $nb in track $track"
             continue
