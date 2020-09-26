@@ -169,8 +169,6 @@ class LearnLessonPreprocessor(Preprocessor):
             i = b
         newsrc += src[i:]
         cell['source'] = newsrc
-        if cell['cell_type'] == 'markdown':
-            cell['metadata']['KAGGLE_FREEZE'] = True
         return cell
 
     def expand_macro(self, macro, cell):
