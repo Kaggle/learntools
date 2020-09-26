@@ -14,7 +14,7 @@ def check_gdf_equal(gdf1, gdf2):
     assert df1.equals(df2), "The results don't look right.  Try again."
     geom1 = gdf1.geometry
     geom2 = gdf2.geometry
-    assert geom1.equals(geom2).all(), "The results don't look right.  Try again."
+    assert geom1.equals(geom2), "The results don't look right.  Try again."
 
 # Q1
 starbucks = pd.read_csv("../input/geospatial-learn-course-data/starbucks_locations.csv")
@@ -92,7 +92,7 @@ CA_stats = CA_counties.merge(cols_to_add, on="GEOID")
 """)
     def check(self, results):
         assert set(CA_stats.columns)==set(results.columns), "The columns don't look right.  They should be {}, but your columns were {}".format(list(CA_stats.columns), list(results.columns))
-        assert results.crs == {'init': 'epsg:4326'}, \
+        assert '4326' in results.crs.to_string(), \
         ("Please set the CRS of `CA_stats` to EPSG 4326 by running "
          "`CA_stats.crs = {'init': 'epsg:4326'}`.")
         assert len(CA_stats)==len(results), \

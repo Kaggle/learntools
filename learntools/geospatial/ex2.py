@@ -13,7 +13,7 @@ def check_gdf_equal(gdf1, gdf2, name):
     assert df1.equals(df2), "The results don't look right.  Try again."
     geom1 = gdf1.geometry
     geom2 = gdf2.geometry
-    assert geom1.equals(geom2).all(), "The results don't look right.  Try again."
+    assert geom1.equals(geom2), "The results don't look right.  Try again."
 
 # Q1
 birds_df = pd.read_csv("../input/geospatial-learn-course-data/purple_martin.csv", parse_dates=['timestamp'])
