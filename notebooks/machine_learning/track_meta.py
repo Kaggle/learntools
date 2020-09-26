@@ -1,8 +1,9 @@
 # See also examples/example_track/example_meta.py for a longer, commented example
 track = dict(
     author_username='dansbecker',
-    course_name='Machine Learning',
-    course_url='https://www.kaggle.com/learn/intro-to-machine-learning'
+    course_name='Introduction to Machine Learning',
+    course_url='https://www.kaggle.com/learn/intro-to-machine-learning',
+    course_forum_url='https://www.kaggle.com/learn-forum/161285'
 )
 
 lessons = [ {'topic': topic_name} for topic_name in
@@ -13,7 +14,8 @@ lessons = [ {'topic': topic_name} for topic_name in
                     'Underfitting and Overfitting',
                     'Random Forests',
                     'Machine Learning Competitions',
-                    'Classification']
+                    'Intro to AutoML',
+                    'Getting Started with Titanic',]
             ]
 
 notebooks = [
@@ -42,7 +44,7 @@ notebooks = [
         filename='ex3.ipynb',
         lesson_idx=2,
         type='exercise',
-        scriptid=400771
+        scriptid=1404276
     ),
     dict(
         filename='tut4.ipynb',
@@ -76,29 +78,63 @@ notebooks = [
         type='exercise',
         scriptid=1259186
         ),
+    dict(filename='tut7.ipynb',
+        lesson_idx=6,
+        type='tutorial'
+        ),
     dict(
         filename='ex7.ipynb',
         lesson_idx=6,
         type='exercise',
         scriptid=1259198
         ),
-    dict(filename='tut8.ipynb',
+#    dict(filename='tut8.ipynb',
+#        lesson_idx=7,
+#        type='tutorial'
+#        ),
+#    dict(filename='ex8.ipynb',
+#        lesson_idx=7,
+#        type='exercise',
+#        scriptid=3685412
+#        ),
+    dict(
+        filename='tut_automl.ipynb',
         lesson_idx=7,
-        type='tutorial'
+        type='tutorial',
+        enable_internet=True
         ),
-    dict(filename='ex8.ipynb',
+    dict(
+        filename='ex_automl.ipynb',
         lesson_idx=7,
         type='exercise',
-        scriptid=3685412
+        scriptid=10027938
+        ),
+    dict(filename='tut_titanic.ipynb',
+        lesson_idx=8,
+        type='tutorial'
         ),
 ]
 
 for nb in notebooks:
     nb['competition_sources'] = ["home-data-for-ml-course"]
     nb['dataset_sources'] = ["dansbecker/melbourne-housing-snapshot",
-                             "iabhishekofficial/mobile-price-classification",
-                             "pavanraj159/predicting-a-pulsar-star"]
+                             "iabhishekofficial/mobile-price-classification"]
 
     # ex7 is special case with only comp dataset, to allow submission from kernel
     if nb['filename'] == 'ex7.ipynb':
         nb['dataset_sources'] = []
+        
+    if nb['filename'] == 'tut_titanic.ipynb':
+        nb['dataset_sources'] = []
+        nb['competition_sources'] = ["titanic"]
+        
+    if nb['filename'] == 'tut_automl.ipynb':
+        nb['competition_sources'] = ["new-york-city-taxi-fare-prediction"]
+        nb['kernel_sources'] = ['alexisbcook/automl-tables-wrapper']
+        nb['dataset_sources'] = []
+        
+    if nb['filename'] == 'ex_automl.ipynb':
+        nb['competition_sources'] = ["house-prices-advanced-regression-techniques"]
+        nb['kernel_sources'] = ['alexisbcook/automl-tables-wrapper']
+        nb['dataset_sources'] = []
+    

@@ -65,16 +65,15 @@ class Q4(FunctionProblem):
     idx_min = hospitals.geometry.distance(collision_location).idxmin()
     my_hospital = hospitals.iloc[idx_min]
     name = my_hospital["name"]
-    latitude = my_hospital["latitude"]
-    longitude = my_hospital["longitude"]
-    return pd.Series({'name': name, 'lat': latitude, 'long': longitude})
+    return name
 """)    
 
 class Q5(CodingProblem):
     _var = "highest_demand"
     _hint = ("Begin by applying the `best_hospital()` function to every entry in `outside_range.geometry`.")
     _solution = CS(
-"""highest_demand = outside_range.geometry.apply(best_hospital).name.value_counts().idxmax()
+"""highest_demand = outside_range.geometry.apply(best_hospital).value_counts().idxmax()
+
 """)
     def check(self, submitted):
         assert type(submitted)==str, "Your answer must be a Python string."

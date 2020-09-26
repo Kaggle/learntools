@@ -67,7 +67,7 @@ image_size = 224
 data_generator = ImageDataGenerator(preprocess_input)
 
 train_generator = data_generator.flow_from_directory(
-                                        directory=../input/dogs-gone-sideways/images/train,
+                                        directory="../input/dogs-gone-sideways/images/train",
                                         target_size=(image_size, image_size),
                                         batch_size=10,
                                         class_mode='categorical')
