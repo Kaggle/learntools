@@ -60,19 +60,27 @@ class LearnLessonPreprocessor(Preprocessor):
             self.pip_install_lt_hack(nb)
         return nb, resources
 
+    def EXERCISE_HEADER(self, **kwargs):
+        exercise_header = course_link ="""**This notebook is an exercise in the [{}]({}) course.  You can reference the tutorial at [this link]({}).**\n\n""".format(self.track.course_name,
+            self.track.course_url, self.lesson.tutorial.url)
+        return res
+
     def add_header_and_footer(self, cells):
-        """Inserts header cell at front of cells and appends footer cell to end. Both new cells have course links"""
-        course_link ="""**[{} Home Page]({})**\n\n""".format(self.track.course_name,
-        self.track.course_url)
+        """Inserts header cell at front of cells (if exercise notebook) and appends footer cell to end."""
+        exercise_header = course_link ="""**This notebook is an exercise in the [{}]({}) course.  You can reference the tutorial at [this link]({}).**\n\n""".format(self.track.course_name,
+            self.track.course_url, self.lesson.tutorial.url)
         horizontal_line_break = "---\n"
-        header_content = course_link + horizontal_line_break
-        footer_content = horizontal_line_break + course_link
+
+        header_content = exercise_header + horizontal_line_break
+        footer_content = horizontal_line_break #+ course_link
 
         forum_cta = """\n\n\n\n*Have questions or comments? Visit the [Learn Discussion forum]({}) to chat with other Learners.*""".format(self.track.course_forum_url)
         footer_content += forum_cta
+        
         header_cell = self.make_cell(cell_type='markdown', source=header_content)
         footer_cell = self.make_cell(cell_type='markdown', source=footer_content)
-        cells.insert(0, header_cell)
+        if self.nb_meta.type == 'exercise':
+            cells.insert(0, header_cell)
         cells.append(footer_cell)
 
     def pip_install_lt_hack(self, nb):
