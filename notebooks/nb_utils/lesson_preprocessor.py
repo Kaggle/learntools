@@ -271,3 +271,7 @@ You are ready for **[{}]({}).**
 "\n"
 "If you want to keep working to improve your performance, select the blue **Edit** button in the top right of the screen. Then you can change your code and repeat the process. There's a lot of room to improve, and you will climb up the leaderboard as you work.\n")
 
+    def EXERCISE_HEADER(self, **kwargs):
+        res = course_link ="""**This notebook is an exercise in the [{}]({}) course.  You can reference the tutorial at [this link]().**\n\n""".format(self.track.course_name,
+        self.track.course_url, self.lesson.tutorial.url)
+        return res
