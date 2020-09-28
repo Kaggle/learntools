@@ -24,7 +24,7 @@ TMP_DIR=`mktemp -d`
 pip install -q -r requirements.txt
 
 
-TRACKS="computer_vision deep_learning_intro embeddings pandas python machine_learning sql data_viz_to_coder ml_intermediate sql_advanced feature_engineering geospatial nlp game_ai data_cleaning embeddings deep_learning"
+TRACKS="computer_vision deep_learning_intro pandas python machine_learning sql data_viz_to_coder ml_intermediate sql_advanced feature_engineering geospatial nlp game_ai data_cleaning"
 
 
 for track in $TRACKS
@@ -39,10 +39,10 @@ for track in $TESTABLE_NOTEBOOK_TRACKS
 do
     # Running the deep learning notebooks is fairly slow (~10-20 minutes), so only
     # do it if any of the relevant files have changed between this branch and master.
-    if [[ $track == "deep_learning" ]] && git diff --exit-code master -- $track ../learntools/$track; then
-        echo "No changes affecting deep learning track. Skipping running notebooks."
-        continue
-    fi
+    #if [[ $track == "deep_learning" ]] && git diff --exit-code master -- $track ../learntools/$track; then
+    #    echo "No changes affecting deep learning track. Skipping running notebooks."
+    #    continue
+    #fi
     cd $track
     ! [[ -a setup_data.sh ]] || ./setup_data.sh
     for nb in `ls raw/*.ipynb`
@@ -51,17 +51,13 @@ do
         # is 11 GB. Downloading it would probably slow down testing unacceptably.
         # AutoML notebooks also run for hours.
         if [[ ( $nb =~ "ex_1" && $track == "python" ) ]] \
-               || [[ ( $nb =~ "ex_automl") ]] || [[ ( $nb =~ "tut_automl") ]] \
-               || [[ ( $nb =~ "tut4" && $track == "game_ai" ) ]] \
-               || [[ ( $nb =~ "tut4" && $track == "data_cleaning" ) ]] \
-               || [[ ( $nb =~ "ex8" && $track == "machine_learning" ) ]] \
-               || [[ $nb =~ "tut_tpus" ]] || [[ $nb =~ "ex_tpus" ]] \
-               || [[ ( $nb =~ "tut1" && $track == "deep_learning_intro" ) ]] \
-               || [[ ( $nb =~ "tut5" && $track == "deep_learning_intro" ) ]] \
-               || [[ ( $nb =~ "tut6" && $track == "deep_learning_intro" ) ]] \
-               || [[ ( $nb =~ "ex1" && $track == "deep_learning_intro" ) ]] \
-               || [[ ( $nb =~ "ex5" && $track == "deep_learning_intro" ) ]] \
-               || [[ ( $nb =~ "ex6" && $track == "deep_learning_intro" ) ]]
+            || [[ ( $nb =~ "ex_automl") ]] || [[ ( $nb =~ "tut_automl") ]] \
+            || [[ ( $nb =~ "tut4" && $track == "game_ai" ) ]] \
+            || [[ ( $nb =~ "tut4" && $track == "data_cleaning" ) ]] \
+            || [[ ( $nb =~ "ex8" && $track == "machine_learning" ) ]] \
+            || [[ $nb =~ "tut_tpus" ]] || [[ $nb =~ "ex_tpus" ]] \
+            || [[ ( $nb =~ "tut1" && $track == "computer_vision" ) ]] || [[ ( $nb =~ "tut5" && $track == "computer_vision" ) ]] || [[ ( $nb =~ "tut6" && $track == "computer_vision" ) ]] \
+            || [[ ( $nb =~ "ex1" && $track == "computer_vision" ) ]] || [[ ( $nb =~ "ex5" && $track == "computer_vision" ) ]] || [[ ( $nb =~ "ex6" && $track == "computer_vision" ) ]] 
         then
             echo "Warning: skipping $nb in track $track"
             continue
