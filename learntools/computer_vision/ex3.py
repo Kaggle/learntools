@@ -28,20 +28,10 @@ class Q2(ThoughtExperiment):
     _solution = """In the tutorial, we talked about how maximum pooling creates **translation invariance** over small distances. This means that we would expect small shifts to disappear after repeated maximum pooling. If you run the cell multiple times, you can see the resulting image is always the same; the pooling operation destroys those small translations.
 """
 
-# Free
-class Q3A(CodingProblem):
-    _hint = ""
-    _solution = ""
-    def check(self):
-        pass
-    
-class Q3B(ThoughtExperiment):
+class Q3(ThoughtExperiment):
     _hint = """VGG16 creates 512 features maps from an image, which might represent something like a wheel or a window. Each square in *Pooled Feature Maps* represents a feature. What would a large value for a feature mean?"""
     _solution = """The VGG16 base produces 512 feature maps. We can think of each feature map as representing some high-level visual feature in the original image -- maybe a wheel or window. Pooling a map gives us a single number, which we could think of as a *score* for that feature: large if the feature is present, small if it is absent. Cars tend to score high with one set of features, and Trucks score high with another. Now, instead of trying to map raw features to classes, the head only has to work with these scores that `GlobalAvgPool2D` produced, a much easier problem for it to solve.
 """
-
-Q3 = MultipartProblem(Q3A, Q3B)
-
 
 qvars = bind_exercises(globals(), [
         Q1, Q2, Q3,

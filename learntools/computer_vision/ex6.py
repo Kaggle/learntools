@@ -2,21 +2,13 @@ from learntools.core import *
 import tensorflow as tf
 
 
-# Free
-class Q1(CodingProblem):
-    _solution = ""
-    _hint = ""
-    def check(self):
-        pass
-
-
-class Q2A(ThoughtExperiment):
+class Q1(ThoughtExperiment):
     _hint = """Remember that whatever transformation you apply should at the least preserve class distinctions. What are ways you could transform an image of a forest so that it still looked (more or less) like a forest?
 """
     _solution = """It seems to this author that flips and rotations would be worth trying first since there's no concept of orientation for pictures taken straight overhead. None of the transformations seem likely to confuse classes, however.
 """
 
-class Q2B(ThoughtExperiment):
+class Q2(ThoughtExperiment):
     _hint = """Remember that whatever transformation you apply should at the least preserve class distinctions. What are ways you could transform an image of a rose so that it still looked (more or less) like a rose?
 """
 
@@ -24,10 +16,7 @@ class Q2B(ThoughtExperiment):
 
 """
 
-Q2 = MultipartProblem(Q2A, Q2B)
-
-
-class Q3A(CodingProblem):
+class Q3(CodingProblem):
     _var = 'model'
     _hint = """
 Your answer should look something like:
@@ -117,16 +106,15 @@ q_3.a.assert_check_passed()
         assert rotation == 0.1, \
             ("Be sure to use a rotation factor of 0.1. You used {}."
              .format(rotation))
-        
 
-class Q3B(ThoughtExperiment):
+
+class Q4(ThoughtExperiment):
     _solution = """
 The learning curves in this model stayed close together for much longer than in previous models. This suggests that the augmentation helped prevent overfitting, allowing the model to continue improving.
 
 And notice that this model achieved the highest accuracy of all the models in the course! This won't always be the case, but it shows that a well-designed custom convnet can sometimes perform as well or better than a much larger pretrained model. Depending on your application, having a smaller model (which requires fewer resources) could be a big advantage.
 """
 
-Q3 = MultipartProblem(Q3A, Q3B)    
 
 qvars = bind_exercises(globals(), [
         Q1, Q2, Q3,
