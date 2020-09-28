@@ -117,7 +117,7 @@ And notice that this model achieved the highest accuracy of all the models in th
 
 
 qvars = bind_exercises(globals(), [
-        Q1, Q2, Q3,
+        Q1, Q2, Q3, Q4,
     ],
     var_format='q_{n}',
 )
