@@ -94,9 +94,9 @@ class Q4(ThoughtExperiment):
 """
 
     
-qvars = bind_exercises(
-    globals(),
-    [Q1, Q2, Q3, Q4],
+qvars = bind_exercises(globals(), [
+        Q1, Q2, Q3, Q4,
+    ],
     var_format='q_{n}',
 )
 

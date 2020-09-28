@@ -62,23 +62,8 @@ class Q3(CodingProblem):
     def check(self, relu_fn):
         assert relu_fn is tf.nn.relu
 
-
-class Q4A(CodingProblem):
-    _hint = ""
-    _solution = ""
-    def check(self):
-        pass
-
-class Q4B(ThoughtExperiment):
+class Q4(ThoughtExperiment):
     _solution = "In the tutorial, we talked about how the pattern of positive numbers will tell you the kind of features the kernel will extract. This kernel has a vertical column of 1's, and so we would expect it to return features of vertical lines."
-
-class Q4C(CodingProblem):    
-    _hint = ""
-    _solution = ""
-    def check(self):
-        pass
-
-Q4 = MultipartProblem(Q4A, Q4B, Q4C)
 
 
 qvars = bind_exercises(globals(), [
