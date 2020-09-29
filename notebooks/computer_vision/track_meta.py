@@ -18,12 +18,17 @@ TOPICS = [
 lessons = [{'topic': topic_name} for topic_name in TOPICS]
 
 
-notebooks = []
-notebooks += [
+notebooks = [
     dict(
         filename="tut1.ipynb",
         lesson_idx=0,
         type='tutorial',
+        enable_gpu=True,
+    ),
+    dict(
+        filename="ex1.ipynb",
+        lesson_idx=0,
+        type='exercise',
         enable_gpu=True,
     ),
     dict(
@@ -32,14 +37,29 @@ notebooks += [
         type='tutorial',
     ),
     dict(
+        filename="ex2.ipynb",
+        lesson_idx=1,
+        type='exercise',
+    ),
+    dict(
         filename="tut3.ipynb",
         lesson_idx=2,
         type='tutorial',
     ),
     dict(
+        filename="ex3.ipynb",
+        lesson_idx=2,
+        type='exercise',
+    ),
+    dict(
         filename="tut4.ipynb",
         lesson_idx=3,
         type='tutorial',
+    ),
+    dict(
+        filename="ex4.ipynb",
+        lesson_idx=3,
+        type='exercise',
     ),
     dict(
         filename="tut5.ipynb",
@@ -48,47 +68,23 @@ notebooks += [
         enable_gpu=True,
     ),
     dict(
-        filename="tut6.ipynb",
-        lesson_idx=5,
-        type='tutorial',
-        enable_gpu=True,
-    ),    
-]
-
-notebooks += [
-    dict(
-        filename="ex1.ipynb",
-        lesson_idx=0,
-        type='exercise',
-        enable_gpu=True,
-    ),
-    dict(
-        filename="ex2.ipynb",
-        lesson_idx=1,
-        type='exercise',
-    ),
-    dict(
-        filename="ex3.ipynb",
-        lesson_idx=2,
-        type='exercise',
-    ),
-    dict(
-        filename="ex4.ipynb",
-        lesson_idx=3,
-        type='exercise',
-    ),
-    dict(
         filename="ex5.ipynb",
         lesson_idx=4,
         type='exercise',
         enable_gpu=True,
     ),
     dict(
+        filename="tut6.ipynb",
+        lesson_idx=5,
+        type='tutorial',
+        enable_gpu=True,
+    ), 
+    dict(
         filename="ex6.ipynb",
         lesson_idx=5,
         type='exercise',
         enable_gpu=True,
-    ),    
+    ),  
 ]
 
 for nb in notebooks:
@@ -96,10 +92,11 @@ for nb in notebooks:
         'ryanholbrook/car-or-truck',
         'ryanholbrook/computer-vision-resources',
         'ryanholbrook/cv-course-models',
-    ]
- 
-# Add extra datasets to Exercise 6
-notebooks[-1]['dataset_sources'] += [
-    'ryanholbrook/tensorflow-flowers',    
-    'ryanholbrook/eurosat',
-]
+        ]
+
+    # Add extra datasets to Exercise 6
+    if '6' in nb['filename']:
+        nb['dataset_sources'] += [
+            'ryanholbrook/tensorflow-flowers', 
+            'ryanholbrook/eurosat',
+            ]
