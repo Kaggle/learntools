@@ -85,25 +85,6 @@ notebooks = [
         type='exercise',
         enable_gpu=True,
     ),  
-    """  
-    dict(
-        filename='tut_tpus.ipynb',
-        lesson_idx=6,
-        type='tutorial',
-        competition_sources=['tpu-getting-started'],
-        kernel_sources=['ryanholbrook/petal-helper'],
-        enable_internet=True
-        ),
-    dict(
-        filename='ex_tpus.ipynb',
-        lesson_idx=6,
-        type='exercise',
-        scriptid=10204702,
-        competition_sources=['tpu-getting-started'],
-        kernel_sources=['ryanholbrook/petal-helper'],  
-        enable_internet=True      
-        )
-    """
 ]
 
 for nb in notebooks:
