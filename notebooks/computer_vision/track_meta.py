@@ -11,7 +11,7 @@ TOPICS = [
     'Maximum Pooling',
     'The Moving Window',
     'Custom Convnets',
-    'Data Augmentation'
+    'Data Augmentation',
 ]
 
 
@@ -92,12 +92,11 @@ for nb in notebooks:
         'ryanholbrook/car-or-truck',
         'ryanholbrook/computer-vision-resources',
         'ryanholbrook/cv-course-models',
-    ]
+        ]
 
     # Add extra datasets to Exercise 6
     if '6' in nb['filename']:
-        nb['dataset_sources'] += ['ryanholbrook/tensorflow-flowers', 'ryanholbrook/eurosat']
-
-    # Remove datasets from TPU lesson
-    #if 'tpus' in nb['filename']:
-    #    nb['dataset_sources'] = []
+        nb['dataset_sources'] += [
+            'ryanholbrook/tensorflow-flowers', 
+            'ryanholbrook/eurosat',
+            ]
