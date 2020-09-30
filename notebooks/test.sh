@@ -13,6 +13,9 @@ LT=$(readlink -f $DIR/..)
 WORKING_DIR=`mktemp -d`
 cp -r $LT $WORKING_DIR
 
+# source retry.sh functions script.
+source $DIR/retry.sh
+
 # Install learntools branch
 pip install $WORKING_DIR/input
 
@@ -21,17 +24,26 @@ cd $WORKING_DIR/input/notebooks
 TMP_DIR=`mktemp -d`
 
 # Install packages the notebook pipeline depends on but which aren't installed with the learntools package.
-pip install -q -r requirements.txt
+# pip install -q -r requirements.txt
 
 
-TRACKS="computer_vision deep_learning_intro pandas python machine_learning sql data_viz_to_coder ml_intermediate sql_advanced feature_engineering geospatial nlp game_ai data_cleaning"
+# TRACKS="computer_vision deep_learning_intro pandas python machine_learning sql data_viz_to_coder ml_intermediate sql_advanced feature_engineering geospatial nlp game_ai data_cleaning"
 
 
-for track in $TRACKS
-do
-    # Run each step of the rendering pipeline, to make sure it runs without errors.
-    python3 prepare_push.py $track
-done
+# for track in $TRACKS
+# do
+#     # Run each step of the rendering pipeline, to make sure it runs without errors.
+#     python3 prepare_push.py $track
+# done
+
+setup_data() {
+    if [[ -a setup_data.sh ]]; then
+        rm -rf input/ # delete input/ to start from a clean slate after a retry.
+         ./setup_data.sh
+    else
+        echo "no setup_data.sh file. Skipping..."
+    fi
+}
 
 TESTABLE_NOTEBOOK_TRACKS="computer_vision deep_learning_intro geospatial python pandas machine_learning data_viz_to_coder ml_intermediate nlp feature_engineering game_ai data_cleaning"
 
@@ -44,7 +56,7 @@ do
     #    continue
     #fi
     cd $track
-    ! [[ -a setup_data.sh ]] || ./setup_data.sh
+    with_retry 3 10 2 setup_data
     for nb in `ls raw/*.ipynb`
     do
         # First python exercise notebook uses google/tinyquickdraw dataset, which

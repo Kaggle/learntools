@@ -1,7 +1,10 @@
 #!/bin/bash
-# Download the datasets used in the ML notebooks to correct relative_paths (../input/...)
+set -ex
 
-mkdir -p input
+if [ -d input ]; then
+    exit 0
+fi
+mkdir input
 
 DATASETS="ryanholbrook/dl-course-data"
 

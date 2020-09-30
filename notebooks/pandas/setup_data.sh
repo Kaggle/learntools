@@ -1,12 +1,10 @@
 #!/bin/bash
-set -e
+set -ex
 
-if [ -d input ]
-then
+if [ -d input ]; then
     exit 0
 fi
-
-mkdir -p input
+mkdir input
 
 DATASETS="zynicide/wine-reviews nolanbconaway/pitchfork-data dansbecker/powerlifting-database residentmario/things-on-reddit jpmiller/publicassistance datasnaek/youtube-new"
 
