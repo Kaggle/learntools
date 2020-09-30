@@ -37,7 +37,7 @@ done
 setup_data() {
     if [[ -a setup_data.sh ]]; then
         rm -rf input/ # delete input/ to start from a clean slate after a retry.
-         ./setup_data.sh
+        ./setup_data.sh
     else
         echo "no setup_data.sh file. Skipping..."
     fi
