@@ -80,7 +80,8 @@ notebooks = [
         ),
     dict(filename='tut7.ipynb',
         lesson_idx=6,
-        type='tutorial'
+        type='tutorial',
+        author="alexisbcook"
         ),
     dict(
         filename='ex7.ipynb',
