@@ -101,17 +101,20 @@ notebooks = [
         filename='tut_automl.ipynb',
         lesson_idx=7,
         type='tutorial',
-        enable_internet=True
+        enable_internet=True,
+        author="alexisbcook"
         ),
     dict(
         filename='ex_automl.ipynb',
         lesson_idx=7,
         type='exercise',
-        scriptid=10027938
+        scriptid=10027938,
+        author="alexisbcook"
         ),
     dict(filename='tut_titanic.ipynb',
         lesson_idx=8,
-        type='tutorial'
+        type='tutorial',
+        author="alexisbcook"
         ),
 ]
 
