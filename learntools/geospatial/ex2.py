@@ -6,6 +6,15 @@ import geopandas as gpd
 congrats_map_completion = "Thank you for creating a map!"
 correct_message_map_completion = ""
 
+def check_gdf_equal(gdf1, gdf2, name):
+    assert type(gdf1)==gpd.geodataframe.GeoDataFrame, "`{}` is not a GeoDataFrame.".format(name)
+    df1 = pd.DataFrame(gdf1.drop(columns='geometry'))
+    df2 = pd.DataFrame(gdf2.drop(columns='geometry'))
+    assert df1.equals(df2), "The results don't look right.  Try again."
+    geom1 = gdf1.geometry
+    geom2 = gdf2.geometry
+    assert geom1.equals(geom2), "The results don't look right.  Try again."
+
 # Q1
 birds_df = pd.read_csv("../input/geospatial-learn-course-data/purple_martin.csv", parse_dates=['timestamp'])
 birds = gpd.GeoDataFrame(birds_df, geometry=gpd.points_from_xy(birds_df["location-long"], birds_df["location-lat"]))
@@ -26,9 +35,8 @@ americas = world.loc[world['continent'].isin(['North America', 'South America'])
 south_america = americas.loc[americas['continent']=='South America']
 totalArea = sum(south_america.geometry.to_crs(epsg=3035).area) / 10**6
 
-class Q1(EqualityCheckProblem):
+class Q1(CodingProblem):
     _var = "birds"
-    _expected = birds
     _hint = ("Use `gpd.GeoDataFrame()`, and use `gpd.points_from_xy()` to create `Point` objects "
         "from the latitude and longitude locations.")
     _solution = CS(
@@ -38,6 +46,8 @@ birds = gpd.GeoDataFrame(birds_df, geometry=gpd.points_from_xy(birds_df["locatio
 # Set the CRS to {'init': 'epsg:4326'}
 birds.crs = {'init' :'epsg:4326'}
 """)
+    def check(self, birds_submit):
+        check_gdf_equal(birds_submit, birds, "birds")
 
 class Q2(CodingProblem):
     _hint = "Use the `plot()` method of each GeoDataFrame."
@@ -69,8 +79,7 @@ end_gdf.crs = {'init': 'epsg:4326'}
         "Don't forget to set the CRS to `{'init': 'epsg:4326'}`."
         sorted_end_gdf = end_gdf.sort_values(by='tag-local-identifier')
         sorted_results = results.sort_values(by='tag-local-identifier')
-        assert sorted_end_gdf.equals(sorted_results), \
-        "The results don't look right.  Please try again."
+        check_gdf_equal(sorted_end_gdf, sorted_results, "end_gdf")
 
 class Q4(CodingProblem):
     _hint = "Use the `plot()` method of each GeoDataFrame."
@@ -86,13 +95,14 @@ end_gdf.plot(ax=ax, color='black', markersize=30)
     def check(self):
         pass 
 
-class Q5(EqualityCheckProblem):
+class Q5(CodingProblem):
     _var = "protected_areas"
-    _expected = protected_areas
     _hint = ("Use `gpd.read_file()`.")
     _solution = CS(
 """protected_areas = gpd.read_file(protected_filepath)
 """)
+    def check(self, protected_areas_submit):
+        check_gdf_equal(protected_areas_submit, protected_areas, "protected_areas")
         
 class Q6(CodingProblem):
     _hint = ("Use the `plot()` method of the `south_america` and `protected_areas` GeoDataFrames.")

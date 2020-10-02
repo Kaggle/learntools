@@ -20,4 +20,4 @@ testing: false
 # should keep their original slugs under author B's namespace. But if author A wants to push
 # new testing versions of the notebook, they can set author: author_A in testing.yaml to generate
 # new versions of the kernels under their own username.
-author: dansbecker
+author: ryanholbrook
