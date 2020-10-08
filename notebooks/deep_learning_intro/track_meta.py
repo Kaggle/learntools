@@ -90,7 +90,7 @@ notebooks = [
         filename='tut_tpus.ipynb',
         lesson_idx=6,
         type='tutorial',
-        dataset_sources='ryanholbrook/higgs-boson',
+        dataset_sources=['ryanholbrook/higgs-boson'],
         ),
 ]
 
