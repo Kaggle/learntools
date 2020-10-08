@@ -88,12 +88,13 @@ notebooks = [
         ),
     dict(filename='tut_tpus.ipynb',
         lesson_idx=6,
-        type='tutorial',
-        competition_sources=['tpu-getting-started']
+        type='tutorial'
         ),
 ]
 
 for nb in notebooks:
     if nb['filename'] != "tut_tpus.ipynb":
         nb['dataset_sources'] = ['ryanholbrook/dl-course-data']
+    else:
+        nb['dataset_sources'] = ['ryanholbrook/higgs-boson']
     
