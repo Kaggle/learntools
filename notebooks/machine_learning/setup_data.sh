@@ -1,15 +1,12 @@
 #!/bin/bash
-# Download the datasets used in the ML notebooks to correct relative_paths (../input/...)
+set -ex
 
-set -e
-
-if [ -d input ]
-then
+if [ -d input ]; then
     exit 0
 fi
+mkdir input
 
-mkdir -p input
-
+# Download the datasets used in the ML notebooks to correct relative_paths (../input/...)
 DATASETS="dansbecker/melbourne-housing-snapshot iabhishekofficial/mobile-price-classification"
 
 for slug in $DATASETS

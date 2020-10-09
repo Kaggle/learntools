@@ -1,15 +1,10 @@
 #!/bin/bash
+set -ex
 
-
-set -e
-
-if [ -d input ]
-then
+if [ -d input ]; then
     exit 0
 fi
-
-# Setup Datsets
-mkdir -p input
+mkdir input
 
 DATASETS=("ryanholbrook/car-or-truck" "ryanholbrook/cv-course-models" "ryanholbrook/computer-vision-resources")
 
