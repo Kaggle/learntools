@@ -1,4 +1,3 @@
-# See also examples/example_track/track_meta.py for a longer, commented example
 track = dict(
     author_username='ryanholbrook',
     course_name="Intro to Deep Learning",
@@ -6,16 +5,16 @@ track = dict(
     course_forum_url='https://www.kaggle.com/learn-forum',
 )
 
-TOPICS = ["A Single Neuron",                 # 1
-          "Deep Neural Networks",            # 2
-          "Stochastic Gradient Descent",     # 3
-          "Overfitting and Underfitting",    # 4
-          "Dropout and Batch Normalization", # 5
-          "Binary Classification",           # 6
-          "Getting Started with TPUs"        # 7
+TOPICS = ["A Single Neuron",                      # 1
+          "Deep Neural Networks",                 # 2
+          "Stochastic Gradient Descent",          # 3
+          "Overfitting and Underfitting",         # 4
+          "Dropout and Batch Normalization",      # 5
+          "Binary Classification",                # 6
+          "Detecting the Higgs Boson with TPUs",  # 7
           ]
 lessons = [{'topic': topic_name} for topic_name in TOPICS]
-    
+
 notebooks = [
     dict(
         filename='tut1.ipynb',
@@ -75,7 +74,8 @@ notebooks = [
         scriptid=11887342,
         enable_gpu=True
         ),
-    dict(filename='tut6.ipynb',
+    dict(
+        filename='tut6.ipynb',
         lesson_idx=5,
         type='tutorial'
         ),
@@ -86,14 +86,16 @@ notebooks = [
         scriptid=11887335,
         enable_gpu=True
         ),
-    dict(filename='tut_tpus.ipynb',
+    dict(
+        filename='tut_tpus.ipynb',
         lesson_idx=6,
-        type='tutorial',
-        competition_sources=['tpu-getting-started']
+        type='tutorial'
         ),
 ]
 
 for nb in notebooks:
     if nb['filename'] != "tut_tpus.ipynb":
         nb['dataset_sources'] = ['ryanholbrook/dl-course-data']
+    else:
+        nb['dataset_sources'] = ['ryanholbrook/higgs-boson']
     
