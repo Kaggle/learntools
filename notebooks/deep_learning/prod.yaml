@@ -1,6 +1,6 @@
 # Rendered ipynb files and kernel metadata json files for this config will be saved at notebooks/<track>/<tag>/
 tag: prod
-public: false
+public: true
 # If true, then exercise kernels synced to kaggle will have internet enabled and will begin
 # with a cell that pip installs the current learntools branch. (Useful for testing 
 # notebooks on Kernels without requiring image docker deploy for every learntools change)
@@ -20,4 +20,4 @@ testing: false
 # should keep their original slugs under author B's namespace. But if author A wants to push
 # new testing versions of the notebook, they can set author: author_A in testing.yaml to generate
 # new versions of the kernels under their own username.
-author: ryanholbrook
+author: dansbecker
