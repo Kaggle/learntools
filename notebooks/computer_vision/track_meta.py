@@ -1,7 +1,7 @@
 track = dict(
     author_username='ryanholbrook',
     course_name='Computer Vision',
-    course_url='https://www.kaggle.com/ryanholbrook/computer-vision',
+    course_url='https://www.kaggle.com/learn/computer-vision',
     course_forum_url='https://www.kaggle.com/learn-forum',
 )
 
@@ -61,33 +61,39 @@ notebooks += [
         lesson_idx=0,
         type='exercise',
         enable_gpu=True,
+        scriptid=10781907
     ),
     dict(
         filename="ex2.ipynb",
         lesson_idx=1,
         type='exercise',
+        scriptid=11989557
     ),
     dict(
         filename="ex3.ipynb",
         lesson_idx=2,
         type='exercise',
+        scriptid=11989559
     ),
     dict(
         filename="ex4.ipynb",
         lesson_idx=3,
         type='exercise',
+        scriptid=12400209
     ),
     dict(
         filename="ex5.ipynb",
         lesson_idx=4,
         type='exercise',
         enable_gpu=True,
+        scriptid=11989565
     ),
     dict(
         filename="ex6.ipynb",
         lesson_idx=5,
         type='exercise',
         enable_gpu=True,
+        scriptid=11991328
     ),    
 ]
 
