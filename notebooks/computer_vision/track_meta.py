@@ -1,7 +1,7 @@
 track = dict(
     author_username='ryanholbrook',
     course_name='Computer Vision',
-    course_url='https://www.kaggle.com/ryanholbrook/computer-vision',
+    course_url='https://www.kaggle.com/learn/computer-vision',
     course_forum_url='https://www.kaggle.com/learn-forum',
 )
 
