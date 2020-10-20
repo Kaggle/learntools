@@ -1,3 +1,9 @@
+#!/bin/bash
+set -ex
+
+if [ -d input ]; then
+    exit 0
+fi
 mkdir input
 
 kaggle competitions download dog-breed-identification -p input/dog-breed-identification -f train.zip
