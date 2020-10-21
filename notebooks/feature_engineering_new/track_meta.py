@@ -91,4 +91,4 @@ notebooks = [
 
 
 for nb in notebooks:
-    nb['dataset_sources'] = ['ryanholbrook/fe-course-data']
+    nb['dataset_sources'] = ['ryanholbrook/feature-engineering-course-data']
