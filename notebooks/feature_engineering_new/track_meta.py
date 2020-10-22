@@ -5,7 +5,7 @@ track = dict(
     course_forum_url='https://www.kaggle.com/learn-forum/',
 )
 
-TOPICS = ["What is Feature Engineering?",         # 1
+TOPICS = ["Transforming Features",                # 1
           "Polynomial and Interaction Features",  # 2
           "Principal Components Analysis",        # 3
           "Feature Hashing",                      # 4
@@ -91,4 +91,4 @@ notebooks = [
 
 
 for nb in notebooks:
-    nb['dataset_sources'] = ['ryanholbrook/feature-engineering-course-data']
+    nb['dataset_sources'] = ['ryanholbrook/fe-course-data']
