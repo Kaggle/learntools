@@ -26,7 +26,7 @@ TMP_DIR=`mktemp -d`
 # Install packages the notebook pipeline depends on but which aren't installed with the learntools package.
 pip install -q -r requirements.txt
 
-TRACKS="ethics computer_vision deep_learning_intro pandas python machine_learning sql data_viz_to_coder ml_intermediate sql_advanced feature_engineering geospatial nlp game_ai data_cleaning"
+TRACKS="computer_vision deep_learning_intro pandas python machine_learning sql data_viz_to_coder ml_intermediate sql_advanced feature_engineering geospatial nlp game_ai data_cleaning"
 
 for track in $TRACKS
 do
@@ -43,7 +43,7 @@ setup_data() {
     fi
 }
 
-TESTABLE_NOTEBOOK_TRACKS="ethics computer_vision deep_learning_intro geospatial python pandas machine_learning data_viz_to_coder ml_intermediate nlp feature_engineering game_ai data_cleaning"
+TESTABLE_NOTEBOOK_TRACKS="computer_vision deep_learning_intro geospatial python pandas machine_learning data_viz_to_coder ml_intermediate nlp feature_engineering game_ai data_cleaning"
 
 for track in $TESTABLE_NOTEBOOK_TRACKS
 do
