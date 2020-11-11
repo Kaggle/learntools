@@ -2,7 +2,7 @@ track = dict(
     author_username='ryanholbrook',
     course_name='Computer Vision',
     course_url='https://www.kaggle.com/learn/computer-vision',
-    course_forum_url='https://www.kaggle.com/learn-forum',
+    course_forum_url='https://www.kaggle.com/learn-forum/196537',
 )
 
 TOPICS = [
