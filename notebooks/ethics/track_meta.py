@@ -15,8 +15,6 @@ lessons = [ {'topic': topic_name} for topic_name in
                      ]
             ]
 
-lessons = [{'topic': topic_name} for topic_name in TOPICS]
-
 notebooks = [
     dict(
         filename='tut1.ipynb',
