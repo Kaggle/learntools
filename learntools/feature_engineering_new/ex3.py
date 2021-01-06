@@ -22,5 +22,9 @@ class Q4(ThoughtExperiment):
     pass
 
 
-qvars = bind_exercises(globals(), [Q1, Q2, Q3, Q4], var_format="q_{n}")
+class Q5(ThoughtExperiment):
+    pass
+
+
+qvars = bind_exercises(globals(), [Q1, Q2, Q3, Q4, Q5], var_format="q_{n}")
 __all__ = list(qvars)
