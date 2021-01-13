@@ -100,6 +100,7 @@ X["Cluster"] = kmeans.fit_predict(X_scaled)
 
 class Q3(CodingProblem):
     _hint = """Your code should look something like:
+```python
 kmeans = KMeans(n_clusters=20, n_init=50, random_state=0)
 
 X_cd = kmeans.____(X_scaled)
@@ -107,6 +108,7 @@ X_cd = kmeans.____(X_scaled)
 # Label features and join to dataset
 X_cd = pd.DataFrame(X_cd, columns=[f"Centroid_{i}" for i in range(X_cd.shape[1])])
 X = X.join(X_cd)
+```
 """
     _solution = CS(
         """
@@ -125,7 +127,7 @@ X = X.join(X_cd)
     def check(self, X_cd):
         X_solution = self._make_solution()
         assert (
-            (X_solution == X_cd).all().all()
+            (X_solution.round(2).eq(X_cd.round(2))).all().all()
         ), "Cluster-distance features are incorrect or missing."
 
     def _make_solution(self):
@@ -145,6 +147,10 @@ X = X.join(X_cd)
         X_scaled = (X_scaled - X_scaled.mean(axis=0)) / X_scaled.std(axis=0)
         kmeans = KMeans(n_clusters=20, n_init=50, random_state=0)
         X_solution = kmeans.fit_transform(X_scaled)
+        X_solution = pd.DataFrame(
+            X_solution,
+            columns=[f"Centroid_{i}" for i in range(X_solution.shape[1])],
+        )
         return X_solution
 
 
