@@ -126,7 +126,7 @@ X = X.join(X_cd)
         X_solution = self._make_solution()
         assert (
             (X_solution == X_cd).all().all()
-        ), "Cluster-distance features are incorrect or mission."
+        ), "Cluster-distance features are incorrect or missing."
 
     def _make_solution(self):
         X = df.copy()
