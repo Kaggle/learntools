@@ -72,6 +72,7 @@ do
             echo "Warning: skipping $nb in track $track"
             continue
         fi
+        echo "Running nbconvert for $nb in track $track"
         jupyter nbconvert --output-dir "$TMP_DIR" --execute $nb --ExecutePreprocessor.timeout=1000 --to html
     done
     cd ../
