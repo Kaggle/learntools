@@ -19,7 +19,7 @@ pipeline {
                 sh '''#!/bin/bash
                     set -exo pipefail
                     # Ensures the currently released Docker Python image is used.
-                    docker pull gcr.io/kaggle-images/python:latest
+                    docker pull gcr.io/kaggle-images/python:staging
                 '''
             }
         }
