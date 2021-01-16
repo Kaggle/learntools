@@ -11,3 +11,29 @@ This repo is split into two types of material.
 - The `notebooks` subdirectory contains tools to simplify publishing courses on kaggle as well as the course materials themselves. The course materials are in notebooks. The notebooks for the python course are in `/notebooks/python/raw/*`. Replace python with another course name to find the materials for other courses.  The notebooks are processed in a templating system before being uploaded to kaggle, so the `raw` notebooks are hard to read. The README in `/notebooks` has instructions to convert `raw` notebooks to rendered notebooks (and to use the templating system more generally).
 
 Some courses have notebooks in a subdirectory of the `learntools` package, reflecting the fact these notebooks were authored and edited outside our templating system.
+
+# Running the tests
+
+Run all tests against the staging image:
+
+```
+./test.sh
+```
+
+Run all tests against a specific image:
+
+```
+./test.sh -i gcr.io/kaggle-images/python:some-tag
+```
+
+Run only the tests for the `computer_vision` track:
+
+```
+./test.sh -t computer_vision
+```
+
+Run only the tests for the 1st exercise of the `computer_vision` track:
+
+```
+./test.sh -t computer_vision -n ex1
+```

@@ -2,8 +2,29 @@
 #
 # Run automated testing for our notebooks.
 set -e
-set -x
 
+# Filter by tracks if first argument set.
+TRACKS="computer_vision deep_learning_intro pandas python machine_learning sql data_viz_to_coder ml_intermediate sql_advanced feature_engineering geospatial nlp game_ai data_cleaning"
+TESTABLE_NOTEBOOK_TRACKS="computer_vision deep_learning_intro geospatial python pandas machine_learning data_viz_to_coder ml_intermediate nlp feature_engineering game_ai data_cleaning"
+if [[ -n $1 && $1 != "all" ]]; then
+    TRACKS=$1
+    TESTABLE_NOTEBOOK_TRACKS=$1
+fi
+readonly TRACKS
+readonly TESTABLE_NOTEBOOK_TRACKS
+
+# Filter by notebook if second argument set.
+NOTEBOOK_FILTER=".*"
+if [[ -n $2 && $2 != "all" ]]; then
+    NOTEBOOK_FILTER=$2
+fi
+readonly NOTEBOOK_FILTER
+
+echo "TRACKS='$TRACKS'"
+echo "TESTABLE_NOTEBOOK_TRACKS='$TESTABLE_NOTEBOOK_TRACKS'"
+echo "NOTEBOOK_FILTER='$NOTEBOOK_FILTER'"
+
+set -x
 # path to the notebook/ directory.
 DIR=`dirname "${BASH_SOURCE[0]}"`
 # Path to the parent (learntools) dir
@@ -26,8 +47,6 @@ TMP_DIR=`mktemp -d`
 # Install packages the notebook pipeline depends on but which aren't installed with the learntools package.
 pip install -q -r requirements.txt
 
-TRACKS="computer_vision deep_learning_intro pandas python machine_learning sql data_viz_to_coder ml_intermediate sql_advanced feature_engineering geospatial nlp game_ai data_cleaning"
-
 for track in $TRACKS
 do
     # Run each step of the rendering pipeline, to make sure it runs without errors.
@@ -43,8 +62,6 @@ setup_data() {
     fi
 }
 
-TESTABLE_NOTEBOOK_TRACKS="computer_vision deep_learning_intro geospatial python pandas machine_learning data_viz_to_coder ml_intermediate nlp feature_engineering game_ai data_cleaning"
-
 for track in $TESTABLE_NOTEBOOK_TRACKS
 do
     # Running the deep learning notebooks is fairly slow (~10-20 minutes), so only
@@ -57,6 +74,10 @@ do
     with_retry 3 10 2 setup_data
     for nb in `ls raw/*.ipynb`
     do
+        if [[ ! $nb =~ $NOTEBOOK_FILTER ]]; then
+            echo "Info: Skiping notebook because it doesn't match $NOTEBOOK_FILTER"
+            continue
+        fi
         # First python exercise notebook uses google/tinyquickdraw dataset, which
         # is 11 GB. Downloading it would probably slow down testing unacceptably.
         # AutoML notebooks also run for hours.
@@ -72,6 +93,7 @@ do
             echo "Warning: skipping $nb in track $track"
             continue
         fi
+        echo "Running nbconvert for $nb in track $track"
         jupyter nbconvert --output-dir "$TMP_DIR" --execute $nb --ExecutePreprocessor.timeout=1000 --to html
     done
     cd ../
