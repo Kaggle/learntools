@@ -4,9 +4,11 @@
 set -e
 
 # Print the commit hash and build date of the image the tests are running in.
-GIT_COMMIT=`cat /etc/git_commit`
-BUILD_DATE=`cat /etc/build_date`
-echo "Running inside image built at $BUILD_DATE for commit $GIT_COMMIT"
+if [[ -r /etc/git_commit ]]; then
+    GIT_COMMIT=`cat /etc/git_commit`
+    BUILD_DATE=`cat /etc/build_date`
+    echo "Running inside image built at $BUILD_DATE for commit $GIT_COMMIT"
+fi
 
 # Filter by tracks if first argument set.
 TRACKS="computer_vision deep_learning_intro pandas python machine_learning sql data_viz_to_coder ml_intermediate sql_advanced feature_engineering geospatial nlp game_ai data_cleaning"
