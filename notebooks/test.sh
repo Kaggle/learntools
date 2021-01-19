@@ -3,6 +3,11 @@
 # Run automated testing for our notebooks.
 set -e
 
+# Print the commit hash and build date of the image the tests are running in.
+GIT_COMMIT=`cat /etc/git_commit`
+BUILD_DATE=`cat /etc/build_date`
+echo "Running inside image built at $BUILD_DATE for commit $GIT_COMMIT"
+
 # Filter by tracks if first argument set.
 TRACKS="computer_vision deep_learning_intro pandas python machine_learning sql data_viz_to_coder ml_intermediate sql_advanced feature_engineering geospatial nlp game_ai data_cleaning"
 TESTABLE_NOTEBOOK_TRACKS="data_viz_to_coder ml_intermediate nlp feature_engineering game_ai data_cleaning computer_vision deep_learning_intro geospatial python pandas machine_learning"
@@ -24,7 +29,6 @@ echo "TRACKS='$TRACKS'"
 echo "TESTABLE_NOTEBOOK_TRACKS='$TESTABLE_NOTEBOOK_TRACKS'"
 echo "NOTEBOOK_FILTER='$NOTEBOOK_FILTER'"
 
-set -x
 # path to the notebook/ directory.
 DIR=`dirname "${BASH_SOURCE[0]}"`
 # Path to the parent (learntools) dir
@@ -75,7 +79,7 @@ do
     for nb in `ls raw/*.ipynb`
     do
         if [[ ! $nb =~ $NOTEBOOK_FILTER ]]; then
-            echo "Info: Skiping notebook because it doesn't match $NOTEBOOK_FILTER"
+            # Skiping notebook because it doesn't match the notebook filter.
             continue
         fi
         # First python exercise notebook uses google/tinyquickdraw dataset, which
