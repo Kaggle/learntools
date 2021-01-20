@@ -90,6 +90,7 @@ do
         if [[ ( $nb =~ "ex_1" && $track == "python" ) ]] \
             || [[ ( $nb =~ "ex_automl") ]] || [[ ( $nb =~ "tut_automl") ]] \
             || [[ ( $nb =~ "tut4" && $track == "game_ai" ) ]] \
+            || [[ ( $nb =~ "ex4" && $track == "game_ai" ) ]] \
             || [[ ( $nb =~ "tut4" && $track == "data_cleaning" ) ]] \
             || [[ ( $nb =~ "ex8" && $track == "machine_learning" ) ]] \
             || [[ $nb =~ "tut_tpus" ]] || [[ $nb =~ "ex_tpus" ]] \
