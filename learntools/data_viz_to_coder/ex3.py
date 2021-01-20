@@ -70,16 +70,14 @@ plt.title("Average Score for Racing Games, by Platform")
         assert len(children) == 21, \
         "Your figure doesn't appear to have one bar for each platform."
                
-        correct_bar_lengths = [7.0425, 6.6571428571428575, 5.897435897435898, 6.85263157894737,
-                               6.9, 6.939622641509434, 6.038636363636365, 6.563636363636364, 
-                               7.032417582417582, 6.773387096774192, 6.585064935064935, 
-                               6.9785714285714295, 7.589999999999999, 6.401960784313727, 6.3, 
-                               5.0116666666666685, 6.898305084745762, 7.021590909090909, 
-                               6.996153846153844, 8.163636363636364, 7.315789473684211]
+        # Get correct lengths
+        #plt.figure(figsize=(8, 6))
+        #sns.barplot(x=df['Racing'], y=df.index)
+        #correct_children = plt.axes().containers[0].get_children()
         
-        assert [children[i].properties()['bbox'].width for i in range(21)] == correct_bar_lengths \
-        or [children[i].properties()['bbox'].height for i in range(21)] == correct_bar_lengths, \
-        "Did you select the `'Racing'` column?"
+        #assert [children[i].properties()['bbox'].width for i in range(21)] == correct_children \
+        #or [children[i].properties()['bbox'].height for i in range(21)] == correct_children, \
+        #"Did you select the `'Racing'` column?"
 
 class ThinkRacing(ThoughtExperiment):
     _hint = ("Check the length of the bar corresponding to the **Wii** platform.  Does it appear to be "

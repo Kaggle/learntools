@@ -98,12 +98,12 @@ sns.kdeplot(data=cancer_m_data['Radius (worst)'], shade=True, label="Malignant")
         assert len(passed_plt.figure(1).axes) > 0, \
         "Please write code to create one figure containing two KDE plots."
         
-        children = passed_plt.axes().get_children()
+        #children = passed_plt.axes().get_children()
         
-        assert all(isinstance(x, matplotlib.collections.PolyCollection) for x in children[0:2]) \
-        and all(isinstance(x, matplotlib.lines.Line2D) for x in children[2:4]), \
-        ("Does your figure show two KDE plots?  Write two lines of code using "
-         "`sns.kdeplot` to generate your figure.")
+        #assert all(isinstance(x, matplotlib.collections.PolyCollection) for x in children[0:2]) \
+        #and all(isinstance(x, matplotlib.lines.Line2D) for x in children[2:4]), \
+        #("Does your figure show two KDE plots?  Write two lines of code using "
+        # "`sns.kdeplot` to generate your figure.")
         
 class ThinkThreshold(ThoughtExperiment):
     _hint = ("Take a look at the KDE plots, and use the legend to tell the difference between "
