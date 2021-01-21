@@ -39,7 +39,6 @@ notebooks.append(
         lesson_idx=6,
         type="tutorial",
         scriptid=1,
-        dataset_sources=["ryanholbrook/fe-course-data"],
         competition_sources=["house-prices-advanced-regression-techniques"],
     )
 )
