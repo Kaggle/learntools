@@ -10,7 +10,7 @@ TOPICS = [
     "Feature Utility",  # 2
     "Creating Features",  # 3
     "Clustering with k-Means",  # 4
-    "Principal Components Analysis",  # 5
+    "Principal Component Analysis",  # 5
     "Target Encoding",  # 6
     "Getting Started with House Prices",  # Bonus
 ]
