@@ -7,7 +7,7 @@ track = dict(
 
 TOPICS = [
     "What is Feature Engineering",  # 1
-    "Feature Utility",  # 2
+    "Mutual Information",  # 2
     "Creating Features",  # 3
     "Clustering with k-Means",  # 4
     "Principal Component Analysis",  # 5
