@@ -12,7 +12,7 @@ TOPICS = [
     "Clustering with k-Means",  # 4
     "Principal Component Analysis",  # 5
     "Target Encoding",  # 6
-    "Getting Started with House Prices",  # Bonus
+    "Feature Engineering for House Prices",  # Bonus
 ]
 lessons = [{"topic": topic_name} for topic_name in TOPICS]
 
