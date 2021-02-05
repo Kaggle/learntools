@@ -5,43 +5,12 @@ from learntools.core import *
 df = pd.read_csv("../input/fe-course-data/ames.csv")
 
 
-class Q1(EqualityCheckProblem):
-    _hint = """Try looking at the data documentation, which you can see by running:
-```
-!cat "../input/fe-course-data/DataDocumentation.txt"
-```
-"""
-    _solution = CS(
-        """
-overall_qual = "ordinal"
-central_air = "binary"
-gr_liv_area = "continuous"
-neighborhood = "nominal"
-fireplaces = "discrete"
-"""
-    )
-    _vars = [
-        "overall_qual",
-        "central_air",
-        "gr_liv_area",
-        "neighborhood",
-        "fireplaces",
-    ]
-    _expected = [
-        "ordinal",
-        "binary",
-        "continuous",
-        "nominal",
-        "discrete",
-    ]
-
-
-class Q2(ThoughtExperiment):
+class Q1(ThoughtExperiment):
     _solution = "There **does** appear to be a significant relationship between `YearBuilt` and `SalePrice`, but **not** between `MoSold` and `SalePrice`. The relationship between `YearBuilt` and `SalePrice` does not appear to be linear; you would get a better fit with a curve bending upwards from left to right, for instance."
 
 
-class Q3(CodingProblem):
-    _hint = "To find a total you do want to create a sum of some sort. But is a half-bath worth as much as a full-bath? Could it make sense to weight them differently?"
+class Q2(CodingProblem):
+    _hint = "To find a total you do want to create a sum of some sort. But is a half-bath worth as much as a full-bath? Could it make sense to weigh them differently?"
     _solution = """
 Either of these would give better results than a simple sum:
 
@@ -86,9 +55,9 @@ X["TotalBaths"] = \
         ).all(), "Incorrect value for `{}`".format("X['TotalBaths']")
 
 
-class Q4(ThoughtExperiment):
+class Q3(ThoughtExperiment):
     _solution = "Since our error metric RMSLE decreased after adding `TotalBaths` to the feature set, it appears `TotalBaths` is worth keeping."
 
 
-qvars = bind_exercises(globals(), [Q1, Q2, Q3, Q4], var_format="q_{n}")
+qvars = bind_exercises(globals(), [Q1, Q2, Q3], var_format="q_{n}")
 __all__ = list(qvars)
