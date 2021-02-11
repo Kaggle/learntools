@@ -8,16 +8,16 @@ df = pd.read_csv("../input/fe-course-data/ames.csv")
 class Q1(CodingProblem):
     _hint = """Your code should look something like:
 ```python
-X_new["LivLotRatio"] = ____ / ____
-X_new["Spaciousness"] = (____ + ____) / ____
-X_new["TotalOutsideSF"] = ____ + ____ + ____ + ____ + ____
+X_1["LivLotRatio"] = ____ / ____
+X_1["Spaciousness"] = (____ + ____) / ____
+X_1["TotalOutsideSF"] = ____ + ____ + ____ + ____ + ____
 ```
 """
     _solution = CS(
         """
-X_new["LivLotRatio"] = df.GrLivArea / df.LotArea
-X_new["Spaciousness"] = (df.FirstFlrSF + df.SecondFlrSF) / df.TotRmsAbvGrd
-X_new["TotalOutsideSF"] = df.WoodDeckSF + df.OpenPorchSF + df.EnclosedPorch + df.Threeseasonporch + df.ScreenPorch
+X_1["LivLotRatio"] = df.GrLivArea / df.LotArea
+X_1["Spaciousness"] = (df.FirstFlrSF + df.SecondFlrSF) / df.TotRmsAbvGrd
+X_1["TotalOutsideSF"] = df.WoodDeckSF + df.OpenPorchSF + df.EnclosedPorch + df.Threeseasonporch + df.ScreenPorch
 """
     )
     _vars = ["X_1"]
