@@ -120,7 +120,7 @@ sns.scatterplot(x=candy_data['pricepercent'], y=candy_data['winpercent'], hue=ca
         assert all(isinstance(x, matplotlib.collections.PathCollection) for x in legend_handles), \
         ("Is your figure a scatter plot?  Please use `sns.scatterplot` to generate your figure.")
         
-        assert len(legend_handles) == 3, "Did you color-code the points with the `'chocolate'` column?"
+        #assert len(legend_handles) == 3, "Did you color-code the points with the `'chocolate'` column?"
 
 class PlotColorReg(CodingProblem):
     _var = 'plt'

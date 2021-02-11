@@ -7,16 +7,16 @@ track = dict(
 )
 
 lessons = [ {'topic': topic_name} for topic_name in
-                    ["Introduction to AI Ethics",
+                    [#"Introduction to AI Ethics",
                      "Human-Centered Design",
                      "Identifying Bias",
-                     "Fairness",
+                     #"Fairness",
                      "Model Cards"
                      ]
             ]
 
 notebooks = [
-    dict(
+    """dict(
         filename='tut1.ipynb',
         lesson_idx=0,
         type='tutorial',
@@ -27,6 +27,7 @@ notebooks = [
         type='exercise',
         scriptid=-1
         ),
+    """
     dict(
         filename='tut2.ipynb',
         lesson_idx=1,
@@ -50,6 +51,7 @@ notebooks = [
         scriptid=-1,
         competition_sources='jigsaw-unintended-bias-in-toxicity-classification'
         ),
+    """
     dict(
         filename='tut4.ipynb',
         lesson_idx=3,
@@ -61,6 +63,7 @@ notebooks = [
         type='exercise',
         scriptid=-1
         ),
+    """
     dict(
         filename='tut5.ipynb',
         lesson_idx=4,
