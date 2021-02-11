@@ -5,18 +5,28 @@ track = dict(
     course_url='https://www.kaggle.com/learn/ai-ethics',
     course_forum_url='https://www.kaggle.com/learn-forum',
 )
-
-# "Introduction to AI Ethics", "Human-Centered Design", "Identifying Bias",
-# "Fairness", "Model Cards"
                     
 lessons = [ {'topic': topic_name} for topic_name in
-                    ["Human-Centered Design",
+                    ["Introduction to AI Ethics",
+                     "Human-Centered Design",
                      "Identifying Bias",
+                     "Fairness",
                      "Model Cards"
                      ]
             ]
 
 notebooks = [
+    dict(
+        filename='tut1.ipynb',
+        lesson_idx=0,
+        type='tutorial',
+        ),
+    dict(
+        filename='ex1.ipynb',
+        lesson_idx=1,
+        type='exercise',
+        scriptid=-1
+        ),
     dict(
         filename='tut2.ipynb',
         lesson_idx=1,
@@ -39,6 +49,17 @@ notebooks = [
         type='exercise',
         scriptid=-1,
         competition_sources='jigsaw-unintended-bias-in-toxicity-classification'
+        ),
+    dict(
+        filename='tut4.ipynb',
+        lesson_idx=3,
+        type='tutorial',
+        ),
+    dict(
+        filename='ex4.ipynb',
+        lesson_idx=3,
+        type='exercise',
+        scriptid=-1
         ),
     dict(
         filename='tut5.ipynb',
