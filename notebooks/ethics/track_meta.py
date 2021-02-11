@@ -23,7 +23,7 @@ notebooks = [
         ),
     dict(
         filename='ex1.ipynb',
-        lesson_idx=1,
+        lesson_idx=0,
         type='exercise',
         scriptid=-1
         ),
