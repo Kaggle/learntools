@@ -6,11 +6,12 @@ track = dict(
     course_forum_url='https://www.kaggle.com/learn-forum',
 )
 
+# "Introduction to AI Ethics", "Human-Centered Design", "Identifying Bias",
+# "Fairness", "Model Cards"
+                    
 lessons = [ {'topic': topic_name} for topic_name in
-                    [#"Introduction to AI Ethics",
-                     "Human-Centered Design",
+                    ["Human-Centered Design",
                      "Identifying Bias",
-                     #"Fairness",
                      "Model Cards"
                      ]
             ]
