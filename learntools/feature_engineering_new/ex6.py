@@ -58,7 +58,6 @@ X_train = encoder.transform(X_pretrain, y_train)
         X_pretrain = df.drop(X_encode.index)
         y_train = X_pretrain.pop("SalePrice")
         # Encoder
-        encoder = MEstimateEncoder(cols=["Neighborhood"], m=1.0,)
         encoder.fit(X_encode, y_encode)
         X_solution = encoder.transform(X_pretrain, y_train)
         return X_solution
