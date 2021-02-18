@@ -22,12 +22,6 @@ notebooks = [
         type='tutorial',
         ),
     dict(
-        filename='ex1.ipynb',
-        lesson_idx=0,
-        type='exercise',
-        scriptid=-1
-        ),
-    dict(
         filename='tut2.ipynb',
         lesson_idx=1,
         type='tutorial',
