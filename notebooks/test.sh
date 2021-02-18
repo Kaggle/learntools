@@ -96,8 +96,7 @@ do
             || [[ $nb =~ "tut_tpus" ]] || [[ $nb =~ "ex_tpus" ]] \
             || [[ ( $nb =~ "tut1" && $track == "computer_vision" ) ]] || [[ ( $nb =~ "tut5" && $track == "computer_vision" ) ]] || [[ ( $nb =~ "tut6" && $track == "computer_vision" ) ]] \
             || [[ ( $nb =~ "ex1" && $track == "computer_vision" ) ]] || [[ ( $nb =~ "ex5" && $track == "computer_vision" ) ]] || [[ ( $nb =~ "ex6" && $track == "computer_vision" ) ]] \
-            || [[ ( $nb =~ "ex1" && $track == "computer_vision" ) ]] \
-            || [[ ( $nb =~ "ex3" && $track == "ethics" ) ]]
+            || [[ ( $nb =~ "ex1" && $track == "computer_vision" ) ]]
         then
             echo "Warning: skipping $nb in track $track"
             continue
