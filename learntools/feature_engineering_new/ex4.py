@@ -59,7 +59,7 @@ features = [
 X_scaled = X.loc[:, features]
 X_scaled = (X_scaled - X_scaled.mean(axis=0)) / X_scaled.std(axis=0)
 
-kmeans = KMeans(n_clusters=20, n_init=50, random_state=0)
+kmeans = KMeans(n_clusters=10, n_init=10, random_state=0)
 X["Cluster"] = kmeans.fit_predict(X_scaled)
 """
     )
@@ -91,7 +91,7 @@ X["Cluster"] = kmeans.fit_predict(X_scaled)
         # Standardize
         X_scaled = X.loc[:, features]
         X_scaled = (X_scaled - X_scaled.mean(axis=0)) / X_scaled.std(axis=0)
-        kmeans = KMeans(n_clusters=20, n_init=50, random_state=0)
+        kmeans = KMeans(n_clusters=10, n_init=10, random_state=0)
         X["Cluster"] = kmeans.fit_predict(X_scaled)
         return X
 
@@ -99,7 +99,7 @@ X["Cluster"] = kmeans.fit_predict(X_scaled)
 class Q3(CodingProblem):
     _hint = """Your code should look something like:
 ```python
-kmeans = KMeans(n_clusters=20, n_init=50, random_state=0)
+kmeans = KMeans(n_clusters=10, n_init=10, random_state=0)
 
 X_cd = kmeans.____(X_scaled)
 
@@ -110,7 +110,7 @@ X = X.join(X_cd)
 """
     _solution = CS(
         """
-kmeans = KMeans(n_clusters=20, n_init=50, random_state=0)
+kmeans = KMeans(n_clusters=10, n_init=10, random_state=0)
 
 # YOUR CODE HERE: Create the cluster-distance features using `fit_transform`
 X_cd = kmeans.fit_transform(X_scaled)
@@ -143,7 +143,7 @@ X = X.join(X_cd)
         # Standardize
         X_scaled = X.loc[:, features]
         X_scaled = (X_scaled - X_scaled.mean(axis=0)) / X_scaled.std(axis=0)
-        kmeans = KMeans(n_clusters=20, n_init=50, random_state=0)
+        kmeans = KMeans(n_clusters=10, n_init=10, random_state=0)
         X_solution = kmeans.fit_transform(X_scaled)
         X_solution = pd.DataFrame(
             X_solution,
