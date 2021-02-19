@@ -53,7 +53,7 @@ notebooks = [
         filename='ex4.ipynb',
         lesson_idx=3,
         type='exercise',
-        scriptid=-1,
+        scriptid=-10,
         dataset_sources='alexisbcook/synthetic-credit-card-approval'
         ),
     dict(
