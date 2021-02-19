@@ -31,7 +31,7 @@ class VarietiesOfFairnessTwo(ThoughtExperiment):
                         "but is now a bit more fair than the original model. Interestingly, if you consider either "
                         "equal accuracy or equal opportunity, the model is biased in favor of Group A! It's also "
                         "important to note that the overall accuracy of the model has dropped -- for each group, "
-                        "the model is making slightly less accurate decisions.)
+                        "the model is making slightly less accurate decisions.")
 
 class VarietiesOfFairnessThree(ThoughtExperiment):
     _hint = ""
