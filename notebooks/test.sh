@@ -12,7 +12,7 @@ fi
 
 # Filter by tracks if first argument set.
 TRACKS="ethics feature_engineering_new computer_vision deep_learning_intro pandas python machine_learning sql data_viz_to_coder ml_intermediate sql_advanced feature_engineering geospatial nlp game_ai data_cleaning"
-TESTABLE_NOTEBOOK_TRACKS="ethics feature_engineering_new data_viz_to_coder ml_intermediate nlp data_cleaning computer_vision deep_learning_intro geospatial python pandas machine_learning game_ai"
+TESTABLE_NOTEBOOK_TRACKS="feature_engineering_new data_viz_to_coder ml_intermediate nlp data_cleaning computer_vision deep_learning_intro geospatial python pandas machine_learning game_ai"
 
 if [[ -n $1 && $1 != "all" ]]; then
     TRACKS=$1
