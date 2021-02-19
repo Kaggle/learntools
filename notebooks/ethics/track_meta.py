@@ -8,9 +8,9 @@ track = dict(
                     
 lessons = [ {'topic': topic_name} for topic_name in
                     ["Introduction to AI Ethics",
-                     "Human-Centered Design",
-                     "Identifying Bias",
-                     "Fairness",
+                     "Human-Centered Design for AI",
+                     "Identifying Bias in AI",
+                     "AI Fairness",
                      "Model Cards"
                      ]
             ]
@@ -53,7 +53,8 @@ notebooks = [
         filename='ex4.ipynb',
         lesson_idx=3,
         type='exercise',
-        scriptid=-1
+        scriptid=-1,
+        dataset_sources='alexisbcook/synthetic-credit-card-approval'
         ),
     dict(
         filename='tut5.ipynb',

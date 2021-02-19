@@ -7,7 +7,7 @@ fi
 mkdir input
 
 # Download the datasets used in the ML notebooks to correct relative_paths (../input/...)
-DATASETS=""
+DATASETS="alexisbcook/synthetic-credit-card-approval"
 
 for slug in $DATASETS
 do
