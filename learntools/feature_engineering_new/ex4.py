@@ -12,9 +12,7 @@ class Q1(ThoughtExperiment):
 2. Either choice could be reasonable, but because the living area of a home tends to be more valuable per square foot, it would make sense to rescale these features so that lot area isn't weighted in the clustering out of proportion to its effect on `SalePrice`, if that is what you were trying to predict.
 3. Yes, since these don't have comparable units. Without rescaling, the number of doors in a car (usually 2 or 4) would have negligible weight compared to its horsepower (usually in the hundreds).
 
-What you should take away from this is that the decision of whether and how to rescale features is rarely automatic -- it will usually depend on some domain knowledge about your data and what you're trying to predict. Comparing different rescaling schemes through cross-validation can also be helpful.
-
-You might like to check out [this tutorial](https://scikit-learn.org/stable/auto_examples/preprocessing/plot_all_scaling.html#sphx-glr-auto-examples-preprocessing-plot-all-scaling-py) in scikit-learn about some of the rescaling methods it offers.
+What you should take away from this is that the decision of whether and how to rescale features is rarely automatic -- it will usually depend on some domain knowledge about your data and what you're trying to predict. Comparing different rescaling schemes through cross-validation can also be helpful. (You might like to check out the `preprocessing` module in scikit-learn for some of the rescaling methods it offers.)
 """
 
 
@@ -61,7 +59,7 @@ features = [
 X_scaled = X.loc[:, features]
 X_scaled = (X_scaled - X_scaled.mean(axis=0)) / X_scaled.std(axis=0)
 
-kmeans = KMeans(n_clusters=20, n_init=50, random_state=0)
+kmeans = KMeans(n_clusters=10, n_init=10, random_state=0)
 X["Cluster"] = kmeans.fit_predict(X_scaled)
 """
     )
@@ -93,7 +91,7 @@ X["Cluster"] = kmeans.fit_predict(X_scaled)
         # Standardize
         X_scaled = X.loc[:, features]
         X_scaled = (X_scaled - X_scaled.mean(axis=0)) / X_scaled.std(axis=0)
-        kmeans = KMeans(n_clusters=20, n_init=50, random_state=0)
+        kmeans = KMeans(n_clusters=10, n_init=10, random_state=0)
         X["Cluster"] = kmeans.fit_predict(X_scaled)
         return X
 
@@ -101,7 +99,7 @@ X["Cluster"] = kmeans.fit_predict(X_scaled)
 class Q3(CodingProblem):
     _hint = """Your code should look something like:
 ```python
-kmeans = KMeans(n_clusters=20, n_init=50, random_state=0)
+kmeans = KMeans(n_clusters=10, n_init=10, random_state=0)
 
 X_cd = kmeans.____(X_scaled)
 
@@ -112,7 +110,7 @@ X = X.join(X_cd)
 """
     _solution = CS(
         """
-kmeans = KMeans(n_clusters=20, n_init=50, random_state=0)
+kmeans = KMeans(n_clusters=10, n_init=10, random_state=0)
 
 # YOUR CODE HERE: Create the cluster-distance features using `fit_transform`
 X_cd = kmeans.fit_transform(X_scaled)
@@ -145,7 +143,7 @@ X = X.join(X_cd)
         # Standardize
         X_scaled = X.loc[:, features]
         X_scaled = (X_scaled - X_scaled.mean(axis=0)) / X_scaled.std(axis=0)
-        kmeans = KMeans(n_clusters=20, n_init=50, random_state=0)
+        kmeans = KMeans(n_clusters=10, n_init=10, random_state=0)
         X_solution = kmeans.fit_transform(X_scaled)
         X_solution = pd.DataFrame(
             X_solution,
