@@ -42,7 +42,7 @@ notebooks = [
         lesson_idx=2,
         type='exercise',
         scriptid=-1,
-        competition_sources='jigsaw-unintended-bias-in-toxicity-classification'
+        competition_sources="jigsaw-unintended-bias-in-toxicity-classification"
         ),
     dict(
         filename='tut4.ipynb',
@@ -54,7 +54,7 @@ notebooks = [
         lesson_idx=3,
         type='exercise',
         scriptid=-10,
-        dataset_sources='alexisbcook/synthetic-credit-card-approval'
+        dataset_sources="alexisbcook/synthetic-credit-card-approval"
         ),
     dict(
         filename='tut5.ipynb',
