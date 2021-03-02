@@ -27,7 +27,7 @@ class VarietiesOfFairnessTwo(ThoughtExperiment):
     _hint = ""
     _solution = ""
     _congrats = "Solution"
-    _correct_message = ("When we consider either demographic parity, new model is still biased in favor of Group B, "
+    _correct_message = ("When we consider demographic parity, the new model is still biased in favor of Group B, "
                         "but is now a bit more fair than the original model. Interestingly, if you consider either "
                         "equal accuracy or equal opportunity, the model is biased in favor of Group A! It's also "
                         "important to note that the overall accuracy of the model has dropped -- for each group, "
