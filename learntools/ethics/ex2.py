@@ -4,7 +4,7 @@ class ReduceWaste(ThoughtExperiment):
     _hint = ""
     _solution = ""
     _congrats = "Solution"
-    _correct_message = "The correct answer is **D**: these are all good ways to start!"
+    _correct_message = "These are all good ways to start!"
     
 class DetectCancer(ThoughtExperiment):
     _hint = ""
@@ -29,7 +29,7 @@ class PrototypeChatbot(ThoughtExperiment):
     _hint = ""
     _solution = ""
     _congrats = "Solution"
-    _correct_message = ("The corresct answer is **B**: Build a non-AI prototype quickly and start testing it with a "
+    _correct_message = ("The correct answer is: Build a non-AI prototype quickly and start testing it with a "
                         "diverse group of potential users.")
 
     
@@ -46,7 +46,7 @@ class ImproveVehicles(ThoughtExperiment):
     _hint = ""
     _solution = ""
     _congrats = "Solution"
-    _correct_message = "The correct answer is **D**: All of the above."
+    _correct_message = "All of these are great ways to improve safety."
 
 qvars = bind_exercises(globals(), [
     ReduceWaste, DetectCancer, FlagActivity, PrototypeChatbot, DetectMisinformation, ImproveVehicles

@@ -36,13 +36,13 @@ class TestUnderstanding(ThoughtExperiment):
     _congrats = "Solution"
     _correct_message = ("Comments that refer to Islam are more likely to be classified as toxic, because of a flawed state of the online community where the data was collected.  This can introduce **historical bias**.")
     
-    class TestUnderstandingTwo(ThoughtExperiment):
+class TestUnderstandingTwo(ThoughtExperiment):
     _hint = ""
     _solution = ""
     _congrats = "Solution"
     _correct_message = ("By translating comments to English, we introduce additional error when classifying non-English comments.  This can introduce **measurement bias**, since non-English comments will often not be translated perfectly.  It could also introduce **aggregation bias**: the model would likely perform better for comments expressed in all languages, if the comments from different languages were treated differently.")
     
-    class TestUnderstandingThree(ThoughtExperiment):
+class TestUnderstandingThree(ThoughtExperiment):
     _hint = ""
     _solution = ""
     _congrats = "Solution"
