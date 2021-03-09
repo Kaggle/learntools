@@ -75,11 +75,11 @@ for col in set(good_label_cols):
         assert not(any((label_X_valid.dtypes == 'object').values)), \
         "You still need to encode some of the categorical columns in your validation data."
 
-        assert label_X_train.shape[1] == 45, \
-        "`label_X_train` should have 45 columns."
+        assert label_X_train.shape[1] in [57, 45], \ # remove 45 after nb update
+        "`label_X_train` does not have the correct number of columns."
 
-        assert label_X_valid.shape[1] == 45, \
-        "`label_X_valid` should have 45 columns."
+        assert label_X_valid.shape[1] in [57, 45], \ # remove 45 after nb update
+        "`label_X_valid` does not have the correct number of columns."
 
 Label = MultipartProblem(LabelA, LabelB)
 
