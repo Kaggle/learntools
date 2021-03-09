@@ -76,11 +76,11 @@ for col in set(good_label_cols):
         "You still need to encode some of the categorical columns in your validation data."
         
         # remove 45 after nb update
-        assert label_X_train.shape[1] in [57, 45], \ 
+        assert label_X_train.shape[1] in [57, 45], \
         "`label_X_train` does not have the correct number of columns."
 
         # remove 45 after nb update
-        assert label_X_valid.shape[1] in [57, 45], \ 
+        assert label_X_valid.shape[1] in [57, 45], \
         "`label_X_valid` does not have the correct number of columns."
 
 Label = MultipartProblem(LabelA, LabelB)
