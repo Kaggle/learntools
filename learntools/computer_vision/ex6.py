@@ -45,8 +45,8 @@ model = keras.Sequential([
 """
     _solution = CS(
         """
-import tensorflow.keras as keras
-import tensorflow.keras.layers as layers
+from tensorflow import keras
+from tensorflow.keras import layers
 
 model = keras.Sequential([
     layers.InputLayer(input_shape=[128, 128, 3]),
