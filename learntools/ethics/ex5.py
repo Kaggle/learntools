@@ -13,10 +13,16 @@ class MostToxic(ThoughtExperiment):
     _hint = ""
     _solution = ""
     _congrats = "Solution"
-    _correct_message = "The answer is **B**: Quantitative Analyses."
+    _correct_message = "The answer is **Quantitative Analyses**."
+    
+class SpeechToText(ThoughtExperiment):
+    _hint = ""
+    _solution = ""
+    _congrats = "Solution"
+    _correct_message = "The answer is **Intended Use**."
     
 qvars = bind_exercises(globals(), [
-    TryOut, MostToxic
+    TryOut, MostToxic, SpeechToText
     ],
     var_format='q_{n}',
     )
