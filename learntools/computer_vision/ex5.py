@@ -1,12 +1,13 @@
-from learntools.core import *
 import tensorflow as tf
+
+from learntools.core import *
 
 
 class Q1(CodingProblem):
     _hint = """You should add two `Conv2D` layers and then a `MaxPool2D` layer. They will be just the same as the other layers in the model, except for some of the parameter values."""
     _solution = CS("""
-import tensorflow.keras as keras
-import tensorflow.keras.layers as layers
+from tensorflow import keras
+from tensorflow.keras import layers
 
 model = keras.Sequential([
     # Block One
