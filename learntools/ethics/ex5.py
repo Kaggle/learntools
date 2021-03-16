@@ -26,14 +26,19 @@ class ScenarioB(ThoughtExperiment):
                         "Pro user interface explaining that the *Simple Zoom* feature should not be used "
                         "in presentations that use props.")
     
-class SpeechToText(ThoughtExperiment):
+class ScenarioB2(ThoughtExperiment):
     _hint = ""
     _solution = ""
     _congrats = "Solution"
-    _correct_message = ""
+    _correct_message = ("There are many possible answers to this question. For example, you may want to "
+                        "check that the model’s equal performance across demographic groups (gender, skin "
+                        "tone and age) remains equal across different camera angles, distances from camera, "
+                        "camera types and lighting conditions. As another example, you may want to know how "
+                        "well the model performs from the specific camera angles that _Production Pro_ "
+                        "customers most commonly use.")
     
 qvars = bind_exercises(globals(), [
-    ScenarioA, ScenarioB, SpeechToText
+    ScenarioA, ScenarioB, ScenarioB2
     ],
     var_format='q_{n}',
     )
