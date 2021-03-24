@@ -28,7 +28,7 @@ class ReviewData(EqualityCheckProblem):
     _solution = CS(
 """# Print the data
 ign_data
-# What is the highest average score received by PC games, for any platform?
+# What is the highest average score received by PC games, for any genre?
 high_score = 7.759930
 # On the Playstation Vita platform, which genre has the 
 # lowest average score? Please provide the name of the column, and put your answer 
