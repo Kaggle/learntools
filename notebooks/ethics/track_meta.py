@@ -3,7 +3,7 @@ track = dict(
     author_username='var0101',
     course_name='AI Ethics',
     course_url='https://www.kaggle.com/learn/ai-ethics',
-    course_forum_url='https://www.kaggle.com/learn-forum',
+    course_forum_url='https://www.kaggle.com/learn-forum/230765',
 )
                     
 lessons = [ {'topic': topic_name} for topic_name in
