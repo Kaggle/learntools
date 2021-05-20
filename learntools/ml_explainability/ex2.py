@@ -25,7 +25,7 @@ eli5.show_weights(perm, feature_names = base_features)
     def check(self, perm_obj):
         assert np.allclose(perm_obj.feature_importances_,
                             np.array([ 0.59,  0.83 ,  0.53,
-                                       0.84, -0.00291397]), rtol=0.3)
+                                       0.84, -0.0025]), rtol=0.3)
     _congrats = "Nice job!"
     _correct_message = """Note that these scores can vary slightly from one run to the next.
                       But the big picture findings will stay the same each time.
@@ -61,12 +61,16 @@ perm2 = PermutationImportance(second_model, random_state=1).fit(new_val_X, new_v
 
 # show the weights for the permutation importance you just calculated
 eli5.show_weights(perm2, feature_names = features_2)
-""")
+"""
+    )
+
     def check(self, perm_obj):
-        assert np.allclose(perm_obj.feature_importances_,
-                          np.array([0.06128774,  0.08575455, 0.07350467,
-                                    0.07330853,  0.57827417, 0.44671882]),
-                          rtol=0.1), "That's not right. Check that you set the right seed and used the right data"
+        assert np.allclose(
+            perm_obj.feature_importances_,
+            np.array([0.0709, 0.0810, 0.0596, 0.0766, 0.5979, 0.4485]),
+            rtol=0.2,
+        ), "That's not right. Check that you set the right seed and used the right data"
+
 
 class ScaleUpFeatureMagnitude(ThoughtExperiment):
     _solution = """
