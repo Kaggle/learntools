@@ -52,7 +52,7 @@ sns.scatterplot(x=candy_data['sugarpercent'], y=candy_data['winpercent'])
     def check(self, passed_plt):
         assert len(passed_plt.figure(1).axes) > 0, "Please write code to create a scatter plot."
         
-        children = passed_plt.axes().get_children()
+        children = passed_plt.gca().get_children()
         
         assert all(isinstance(x, matplotlib.spines.Spine) for x in children[1:5]), \
         "Is your figure a scatter plot? Please use `sns.scatterplot` to generate your figure."
@@ -84,7 +84,7 @@ sns.regplot(x=candy_data['sugarpercent'], y=candy_data['winpercent'])
         assert len(passed_plt.figure(1).axes) > 0, \
         "Please write code to create a scatter plot with a regression line."
         
-        children = passed_plt.axes().get_children()
+        children = passed_plt.gca().get_children()
         
         assert all(isinstance(x, matplotlib.spines.Spine) for x in children[3:7]), \
         ("Is your figure a scatter plot with a regression line? "
@@ -120,7 +120,7 @@ sns.scatterplot(x=candy_data['pricepercent'], y=candy_data['winpercent'], hue=ca
         assert all(isinstance(x, matplotlib.collections.PathCollection) for x in legend_handles), \
         ("Is your figure a scatter plot?  Please use `sns.scatterplot` to generate your figure.")
         
-        assert len(legend_handles) == 3, "Did you color-code the points with the `'chocolate'` column?"
+        #assert len(legend_handles) == 3, "Did you color-code the points with the `'chocolate'` column?"
 
 class PlotColorReg(CodingProblem):
     _var = 'plt'
@@ -176,7 +176,7 @@ sns.swarmplot(x=candy_data['chocolate'], y=candy_data['winpercent'])
     def check(self, passed_plt):
         assert len(passed_plt.figure(1).axes) > 0, "Please write code to create a categorical scatter plot."
         
-        children = passed_plt.axes().get_children()
+        children = passed_plt.gca().get_children()
         
         assert all(isinstance(x, matplotlib.spines.Spine) for x in children[2:6]), \
         "Is your figure a categorical scatter plot?  Please use `sns.swarmplot` to generate your figure."

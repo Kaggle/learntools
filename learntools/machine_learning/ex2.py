@@ -15,6 +15,7 @@ class LoadHomeData(EqualityCheckProblem):
         assert df.shape == expected_shape, ("Expected {} rows and {} columns, but"
                 " got shape {}").format(expected_shape[0], expected_shape[1], df.shape)
 
+
 class HomeDescription(EqualityCheckProblem):
     _vars = ['avg_lot_size', 'newest_home_age']
     max_year_built = 2010
@@ -24,8 +25,8 @@ class HomeDescription(EqualityCheckProblem):
     _solution = CS(
 """# using data read from home_data.describe()
 avg_lot_size = 10517
-newest_home_age = 10
-""")
+newest_home_age = {}
+""".format(min_home_age))
 
 
 qvars = bind_exercises(globals(), [

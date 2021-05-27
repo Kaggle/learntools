@@ -1,6 +1,5 @@
 import numpy as np
 import tensorflow as tf
-
 from learntools.core import *
 
 # Using *Red Wine Quality* dataset
@@ -65,7 +64,7 @@ model = keras.Sequential([
 # Weights and Biases
 class Q3(CodingProblem):
     _hint = "You can get the attribute of an object using the 'dot' notation: like `object.attribute`."
-    _solution = CS("""
+    _solution = CS(r"""
 # Uncomment if you need the model from the previous question:
 # model = keras.Sequential([
 #     layers.Dense(units=1, input_shape=[11])
