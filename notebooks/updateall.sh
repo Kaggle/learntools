@@ -7,6 +7,8 @@ set -e
 
 # microchallenges (NOTE: does not update exercises)
 python prepare_push.py microchallenges
+kaggle k push -p microchallenges/prod/kernels_api_metadata/tut1
+kaggle k push -p microchallenges/prod/kernels_api_metadata/tut2
 
 # python (tut_3, ex_1 don't work)
 python prepare_push.py python
@@ -37,7 +39,7 @@ kaggle k push -p pandas/prod/kernels_api_metadata/tut_3
 kaggle k push -p pandas/prod/kernels_api_metadata/tut_4
 kaggle k push -p pandas/prod/kernels_api_metadata/tut_5
 
-# intro to ML
+# intro to ML (need to edit link in final exercise back to tutorial)
 python prepare_push.py machine_learning
 ./pushall.sh machine_learning/prod
 
@@ -80,3 +82,15 @@ python prepare_push.py game_ai
 # data cleaning
 python prepare_push.py data_cleaning
 ./pushall.sh data_cleaning/prod
+
+# AI Ethics
+python prepare_push.py ethics
+./pushall.sh ethics/prod
+
+# intro to deep learning
+python prepare_push.py deep_learning_intro
+./pushall.sh deep_learning_intro/prod
+
+# computer vision
+python prepare_push.py computer_vision
+./pushall.sh computer_vision/prod
