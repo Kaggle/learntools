@@ -43,6 +43,14 @@ kaggle k push -p pandas/prod/kernels_api_metadata/tut_5
 python prepare_push.py machine_learning
 ./pushall.sh machine_learning/prod
 
+# AI Ethics (ex3 and ex4 do not work)
+python prepare_push.py ethics
+kaggle k push -p ethics/prod/kernels_api_metadata/tut1
+kaggle k push -p ethics/prod/kernels_api_metadata/tut2
+kaggle k push -p ethics/prod/kernels_api_metadata/tut3
+kaggle k push -p ethics/prod/kernels_api_metadata/tut4
+kaggle k push -p ethics/prod/kernels_api_metadata/ex2
+
 # intro to SQL
 python prepare_push.py sql
 ./pushall.sh sql/prod
@@ -83,10 +91,6 @@ python prepare_push.py game_ai
 python prepare_push.py data_cleaning
 ./pushall.sh data_cleaning/prod
 
-# AI Ethics
-python prepare_push.py ethics
-./pushall.sh ethics/prod
-
 # intro to deep learning
 python prepare_push.py deep_learning_intro
 ./pushall.sh deep_learning_intro/prod
@@ -94,3 +98,4 @@ python prepare_push.py deep_learning_intro
 # computer vision
 python prepare_push.py computer_vision
 ./pushall.sh computer_vision/prod
+
