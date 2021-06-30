@@ -7,12 +7,12 @@ track = dict(
 )
 
 TOPICS = [
-    "Forecasting with Prophet",  # 1
+    "Introduction to Time Series with Prophet",  # 1
     "Trend",  # 2
     "Seasonality",  # 3
-    "Autocorrelation and Lag",  # 4
-    "Forecasting Strategies",  # 5
-    "Multiple Time Series Forecasts",  # 6
+    "Time Series as Features",  # 4
+    "Hybrid Models",  # 5
+    "Making Forecasts",  # 6
 ]
 lessons = [{"topic": topic_name} for topic_name in TOPICS]
 
