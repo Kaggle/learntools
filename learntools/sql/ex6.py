@@ -147,8 +147,8 @@ answers_query = \"""
                 \"""
                 
 # Set up the query (cancel the query if it would use too much of 
-# your quota, with the limit set to 1 GB)
-safe_config = bigquery.QueryJobConfig(maximum_bytes_billed=10**10)
+# your quota, with the limit set to 27 GB)
+safe_config = bigquery.QueryJobConfig(maximum_bytes_billed=27*10**10)
 answers_query_job = client.query(answers_query, job_config=safe_config)
 
 # API request - run the query, and return a pandas DataFrame

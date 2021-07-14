@@ -9,7 +9,7 @@ class VarietiesOfFairness(ThoughtExperiment):
                         "would mean that 50% of the applicants are from Group B. The model is also slightly "
                         "more accurate for applicants from Group B (with accuracy of 95.02%, vs 94.56% for Group "
                         "A). The true positive rate is very high for Group B (98.03%, vs. 77.23% for Group A). "
-                        "In other words, for Group B, almost all people who should be approved are actually approved."
+                        "In other words, for Group B, almost all people who should be approved are actually approved. "
                         "For Group A, if you should be approved, your chances of actually being approved are much lower.")
     
 class BaselineModel(ThoughtExperiment):
@@ -28,7 +28,7 @@ class VarietiesOfFairnessTwo(ThoughtExperiment):
     _solution = ""
     _congrats = "Solution"
     _correct_message = ("When we consider demographic parity, the new model is still biased in favor of Group B, "
-                        "but is now a bit more fair than the original model. Interestingly, if you consider either "
+                        "but is now a bit more fair than the original model. But now, if you consider either "
                         "equal accuracy or equal opportunity, the model is biased in favor of Group A! It's also "
                         "important to note that the overall accuracy of the model has dropped -- for each group, "
                         "the model is making slightly less accurate decisions.")
@@ -38,10 +38,10 @@ class VarietiesOfFairnessThree(ThoughtExperiment):
     _solution = ""
     _congrats = "Solution"
     _correct_message = ("This model acheives nearly equal representation in the pool of approved applicants from "
-                        "each Group -- if demographic parity is the metric that we care about, then this model is "
+                        "each group -- if demographic parity is what we care about, then this model is "
                         "much more fair than the first two models. Accuracy is roughly the same for each group, "
-                        "but there is a substantial drop in overall accuracy for each group. If our metric is "
-                        "equal opportunity fairness, the model has bias in favor of Group A: all individuals from "
+                        "but there is a substantial drop in overall accuracy for each group. If we examine the model for "
+                        "equal opportunity fairness, the model is biased in favor of Group A: all individuals from "
                         "Group A who should be approved are approved, whereas only 63% of individuals from Group B "
                         "who should be approved are approved.  (This is similar to the dynamic in the first model, "
                         "with the favored group switched -- that is, in the first model, nearly all individuals "

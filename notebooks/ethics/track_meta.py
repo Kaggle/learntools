@@ -3,7 +3,7 @@ track = dict(
     author_username='var0101',
     course_name='AI Ethics',
     course_url='https://www.kaggle.com/learn/ai-ethics',
-    course_forum_url='https://www.kaggle.com/learn-forum',
+    course_forum_url='https://www.kaggle.com/learn-forum/230765',
 )
                     
 lessons = [ {'topic': topic_name} for topic_name in
@@ -30,7 +30,7 @@ notebooks = [
         filename='ex2.ipynb',
         lesson_idx=1,
         type='exercise',
-        scriptid=-1
+        scriptid=15577437
         ),
     dict(
         filename='tut3.ipynb',
@@ -42,7 +42,7 @@ notebooks = [
         filename='ex3.ipynb',
         lesson_idx=2,
         type='exercise',
-        scriptid=-1,
+        scriptid=15622654,
         competition_sources="jigsaw-unintended-bias-in-toxicity-classification",
         author='alexisbcook'
         ),
@@ -56,7 +56,7 @@ notebooks = [
         filename='ex4.ipynb',
         lesson_idx=3,
         type='exercise',
-        scriptid=-1,
+        scriptid=15622664,
         dataset_sources="alexisbcook/synthetic-credit-card-approval",
         author='alexisbcook'
         ),
@@ -69,6 +69,6 @@ notebooks = [
         filename='ex5.ipynb',
         lesson_idx=4,
         type='exercise',
-        scriptid=-1
+        scriptid=15577440
         ),
 ]

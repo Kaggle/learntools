@@ -28,7 +28,7 @@ class ReviewData(EqualityCheckProblem):
     _solution = CS(
 """# Print the data
 ign_data
-# What is the highest average score received by PC games, for any platform?
+# What is the highest average score received by PC games, for any genre?
 high_score = 7.759930
 # On the Playstation Vita platform, which genre has the 
 # lowest average score? Please provide the name of the column, and put your answer 
@@ -60,7 +60,7 @@ plt.title("Average Score for Racing Games, by Platform")
     def check(self, passed_plt):
         assert len(passed_plt.figure(1).axes) > 0, "Please write code to create a bar chart."
         
-        container = passed_plt.axes().containers[0]
+        container = passed_plt.gca().containers[0]
         
         assert type(container) == matplotlib.container.BarContainer, \
         "Is your figure a bar chart?  Please use `sns.barplot` to generate your figure."
@@ -73,7 +73,7 @@ plt.title("Average Score for Racing Games, by Platform")
         # Get correct lengths
         #plt.figure(figsize=(8, 6))
         #sns.barplot(x=df['Racing'], y=df.index)
-        #correct_children = plt.axes().containers[0].get_children()
+        #correct_children = plt.gca().containers[0].get_children()
         
         #assert [children[i].properties()['bbox'].width for i in range(21)] == correct_children \
         #or [children[i].properties()['bbox'].height for i in range(21)] == correct_children, \
@@ -114,7 +114,7 @@ plt.title("Average Game Score, by Platform and Genre")
     def check(self, passed_plt):
         assert len(passed_plt.figure(1).axes) > 0, "Please write code to create a heatmap."
         
-        children = passed_plt.axes().get_children()
+        children = passed_plt.gca().get_children()
 
         assert type(children[0]) == matplotlib.collections.QuadMesh, \
         "Is your figure a heatmap?  Please use `sns.heatmap` to generate your figure."

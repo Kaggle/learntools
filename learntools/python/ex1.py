@@ -1,11 +1,12 @@
 from learntools.core import *
 from learntools.core.problem import injected
 
-class ExerciseFormatTutorial(EqualityCheckProblem):
+class ExerciseFormatTutorial(CodingProblem):
     _var = 'color'
-    _expected = 'blue'
     _hint = "Your favorite color rhymes with *glue*."
     _solution = CS('color = "blue"')
+    def check(self, color):
+        assert color.lower() == "blue"
 
     @property
     def _correct_message(self):
