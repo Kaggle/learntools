@@ -7,13 +7,12 @@ track = dict(
 )
 
 TOPICS = [
-    "Introduction to Time Series",  # 1
+    "Linear Regression with Time Series",  # 1
     "Trend",  # 2
     "Seasonality",  # 3
     "Time Series as Features",  # 4
     "Hybrid Models",  # 5
-    "Making Forecasts",  # 6
-    "Time Series Cross Validation",  # 7
+    "Machine Learning for Time Series Forecasting",  # 6
 ]
 lessons = [{"topic": topic_name} for topic_name in TOPICS]
 
@@ -30,8 +29,6 @@ notebooks = [
     dict(filename="ex5.ipynb", lesson_idx=4, type="exercise", scriptid=0),
     dict(filename="tut6.ipynb", lesson_idx=5, type="tutorial"),
     dict(filename="ex6.ipynb", lesson_idx=5, type="exercise", scriptid=0),
-    #    dict(filename="tut7.ipynb", lesson_idx=6, type="tutorial"),
-    #    dict(filename="ex7.ipynb", lesson_idx=5, type="exercise", scriptid=0),
 ]
 for nb in notebooks:
     nb["dataset_sources"] = ["ryanholbrook/ts-course-data"]
