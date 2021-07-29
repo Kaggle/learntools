@@ -43,7 +43,7 @@ notebooks = [
         lesson_idx=2,
         type='exercise',
         scriptid=15622654,
-        competition_sources="jigsaw-unintended-bias-in-toxicity-classification",
+        dataset_sources="alexisbcook/jigsaw-snapshot",
         author='alexisbcook'
         ),
     dict(
