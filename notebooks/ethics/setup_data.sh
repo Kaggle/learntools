@@ -9,24 +9,10 @@ mkdir input
 # Download the datasets used in the ML notebooks to correct relative_paths (../input/...)
 DATASETS=("alexisbcook/synthetic-credit-card-approval" "alexisbcook/jigsaw-snapshot")
 
-for slug in $DATASETS
+for dataset in "${DATASETS[@]}"
 do
-    name=`echo $slug | cut -d '/' -f 2`
+    name=`echo $dataset | cut -d '/' -f 2`
     dest="input/$name"
     mkdir -p $dest
-    kaggle d download -p $dest --unzip $slug
-done
-
-COMPDATASETS=""
-
-for comp in $COMPDATASETS
-do
-    dest="input/$comp"
-    mkdir -p $dest
-    kaggle competitions download $comp -p $dest
-    cd $dest
-    unzip ${comp}.zip
-    chmod 700 *.csv
-    cp *.csv ..
-    cd ..
+    kaggle d download -p $dest --unzip $dataset
 done
