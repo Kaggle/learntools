@@ -63,7 +63,7 @@ class MAE(EqualityCheckProblem):
     _var = 'val_mae'
     _expected = 29652.931506849316
     _hint = ("The order of arguments to mean_absolute_error doesn't matter. Make sure you fit to only the training data in step 2.")
-    _solution = CS("""val_mae = mean_absolute_error(val_predictions, val_y)""")
+    _solution = CS("""val_mae = mean_absolute_error(val_y, val_predictions)""")
 
 
 qvars = bind_exercises(globals(), [
