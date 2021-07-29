@@ -7,7 +7,7 @@ fi
 mkdir input
 
 # Download the datasets used in the ML notebooks to correct relative_paths (../input/...)
-DATASETS="alexisbcook/synthetic-credit-card-approval"
+DATASETS=("alexisbcook/synthetic-credit-card-approval" "alexisbcook/jigsaw-snapshot")
 
 for slug in $DATASETS
 do
@@ -17,7 +17,7 @@ do
     kaggle d download -p $dest --unzip $slug
 done
 
-COMPDATASETS="jigsaw-unintended-bias-in-toxicity-classification"
+COMPDATASETS=""
 
 for comp in $COMPDATASETS
 do
