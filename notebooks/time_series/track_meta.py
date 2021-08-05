@@ -32,3 +32,4 @@ notebooks = [
 ]
 for nb in notebooks:
     nb["dataset_sources"] = ["ryanholbrook/ts-course-data"]
+    nb["competition_sources"] = ["store-sales-time-series-forecasting"]
