@@ -157,8 +157,9 @@ def make_leads(ts, leads):
 
 def make_multistep_target(ts, steps):
     return pd.concat(
-        {f'y_step_{i}': ts.shift(-i)
-         for i in reversed(range(steps))}, axis=1)
+        {f'y_step_{i + 1}': ts.shift(-i)
+         for i in reversed(range(steps))},
+        axis=1)
 
 
 def create_multistep_example(n, steps, lags, lead_time=1):
