@@ -24,13 +24,21 @@ def load_store_sales():
     return store_sales
 
 
-def load_average_sales(with_promo=False):
+def load_average_sales():
     store_sales = load_store_sales()
     average_sales = store_sales.groupby('date').mean()
-    if not with_promo:
-        return average_sales['sales']
-    else:
-        return average_sales
+    return average_sales
+
+
+def load_family_sales():
+    family_sales = (  #
+        load_store_sales()  #
+        .groupby(['family', 'date'])  #
+        .mean()  # 
+        .unstack('family')  #
+        .loc['2017']  #
+    )  #
+    return family_sales
 
 
 def load_oil():
