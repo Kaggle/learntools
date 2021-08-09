@@ -1,7 +1,7 @@
 from learntools.core import *
 from learntools.time_series.checking_utils import load_average_sales
 
-average_sales = load_average_sales()
+average_sales = load_average_sales()['sales']
 
 
 # Interpret linear regression with the time dummy
