@@ -9,8 +9,10 @@ class Q1(CodingProblem):  # Fit method for boosted hybrid
         # imported from ex5setup
         bh = BoostedHybrid(LinearRegression(), KNeighborsRegressor())
 
+        X_1, X_2 = X, X.stack().to_frame()
+
         try:
-            bh.fit(X, X.stack().to_frame(), y)
+            bh.fit(X_1, X_2, y)
         except Exception as e:
             if 'Placeholder' in e.args[0]:
                 raise exceptions.NotAttempted
@@ -31,7 +33,11 @@ class Q1(CodingProblem):  # Fit method for boosted hybrid
 
         assert bhe.y_fit.equals(bh.y_fit), \
             'Fit not implemented correctly for `model_1`.'
+
         assert bhe.y_resid.equals(bh.y_resid), \
+            'Residual series y_resid not implemented correctly.'
+
+        assert all(bhe.model_2.predict(X_2) == bh.model_2.predict(X_2)), \
             'Fit not implemented correctly for `model_2`.'
 
     _vars = ["BoostedHybrid"]

@@ -32,8 +32,10 @@ trend = food_sales.rolling(
 
 
 class Q2(ThoughtExperiment):  # Identify trend
-    _hint = ""
-    _solution = ""
+    _solution = """The upwards bend in the trend suggests an order 2 (quadratic) polynomial might be appropriate.
+
+If you've worked with economic time series before, you might guess that the growth rate in *Food and Beverage Sales* is best expressed as a percent change. Percent change can often be modeled using an exponential curve. (Don't worry if this isn't familiar!)
+"""
 
 
 class Q3(EqualityCheckProblem):  # Create trend feature
@@ -69,8 +71,8 @@ X_fore = dp.out_of_sample(steps=90)
 
 
 class Q4(ThoughtExperiment):  # Risks of high-order polynomials
-    _hint = ""
-    _solution = ""
+    _hint = """What could you say about the rate of change of a term like `t ** 11` over a long period of time?"""
+    _solution = """An order 11 polynomial will include terms like `t ** 11`. Terms like these tend to diverge rapidly outside of the training period making forecasts very unreliable."""
 
 
 qvars = bind_exercises(globals(), [Q1, Q2, Q3, Q4], var_format="q_{n}")

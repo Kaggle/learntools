@@ -15,8 +15,10 @@ task_c = 3
 
 
 class Q2(ThoughtExperiment):  # Forecasting task for Store Sales
-    _hint = ""
-    _solution = ""
+    _solution = """The training set ends on `2017-08-15`, which gives us the forecast origin. The test set comprises the dates `2017-08-16` to `2017-08-31`, and this gives us the forecast horizon. There is one step between the origin and horizon, so we have a lead time of one day.
+
+Put another way, we need a 16-step forecast with a 1-step lead time. We can use lags starting with lag 1, and we make the entire 16-step forecast using features from `2017-08-15`.
+"""
 
 
 class Q3(EqualityCheckProblem):  # Create multistep dataset for Store Sales

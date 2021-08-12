@@ -41,6 +41,23 @@ def load_family_sales():
     return family_sales
 
 
+def load_holidays_events():
+    holidays_events = pd.read_csv(
+        comp_dir / "holidays_events.csv",
+        dtype={
+            'type': 'category',
+            'locale': 'category',
+            'locale_name': 'category',
+            'description': 'category',
+            'transferred': 'bool',
+        },
+        parse_dates=['date'],
+        infer_datetime_format=True,
+    )
+    holidays_events = holidays_events.set_index('date').to_period('D')
+    return holidays_events
+
+
 def load_oil():
     oil = pd.read_csv(
         comp_dir / "oil.csv",

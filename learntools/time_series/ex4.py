@@ -9,8 +9,10 @@ class Q1(ThoughtExperiment):  # Time and serial dependence
 
 
 class Q2(ThoughtExperiment):  # Serial dependence in Store Sales
-    _hint = ""
-    _solution = ""
+    _solution = """None of the lags seem especially significant from the correlogram (except possibly lag 5). With linear regression alone, it's unlikely any of these lags would lead to much improvement.
+
+The lag plot, however, indicates that there may be some non-linear dependence, especially in the first lag. In the next lesson, we'll construct a forecaster with XGBoost, an algorithm capable of learning this kind of dependence.
+"""
 
 
 class Q3(ThoughtExperiment):  # Time series features
