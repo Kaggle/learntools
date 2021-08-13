@@ -1,23 +1,42 @@
 from learntools.core import *
-from learntools.time_series.checking_utils import load_store_sales
+from learntools.time_series.checking_utils import load_store_sales, load_family_sales
 from learntools.time_series.utils import make_lags, make_leads
 
 
-class Q1(ThoughtExperiment):  # Time and serial dependence
-    _hint = ""
-    _solution = ""
+class Q1(EqualityCheckProblem):  # Plotting cycles
+    family_sales = load_family_sales()
+    y = family_sales.loc[:, ('sales', 'MAGAZINES')].rename("Magazine Sales")
+    y_ma = y.rolling(7, center=True).mean()
+
+    _vars = ['y_ma']
+    _expected = [y_ma]
+
+    _hint = """Your solution should look like:
+```python
+y_ma = y.rolling(____, center=____).____()
+
+ax = y_ma.plot()
+ax.set_title("Seven-Day Moving Average");
+```
+"""
+    _solution = CS("""
+y_ma = y.rolling(7, center=True).mean()
+
+ax = y_ma.plot()
+ax.set_title("Seven-Day Moving Average");
+""")
 
 
 class Q2(ThoughtExperiment):  # Serial dependence in Store Sales
-    _solution = """None of the lags seem especially significant from the correlogram (except possibly lag 5). With linear regression alone, it's unlikely any of these lags would lead to much improvement.
-
-The lag plot, however, indicates that there may be some non-linear dependence, especially in the first lag. In the next lesson, we'll construct a forecaster with XGBoost, an algorithm capable of learning this kind of dependence.
+    _solution = """The correlogram indicates the first lag is likely to be significant, as well as possibly the sixth lag. The lag plot suggests some non-linear effect as well.
 """
 
 
 class Q3(ThoughtExperiment):  # Time series features
-    _hint = ""
-    _solution = ""
+    _solution = """The lag plot indicates that both leading and lagged values of `onpromotion` are correlated with magazine sales. This suggests that both kinds of values could be useful as features.
+
+In addition, the leading values seem to have some non-linear effect.
+"""
 
 
 class Q4(EqualityCheckProblem):  # Create time series features
@@ -25,9 +44,10 @@ class Q4(EqualityCheckProblem):  # Create time series features
     from sklearn.linear_model import LinearRegression
     from statsmodels.tsa.deterministic import (CalendarFourier,
                                                DeterministicProcess)
-    average_sales = load_store_sales().groupby(
-        'date').mean().squeeze().loc['2017']
-    y = average_sales.loc[:, 'sales']
+    family_sales = load_family_sales()
+    y = family_sales.loc[:, ('sales', 'MAGAZINES')].rename("Magazine Sales")
+    onpromotion = family_sales.loc[:, ('onpromotion',
+                                       'MAGAZINES')].rename("onpromotion")
     fourier = CalendarFourier(freq='M', order=4)
     dp = DeterministicProcess(
         constant=True,
@@ -43,7 +63,6 @@ class Q4(EqualityCheckProblem):  # Create time series features
     model.fit(X_time, y)
     y_deseason = y - model.predict(X_time)
     y_deseason.name = 'sales_deseasoned'
-    onpromotion = average_sales.loc[:, 'onpromotion']
     X_lags = make_lags(y_deseason, lags=1)
     X_promo = pd.concat([
         make_lags(onpromotion, lags=1),
@@ -89,10 +108,10 @@ y, X = y.align(X, join='inner')
 
 
 class Q5(EqualityCheckProblem):  # Create statistical features
-    average_sales = load_store_sales().groupby(
-        'date').mean().squeeze().loc['2017']
-    y_lag = average_sales.loc[:, 'sales'].shift(1)
-    onpromo = average_sales.loc[:, 'onpromotion']
+    family_sales = load_family_sales()
+    mag_sales = family_sales.loc(axis=1)[:, 'MAGAZINES']
+    y_lag = mag_sales.loc[:, 'sales'].shift(1)
+    onpromo = mag_sales.loc[:, 'onpromotion']
 
     median_14 = y_lag.rolling(14).median()
     std_7 = y_lag.rolling(7).std()
@@ -103,8 +122,8 @@ class Q5(EqualityCheckProblem):  # Create statistical features
 
     _hint = """Your code should look like:
 ```python
-y_lag = average_sales.loc[:, 'sales'].shift(1)
-onpromo = average_sales.loc[:, 'onpromotion']
+y_lag = mag_sales.loc[:, 'sales'].shift(1)
+onpromo = mag_sales.loc[:, 'onpromotion']
 
 mean_7 = y_lag.rolling(7).____()
 median_14 = y_lag.rolling(____).median()
@@ -113,8 +132,8 @@ promo_7 = onpromo.rolling(____, center=True).____()
 ```
 """
     _solution = CS("""
-y_lag = average_sales.loc[:, 'sales'].shift(1)
-onpromo = average_sales.loc[:, 'onpromotion']
+y_lag = mag_sales.loc[:, 'sales'].shift(1)
+onpromo = mag_sales.loc[:, 'onpromotion']
 
 mean_7 = y_lag.rolling(7).mean()
 median_14 = y_lag.rolling(14).median()

@@ -36,7 +36,7 @@ def load_family_sales():
         .groupby(['family', 'date'])  #
         .mean()  # 
         .unstack('family')  #
-        .loc['2017']  #
+        .loc['2017', ['sales', 'onpromotion']]  #
     )  #
     return family_sales
 

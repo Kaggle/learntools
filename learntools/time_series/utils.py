@@ -73,9 +73,9 @@ def plot_periodogram(ts, detrend='linear', ax=None):
 
 
 # From Lesson 4
-def lagplot(x, y=None, lag=1, standardize=False, ax=None, **kwargs):
+def lagplot(x, y=None, shift=1, standardize=False, ax=None, **kwargs):
     from matplotlib.offsetbox import AnchoredText
-    x_ = x.shift(lag)
+    x_ = x.shift(shift)
     if standardize:
         x_ = (x_ - x_.mean()) / x_.std()
     if y is not None:
@@ -105,20 +105,31 @@ def lagplot(x, y=None, lag=1, standardize=False, ax=None, **kwargs):
     )
     at.patch.set_boxstyle("square, pad=0.0")
     ax.add_artist(at)
-    ax.set(title=f"Lag {lag}", xlabel=x_.name, ylabel=y_.name)
+    title = f"Lag {shift}" if shift > 0 else f"Lead {shift}"
+    ax.set(title=f"Lag {shift}", xlabel=x_.name, ylabel=y_.name)
     return ax
 
 
-def plot_lags(x, y=None, lags=6, nrows=1, lagplot_kwargs={}, **kwargs):
+def plot_lags(x,
+              y=None,
+              lags=6,
+              leads=None,
+              nrows=1,
+              lagplot_kwargs={},
+              **kwargs):
     import math
     kwargs.setdefault('nrows', nrows)
-    kwargs.setdefault('ncols', math.ceil(lags / nrows))
+    orig = leads is not None
+    leads = leads or 0
+    kwargs.setdefault('ncols', math.ceil((lags + orig + leads) / nrows))
     kwargs.setdefault('figsize', (kwargs['ncols'] * 2, nrows * 2 + 0.5))
     fig, axs = plt.subplots(sharex=True, sharey=True, squeeze=False, **kwargs)
     for ax, k in zip(fig.get_axes(), range(kwargs['nrows'] * kwargs['ncols'])):
+        k -= leads + orig
         if k + 1 <= lags:
-            ax = lagplot(x, y, lag=k + 1, ax=ax, **lagplot_kwargs)
-            ax.set_title(f"Lag {k + 1}", fontdict=dict(fontsize=14))
+            ax = lagplot(x, y, shift=k + 1, ax=ax, **lagplot_kwargs)
+            title = f"Lag {k + 1}" if k + 1 >= 0 else f"Lead {-k - 1}"
+            ax.set_title(title, fontdict=dict(fontsize=14))
             ax.set(xlabel="", ylabel="")
         else:
             ax.axis('off')
