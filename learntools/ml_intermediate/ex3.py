@@ -162,6 +162,9 @@ OH_X_valid = pd.concat([num_X_valid, OH_cols_valid], axis=1)
 
         assert len(OH_X_valid.columns) == 155, \
         "`OH_X_valid` should have 155 columns."
+        
+        assert list(OH_X_train.index.values)[:10] != list(range(10)), \
+        "Remember that one-hot encoding removes the index from your data!  Don't forget to re-add it."
 
 
 qvars = bind_exercises(globals(), [
