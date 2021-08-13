@@ -209,10 +209,9 @@ def make_leads(ts, leads):
          for i in reversed(range(leads))}, axis=1)
 
 
-def make_multistep_target(ts, steps):
-    return pd.concat({f'y_step_{i + 1}': ts.shift(-i)
-                      for i in range(steps)},
-                     axis=1)
+def make_multistep_target(ts, steps, reverse=False):
+    shifts = reversed(range(steps)) if reverse else range(steps)
+    return pd.concat({f'y_step_{i + 1}': ts.shift(-i) for i in shifts}, axis=1)
 
 
 def create_multistep_example(n, steps, lags, lead_time=1):
@@ -222,7 +221,7 @@ def create_multistep_example(n, steps, lags, lead_time=1):
         dtype=pd.Int8Dtype,
     )
     X = make_lags(ts, lags, lead_time)
-    y = make_multistep_target(ts, steps)
+    y = make_multistep_target(ts, steps, reverse=True)
     data = pd.concat({'Targets': y, 'Features': X}, axis=1)
     data = data.style.set_properties(['Targets'], **{'background-color': 'LavenderBlush'}) \
                      .set_properties(['Features'], **{'background-color': 'Lavender'})
