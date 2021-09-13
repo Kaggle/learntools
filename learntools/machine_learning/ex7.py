@@ -11,7 +11,7 @@ rf_model_on_full_data = RandomForestRegressor()
 rf_model_on_full_data.fit(X, y)
 
 # Then in last code cell
-test_data_path = '../input/home-data-for-ml-course/test.csv'
+test_data_path = '../input/test.csv'
 test_data = pd.read_csv(test_data_path)
 test_X = test_data[features]
 test_preds = rf_model_on_full_data.predict(test_X)
