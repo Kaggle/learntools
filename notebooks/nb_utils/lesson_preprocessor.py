@@ -74,15 +74,15 @@ class LearnLessonPreprocessor(Preprocessor):
         header_content = exercise_header + horizontal_line_break
         footer_content = horizontal_line_break #+ course_link
 
-        #forum_cta = """\n\n\n\n*Have questions or comments? Visit the [course discussion forum]({}/discussion) to chat with other learners.*""".format(self.track.course_url)
-        forum_cta = ""
+        forum_cta = """\n\n\n\n*Have questions or comments? Visit the [course discussion forum]({}/discussion) to chat with other learners.*""".format(self.track.course_url)
         footer_content += forum_cta
         
         header_cell = self.make_cell(cell_type='markdown', source=header_content)
         footer_cell = self.make_cell(cell_type='markdown', source=footer_content)
         if self.nb_meta.type == 'exercise':
             cells.insert(0, header_cell)
-        cells.append(footer_cell)
+        # Uncomment to add footer cell
+        #cells.append(footer_cell)
 
     def pip_install_lt_hack(self, nb):
         """pip install learntools @ the present branch when running on Kernels"""
