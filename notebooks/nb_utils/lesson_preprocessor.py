@@ -74,7 +74,8 @@ class LearnLessonPreprocessor(Preprocessor):
         header_content = exercise_header + horizontal_line_break
         footer_content = horizontal_line_break #+ course_link
 
-        forum_cta = """\n\n\n\n*Have questions or comments? Visit the [course discussion forum]({}/discussion) to chat with other learners.*""".format(self.track.course_url)
+        #forum_cta = """\n\n\n\n*Have questions or comments? Visit the [course discussion forum]({}/discussion) to chat with other learners.*""".format(self.track.course_url)
+        forum_cta = ""
         footer_content += forum_cta
         
         header_cell = self.make_cell(cell_type='markdown', source=header_content)
