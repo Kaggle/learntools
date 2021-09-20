@@ -28,7 +28,7 @@ notebooks = [
     dict(filename="tut5.ipynb", lesson_idx=4, type="tutorial"),
     dict(filename="ex5.ipynb", lesson_idx=4, type="exercise", scriptid=19616007),
     dict(filename="tut6.ipynb", lesson_idx=5, type="tutorial"),
-    dict(filename="ex6.ipynb", lesson_idx=5, type="exercise", scriptid=18906874),
+    dict(filename="ex6.ipynb", lesson_idx=5, type="exercise", scriptid=20667477),
 ]
 for nb in notebooks:
     nb["dataset_sources"] = ["ryanholbrook/ts-course-data"]
