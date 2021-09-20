@@ -170,7 +170,7 @@ class BoostedHybrid:
             columns=y.columns,
         )
         # Compute residuals
-        y_resid = y - y_fit
+        y_resid = y - y_fit + y_fit.mean(axis=0)
         y_resid = y_resid.stack(stack_cols).squeeze()  # wide to long
 
         # Train model_2 on residuals
@@ -186,7 +186,9 @@ class BoostedHybrid:
             self.model_1.predict(X_1),
             index=X_1.index,
             columns=self.y_columns,
-        ).stack(self.stack_cols).squeeze()  # wide to long
+        )
+        y_pred -= y_pred.mean(axis=0)
+        y_pred = y_pred.stack(self.stack_cols).squeeze()  # wide to long
 
         # Add model_2 predictions to model_1 predictions
         y_pred += self.model_2.predict(X_2)
@@ -194,19 +196,20 @@ class BoostedHybrid:
 
 
 # From Lesson 6
-def make_lags(ts, lags, lead_time=1):
+def make_lags(ts, lags, lead_time=1, name='y'):
     return pd.concat(
         {
-            f'y_lag_{i}': ts.shift(i)
+            f'{name}_lag_{i}': ts.shift(i)
             for i in range(lead_time, lags + lead_time)
         },
         axis=1)
 
 
-def make_leads(ts, leads):
+def make_leads(ts, leads, name='y'):
     return pd.concat(
-        {f'y_lead_{i}': ts.shift(-i)
-         for i in reversed(range(leads))}, axis=1)
+        {f'{name}_lead_{i}': ts.shift(-i)
+         for i in reversed(range(leads))},
+        axis=1)
 
 
 def make_multistep_target(ts, steps, reverse=False):
