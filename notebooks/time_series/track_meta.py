@@ -12,7 +12,7 @@ TOPICS = [
     "Seasonality",  # 3
     "Time Series as Features",  # 4
     "Hybrid Models",  # 5
-    "Machine Learning for Time Series Forecasting",  # 6
+    "Forecasting with Machine Learning",  # 6
 ]
 lessons = [{"topic": topic_name} for topic_name in TOPICS]
 
