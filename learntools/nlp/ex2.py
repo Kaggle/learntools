@@ -224,7 +224,7 @@ class EvaluateFunction(CodingProblem):
             def predict (model, texts):
                 docs = [model.tokenizer(text) for text in texts]
                 textcat = model.get_pipe('textcat')
-                scores, _ = textcat.predict(docs)
+                scores = textcat.predict(docs)
                 return scores.argmax(axis=1)
 
             # Get predictions from textcat model
