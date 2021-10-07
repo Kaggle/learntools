@@ -124,7 +124,7 @@ def train(model, train_data, optimizer, batch_size=8):
 
             for batch in minibatch(train_data, size=batch_size):
                 for text, labels in batch:
-                    doc = nlp.make_doc(text)
+                    doc = model.make_doc(text)
                     example = Example.from_dict(doc, labels)
                     # Update model with texts and labels
                     model.update([example], sgd=optimizer, losses=losses)
