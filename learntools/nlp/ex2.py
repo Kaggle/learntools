@@ -96,9 +96,7 @@ textcat.add_label("POSITIVE")
 
 class TrainFunction(CodingProblem):
     _var = 'train'
-    _hint = ("Use minibatch to create the batches. You can use the zip method to split the "
-             "train_data list into two separate lists. For training the model, model.update "
-             "takes the texts and labels. Be sure to use a batch size of 8, and dropout 0.2.")
+    _hint = ("For training the model, use `model.update`.")
     _solution = CS("""
 def train(model, train_data, optimizer, batch_size=8):
     losses = {}
