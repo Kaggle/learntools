@@ -5,6 +5,8 @@ import pandas as pd
 import spacy
 from spacy.util import minibatch
 import textwrap
+from spacy.training.example import Example
+
 
 from learntools.core import *
 
@@ -30,13 +32,8 @@ def create_model():
     # Create an empty model
     nlp = spacy.blank("en")
 
-    # Create the TextCategorizer with exclusive classes and "bow" architecture
-    textcat = nlp.create_pipe(
-                "textcat",
-                config={
-                    "exclusive_classes": True,
-                    "architecture": "bow"})
-    nlp.add_pipe(textcat)
+    # Add the TextCategorizer to the empty model
+    textcat = nlp.add_pipe("textcat")
 
     # Add NEGATIVE and POSITIVE labels to text classifier
     textcat.add_label("NEGATIVE")
@@ -46,12 +43,15 @@ def create_model():
 
 def train_func(model, train_data, optimizer, batch_size=8):
     losses = {}
-    # random.seed(1)
+    random.seed(1)
     random.shuffle(train_data)
-    batches = minibatch(train_data, size=batch_size)
-    for batch in batches:
-        texts, labels = zip(*batch)
-        model.update(texts, labels, sgd=optimizer, losses=losses)
+    for batch in minibatch(train_data, size=batch_size):
+        for text, labels in batch:
+            doc = model.make_doc(text)
+            example = Example.from_dict(doc, labels)
+            # Update model with texts and labels
+            model.update([example], sgd=optimizer, losses=losses)
+        
     return losses
 
 class EvaluateFeedbackFormApproach(ThoughtExperiment):
@@ -75,20 +75,15 @@ class CreateTextCatModel(CodingProblem):
              "to the nlp model. Set the config appropriately for exclusive classes and bow "
              "architecture. Then use .add_label to add labels.")
     _solution = CS("""
-    # Create an empty model
-    nlp = spacy.blank("en")
+# Create an empty model
+nlp = spacy.blank("en")
 
-    # Create the TextCategorizer with exclusive classes and "bow" architecture
-    textcat = nlp.create_pipe(
-                "textcat",
-                config={
-                    "exclusive_classes": True,
-                    "architecture": "bow"})
-    nlp.add_pipe(textcat)
+# Add the TextCategorizer to the empty model
+textcat = nlp.add_pipe("textcat")
 
-    # Add NEGATIVE and POSITIVE labels to text classifier
-    textcat.add_label("NEGATIVE")
-    textcat.add_label("POSITIVE")
+# Add labels to text classifier
+textcat.add_label("NEGATIVE")
+textcat.add_label("POSITIVE")
     """)
 
     def check(self, nlp):
@@ -98,39 +93,42 @@ class CreateTextCatModel(CodingProblem):
         message = f"TextCatagorizer labels should be ('NEGATIVE', 'POSITIVE'), we found {textcat.labels}"
         assert textcat.labels == ('NEGATIVE', 'POSITIVE'), message
 
-        config = textcat.cfg
-        assert config['architecture'] == 'bow', "Please use the 'bow' architecture"
-        assert config['exclusive_classes'], "Be sure to set exclusive_classes to True in the model config"
-
 
 class TrainFunction(CodingProblem):
     _var = 'train'
-    _hint = ("Use minibatch to create the batches. You can use the zip method to split the "
-             "train_data list into two separate lists. For training the model, model.update "
-             "takes the texts and labels. Be sure to use a batch size of 8, and dropout 0.2.")
+    _hint = ("For training the model, use `model.update`.")
     _solution = CS("""
-    def train(model, train_data, optimizer, batch_size=8):
-        losses = {}
-        random.shuffle(train_data)
-        batches = minibatch(train_data, size=batch_size)
-        for batch in batches:
-            texts, labels = zip(*batch)
-            model.update(texts, labels, sgd=optimizer, losses=losses)
-        return losses""")
+def train(model, train_data, optimizer, batch_size=8):
+    losses = {}
+    random.seed(1)
+    random.shuffle(train_data)
+    
+    for batch in minibatch(train_data, size=batch_size):
+        for text, labels in batch:
+            doc = nlp.make_doc(text)
+            example = Example.from_dict(doc, labels)
+            # Update model with texts and labels
+            model.update([example], sgd=optimizer, losses=losses)
+        
+    return losses
+""")
 
     def check(self, train):
         
         def soln_func(model, train_data, optimizer, batch_size=8):
             losses = {}
-            #random.seed(1)
+            random.seed(1)
             random.shuffle(train_data)
-            batches = minibatch(train_data, size=batch_size)
-            for batch in batches:
-                texts, labels = zip(*batch)
-                model.update(texts, labels, sgd=optimizer, losses=losses)
+
+            for batch in minibatch(train_data, size=batch_size):
+                for text, labels in batch:
+                    doc = model.make_doc(text)
+                    example = Example.from_dict(doc, labels)
+                    # Update model with texts and labels
+                    model.update([example], sgd=optimizer, losses=losses)
+                    
             return losses
         
-
         train_data = list(zip(train_texts, train_labels))
         
         spacy.util.fix_random_seed(1)
@@ -145,7 +143,7 @@ class TrainFunction(CodingProblem):
         optimizer = nlp.begin_training()
         soln_losses = soln_func(nlp, train_data[:1000], optimizer)
 
-        assert student_losses == soln_losses, "Your loss isn't the same as our solution. Make sure to set batch size to 8 and dropout to 0.2."
+        assert student_losses == soln_losses, "Your loss isn't the same as our solution. Make sure to set batch size to 8."
 
 class PredictFunction(CodingProblem):
     _var = 'predict'
@@ -156,29 +154,29 @@ class PredictFunction(CodingProblem):
              "value. Take note of the axis argument in .argmax so you're finding the max index "
              "for each example")
     _solution = CS("""
-        def predict(nlp, texts):
-            # Use the tokenizer to tokenize each input text example
-            docs = [nlp.tokenizer(text) for text in texts]
-            
-            # Use textcat to get the scores for each doc
-            textcat = nlp.get_pipe('textcat')
-            scores, _ = textcat.predict(docs)
-            
-            # From the scores, find the class with the highest score/probability
-            predicted_class = scores.argmax(axis=1)
-
-            return predicted_class""")
+def predict(nlp, texts): 
+    # Use the model's tokenizer to tokenize each input text
+    docs = [nlp.tokenizer(text) for text in texts]
+    
+    # Use textcat to get the scores for each doc
+    textcat = nlp.get_pipe("textcat")
+    scores = textcat.predict(docs)
+    
+    # From the scores, find the class with the highest score/probability
+    predicted_class = scores.argmax(axis=1)
+    
+    return predicted_class""")
 
     def check(self, predict):
         
         def soln_func(nlp, texts):
-            # Use the tokenizer to tokenize each input text example
+            # Use the model's tokenizer to tokenize each input text
             docs = [nlp.tokenizer(text) for text in texts]
-            
+
             # Use textcat to get the scores for each doc
-            textcat = nlp.get_pipe('textcat')
-            scores, _ = textcat.predict(docs)
-            
+            textcat = nlp.get_pipe("textcat")
+            scores = textcat.predict(docs)
+
             # From the scores, find the class with the highest score/probability
             predicted_class = scores.argmax(axis=1)
 
@@ -224,7 +222,7 @@ class EvaluateFunction(CodingProblem):
             def predict (model, texts):
                 docs = [model.tokenizer(text) for text in texts]
                 textcat = model.get_pipe('textcat')
-                scores, _ = textcat.predict(docs)
+                scores = textcat.predict(docs)
                 return scores.argmax(axis=1)
 
             # Get predictions from textcat model

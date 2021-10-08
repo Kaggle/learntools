@@ -50,7 +50,7 @@ class MatchAllDataset(CodingProblem):
         doc = nlp(review.text)
         matches = matcher(doc)
 
-        found_items = set([doc[match[1]:match[2]].lower_ for match in matches])
+        found_items = set([doc[match[1]:match[2]].text.lower() for match in matches])
         
         for item in found_items:
             item_ratings[item].append(review.stars)
