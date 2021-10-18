@@ -76,7 +76,7 @@ We'll demystify this bit of Python magic later when we talk about *tuples*."""
         if (b, a) == orig_values:
             # well this is ridiculous in its verbosity
             assert False, (
-        "Hm, did you write something like...\n"
+        "Did you write something like...\n"
         "```python\na = [3, 2, 1]\nb = [1, 2, 3]```\n?\n"
         "That's not an unreasonable think to try, but there are two problems:\n"
         "1. You're relying on knowing the values of `a` and `b` ahead of time."
