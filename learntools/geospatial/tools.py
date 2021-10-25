@@ -14,6 +14,6 @@ class Nominatim:
         try:
             my_index = all_addresses.index(address)
             gdf = gpd.read_file("../input/geospatial-learn-course-data/ex4_files/ex4_files/add_{}.shp".format(my_index))
-            return Point(latitude=gdf.geometry.y, longitude=gdf.geometry.x)
+            return Point(latitude=gdf.geometry.y[0], longitude=gdf.geometry.x[0])
         except:
             return None
