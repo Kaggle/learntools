@@ -19,6 +19,7 @@ def check_gdf_equal(gdf1, gdf2):
 # Q1
 starbucks = pd.read_csv("../input/geospatial-learn-course-data/starbucks_locations.csv")
 rows_with_missing = starbucks[starbucks["City"]=="Berkeley"]
+geolocator = Nominatim(user_agent="kaggle_learn")
 def my_geocoder(row):
     point = geolocator.geocode(row).point
     return pd.Series({'Latitude': point.latitude, 'Longitude': point.longitude})
