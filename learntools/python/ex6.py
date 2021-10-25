@@ -55,8 +55,8 @@ class ZipValidator(FunctionProblem):
     _hint = ("Try looking up `help(str.isdigit)`")
 
     _solution = CS(
-"""def is_valid_zip(zip_str):
-    return len(zip_str) == 5 and zip_str.isdigit()""")
+"""def is_valid_zip(zip_code):
+    return len(zip_code) == 5 and zip_code.isdigit()""")
 
     _test_cases = [
             ('12345', True),
