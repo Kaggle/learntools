@@ -3,7 +3,7 @@ from learntools.core import *
 import math
 import pandas as pd
 import geopandas as gpd
-from learntools.geospatial.tools import geocode
+from learntools.geospatial.tools import Nominatim
 
 congrats_map_completion = "Thank you for creating a map!"
 correct_message_map_completion = ""
@@ -19,9 +19,10 @@ def check_gdf_equal(gdf1, gdf2):
 # Q1
 starbucks = pd.read_csv("../input/geospatial-learn-course-data/starbucks_locations.csv")
 rows_with_missing = starbucks[starbucks["City"]=="Berkeley"]
+geolocator = Nominatim(user_agent="kaggle_learn")
 def my_geocoder(row):
-    point = geocode(row, provider='nominatim').geometry[0]
-    return pd.Series({'Longitude': point.x, 'Latitude': point.y})
+    point = geolocator.geocode(row).point
+    return pd.Series({'Latitude': point.latitude, 'Longitude': point.longitude})
 berkeley_locations = rows_with_missing.apply(lambda x: my_geocoder(x['Address']), axis=1)
 starbucks.update(berkeley_locations)
 
@@ -35,13 +36,13 @@ CA_stats = CA_counties.merge(cols_to_add, on="GEOID")
 
 class Q1(CodingProblem):
     _var = 'starbucks'
-    _hint = ("Use `geocode()` to get the missing locations from the addresses in the "
+    _hint = ("Use `geolocator.geocode()` to get the missing locations from the addresses in the "
              "\"Address\" column.  You might find the [`pd.DataFrame.update()`](https://bit.ly/2kEyXP9l) "
              "method useful to solve this problem.")
     _solution = CS(
 """def my_geocoder(row):
-    point = geocode(row, provider='nominatim').geometry[0]
-    return pd.Series({'Longitude': point.x, 'Latitude': point.y})
+    point = geolocator.geocode(row).point
+    return pd.Series({'Latitude': point.latitude, 'Longitude': point.longitude})
 
 berkeley_locations = rows_with_missing.apply(lambda x: my_geocoder(x['Address']), axis=1)
 starbucks.update(berkeley_locations)
