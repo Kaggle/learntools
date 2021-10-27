@@ -73,7 +73,7 @@ python prepare_push.py sql_advanced
 
 # feature engineering
 python prepare_push.py feature_engineering
-./pushall.sh feature_engineering.prod
+./pushall.sh feature_engineering/prod
 
 # geospatial analysis
 python prepare_push.py geospatial
