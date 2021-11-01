@@ -2,7 +2,6 @@ import importlib
 import os
 
 import yaml
-
 from nb_utils import track_metadata
 
 def get_track_meta(track_dir, cfg):
