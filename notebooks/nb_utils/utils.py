@@ -2,7 +2,6 @@ import importlib
 import os
 
 import yaml
-
 from nb_utils import track_metadata
 
 def get_track_meta(track_dir, cfg):
@@ -20,7 +19,7 @@ def get_track_config(track_dir, tag):
     with open(cfg_path) as f:
         # TODO: Some wrapper that knows about valid keys and default values. And
         # maybe with dotted access to keys.
-        return yaml.load(f)
+        return yaml.load(f, Loader=yaml.FullLoader)
 
 def get_track_configs(track_dir):
     for fname in os.listdir(track_dir):
@@ -28,4 +27,4 @@ def get_track_configs(track_dir):
             continue
         path = os.path.join(track_dir, fname)
         with open(path) as f:
-            yield yaml.load(f)
+            yield yaml.load(f, Loader=yaml.FullLoader)
