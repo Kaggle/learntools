@@ -82,7 +82,7 @@ class LearnLessonPreprocessor(Preprocessor):
         if self.nb_meta.type == 'exercise':
             cells.insert(0, header_cell)
         # Uncomment to add footer cell
-        #cells.append(footer_cell)
+        cells.append(footer_cell)
 
     def pip_install_lt_hack(self, nb):
         """pip install learntools @ the present branch when running on Kernels"""
