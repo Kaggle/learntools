@@ -170,7 +170,7 @@ class BoostedHybrid:
             columns=y.columns,
         )
         # Compute residuals
-        y_resid = y - y_fit + y_fit.mean(axis=0)
+        y_resid = y - y_fit
         y_resid = y_resid.stack(stack_cols).squeeze()  # wide to long
 
         # Train model_2 on residuals
@@ -187,7 +187,6 @@ class BoostedHybrid:
             index=X_1.index,
             columns=self.y_columns,
         )
-        y_pred -= y_pred.mean(axis=0)
         y_pred = y_pred.stack(self.stack_cols).squeeze()  # wide to long
 
         # Add model_2 predictions to model_1 predictions
