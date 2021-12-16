@@ -36,12 +36,9 @@ positive_pledges_only = kickstarters_2017.pledged.loc[index_positive_pledges]
 normalized_values = pd.Series(stats.boxcox(positive_pledges_only)[0], 
                               name='pledged', index=positive_pledges_only.index)
 
-# plot both together to compare
-fig, ax = plt.subplots(1,2,figsize=(15,3))
-sns.distplot(positive_pledges_only, ax=ax[0])
-ax[0].set_title("Original Data")
-sns.distplot(normalized_values, ax=ax[1])
-ax[1].set_title("Normalized data")
+# plot normalized data
+ax = sns.histplot(normalized_values, kde=True)
+ax.set_title("Normalized data")
 ```
 
 """
