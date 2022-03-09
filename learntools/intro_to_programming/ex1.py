@@ -1,5 +1,3 @@
-import pandas as pd
-
 from learntools.core import *
 
 num_years = 4

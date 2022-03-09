@@ -1,17 +1,4 @@
-import pandas as pd
-
 from learntools.core import *
-
-num_years = 4
-days_per_year = 365 
-hours_per_day = 24
-mins_per_hour = 60
-secs_per_min = 60
-births_per_min = 250
-
-survived = 342
-minors = 113
-total = 891
 
 class RunHelloWorld(CodingProblem):
     _congrats = ("If you see `Hello, world!` above, You have successfully printed a message, "
