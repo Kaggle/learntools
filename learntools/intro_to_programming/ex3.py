@@ -45,8 +45,8 @@ class CustomEngravings(FunctionProblem):
     _test_cases = [
         (("Charlie+Denver", True), 240),
         (("08/10/2000", False), 120),
-        ((3, 2, True), 230000),
-        ((4, 5, False), 250000),
+        (("Adrian", True), 160),
+        (("Ana", False), 71),
     ]
     _hint = ("There are two options - either the project uses solid gold or does not.  With this in mind, you can structure your solution like this: `cost = solid_gold * ____ + (not_solid_gold) * ____`.  You need to figure out how to fill in the blanks.")
     _solution = CS(
