@@ -92,7 +92,10 @@ do
             || [[ ( $nb =~ "ex_automl") ]] || [[ ( $nb =~ "tut_automl") ]] \
             || [[ ( $nb =~ "tut4" && $track == "game_ai" ) ]] \
             || [[ ( $nb =~ "tut4" && $track == "data_cleaning" ) ]] \
-            || [[ ( $nb =~ "ex8" && $track == "machine_learning" ) ]] \
+            || [[ ( $nb =~ "tut1" && $track == "intro_to_programming" ) ]] \
+	    || [[ ( $nb =~ "tut2" && $track == "intro_to_programming" ) ]] \
+	    || [[ ( $nb =~ "tut3" && $track == "intro_to_programming" ) ]] \
+	    || [[ ( $nb =~ "ex8" && $track == "machine_learning" ) ]] \
             || [[ $nb =~ "tut_tpus" ]] || [[ $nb =~ "ex_tpus" ]] \
             || [[ ( $nb =~ "tut1" && $track == "computer_vision" ) ]] || [[ ( $nb =~ "tut5" && $track == "computer_vision" ) ]] || [[ ( $nb =~ "tut6" && $track == "computer_vision" ) ]] \
             || [[ ( $nb =~ "ex1" && $track == "computer_vision" ) ]] || [[ ( $nb =~ "ex5" && $track == "computer_vision" ) ]] || [[ ( $nb =~ "ex6" && $track == "computer_vision" ) ]] \
