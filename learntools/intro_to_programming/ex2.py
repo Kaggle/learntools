@@ -5,13 +5,33 @@ def get_expected_cost(beds, baths):
     value = 80000 + 30000 * beds + 10000 * baths
     return value
 
-######### TODO
-class GetExpectedCost(CodingProblem):
-    _congrats = ("If you see `Hello, world!` above, You have successfully printed a message, "
-                 "and you're ready to move on to the next question.")
-    _correct_message = ""
-    def check(self):
-        pass 
+def get_cost(sqft_walls, sqft_ceiling, sqft_per_gallon, cost_per_gallon):
+    total_sqft = sqft_walls + sqft_ceiling
+    gallons_needed = total_sqft / sqft_per_gallon
+    cost = cost_per_gallon * gallons_needed
+    return cost
+
+class GetExpectedCost(FunctionProblem):
+    _var = 'get_expected_cost'
+    _test_cases = [
+        ((0, 0), 80000),
+        ((0, 1), 90000),
+        ((1, 0), 110000),
+        ((1, 1), 120000),
+        ((1, 2), 130000),
+        ((2, 3), 170000),
+        ((3, 2), 190000),
+        ((3, 3), 200000),
+        ((3, 4), 210000),
+    ]
+    _hint = ("The value should be the base cost (`80000`), plus the total cost of the bedrooms (`30000 * beds`), "
+             "plus the total cost of the bathrooms (`10000 * baths`).")
+    _solution = CS(
+"""
+def get_expected_cost(beds, baths):
+    value = 80000 + 30000 * beds + 10000 * baths
+    return value
+""")
     
 class RunGetExpectedCost(EqualityCheckProblem):
     _vars = ['option_one', 'option_two', 'option_three', 'option_four']
@@ -26,48 +46,54 @@ option_three = get_expected_cost(3, 3)
 option_four = get_expected_cost(3, 4)
 """)
     
-class GetCostPaint(CodingProblem):
-    _hint = "HINT: If you're ever stuck on a question, it's a good idea to look at the hint before viewing the solution."
-    _solution = ("SOLUTION: If you're still stuck on a question after viewing the hint and re-reading the tutorial, "
-                 "you can view the solution.  You can also view the solution after you have successfully submitted "
-                 "your own answer, to check if the official solution is any different (there may be more than "
-                 "one right answer!).")
-    _congrats = "Once you have ran `q3.hint()` and `q3.solution()`, you're ready to move on to the next question."
-    _correct_message = ""
-    def check(self):
-        pass 
+class GetCostPaint(FunctionProblem):
+    _var = 'get_cost'
+    _test_cases = [
+        ((432, 144, 400, 15), 21.599999999999998),
+        ((400, 400, 400, 10), 20.0),
+        ((400, 500, 300, 16), 48.0),
+    ]
+    _hint = CS("Begin by calculating the total number of square feet that need to be painted.  "
+    "Then, based on that, figure out how many gallons you need.  Then, once you know how many "
+    "gallons you need, you can calculate the total cost of the project.")
+    _solution = CS(
+"""
+def get_cost(sqft_walls, sqft_ceiling, sqft_per_gallon, cost_per_gallon):
+    total_sqft = sqft_walls + sqft_ceiling
+    gallons_needed = total_sqft / sqft_per_gallon
+    cost = cost_per_gallon * gallons_needed
+    return cost
+""") 
 
 class GetCostPaintExample(EqualityCheckProblem):
-    _vars = ['births_per_min', 'births_per_day']
-    _expected = [250, births_per_min * mins_per_hour * hours_per_day]
-    _hint = ("How can you use the variables to calculate the number of minutes in one day?  Once you have that, you "
-             "need only multiply that number by the number of births per minute.")
+    _var = 'project_cost'
+    _expected = get_cost(432, 144, 400, 15)
+    _hint = ("If we needed to instead calculate the cost of applying one coat of paint to a room with "
+             "800 square feet of walls and 160 square feet of ceiling, and one gallon of paint covered "
+             "300 square feet and cost $10, we would set `project_cost = get_cost(800, 160, 300, 10)`.")
     _solution = CS(
-"""# Set the value of the births_per_min variable
-births_per_min = 250
-
-# Set the value of the births_per_day variable
-births_per_day = births_per_min * mins_per_hour * hours_per_day
+"""# Set the project_cost variable to the cost of the project
+project_cost = get_cost(432, 144, 400, 15) 
 """)
     
-class NoMoreFractions(EqualityCheckProblem):
-    _vars = ['survived_fraction', 'minors_fraction']
-    _expected = [survived/total, minors/total]
-    _hint = ("To get the fraction of people who survived the titanic, you need to divide the total number of people by the "
-             "number of people who surivived.  Remember the variables that you can use to answer this question: `survived`, "
-             "`total`, and `minors`.")
+########## TODO
+class NoMoreFractions(FunctionProblem):
+    _var = 'get_actual_cost'
+    _test_cases = [
+        ((432, 144, 400, 15), 30),
+        ((400, 500, 400, 10), 30),
+        ((400, 900, 300, 16), 80),
+    ]
+    _hint = ("Begin with the `get_cost()` function as a starting point.  The only change you need to "
+             "make is to add `math.ceil()` to round up the number of gallons that need to be purchased. "
+             "Can you figure out where to add it to the function?")
     _solution = CS(
-"""# TODO: Fill in the value of the variable here
-survived_fraction = survived/total
-
-# Print the value of the variable
-print(survived_fraction)
-
-# TODO: Fill in the value of the variable here
-minors_fraction = minors/total 
-
-# Print the value of the variable
-print(minors_fraction)
+"""def get_actual_cost(sqft_walls, sqft_ceiling, sqft_per_gallon, cost_per_gallon):
+    total_sqft = sqft_walls + sqft_ceiling
+    gallons_needed = total_sqft / sqft_per_gallon
+    gallons_to_buy = math.ceil(gallons_needed)
+    cost = cost_per_gallon * gallons_to_buy
+    return cost
 """)
 
 
