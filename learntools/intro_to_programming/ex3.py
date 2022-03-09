@@ -10,22 +10,30 @@ class FloatToInt(ThoughtExperiment):
     
 class MultiplyBooleans(ThoughtExperiment):
     _solution = ("When you multiple an integer or float by a boolean with value `True`, it just returns "
-                 "that same integer or float (that is, it is equivalent to multiplying by 1).  If you "
+                 "that same integer or float (and is equivalent to multiplying by 1).  If you "
                  "multiply an integer or float by a boolean with value `False`, it always returns 0.  This "
                  "is true for both positive and negative numbers.  If you multiply a string by a boolean with "
                  "value `True`, it just returns that same string.  And if you multiply a string by a boolean "
                  "with value `False`, it returns an empty string (or a string with length zero).")
     
-class EstimateHouseValueBool(CodingProblem):
+class EstimateHouseValueBool(FunctionProblem):
+    _var = 'get_expected_cost'
+    _test_cases = [
+        ((0, 0), 80000),
+        ((0, 1), 90000),
+        ((1, 0), 110000),
+        ((1, 1), 120000),
+        ((1, 2), 130000),
+        ((2, 3), 170000),
+        ((3, 2), 190000),
+        ((3, 3), 200000),
+        ((3, 4), 210000),
+    ]
     _hint = "HINT: If you're ever stuck on a question, it's a good idea to look at the hint before viewing the solution."
     _solution = ("SOLUTION: If you're still stuck on a question after viewing the hint and re-reading the tutorial, "
                  "you can view the solution.  You can also view the solution after you have successfully submitted "
                  "your own answer, to check if the official solution is any different (there may be more than "
                  "one right answer!).")
-    _congrats = "Once you have ran `q3.hint()` and `q3.solution()`, you're ready to move on to the next question."
-    _correct_message = ""
-    def check(self):
-        pass 
 
 class AddingBooleans(EqualityCheckProblem):
     _vars = ['births_per_min', 'births_per_day']

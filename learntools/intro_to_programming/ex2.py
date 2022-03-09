@@ -53,7 +53,7 @@ class GetCostPaint(FunctionProblem):
         ((400, 400, 400, 10), 20.0),
         ((400, 500, 300, 16), 48.0),
     ]
-    _hint = CS("Begin by calculating the total number of square feet that need to be painted.  "
+    _hint = ("Begin by calculating the total number of square feet that need to be painted. "
     "Then, based on that, figure out how many gallons you need.  Then, once you know how many "
     "gallons you need, you can calculate the total cost of the project.")
     _solution = CS(
@@ -76,7 +76,6 @@ class GetCostPaintExample(EqualityCheckProblem):
 project_cost = get_cost(432, 144, 400, 15) 
 """)
     
-########## TODO
 class NoMoreFractions(FunctionProblem):
     _var = 'get_actual_cost'
     _test_cases = [

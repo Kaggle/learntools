@@ -12,7 +12,7 @@ minors = 113
 total = 891
 
 class RunHelloWorld(CodingProblem):
-    _congrats = ("If you see `Hello, world!` above, You have successfully printed a message, "
+    _congrats = ("If you see 'Hello, world!' above, You have successfully printed a message, "
                  "and you're ready to move on to the next question.")
     _correct_message = ""
     def check(self):
@@ -25,12 +25,12 @@ class PrintAnotherMsg(CodingProblem):
         pass 
     
 class LearnCheckingCode(CodingProblem):
-    _hint = "HINT: If you're ever stuck on a question, it's a good idea to look at the hint before viewing the solution."
-    _solution = ("SOLUTION: If you're still stuck on a question after viewing the hint and re-reading the tutorial, "
+    _hint = "If you're ever stuck on a question, it's a good idea to look at the hint before viewing the solution."
+    _solution = ("If you're still stuck on a question after viewing the hint and re-reading the tutorial, "
                  "you can view the solution.  You can also view the solution after you have successfully submitted "
                  "your own answer, to check if the official solution is any different (there may be more than "
                  "one right answer!).")
-    _congrats = "Once you have ran `q3.hint()` and `q3.solution()`, you're ready to move on to the next question."
+    _congrats = "Once you have printed the hint and the solution, you're ready to move on to the next question."
     _correct_message = ""
     def check(self):
         pass 
