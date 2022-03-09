@@ -30,5 +30,6 @@ notebooks = [
     #dict(filename="ex6.ipynb", lesson_idx=5, type="exercise", scriptid=-1),
 ]
 
-# add dataset sources
-
+for nb in notebooks:
+    if nb['filename'] == 'ex1.ipynb':
+        nb['competition_sources'] = ["titanic"]
