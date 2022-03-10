@@ -11,8 +11,8 @@ if [[ -r /etc/git_commit ]]; then
 fi
 
 # Filter by tracks if first argument set.
-TRACKS="time_series ethics feature_engineering_new computer_vision deep_learning_intro pandas python machine_learning sql data_viz_to_coder ml_intermediate sql_advanced feature_engineering geospatial nlp game_ai data_cleaning"
-TESTABLE_NOTEBOOK_TRACKS="geospatial nlp time_series ethics feature_engineering_new data_viz_to_coder ml_intermediate data_cleaning computer_vision deep_learning_intro python pandas machine_learning game_ai"
+TRACKS="intro_to_programming time_series ethics feature_engineering_new computer_vision deep_learning_intro pandas python machine_learning sql data_viz_to_coder ml_intermediate sql_advanced feature_engineering geospatial nlp game_ai data_cleaning"
+TESTABLE_NOTEBOOK_TRACKS="intro_to_programming geospatial nlp time_series ethics feature_engineering_new data_viz_to_coder ml_intermediate data_cleaning computer_vision deep_learning_intro python pandas machine_learning game_ai"
 
 if [[ -n $1 && $1 != "all" ]]; then
     TRACKS=$1
@@ -92,7 +92,10 @@ do
             || [[ ( $nb =~ "ex_automl") ]] || [[ ( $nb =~ "tut_automl") ]] \
             || [[ ( $nb =~ "tut4" && $track == "game_ai" ) ]] \
             || [[ ( $nb =~ "tut4" && $track == "data_cleaning" ) ]] \
-            || [[ ( $nb =~ "ex8" && $track == "machine_learning" ) ]] \
+            || [[ ( $nb =~ "tut1" && $track == "intro_to_programming" ) ]] \
+	    || [[ ( $nb =~ "tut2" && $track == "intro_to_programming" ) ]] \
+	    || [[ ( $nb =~ "tut3" && $track == "intro_to_programming" ) ]] \
+	    || [[ ( $nb =~ "ex8" && $track == "machine_learning" ) ]] \
             || [[ $nb =~ "tut_tpus" ]] || [[ $nb =~ "ex_tpus" ]] \
             || [[ ( $nb =~ "tut1" && $track == "computer_vision" ) ]] || [[ ( $nb =~ "tut5" && $track == "computer_vision" ) ]] || [[ ( $nb =~ "tut6" && $track == "computer_vision" ) ]] \
             || [[ ( $nb =~ "ex1" && $track == "computer_vision" ) ]] || [[ ( $nb =~ "ex5" && $track == "computer_vision" ) ]] || [[ ( $nb =~ "ex6" && $track == "computer_vision" ) ]] \
