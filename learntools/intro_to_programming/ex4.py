@@ -47,8 +47,9 @@ class ExcessSodium(FunctionProblem):
         ((0, 46), True),
         ((0, 800), True),
         ((1, 1), True),
-        ((2, 3), False),
-        ((10, 100), False),
+        ((2, 3), True),
+        ((10, 100), True),
+        ((100, 10), False),
     ]
     _hint = ("To check if an item is a non-caloric beverage, you need to use the `calories_per_serving` variable.")
     _solution = CS(
@@ -75,9 +76,9 @@ class GetLabels(CodingProblem):
         pass
 
 qvars = bind_exercises(globals(), [
-    ExcessTransFat, #todo test cases
-    ExcessSugar, #todo test cases
-    ExcessSodium, #todo test cases
+    ExcessTransFat, 
+    ExcessSugar, 
+    ExcessSodium, 
     ValueErrorCalories, 
     GetLabels
     ],
