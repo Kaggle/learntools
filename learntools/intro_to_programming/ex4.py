@@ -64,8 +64,8 @@ class ValueErrorCalories(ThoughtExperiment):
     _hint = ('In order to make sure that the `raise ValueError(...)` code is run, you need to make sure that the value '
              'supplied for `food_type` is something other than `"solid"` or `"liquid"`.')
     _solution = ('The code `raise ValueError()` makes the code error, and it returns the error message shown in the parentheses. '
-                 'This is useful in this function, because in order for the function input to make sense, '
-                 '`"food_type"` must be one of `"solid"` or `"liquid"`. If something other than these two values '
+                 'This is useful in this function, because in order for the function input to make sense, you have to supply a '
+                 'value for `"food_type"` that is one of `"solid"` or `"liquid"`. If something other than these two values '
                  'is returned, this line makes the function error, and surfaces a message saying the values '
                  'that are accepted for `"food_type"`, so that the programmer knows how to correct their code.')
 
