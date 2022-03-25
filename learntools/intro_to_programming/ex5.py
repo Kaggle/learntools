@@ -42,7 +42,7 @@ menu = ['stewed meat with onions', 'bean soup', 'risotto with trout and shrimp',
 
 # Remove 'bean soup', and add 'roasted beet salad' to the end of the menu
 menu.remove('bean soup')
-menu.apppend('roasted beet salad')
+menu.append('roasted beet salad')
 """)
     def check(self, menu):
         
