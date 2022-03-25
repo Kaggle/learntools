@@ -51,7 +51,7 @@ menu.apppend('roasted beet salad')
         '`menu` needs to be a Python list.'
         
         # extra items need to be removed
-        assert set(menu) - set(correct_menu) == 0:
+        assert set(menu) - set(correct_menu) == set(): \
             'These item(s) should be removed from `menu`: {}'.format(list(set(menu) - set(correct_menu)))
         
         for item in correct_menu:
