@@ -56,10 +56,10 @@ menu.apppend('roasted beet salad')
         
         for item in correct_menu:
             # contains all needed items
-            assert item in menu, 
+            assert item in menu, \ 
             '`menu` needs to have this item, but it is missing: `{}`'.format(item)
             # no items duplicated
-            assert menu.count(item) == 1,
+            assert menu.count(item) == 1, \
             'Each item should appear in `menu` once, but `{}` appears {} times.'.format(item, menu.count(item))
         
 
