@@ -9,9 +9,8 @@ TOPICS = [
     "Arithmetic and Variables",  # 1
     "Functions",  # 2
     "Data Types",  # 3
-    #"Conditions and Conditional Statements",  # 4
-    #"Lists",  # 5
-    #"Loops",  # 6
+    "Conditions and Conditional Statements",  # 4
+    "Lists and List Comprehensions",  # 5
 ]
 lessons = [{"topic": topic_name} for topic_name in TOPICS]
 
@@ -22,12 +21,10 @@ notebooks = [
     dict(filename="ex2.ipynb", lesson_idx=1, type="exercise", scriptid=25258227),
     dict(filename="tut3.ipynb", lesson_idx=2, type="tutorial"),
     dict(filename="ex3.ipynb", lesson_idx=2, type="exercise", scriptid=25258226),
-    #dict(filename="tut4.ipynb", lesson_idx=3, type="tutorial"),
-    #dict(filename="ex4.ipynb", lesson_idx=3, type="exercise", scriptid=-1),
-    #dict(filename="tut5.ipynb", lesson_idx=4, type="tutorial"),
-    #dict(filename="ex5.ipynb", lesson_idx=4, type="exercise", scriptid=-1),
-    #dict(filename="tut6.ipynb", lesson_idx=5, type="tutorial"),
-    #dict(filename="ex6.ipynb", lesson_idx=5, type="exercise", scriptid=-1),
+    dict(filename="tut4.ipynb", lesson_idx=3, type="tutorial"),
+    dict(filename="ex4.ipynb", lesson_idx=3, type="exercise", scriptid=25880622),
+    dict(filename="tut5.ipynb", lesson_idx=4, type="tutorial"),
+    dict(filename="ex5.ipynb", lesson_idx=4, type="exercise", scriptid=25880656),
 ]
 
 for nb in notebooks:
