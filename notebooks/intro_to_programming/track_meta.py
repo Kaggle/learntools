@@ -10,7 +10,7 @@ TOPICS = [
     "Functions",  # 2
     "Data Types",  # 3
     "Conditions and Conditional Statements",  # 4
-    "Lists and List Comprehensions",  # 5
+    "Intro to Lists",  # 5
 ]
 lessons = [{"topic": topic_name} for topic_name in TOPICS]
 
