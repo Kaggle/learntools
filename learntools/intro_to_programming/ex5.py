@@ -10,15 +10,22 @@ num_customers = [137, 147, 135, 128, 170, 174, 165, 146, 126, 159,
                  141, 151, 131, 149, 164, 163, 143, 143, 166, 171]
 
 # problem 3
+alphabet = "A.B.C.D.E.F.G.H.I.J.K.L.M.N.O.P.Q.R.S.T.U.V.W.X.Y.Z"
+address = "Mr. H. Potter,The cupboard under the Stairs,4 Privet Drive,Little Whinging,Surrey"
 
+# problem 4
+def percentage_liked_solution(ratings):
+    list_liked = [i >= 4 for i in ratings]
+    percentage_liked = sum(list_liked)/len(list_liked)
+    return percentage_liked
 
 # problem 5
 def percentage_growth_solution(num_users, yrs_ago):
     growth = (num_users[len(num_users)-1] - num_users[len(num_users)-yrs_ago-1])/num_users[len(num_users)-yrs_ago-1]
     return growth
 
-num_users_test = [2001078, 1930992, 1843064, 1623463, 1593432, 1503323, 1458996, 1204334, 1043553, 920344]
-num_users_test2 = [2001232, 1930952, 1841064, 1620963, 1593862, 1503423, 1478996, 1219334, 1009553, 920224]
+num_users_test = [920344, 1043553, 1204334, 1458996, 1503323, 1593432, 1623463, 1843064, 1930992, 2001078]
+num_users_test2 = [920224, 1009553, 1219334, 1478996, 1503423, 1593862, 1620963, 1841064, 1930952, 2001232]
 
 
 class FoodMenu(CodingProblem):
