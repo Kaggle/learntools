@@ -51,8 +51,8 @@ births_per_day = births_per_min * mins_per_hour * hours_per_day
 class BonusTitanic(EqualityCheckProblem):
     _vars = ['survived_fraction', 'minors_fraction']
     _expected = [survived/total, minors/total]
-    _hint = ("To get the fraction of people who survived the titanic, you need to divide the total number of people by the "
-             "number of people who surivived.  Remember the variables that you can use to answer this question: `survived`, "
+    _hint = ("To get the fraction of people who survived the titanic, you need to divide the number of survivors by the "
+             "total number of people.  Remember the variables that you can use to answer this question: `survived`, "
              "`total`, and `minors`.")
     _solution = CS(
 """# Fill in the value of the survived_fraction variable 

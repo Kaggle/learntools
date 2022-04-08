@@ -10,23 +10,22 @@ num_customers = [137, 147, 135, 128, 170, 174, 165, 146, 126, 159,
                  141, 151, 131, 149, 164, 163, 143, 143, 166, 171]
 
 # problem 3
-def get_probs_from_counts_solution(count_list):
-    prob_list = [i / sum(count_list) for i in count_list]
-    return prob_list
+alphabet = "A.B.C.D.E.F.G.H.I.J.K.L.M.N.O.P.Q.R.S.T.U.V.W.X.Y.Z"
+address = "Mr. H. Potter,The cupboard under the Stairs,4 Privet Drive,Little Whinging,Surrey"
 
 # problem 4
-def percentage_growth_solution(num_users, yrs_ago):
-    growth = (num_users[0] - num_users[yrs_ago])/num_users[yrs_ago]
-    return growth
-
-num_users_test = [2001078, 1930992, 1843064, 1623463, 1593432, 1503323, 1458996, 1204334, 1043553, 920344]
-num_users_test2 = [2001232, 1930952, 1841064, 1620963, 1593862, 1503423, 1478996, 1219334, 1009553, 920224]
-
-# problem 5
 def percentage_liked_solution(ratings):
     list_liked = [i >= 4 for i in ratings]
     percentage_liked = sum(list_liked)/len(list_liked)
     return percentage_liked
+
+# problem 5
+def percentage_growth_solution(num_users, yrs_ago):
+    growth = (num_users[len(num_users)-1] - num_users[len(num_users)-yrs_ago-1])/num_users[len(num_users)-yrs_ago-1]
+    return growth
+
+num_users_test = [920344, 1043553, 1204334, 1458996, 1503323, 1593432, 1623463, 1843064, 1930992, 2001078]
+num_users_test2 = [920224, 1009553, 1219334, 1478996, 1503423, 1593862, 1620963, 1841064, 1930952, 2001232]
 
 
 class FoodMenu(CodingProblem):
@@ -74,20 +73,31 @@ max_month = max(num_customers)
 min_month = min(num_customers)
 """)
 
-class GetProbsFromCounts(FunctionProblem):
-    _var = 'get_probs_from_counts'
-    _test_cases = [
-        ([1, 3, 5, 11], get_probs_from_counts_solution([1, 3, 5, 11])),
-        ([1, 2], get_probs_from_counts_solution([1, 2])),
-        ([7, 8, 9, 10, 11], get_probs_from_counts_solution([7, 8, 9, 10, 11]))
-    ]
-    _hint = ("In the tutorial, you learned how to divide every entry in a list by the maximum entry in the list. "
-             "To answer this question, you need to divide every entry in the list by the sum of the entries in the list.")
+class SplitString(EqualityCheckProblem):
+    _vars = ['letters', 'formatted_address']
+    _expected = [alphabet.split("."), address.split(",")]
+    _hint = ("In each case, you need to use `.split()`.")
     _solution = CS(
-"""# Write your function
-def get_probs_from_counts(count_list):
-    prob_list = [i / sum(count_list) for i in count_list]
-    return prob_list
+"""letters = alphabet.split(".")
+formatted_address = address.split(",")
+""")
+    
+class PercentageLiked(FunctionProblem):
+    _var = 'percentage_liked'
+    _test_cases = [
+        ([1, 2, 3, 4, 5, 4, 5, 1], percentage_liked_solution([1, 2, 3, 4, 5, 4, 5, 1])),
+        ([1, 2, 3, 4], percentage_liked_solution([1, 2, 3, 4])),
+        ([1, 2, 3, 4, 5, 4, 5, 1, 2, 2, 2], percentage_liked_solution([1, 2, 3, 4, 5, 4, 5, 1, 2, 2, 2])),
+        ([1, 4, 4, 4, 5, 4, 5, 1], percentage_liked_solution([1, 4, 4, 4, 5, 4, 5, 1])),
+    ]
+    _hint = ('Remember that when we add booleans, it returns the total number of entries in the sum that are `True`.')
+    _solution = CS(
+"""
+# Complete the function
+def percentage_liked(ratings):
+    list_liked = [i >= 4 for i in ratings]
+    percentage_liked = sum(list_liked)/len(list_liked)
+    return percentage_liked
 """)
     
 class WebsiteAnalytics(FunctionProblem):
@@ -107,35 +117,16 @@ class WebsiteAnalytics(FunctionProblem):
              "You only need to modify the positions for the items that are pulled from the list.")
     _solution = CS(
 """def percentage_growth(num_users, yrs_ago):
-    growth = (num_users[0] - num_users[yrs_ago])/num_users[yrs_ago]
+    growth = (num_users[len(num_users)-1] - num_users[len(num_users)-yrs_ago-1])/num_users[len(num_users)-yrs_ago-1]
     return growth
-""")
-    
-class PercentageLiked(FunctionProblem):
-    _var = 'percentage_liked'
-    _test_cases = [
-        ([1, 2, 3, 4, 5, 4, 5, 1], percentage_liked_solution([1, 2, 3, 4, 5, 4, 5, 1])),
-        ([1, 2, 3, 4], percentage_liked_solution([1, 2, 3, 4])),
-        ([1, 2, 3, 4, 5, 4, 5, 1, 2, 2, 2], percentage_liked_solution([1, 2, 3, 4, 5, 4, 5, 1, 2, 2, 2])),
-        ([1, 4, 4, 4, 5, 4, 5, 1], percentage_liked_solution([1, 4, 4, 4, 5, 4, 5, 1])),
-    ]
-    _hint = ('Begin by creating a Python list `list_liked` with `True` if the corresponding entry in `ratings` is '
-             'greater than or equal to 4 and is otherwise `False`.  Then take the average value of `list_liked`.')
-    _solution = CS(
-"""
-# Complete the function
-def percentage_liked(ratings):
-    list_liked = [i >= 4 for i in ratings]
-    percentage_liked = sum(list_liked)/len(list_liked)
-    return percentage_liked
 """)
 
 qvars = bind_exercises(globals(), [
     FoodMenu, 
     NumCustomers, 
-    GetProbsFromCounts, 
+    SplitString, 
+    PercentageLiked,
     WebsiteAnalytics, 
-    PercentageLiked
     ],
     var_format='q{n}',
     )
