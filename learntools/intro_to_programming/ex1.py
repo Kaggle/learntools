@@ -68,6 +68,7 @@ minors_fraction = minors/total
 print(minors_fraction)
 """)
 
+
 qvars = bind_exercises(globals(), [
     RunHelloWorld,
     PrintAnotherMsg,
