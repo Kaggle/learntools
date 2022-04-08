@@ -6,11 +6,8 @@ def get_expected_cost(beds, baths, has_basement):
 
 class FloatToInt(ThoughtExperiment):
     _solution = ("Negative floats are always rounded UP to the closest integer (for instance, "
-                 "both -1.1 and -1.9 are rounded up to -1). Positive floats are rounded either "
-                 "UP or DOWN, depending on whether the preceding or following integer is closer "
-                 "(for instance, 1.1 is rounded down to 1, and 1.9 is rounded up to 2).  In the "
-                 "case that the float is equidistant from both integers, it is rounded up "
-                 "(for instance, 1.5 is rounded up to 2).")
+                 "both -1.1 and -1.9 are rounded up to -1). Positive floats are always rounded "
+                 "DOWN to the closest integer (for instance, 2.1 and 2.9 are rounded down to 2).")
     
 class MultiplyBooleans(ThoughtExperiment):
     _solution = ("When you multiple an integer or float by a boolean with value `True`, it just returns "
