@@ -14,7 +14,10 @@ class ExcessTransFat(FunctionProblem):
              "from fat that are allowed from 10% to 1%.")
     _solution = CS(
 """def excess_trans_fat(trans_fat_g, calories_per_serving):
-    return (trans_fat_g * 9 / calories_per_serving >= .01) 
+    if trans_fat_g * 9 / calories_per_serving >= .01:
+        return True
+    else:
+        return False
 """)
 
 class ExcessSugar(FunctionProblem):
