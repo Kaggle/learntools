@@ -13,7 +13,7 @@ def get_grade(score):
         grade = "F"
     return grade
 
-def get_water_bill:
+def get_water_bill():
     if num_gallons <= 8000:
         bill = 4.82 * num_gallons 
     else if num_gallons <= 22000:
@@ -107,11 +107,16 @@ def get_water_bill(num_gallons):
 ```
 """
     _solution = CS(
-"""def excess_sodium(calories_per_serving, sodium_mg):
-    if calories_per_serving == 0:
-        return (sodium_mg >= 45)
+"""def get_water_bill(num_gallons):
+    if num_gallons <= 8000:
+        bill = 4.82 * num_gallons / 1000
+    elif num_gallons <= 22000:
+        bill = 5.53 * num_gallons / 1000
+    elif num_gallons <= 30000:
+        bill = 6.91 * num_gallons / 1000
     else:
-        return (sodium_mg / calories_per_serving >= 1)
+        bill = 10.36 * num_gallons / 1000
+    return bill
 """)
     
 class GetPhoneBill(FunctionProblem):
