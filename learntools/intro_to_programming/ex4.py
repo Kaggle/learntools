@@ -13,7 +13,7 @@ def get_grade(score):
         grade = "F"
     return grade
 
-def get_water_bill():
+def get_water_bill(num_gallons):
     if num_gallons <= 8000:
         bill = 4.82 * num_gallons 
     elif num_gallons <= 22000:

@@ -46,7 +46,7 @@ class CustomEngravings(FunctionProblem):
         (("Ana", False), 71),
     ]
     _hint = ("There are two options - either the project uses solid gold or does not.  With this in mind, you can structure your solution like this: `cost = solid_gold * ____ + (not_solid_gold) * ____`.  You need to figure out how to fill in the blanks. Also, remember that:\n"
-             "- If `solid_gold = True`, then `(not solid_gold) = False`, and if `solid_gold = False`, then `(not solid_gold = True)`.\n"
+             "- If `solid_gold = True`, then `(not solid_gold) = False`, and if `solid_gold = False`, then `(not solid_gold) = True`.\n"
              "- Multiplying an integer by `True` is equivalent to multiplying it by 1, and multiplying an integer by `False` is equivalent to multiplying it by 0.")
     _solution = CS(
 """def cost_of_project(engraving, solid_gold):
