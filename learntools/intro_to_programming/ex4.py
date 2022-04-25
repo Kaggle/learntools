@@ -15,13 +15,13 @@ def get_grade(score):
 
 def get_water_bill(num_gallons):
     if num_gallons <= 8000:
-        bill = 4.82 * num_gallons 
+        bill = 4.82 * num_gallons / 1000
     elif num_gallons <= 22000:
-        bill = 5.53 * num_gallons 
+        bill = 5.53 * num_gallons / 1000
     elif num_gallons <= 30000:
-        bill = 6.91 * num_gallons
+        bill = 6.91 * num_gallons / 1000
     else:
-        bill = 10.36 * num_gallons 
+        bill = 10.36 * num_gallons / 1000
     return bill
 
 def get_phone_bill(gb):
@@ -66,9 +66,9 @@ class CostProjectPartDeux(FunctionProblem):
         (("Adrian", True), 160),
         (("Ana", False), 71),
     ]
-    _hint = ("If `solid_gold = True`, then the cost of the ring is $100 (base cost), plus $10 times the length of the "
+    _hint = ("If `solid_gold = True`, then the cost of the ring is \\$100 (base cost), plus \\$10 times the length of the "
              "engraving.  You can get the length of the engraving with `len(engraving)`.  Otherwise, if "
-             "`solid_gold = False`, then the cost of the ring is $50 (base cost), plus $7 times the length of the engraving.")
+             "`solid_gold = False`, then the cost of the ring is \\$50 (base cost), plus \\$7 times the length of the engraving.")
     _solution = CS(
 """# option 1
 def cost_of_project(engraving, solid_gold):
