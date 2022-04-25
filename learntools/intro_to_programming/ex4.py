@@ -32,7 +32,7 @@ def get_phone_bill(gb):
     # if gb_over is positive, there is an additional fee
     if gb_over > 0:
         # calculate cost of additional GB
-        overage_fee = 100 * amount_over
+        overage_fee = 100 * gb_over
         # add additional cost to bill
         bill = bill + overage_fee
     return bill
