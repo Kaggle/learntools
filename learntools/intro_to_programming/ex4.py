@@ -16,9 +16,9 @@ def get_grade(score):
 def get_water_bill():
     if num_gallons <= 8000:
         bill = 4.82 * num_gallons 
-    else if num_gallons <= 22000:
+    elif num_gallons <= 22000:
         bill = 5.53 * num_gallons 
-    else if num_gallons <= 30000:
+    elif num_gallons <= 30000:
         bill = 6.91 * num_gallons
     else:
         bill = 10.36 * num_gallons 
