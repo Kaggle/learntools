@@ -1,73 +1,158 @@
 from learntools.core import *
 
-class ExcessTransFat(FunctionProblem):
-    _var = 'excess_trans_fat'
-    _test_cases = [
-        ((1, 900), True),
-        ((.9, 900), False),
-        ((.1, 900), False),
-        ((1.1, 900), True),
-        ((2, 900), True),
-    ]
-    _hint = ("The calculation here is very similar to the saturated fat example.  You still need to use the fact "
-             "that there are 9 calories per 1 gram of fat, and you need to change the percentage from calories "
-             "from fat that are allowed from 10% to 1%.")
+def get_grade(score):
+    if score >= 90:
+        grade = "A"
+    elif score >= 80:
+        grade = "B"
+    elif score >= 70:
+        grade = "C"
+    elif score >= 60:
+        grade = "D"
+    else:
+        grade = "F"
+    return grade
+
+def get_water_bill(num_gallons):
+    if num_gallons <= 8000:
+        bill = 4.82 * num_gallons / 1000
+    elif num_gallons <= 22000:
+        bill = 5.53 * num_gallons / 1000
+    elif num_gallons <= 30000:
+        bill = 6.91 * num_gallons / 1000
+    else:
+        bill = 10.36 * num_gallons / 1000
+    return bill
+
+def get_phone_bill(gb):
+    # everyone pays $100/month
+    bill = 100
+    # number of GB over the 15GB plan (negative if under)
+    gb_over = gb - 15
+    # if gb_over is positive, there is an additional fee
+    if gb_over > 0:
+        # calculate cost of additional GB
+        overage_fee = 100 * gb_over
+        # add additional cost to bill
+        bill = bill + overage_fee
+    return bill
+
+class GetGrade(FunctionProblem):
+    _var = 'get_grade'
+    _test_cases = [(i, get_grade(i)) for i in range(0,101)]
+    _hint = ('`"A"` should only be returned if `score >= 90`.  Otherwise, if the score is between 80 and 89 (inclusive), or '
+             '70 and 79 (inclusive), 60 and 69 (inclusive), or less than 60, a different score should be returned.  Make '
+             'sure that your function always returns one of: `"A"`, `"B"`, `"C"`, `"D"`, or `"F"`.')
     _solution = CS(
-"""def excess_trans_fat(trans_fat_g, calories_per_serving):
-    return (trans_fat_g * 9 / calories_per_serving >= .01) 
+"""def get_grade(score):
+    if score >= 90:
+        grade = "A"
+    elif score >= 80:
+        grade = "B"
+    elif score >= 70:
+        grade = "C"
+    elif score >= 60:
+        grade = "D"
+    else:
+        grade = "F"
+    return grade
 """)
 
-class ExcessSugar(FunctionProblem):
-    _var = 'excess_sugar'
+class CostProjectPartDeux(FunctionProblem):
+    _var = 'cost_of_project'
     _test_cases = [
-        ((1, 40), True),
-        ((.9, 40), False),
-        ((.1, 40), False),
-        ((1.1, 40), True),
-        ((2, 40), True),
+        (("Charlie+Denver", True), 240),
+        (("08/10/2000", False), 120),
+        (("Adrian", True), 160),
+        (("Ana", False), 71),
     ]
-    _hint = ("A [Snickers](https://world.openfoodfacts.org/product/9300682052825/snickers) candy bar has: \n"
-             "- 25.6 grams of sugar per serving, and\n"
-             "- 1030 calories per serving.\n"
-             "To calculate the percentage of calories from sugar in a Snickers candy bar, note that:\n"
-             "- **For all foods and drinks**, there are approximately 4 calories per 1 gram of sugar.\n" 
-             "- So, a Snickers candy bar has 4 * 25.6 = 102.4 calories of sugar per serving.\n"
-             "- Thus, the percentage of calories from sugar is 102.4/1030, which is approximately 0.0994, or 9.94%.\n"
-             "- This is JUST under 10%, and so your algorithm should judge the Snickers candy bar as NOT having excess sugar.")
+    _hint = ("If `solid_gold = True`, then the cost of the ring is \\$100 (base cost), plus \\$10 times the length of the "
+             "engraving.  You can get the length of the engraving with `len(engraving)`.  Otherwise, if "
+             "`solid_gold = False`, then the cost of the ring is \\$50 (base cost), plus \\$7 times the length of the engraving.")
     _solution = CS(
-"""def excess_sugar(sugars_g, calories_per_serving):
-    return (sugars_g * 4 / calories_per_serving >= .1)
-""")
-    
-class ExcessSodium(FunctionProblem):
-    _var = 'excess_sodium'
-    _test_cases = [
-        ((0, 44), False),
-        ((0, 45), True),
-        ((0, 46), True),
-        ((0, 800), True),
-        ((1, 1), True),
-        ((2, 3), True),
-        ((10, 100), True),
-        ((100, 10), False),
-    ]
-    _hint = ("To check if an item is a non-caloric beverage, you need to use the `calories_per_serving` variable.")
-    _solution = CS(
-"""def excess_sodium(calories_per_serving, sodium_mg):
-    if calories_per_serving == 0:
-        return (sodium_mg >= 45)
+"""# option 1
+def cost_of_project(engraving, solid_gold):
+    num_units = len(engraving)
+    if solid_gold == True:
+        cost = 100 + 10 * num_units
     else:
-        return (sodium_mg / calories_per_serving >= 1)
+        cost = 50 + 7 * num_units
+    return cost
+    
+# option 2 
+def cost_of_project(engraving, solid_gold):
+    if solid_gold == True:
+        cost = 100 + 10 * len(engraving)
+    else:
+        cost = 50 + 7 * len(engraving)
+    return cost
 """)
     
-class ValueErrorCalories(ThoughtExperiment):
-    _hint = ('In order to make sure that the `raise ValueError(...)` code is run, you need to make sure that the value '
-             'supplied for `food_type` is something other than `"solid"` or `"liquid"`.')
-    _solution = ('The code `raise ValueError()` makes the code error, and it returns the error message shown in the parentheses. '
-                 'This is useful in this function, because in order for the function input to make sense, you have to supply a '
-                 'value for `"food_type"` that is one of `"solid"` or `"liquid"`. If something other than these two values '
-                 'is returned, this line makes the function error, and surfaces a message saying the values '
-                 'that are accepted for `"food_type"`, so that the programmer knows how to correct their code.')
+class GetWaterBill(FunctionProblem):
+    _var = 'get_water_bill'
+    _test_cases = [(1000*i, get_water_bill(1000*i)) for i in range (0, 41)]
+    _hint = """
+Your solution should look something like:
+```python
+def get_water_bill(num_gallons):
+    if num_gallons <= 8000:
+        bill = ____ 
+    elif num_gallons <= 22000:
+        bill = ____ 
+    elif num_gallons <= 30000:
+        bill = ____
+    else:
+        bill = ____ 
+    return bill
+```
+"""
+    _solution = CS(
+"""def get_water_bill(num_gallons):
+    if num_gallons <= 8000:
+        bill = 4.82 * num_gallons / 1000
+    elif num_gallons <= 22000:
+        bill = 5.53 * num_gallons / 1000
+    elif num_gallons <= 30000:
+        bill = 6.91 * num_gallons / 1000
+    else:
+        bill = 10.36 * num_gallons / 1000
+    return bill
+""")
+    
+class GetPhoneBill(FunctionProblem):
+    _var = 'get_phone_bill'
+    _test_cases = [(5 + .5*i, get_phone_bill(5 + .5*i)) for i in range (0, 35)]
+    _hint = """
+Your solution should look something like:
+```python
+def get_phone_bill(gb):
+    # everyone pays $100/month
+    bill = 100
+    # number of GB over the 15GB plan (negative if under)
+    gb_over = gb - 15
+    # if gb_over is positive, there is an additional fee
+    if ____:
+        # calculate cost of additional GB
+        overage_fee = ____
+        # add additional cost to bill
+        bill = ____
+    return bill
+```
+"""
+    _solution = CS(
+"""def get_phone_bill(gb):
+    # everyone pays $100/month
+    bill = 100
+    # number of GB over the 15GB plan (negative if under)
+    gb_over = gb - 15
+    # if gb_over is positive, there is an additional fee
+    if gb_over > 0:
+        # calculate cost of additional GB
+        overage_fee = 100 * gb_over
+        # add additional cost to bill
+        bill = bill + overage_fee
+    return bill
+""")
 
 class GetLabels(CodingProblem):
     _congrats = "Once you have determined the labels for all of the food items, you're ready to move on to the next lesson!"
@@ -76,10 +161,10 @@ class GetLabels(CodingProblem):
         pass
 
 qvars = bind_exercises(globals(), [
-    ExcessTransFat, 
-    ExcessSugar, 
-    ExcessSodium, 
-    ValueErrorCalories, 
+    GetGrade, 
+    CostProjectPartDeux, 
+    GetWaterBill, 
+    GetPhoneBill, 
     GetLabels
     ],
     var_format='q{n}',
