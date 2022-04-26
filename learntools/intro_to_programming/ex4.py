@@ -126,31 +126,19 @@ class GetPhoneBill(FunctionProblem):
 Your solution should look something like:
 ```python
 def get_phone_bill(gb):
-    # everyone pays $100/month
-    bill = 100
-    # number of GB over the 15GB plan (negative if under)
-    gb_over = gb - 15
-    # if gb_over is positive, there is an additional fee
-    if ____:
-        # calculate cost of additional GB
-        overage_fee = ____
-        # add additional cost to bill
+    if gb <= 15:
         bill = ____
+    else:
+        bill = 100 + ____
     return bill
 ```
 """
     _solution = CS(
 """def get_phone_bill(gb):
-    # everyone pays $100/month
-    bill = 100
-    # number of GB over the 15GB plan (negative if under)
-    gb_over = gb - 15
-    # if gb_over is positive, there is an additional fee
-    if gb_over > 0:
-        # calculate cost of additional GB
-        overage_fee = 100 * gb_over
-        # add additional cost to bill
-        bill = bill + overage_fee
+    if gb <= 15:
+        bill = 100
+    else:
+        bill = 100 + (gb - 15) * 100
     return bill
 """)
 
