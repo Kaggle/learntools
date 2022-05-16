@@ -114,7 +114,11 @@ class WebsiteAnalytics(FunctionProblem):
         ((num_users_test, 9), percentage_growth_solution(num_users_test, 9)),
     ]
     _hint = ("It's already correct that you need to subtract two numbers from the list, before dividing by an item in the list. "
-             "You only need to modify the positions for the items that are pulled from the list.")
+             "You only need to modify the positions for the items that are pulled from the list. Note thaat in order to pull "
+             "the final entry in the `num_users` list, you would need to use `num_users[len(num_users)-1]`.  This corresponds "
+             "to the number of users in the most recently completed year.  Then, to get the number of users from one year "
+             "prior, you should use `num_users[len(num_users)-2]`.  To get the number of users from `yrs_ago` years ago, use "
+             "`num_users[len(num_users)-yrs_ago-1`.")
     _solution = CS(
 """def percentage_growth(num_users, yrs_ago):
     growth = (num_users[len(num_users)-1] - num_users[len(num_users)-yrs_ago-1])/num_users[len(num_users)-yrs_ago-1]
