@@ -118,7 +118,7 @@ class WebsiteAnalytics(FunctionProblem):
              "the final entry in the `num_users` list, you would need to use `num_users[len(num_users)-1]`.  This corresponds "
              "to the number of users in the most recently completed year.  \n\nThen, to get the number of users from one year "
              "prior, you should use `num_users[len(num_users)-2]`.  \n\nTo get the number of users from `yrs_ago` years ago, use "
-             "`num_users[len(num_users)-yrs_ago-1`.")
+             "`num_users[len(num_users)-yrs_ago-1]`.")
     _solution = CS(
 """def percentage_growth(num_users, yrs_ago):
     growth = (num_users[len(num_users)-1] - num_users[len(num_users)-yrs_ago-1])/num_users[len(num_users)-yrs_ago-1]

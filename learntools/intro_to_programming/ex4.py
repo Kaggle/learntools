@@ -15,13 +15,13 @@ def get_grade(score):
 
 def get_water_bill(num_gallons):
     if num_gallons <= 8000:
-        bill = 4.82 * num_gallons / 1000
+        bill = 5 * num_gallons / 1000
     elif num_gallons <= 22000:
-        bill = 5.53 * num_gallons / 1000
+        bill = 6 * num_gallons / 1000
     elif num_gallons <= 30000:
-        bill = 6.91 * num_gallons / 1000
+        bill = 7 * num_gallons / 1000
     else:
-        bill = 10.36 * num_gallons / 1000
+        bill = 10 * num_gallons / 1000
     return bill
 
 def get_phone_bill(gb):
@@ -109,13 +109,13 @@ def get_water_bill(num_gallons):
     _solution = CS(
 """def get_water_bill(num_gallons):
     if num_gallons <= 8000:
-        bill = 4.82 * num_gallons / 1000
+        bill = 5 * num_gallons / 1000
     elif num_gallons <= 22000:
-        bill = 5.53 * num_gallons / 1000
+        bill = 6 * num_gallons / 1000
     elif num_gallons <= 30000:
-        bill = 6.91 * num_gallons / 1000
+        bill = 7 * num_gallons / 1000
     else:
-        bill = 10.36 * num_gallons / 1000
+        bill = 10 * num_gallons / 1000
     return bill
 """)
     
