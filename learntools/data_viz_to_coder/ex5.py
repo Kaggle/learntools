@@ -80,7 +80,7 @@ sns.kdeplot(data=cancer_data, x='Radius (worst)', hue='Diagnosis', shade=True)
 
     def solution_plot(self):
         self._view.solution()
-        sns.kdeplot(data=cancer_data, x='Radius (worst)', hue='Diagnosis', shade=True)
+        sns.kdeplot(data=df, x='Radius (worst)', hue='Diagnosis', shade=True)
     
     def check(self, passed_plt):
         assert len(passed_plt.figure(1).axes) > 0, \
