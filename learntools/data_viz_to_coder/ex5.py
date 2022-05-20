@@ -49,7 +49,7 @@ sns.histplot(data=cancer_data, x='Area (mean)', hue='Diagnosis')
 
     def solution_plot(self):
         self._view.solution()
-        sns.histplot(data=cancer_data, x='Area (mean)', hue='Diagnosis')
+        sns.histplot(data=df, x='Area (mean)', hue='Diagnosis')
     
     def check(self, passed_plt):
         assert len(passed_plt.figure(1).axes) > 0, "Please write code to create two histograms."
