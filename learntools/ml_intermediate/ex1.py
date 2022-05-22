@@ -18,7 +18,7 @@ class BestModel(CodingProblem):
          "`model_3`, `model_4`, or `model_5`.")
 
         params = best_model.get_params()
-        assert params['n_estimators'] == 100 and params['criterion'] == 'mae' \
+        assert params['n_estimators'] == 100 and (params['criterion'] == 'mae' or params['criterion'] == 'absolute_error') \
         and params['random_state'] == 0, \
         ("Set the value of `best_model` to one of `model_1`, `model_2`, "
          "`model_3`, `model_4`, or `model_5`.  Select the model that gets the lowest MAE.")
