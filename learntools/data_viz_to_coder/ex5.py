@@ -6,60 +6,50 @@ import matplotlib.pyplot as plt
 
 from learntools.core import *
 
-warnings.filterwarnings("ignore")
-df_b = pd.read_csv("../input/cancer_b.csv", index_col="Id")
-df_m = pd.read_csv("../input/cancer_m.csv", index_col="Id")
+df = pd.read_csv("../input/cancer.csv", index_col="Id")
 
 class LoadCancerData(EqualityCheckProblem):
-    _vars = ['cancer_b_data', 'cancer_m_data']
-    _expected = [df_b, df_m]
+    _var = 'cancer_data'
+    _expected = df
     _hint = ("Use `pd.read_csv`, and follow it with **two** pieces of text that "
              "are enclosed in parentheses and separated by commas.  (1) The "
-             "filepath for the dataset is provided in either `cancer_b_filepath` or "
-             "`cancer_m_filepath`.  (2) Use the `\"Id\"` column to label the rows.")
+             "filepath for the dataset is provided in `cancer_filepath`. "
+             "(2) Use the `\"Id\"` column to label the rows.")
     _solution = CS("""
-cancer_b_data = pd.read_csv(cancer_b_filepath, index_col="Id")
-cancer_m_data = pd.read_csv(cancer_m_filepath, index_col="Id")
+cancer_data = pd.read_csv(cancer_filepath, index_col="Id")
 """)
 
 class ReviewData(EqualityCheckProblem):
     _vars = ['max_perim', 'mean_radius']
-    _expected = [87.46, 20.57]
+    _expected = [87.46, 9.504]
     _hint = ("Use the `head()` command to print the first 5 rows. "
              "**After printing the first 5 rows**, "
              "each row corresponds to a different tumor ID. "
              "The `'Perimeter (mean)'` column is the fourth column in the dataset. "
              "The `'Radius (mean)'` column is the second column.")
     _solution = CS(
-"""# Print the first five rows of the (benign) data
-cancer_b_data.head()
-# Print the first five rows of the (malignant) data
-cancer_m_data.head()
-# In the first five rows of the data for benign tumors, what is the
+"""# Print the first five rows of the data
+cancer_data.head()
+# In the first five rows of the data, what is the
 # largest value for 'Perimeter (mean)'?
 max_perim = 87.46
-# What is the value for 'Radius (mean)' for the tumor with Id 842517?
-mean_radius = 20.57
+# What is the value for 'Radius (mean)' for the tumor with Id 8510824?
+mean_radius = 9.504
 """)
 
 class PlotHist(CodingProblem):
     _var = 'plt'
-    _hint = ("Use `sns.distplot`, and set the data and legend label by using "
-             "`a=` and `label=`, respectively. Set `kde=False`. You will need to " 
-             "write two lines of code, corresponding to `cancer_m_data` and "
-             "`cancer_b_data`.")
+    _hint = ("Use `sns.histplot`, and set the data and column by using "
+             "`data=` and `x=`, respectively. To separate the data according "
+             "to whether it is benign or malignant, use `hue=`.")
     _solution = CS(
 """# Histograms for benign and maligant tumors
-sns.distplot(a=cancer_b_data['Area (mean)'], label="Benign", kde=False)
-sns.distplot(a=cancer_m_data['Area (mean)'], label="Malignant", kde=False)
-plt.legend()
+sns.histplot(data=cancer_data, x='Area (mean)', hue='Diagnosis')
 """)
 
     def solution_plot(self):
         self._view.solution()
-        sns.distplot(a=df_b['Area (mean)'], label="Benign", kde=False)
-        sns.distplot(a=df_m['Area (mean)'], label="Malignant", kde=False)
-        plt.legend()
+        sns.histplot(data=df, x='Area (mean)', hue='Diagnosis')
     
     def check(self, passed_plt):
         assert len(passed_plt.figure(1).axes) > 0, "Please write code to create two histograms."
@@ -67,8 +57,8 @@ plt.legend()
         children = passed_plt.gca().get_children()
         
         assert all(isinstance(x, matplotlib.patches.Rectangle) for x in children[:31]), \
-        ("Does your figure contain two histograms?  Write two lines of code "
-         "using `sns.distplot` to generate your figure.")
+        ("Does your figure contain two histograms? "
+         "Using `sns.histplot` to generate your figure.")
 
 class ThinkHist(ThoughtExperiment):
     _hint = ("Does the histogram for malignant tumors appear mostly to the left or to the "
@@ -80,19 +70,17 @@ Hist = MultipartProblem(PlotHist, ThinkHist)
 
 class PlotThreshold(CodingProblem):
     _var = 'plt'
-    _hint = ("Use `sns.kdeplot`, and specify the data and label by using `data=` and `label=`, "
-             "respectively. You will need to write two lines of code, corresponding to "
-             "`cancer_m_data` and `cancer_b_data`.")
+    _hint = ("Use `sns.kdeplot`, and specify the data and label by using `data=` and `x=`, "
+             "respectively. To separate the data according to whether it is benign or "
+             "malignant, use `hue=`.  Set `shade=True`.")
     _solution = CS(
 """# KDE plots for benign and malignant tumors
-sns.kdeplot(data=cancer_b_data['Radius (worst)'], shade=True, label="Benign")
-sns.kdeplot(data=cancer_m_data['Radius (worst)'], shade=True, label="Malignant")
+sns.kdeplot(data=cancer_data, x='Radius (worst)', hue='Diagnosis', shade=True)
 """)
 
     def solution_plot(self):
         self._view.solution()
-        sns.kdeplot(data=df_b['Radius (worst)'], shade=True, label="Benign")
-        sns.kdeplot(data=df_m['Radius (worst)'], shade=True, label="Malignant")
+        sns.kdeplot(data=df, x='Radius (worst)', hue='Diagnosis', shade=True)
     
     def check(self, passed_plt):
         assert len(passed_plt.figure(1).axes) > 0, \
