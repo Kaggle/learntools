@@ -22,7 +22,7 @@ notebooks = [
     dict(filename="tut3.ipynb", lesson_idx=2, type="tutorial"),      # 25258222
     dict(filename="ex3.ipynb", lesson_idx=2, type="exercise", scriptid=25258226),
     dict(filename="tut4.ipynb", lesson_idx=3, type="tutorial"),      # 25880617
-    dict(filename="ex4.ipynb", lesson_idx=3, type="exercise", scriptid=25880622, enable_internet=True),
+    dict(filename="ex4.ipynb", lesson_idx=3, type="exercise", scriptid=25880622),
     dict(filename="tut5.ipynb", lesson_idx=4, type="tutorial"),      # 26034860
     dict(filename="ex5.ipynb", lesson_idx=4, type="exercise", scriptid=26034864),
 ]
