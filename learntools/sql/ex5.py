@@ -82,8 +82,7 @@ table = client.get_table(table_ref)
 client.list_rows(table, max_results=5).to_dataframe()
 ```
 
-Some trips in the top few rows have `trip_seconds` or `trip_miles` values of 0. 
-Other location fields have values of `None`. That is a problem if we want to use those fields.
+Some location fields have values of `None` or `NaN`. That is a problem if we want to use those fields.
 """
 
 # (3)
