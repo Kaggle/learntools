@@ -39,7 +39,8 @@ notebooks = [
         lesson_idx=1,
         type='exercise',
         dataset_sources = ["chicago/chicago-taxi-trips-bq"],
-        scriptid=5045824
+        scriptid=5045824,
+        enable_internet=True
         ),
     dict(
         filename='tut3.ipynb',
