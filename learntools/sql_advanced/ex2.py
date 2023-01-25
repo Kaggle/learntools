@@ -15,15 +15,14 @@ avg_num_trips_query = """
                       SELECT DATE(trip_start_timestamp) AS trip_date,
                           COUNT(*) as num_trips
                       FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`
-                      WHERE trip_start_timestamp >= '2016-01-01' AND trip_start_timestamp < '2018-01-01'
+                      WHERE trip_start_timestamp > '2016-01-01' AND trip_start_timestamp < '2016-04-01'
                       GROUP BY trip_date
-                      ORDER BY trip_date
                       )
                       SELECT trip_date,
                           AVG(num_trips) 
                           OVER (
                                ORDER BY trip_date
-                               ROWS BETWEEN 15 PRECEDING AND 15 FOLLOWING
+                               ROWS BETWEEN 3 PRECEDING AND 3 FOLLOWING
                                ) AS avg_num_trips
                       FROM trips_by_day
                       """
@@ -40,7 +39,7 @@ trip_number_query = """
                                   ORDER BY trip_start_timestamp
                                  ) AS trip_number
                     FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`
-                    WHERE DATE(trip_start_timestamp) = '2017-05-01' 
+                    WHERE DATE(trip_start_timestamp) = '2013-10-03' 
                     """
 trip_number_answer = client.query(trip_number_query).result().to_dataframe()
 
@@ -52,9 +51,9 @@ break_time_query = """
                        TIMESTAMP_DIFF(
                            trip_start_timestamp, 
                            LAG(trip_end_timestamp, 1) OVER (PARTITION BY taxi_id ORDER BY trip_start_timestamp), 
-                           MINUTE) as prev_break
+                           MINUTE) AS prev_break
                    FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`
-                   WHERE DATE(trip_start_timestamp) = '2017-05-01' 
+                   WHERE DATE(trip_start_timestamp) = '2013-10-03' 
                    """
 break_time_answer = client.query(break_time_query).result().to_dataframe()
 
@@ -74,7 +73,7 @@ class TaxiDemand(CodingProblem):
         results = run_query(query)
         # check 1: words appear in query
         assert ("over" in query.lower()), ('Your query is missing an **OVER** clause.')
-        assert ("15" in query.lower()), ("Your window should include the current date, along with the preceding 15 days and the following 15 days.")
+        assert ("3" in query.lower()), ("Your window should include the current date, along with the preceding 3 days and the following 3 days.")
         assert ("avg" in query.lower()), ("Your query should calculate a rolling average.  For this, you need to use the **AVG()** function.")
         # check 2: column names
         lowered_colnames = [c.lower() for c in results.columns]
@@ -82,7 +81,7 @@ class TaxiDemand(CodingProblem):
         assert ('avg_num_trips' in results.columns), ("You didn't select the `avg_num_trips` column. Try again.")
         # check 3: length of df
         assert (len(results) == len(avg_num_trips_answer)), ("Your results do not seem to have the correct dates.  You should have one entry "
-                                                             "for each date from January 1, 2016, to December 31, 2017.  Note that the provided partial "
+                                                             "for each date from January 1, 2016, to March 31, 2016.  Note that the provided partial "
                                                              "query already selects the appropriate dates for you (in the `trips_by_day` column).")
         # check 4: check specific value in df
         # get a date to check
@@ -101,22 +100,21 @@ avg_num_trips_query = \"""
                       SELECT DATE(trip_start_timestamp) AS trip_date,
                           COUNT(*) as num_trips
                       FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`
-                      WHERE trip_start_timestamp >= '2016-01-01' AND trip_start_timestamp < '2018-01-01'
+                      WHERE trip_start_timestamp > '2016-01-01' AND trip_start_timestamp < '2016-04-01'
                       GROUP BY trip_date
-                      ORDER BY trip_date
                       )
                       SELECT trip_date,
                           AVG(num_trips) 
                           OVER (
                                ORDER BY trip_date
-                               ROWS BETWEEN 15 PRECEDING AND 15 FOLLOWING
+                               ROWS BETWEEN 3 PRECEDING AND 3 FOLLOWING
                                ) AS avg_num_trips
                       FROM trips_by_day
                       \"""
 """
     )
     _hint = ("Use the **AVG()** function. Write an **OVER** clause with that orders the rows with the `trip_date` column and uses a window that "
-             "includes the 15 preceding rows, the current row, and the following 15 rows.")
+             "includes the 3 preceding rows, the current row, and the following 3 rows.")
 
 
 # (2)
@@ -151,7 +149,7 @@ trip_number_query = \"""
                                   ORDER BY trip_start_timestamp
                                  ) AS trip_number
                     FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`
-                    WHERE DATE(trip_start_timestamp) = '2017-05-01' 
+                    WHERE DATE(trip_start_timestamp) = '2013-10-03' 
                     \"""
 
 trip_number_result = client.query(trip_number_query).result().to_dataframe()
@@ -193,7 +191,7 @@ break_time_query = \"""
                            LAG(trip_end_timestamp, 1) OVER (PARTITION BY taxi_id ORDER BY trip_start_timestamp), 
                            MINUTE) as prev_break
                    FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`
-                   WHERE DATE(trip_start_timestamp) = '2017-05-01' 
+                   WHERE DATE(trip_start_timestamp) = '2013-10-03' 
                    \"""
 
 break_time_result = client.query(break_time_query).result().to_dataframe()
