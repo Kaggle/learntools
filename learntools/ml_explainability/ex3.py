@@ -50,7 +50,7 @@ The code you need to create the desired plot is:
 class ReadPDPContour(CodingProblem):
     _var = 'savings_from_shorter_trip'
     _hint = 'First find the vertical level corresponding to -74 dropoff longitude. Then read off the horizontal values you are switching between. Use the contour lines to orient yourself on what values you are near. You can round to the nearest integer rather than stressing about the exact cost to the nearest penny'
-    _solution = 'About \$6. The price decreases from slightly less than \$15 to slightly less than \$9.'
+    _solution = 'About 6. The price decreases from slightly less than 15 to slightly less than 9.'
     def check(self, savings):
         if type(savings) == str:
             savings = Decimal(dollars.strip('$'))
