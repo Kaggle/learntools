@@ -100,7 +100,7 @@ do
             || [[ ( $nb =~ "tut1" && $track == "computer_vision" ) ]] || [[ ( $nb =~ "tut5" && $track == "computer_vision" ) ]] || [[ ( $nb =~ "tut6" && $track == "computer_vision" ) ]] \
             || [[ ( $nb =~ "ex1" && $track == "computer_vision" ) ]] || [[ ( $nb =~ "ex5" && $track == "computer_vision" ) ]] || [[ ( $nb =~ "ex6" && $track == "computer_vision" ) ]] \
             || [[ ( $nb =~ "ex1" && $track == "computer_vision" ) ]] \
-            || [[ ( $nb =~ "ex2" && $track == "nlp" ) ]] #times out
+            || [[ ( $nb =~ "ex2" && $track == "nlp" ) ]] \ #times out
 	    || [[ ( $nb =~ "ex3_partial_plots" && $track == "ml_explainability" ) ]] #placeholders
         then
             echo "Warning: skipping $nb in track $track"
