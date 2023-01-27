@@ -41,7 +41,8 @@ notebooks = [
         filename='ex3_partial_plots.ipynb',
         lesson_idx=2,
         type='exercise',
-        scriptid=1637380
+        scriptid=1637380,
+        enable_internet=True
     ),
     dict(
         filename='tut4_shap_basic.ipynb',
