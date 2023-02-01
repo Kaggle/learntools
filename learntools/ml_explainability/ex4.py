@@ -5,6 +5,7 @@ import numpy as np
 
 from learntools.core import *
 
+# (1)
 class SummarizeModel(ThoughtExperiment):
     _solution = CS(
 """
@@ -19,6 +20,7 @@ eli5.show_weights(perm, feature_names = val_X.columns.tolist())
 """
     )
 
+# (2)
 class EffectNumInpatient(ThoughtExperiment):
     _solution = CS(
 """
@@ -37,6 +39,7 @@ plt.show()
 """
     )
 
+# (3)
 class EffectTimeInHospital(ThoughtExperiment):
     _solution = \
 """
@@ -54,6 +57,7 @@ The results are very different. Specifically time in hospital has a much smaller
     plt.show()
 """
 
+# (4)
 class RawActualsInsteadOfPDP(ThoughtExperiment):
     _hint = "This requires a groupby (from pandas) on the raw data, rather than using a model"
     _solution = CS(
@@ -68,6 +72,7 @@ plt.show()
 """
     )
 
+# (5)
 class UseShap(ThoughtExperiment):
     _hint = "Here's the time to use SHAP values"
     _solution = CS(
