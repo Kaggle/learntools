@@ -27,14 +27,10 @@ class EffectNumInpatient(ThoughtExperiment):
 # PDP for number_inpatient feature
 
 from matplotlib import pyplot as plt
-from pdpbox import pdp, get_dataset, info_plots
+from sklearn.inspection import PartialDependenceDisplay
 
 feature_name = 'number_inpatient'
-# Create the data that we will plot
-my_pdp = pdp.pdp_isolate(model=my_model, dataset=val_X, model_features=val_X.columns, feature=feature_name)
-
-# plot it
-pdp.pdp_plot(my_pdp, feature_name)
+PartialDependenceDisplay.from_estimator(my_model, val_X, [feature_name])
 plt.show()
 """
     )
@@ -46,14 +42,10 @@ class EffectTimeInHospital(ThoughtExperiment):
 The results are very different. Specifically time in hospital has a much smaller effect. Code below:
 
     from matplotlib import pyplot as plt
-    from pdpbox import pdp, get_dataset, info_plots
+    from sklearn.inspection import PartialDependenceDisplay
 
     feature_name = 'time_in_hospital'
-    # Create the data that we will plot
-    my_pdp = pdp.pdp_isolate(model=my_model, dataset=val_X, model_features=val_X.columns, feature=feature_name)
-
-    # plot it
-    pdp.pdp_plot(my_pdp, feature_name)
+    PartialDependenceDisplay.from_estimator(my_model, val_X, [feature_name])
     plt.show()
 """
 
