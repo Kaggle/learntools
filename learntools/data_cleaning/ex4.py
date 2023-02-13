@@ -2,7 +2,7 @@ from learntools.core import *
 
 import pandas as pd
 import numpy as np
-import chardet
+import charset_normalizer
 import os
 np.random.seed(0)
 
