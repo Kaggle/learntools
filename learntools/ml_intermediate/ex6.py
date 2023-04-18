@@ -53,8 +53,10 @@ my_model_1.fit(X_train, y_train)
         ("Please instantiate the XGBoost model with default parameters, and set the random seed "
          "to 0 (e.g., `my_model_1 = XGBRegressor(random_state=0)`).")
 
-        assert my_model_1._Booster is not None, \
-        "Please fit the model to the training data."
+        try: 
+            my_model_1.get_booster()
+        except:
+            assert 0==1, "Please fit the model to the training data."
 
 class Model1B(CodingProblem):
     _var = 'predictions_1'
