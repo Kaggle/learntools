@@ -21,7 +21,7 @@ rides_per_month_query = """
                         SELECT EXTRACT(MONTH FROM trip_start_timestamp) AS month, 
                                COUNT(1) AS num_trips
                         FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`
-                        WHERE EXTRACT(YEAR FROM trip_start_timestamp) = 2017
+                        WHERE EXTRACT(YEAR FROM trip_start_timestamp) = 2016
                         GROUP BY month
                         ORDER BY month
                         """
@@ -36,8 +36,8 @@ speeds_query = """
                           trip_miles, 
                           trip_seconds
                    FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`
-                   WHERE trip_start_timestamp > '2017-01-01' AND 
-                         trip_start_timestamp < '2017-07-01' AND 
+                   WHERE trip_start_timestamp > '2016-01-01' AND 
+                         trip_start_timestamp < '2016-04-01' AND 
                          trip_seconds > 0 AND 
                          trip_miles > 0
                )
@@ -82,8 +82,7 @@ table = client.get_table(table_ref)
 client.list_rows(table, max_results=5).to_dataframe()
 ```
 
-Some trips in the top few rows have `trip_seconds` or `trip_miles` values of 0. 
-Other location fields have values of `None`. That is a problem if we want to use those fields.
+Some location fields have values of `None` or `NaN`. That is a problem if we want to use those fields.
 """
 
 # (3)
@@ -97,7 +96,7 @@ class YearDistrib(CodingProblem):
         # check 2: length of dataframe
         assert (len(results) == len(rides_per_year_answer)), ("The results don't look right. Try again.")
         # check 3: one value in particular
-        year_to_check = list(rides_per_year_answer["year"])[0]
+        year_to_check = list(rides_per_year_answer["year"])[-1]
         correct_number = int(rides_per_year_answer.loc[rides_per_year_answer["year"]==year_to_check]["num_trips"].values)
         submitted_number = int(results.loc[results["year"]==year_to_check]["num_trips"].values)
         assert (correct_number == submitted_number), ("The results don't look right. Try again.")
@@ -145,7 +144,7 @@ rides_per_month_query = \"""
                         SELECT EXTRACT(MONTH FROM trip_start_timestamp) AS month, 
                                COUNT(1) AS num_trips
                         FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`
-                        WHERE EXTRACT(YEAR FROM trip_start_timestamp) = 2017
+                        WHERE EXTRACT(YEAR FROM trip_start_timestamp) = 2016
                         GROUP BY month
                         ORDER BY month
                         \"""
@@ -191,8 +190,8 @@ speeds_query = \"""
                           trip_miles, 
                           trip_seconds
                    FROM `bigquery-public-data.chicago_taxi_trips.taxi_trips`
-                   WHERE trip_start_timestamp > '2017-01-01' AND 
-                         trip_start_timestamp < '2017-07-01' AND 
+                   WHERE trip_start_timestamp > '2016-01-01' AND 
+                         trip_start_timestamp < '2016-04-01' AND 
                          trip_seconds > 0 AND 
                          trip_miles > 0
                )

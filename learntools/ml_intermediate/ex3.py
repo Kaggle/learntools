@@ -141,6 +141,9 @@ num_X_valid = X_valid.drop(object_cols, axis=1)
 OH_X_train = pd.concat([num_X_train, OH_cols_train], axis=1)
 OH_X_valid = pd.concat([num_X_valid, OH_cols_valid], axis=1)
 
+# Ensure all columns have string type
+OH_X_train.columns = OH_X_train.columns.astype(str)
+OH_X_valid.columns = OH_X_valid.columns.astype(str)
 """)
 
     def check(self, OH_X_train, OH_X_valid):

@@ -52,7 +52,8 @@ notebooks = [
         filename='ex4_shap_basic.ipynb',
         lesson_idx=3,
         type='exercise',
-        scriptid=1637226
+        scriptid=1637226,
+        enable_internet=True
     ),
     dict(
         filename='tut5_shap_advanced.ipynb',

@@ -11,8 +11,8 @@ if [[ -r /etc/git_commit ]]; then
 fi
 
 # Filter by tracks if first argument set.
-TRACKS="intro_to_programming time_series ethics feature_engineering_new computer_vision deep_learning_intro pandas python machine_learning sql data_viz_to_coder ml_intermediate sql_advanced feature_engineering geospatial nlp game_ai data_cleaning"
-TESTABLE_NOTEBOOK_TRACKS="intro_to_programming geospatial nlp time_series ethics feature_engineering_new data_viz_to_coder ml_intermediate data_cleaning computer_vision deep_learning_intro python pandas machine_learning game_ai"
+TRACKS="ml_explainability intro_to_programming time_series ethics feature_engineering_new computer_vision deep_learning_intro pandas python machine_learning sql data_viz_to_coder ml_intermediate sql_advanced feature_engineering geospatial nlp game_ai data_cleaning"
+TESTABLE_NOTEBOOK_TRACKS="ml_intermediate ml_explainability intro_to_programming geospatial time_series ethics feature_engineering_new data_viz_to_coder data_cleaning computer_vision deep_learning_intro python pandas machine_learning game_ai"
 
 if [[ -n $1 && $1 != "all" ]]; then
     TRACKS=$1
@@ -100,7 +100,8 @@ do
             || [[ ( $nb =~ "tut1" && $track == "computer_vision" ) ]] || [[ ( $nb =~ "tut5" && $track == "computer_vision" ) ]] || [[ ( $nb =~ "tut6" && $track == "computer_vision" ) ]] \
             || [[ ( $nb =~ "ex1" && $track == "computer_vision" ) ]] || [[ ( $nb =~ "ex5" && $track == "computer_vision" ) ]] || [[ ( $nb =~ "ex6" && $track == "computer_vision" ) ]] \
             || [[ ( $nb =~ "ex1" && $track == "computer_vision" ) ]] \
-            || [[ ( $nb =~ "ex2" && $track == "nlp" ) ]] #times out
+            || [[ ( $nb =~ "ex2" && $track == "nlp" ) ]] \
+            || [[ ( $nb =~ "ex3_partial_plots" && $track == "ml_explainability" ) ]]
         then
             echo "Warning: skipping $nb in track $track"
             continue

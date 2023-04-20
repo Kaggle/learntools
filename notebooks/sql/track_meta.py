@@ -80,6 +80,7 @@ notebooks = [
         type='exercise',
         dataset_sources = ["chicago/chicago-taxi-trips-bq", "bigquery/bitcoin-blockchain"],
         scriptid=682113,
+        enable_internet=True
  ),
     dict(
         filename='tut6.ipynb',
