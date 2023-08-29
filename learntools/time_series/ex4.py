@@ -1,5 +1,5 @@
 from learntools.core import *
-from learntools.time_series.checking_utils import load_store_sales, load_family_sales
+from learntools.time_series.checking_utils import load_family_sales
 from learntools.time_series.utils import make_lags, make_leads
 
 

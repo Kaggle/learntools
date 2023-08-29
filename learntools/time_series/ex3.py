@@ -14,7 +14,7 @@ class Q2(CodingProblem):  # Create seasonal features
     def check(self, dp, X):
         from statsmodels.tsa.deterministic import (CalendarFourier,
                                                    DeterministicProcess)
-        y = load_average_sales()['2017']
+        y = load_average_sales().loc['2017']
         fourier = CalendarFourier(freq='M', order=4)
         dp = DeterministicProcess(
             index=y.index,
