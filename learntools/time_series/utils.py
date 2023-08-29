@@ -40,7 +40,7 @@ def seasonal_plot(X, y, period, freq, ax=None):
 
 def plot_periodogram(ts, detrend='linear', ax=None):
     from scipy.signal import periodogram
-    fs = pd.Timedelta("1Y") / pd.Timedelta("1D")
+    fs = pd.Timedelta("365D") / pd.Timedelta("1D")
     freqencies, spectrum = periodogram(
         ts,
         fs=fs,
