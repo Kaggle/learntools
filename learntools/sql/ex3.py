@@ -8,8 +8,8 @@ client = bigquery.Client()
 
 # (1) ProlificCommenters
 prolific_commenters_query = """
-                            SELECT author, COUNT(id) AS NumPosts
-                            FROM `bigquery-public-data.hacker_news.comments`
+                            SELECT `by` as author, COUNT(id) AS NumPosts
+                            FROM `bigquery-public-data.hacker_news.full`
                             GROUP BY author
                             HAVING COUNT(id) > 10000
                             """
@@ -19,7 +19,7 @@ prolific_commenters_answer = query_job.to_dataframe()
 # (2) NumDeletedPosts
 deleted_posts_query = """
                       SELECT COUNT(1) AS num_deleted_posts
-                      FROM `bigquery-public-data.hacker_news.comments`
+                      FROM `bigquery-public-data.hacker_news.full`
                       WHERE deleted = True
                       """
 query_job = client.query(deleted_posts_query)
@@ -47,7 +47,7 @@ class ProlificCommenters(CodingProblem):
 """
 prolific_commenters_query = \"""
                             SELECT author, COUNT(1) AS NumPosts
-                            FROM `bigquery-public-data.hacker_news.comments`
+                            FROM `bigquery-public-data.hacker_news.full`
                             GROUP BY author
                             HAVING COUNT(1) > 10000
                             \"""
@@ -62,7 +62,7 @@ class NumDeletedPosts(EqualityCheckProblem):
 # Query to determine how many posts were deleted
 deleted_posts_query = \"""
                       SELECT COUNT(1) AS num_deleted_posts
-                      FROM `bigquery-public-data.hacker_news.comments`
+                      FROM `bigquery-public-data.hacker_news.full`
                       WHERE deleted = True
                       \"""
                       
