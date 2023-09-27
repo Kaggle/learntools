@@ -7,7 +7,7 @@ import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib import animation
-plt.style.use('seaborn-whitegrid')
+plt.style.use('seaborn-v0_8-whitegrid')
 
 # NUM_EXAMPLES = 256
 # BATCH_SIZE = 8

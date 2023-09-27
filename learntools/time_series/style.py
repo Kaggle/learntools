@@ -5,7 +5,7 @@ from IPython import get_ipython
 
 warnings.simplefilter("ignore")
 
-plt.style.use("seaborn-whitegrid")
+plt.style.use("seaborn-v0_8-whitegrid")
 plt.rc(
     "figure",
     autolayout=True,
