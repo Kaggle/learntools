@@ -43,9 +43,13 @@ If you create further config files (e.g. `testing.yaml`), they will generate the
 `prepare_push.py` translates notebooks in `raw/` to publishable notebooks in `rendered/`.
 The logic for this step mostly lives in `lesson_preprocessor.py`. Most of its work is in expanding macros which look like `#$HIDE_OUTPUT$`, or `#$EXERCISE_URL(2)$`. See MACROS.txt for a listing of available macros.
 
+`prepare_push.py` requires a few libraries that may need to be installed before continuing.
+
 The Kaggle Kernels API requires a `kernel-metadata.json` file for any kernel being pushed to the site. `prepare_push.py` also generates these in the `kernels_api_metadata` subdirectory. 
 
 ## Step 2: Pushing
+
+The push process uses the Kaggle Kernels API, so it requires a valid API key with write permissions to the learn notebooks to update.
 
 Use ./pushall.sh as
     ./pushall deep_learning/prod
