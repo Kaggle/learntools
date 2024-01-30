@@ -49,7 +49,7 @@ The Kaggle Kernels API requires a `kernel-metadata.json` file for any kernel bei
 
 ## Step 2: Pushing
 
-The push process uses the Kaggle Kernels API, so it requires a valid API key with write permissions to the learn notebooks to update.
+The push process uses the Kaggle Kernels API, so it requires a valid API key with write permissions to the learn notebooks to update. Additionally, if pushing an exercise, the pushing account should be included in the `ops-kernels-commits-allow-errors` flag, which enables the notebook to be published despite known errors where the Learn users will fill in the missing code.
 
 Use ./pushall.sh as
     ./pushall deep_learning/prod
