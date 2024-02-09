@@ -78,15 +78,7 @@ fi
 
 set -x
 
-if [[ $NOTEBOOK == "all" ]]; then
-    docker run --rm -t \
-    -e KAGGLE_USERNAME -e KAGGLE_KEY \
-    -v ~/.kaggle:/root/.kaggle:ro \
-    -v $PWD:/input:ro \
-    $PINNED_IMAGE \
-    /bin/bash -c "/input/notebooks/test.sh kerasExp"
-fi
-
+# Allows pinned notebooks to be tested independently. 
 if [[ $NOTEBOOK  == "computer_vision" || $NOTEBOOK == "deep_learning_intro" ]]; then
     docker run --rm -t \
     -e KAGGLE_USERNAME -e KAGGLE_KEY \
@@ -94,6 +86,17 @@ if [[ $NOTEBOOK  == "computer_vision" || $NOTEBOOK == "deep_learning_intro" ]]; 
     -v $PWD:/input:ro \
     $PINNED_IMAGE \
     /bin/bash -c "/input/notebooks/test.sh $TRACK $NOTEBOOK"
+    exit
+fi
+
+
+if [[ $NOTEBOOK == "all" ]]; then
+    docker run --rm -t \
+    -e KAGGLE_USERNAME -e KAGGLE_KEY \
+    -v ~/.kaggle:/root/.kaggle:ro \
+    -v $PWD:/input:ro \
+    $PINNED_IMAGE \
+    /bin/bash -c "/input/notebooks/test.sh kerasExp"
 fi
 
 docker run --rm -t \
