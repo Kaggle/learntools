@@ -11,13 +11,20 @@ if [[ -r /etc/git_commit ]]; then
 fi
 
 # Filter by tracks if first argument set.
-TRACKS="ml_explainability intro_to_programming time_series ethics feature_engineering_new computer_vision deep_learning_intro pandas python machine_learning sql data_viz_to_coder ml_intermediate sql_advanced feature_engineering geospatial nlp game_ai data_cleaning"
-TESTABLE_NOTEBOOK_TRACKS="ml_intermediate ml_explainability intro_to_programming geospatial time_series ethics feature_engineering_new data_viz_to_coder data_cleaning computer_vision deep_learning_intro python pandas machine_learning game_ai"
+TRACKS="ml_explainability intro_to_programming time_series ethics feature_engineering_new pandas python machine_learning sql data_viz_to_coder ml_intermediate sql_advanced feature_engineering geospatial nlp game_ai data_cleaning"
+TESTABLE_NOTEBOOK_TRACKS="ml_intermediate ml_explainability intro_to_programming geospatial time_series ethics feature_engineering_new data_viz_to_coder data_cleaning python pandas machine_learning game_ai"
+PARTIAL_TESTABLE_NOTEBOOK_TRACKS="computer_vision deep_learning_intro"
 
-if [[ -n $1 && $1 != "all" ]]; then
+if [[ -n $1 && $1 != "all" && $1 != "kerasExp" ]]; then
     TRACKS=$1
     TESTABLE_NOTEBOOK_TRACKS=$1
 fi
+
+if [[ -n $1 && $1 == "kerasExp" ]]; then
+    TRACKS=$PARTIAL_TESTABLE_NOTEBOOK_TRACKS
+    TESTABLE_NOTEBOOK_TRACKS=$PARTIAL_TESTABLE_NOTEBOOK_TRACKS
+fi
+
 readonly TRACKS
 readonly TESTABLE_NOTEBOOK_TRACKS
 

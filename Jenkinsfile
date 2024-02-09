@@ -18,8 +18,9 @@ pipeline {
             steps {
                 sh '''#!/bin/bash
                     set -exo pipefail
-                    # Ensures the currently released Docker Python image is used.
+                    # Ensures both pinned and unpinned notebook are supported
                     docker pull gcr.io/kaggle-images/python:staging
+		    docker pull gcr.io/kaggle-images/python:v143
                 '''
             }
         }
