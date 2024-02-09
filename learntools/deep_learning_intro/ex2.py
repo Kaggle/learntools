@@ -1,6 +1,6 @@
 import numpy as np
 import tensorflow as tf
-
+import tf_keras
 from learntools.core import *
 
 # Using *Concrete* dataset
@@ -33,16 +33,16 @@ input_shape = [____]
 class Q2(CodingProblem):
     _hint = """Your answer should look something like:
 ```python
-model = keras.Sequential([
+model = tf_keras.Sequential([
     ____
 ])
 ```
 """
     _solution = CS("""
-from tensorflow import keras
-from tensorflow.keras import layers
+import tf_keras
+from tf_keras import layers
 
-model = keras.Sequential([
+model = tf_keras.Sequential([
     layers.Dense(512, activation='relu', input_shape=input_shape),
     layers.Dense(512, activation='relu'),
     layers.Dense(512, activation='relu'),    
@@ -85,7 +85,7 @@ class Q3(CodingProblem):
     _hidden_units = 32
     _hint = """Your model should look something like:
 ```python
-model = keras.Sequential([
+model = tf_keras.Sequential([
     layers.Dense(____),
     layers.Activation(____),
     layers.Dense(____),
@@ -95,7 +95,7 @@ model = keras.Sequential([
 ```
 """
     _solution = CS("""
-model = keras.Sequential([
+model = tf_keras.Sequential([
     layers.Dense(32, input_shape=[8]),
     layers.Activation('relu'),
     layers.Dense(32),

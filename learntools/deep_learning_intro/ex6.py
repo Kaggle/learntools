@@ -20,10 +20,10 @@ model = keras.Sequential([
 ```
 """
     _solution = CS("""
-from tensorflow import keras
-from tensorflow.keras import layers
+import tf_keras
+from tf_keras import layers
 
-model = keras.Sequential([
+model = tf_keras.Sequential([
     layers.BatchNormalization(input_shape=input_shape),
     layers.Dense(256, activation='relu'),
     layers.BatchNormalization(),

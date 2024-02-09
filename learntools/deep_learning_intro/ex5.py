@@ -5,7 +5,7 @@ from learntools.core import *
 class Q1(CodingProblem):
     _hint = """Your answer should look something like:
 ```python
-model = keras.Sequential([
+model = tf_keras.Sequential([
     # Dense
     # Dropout
     # Dense
@@ -15,7 +15,7 @@ model = keras.Sequential([
 ```
 """
     _solution = CS("""
-model = keras.Sequential([
+model = tf_keras.Sequential([
     layers.Dense(128, activation='relu', input_shape=input_shape),
     layers.Dropout(0.3),
     layers.Dense(64, activation='relu'),
@@ -65,7 +65,7 @@ From the learning curves, you can see that the validation loss remains near a co
 class Q3(CodingProblem):
     _hint = """Your answer should look something like:
 ```python
-model = keras.Sequential([
+model = tf_keras.Sequential([
     # Batch Normalization
     # Dense
     # Batch Normalization
@@ -78,7 +78,7 @@ model = keras.Sequential([
 ```
 """
     _solution = CS("""
-model = keras.Sequential([
+model = tf_keras.Sequential([
     layers.BatchNormalization(input_shape=input_shape),
     layers.Dense(512, activation='relu'),
     layers.BatchNormalization(),

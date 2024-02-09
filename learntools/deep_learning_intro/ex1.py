@@ -1,5 +1,6 @@
 import numpy as np
 import tensorflow as tf
+import tf_keras
 from learntools.core import *
 
 # Using *Red Wine Quality* dataset
@@ -29,16 +30,16 @@ input_shape = [____]
 class Q2(CodingProblem):
     _hint = """Your answer should look something like:
 ```python
-model = keras.Sequential([
+model = tf_keras.Sequential([
     ____
 ])
 ```
 """
     _solution = CS("""
-from tensorflow import keras
-from tensorflow.keras import layers
+from tf_keras
+from tf_keras import layers
 
-model = keras.Sequential([
+model = tf_keras.Sequential([
     layers.Dense(units=1, input_shape=[{}])
 ])
 """.format(inputs))
@@ -66,7 +67,7 @@ class Q3(CodingProblem):
     _hint = "You can get the attribute of an object using the 'dot' notation: like `object.attribute`."
     _solution = CS(r"""
 # Uncomment if you need the model from the previous question:
-# model = keras.Sequential([
+# model = tf_keras.Sequential([
 #     layers.Dense(units=1, input_shape=[11])
 # ])
 

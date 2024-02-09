@@ -1,6 +1,6 @@
-from tensorflow import keras
+from tf_keras
 import tensorflow as tf
-from tensorflow.keras import layers
+from tf_keras import layers
 
 import numpy as np
 
