@@ -2,6 +2,7 @@
 set -e
 
 IMAGE='gcr.io/kaggle-images/python:staging'
+PINNED_IMAGE='gcr.io/kaggle-images/python@sha256:287c4e0e224e592dc6113940a6cf3d099b814c7bff0c1e8da57f8e6bad123ac5'
 TRACK='all'
 NOTEBOOK='all'
 
@@ -76,6 +77,25 @@ if [[ -z $KAGGLE_KEY && ! ( -r "$HOME/.kaggle/kaggle.json" ) ]]; then
 fi
 
 set -x
+
+if [[ $NOTEBOOK == "all" ]]; then
+    docker run --rm -t \
+    -e KAGGLE_USERNAME -e KAGGLE_KEY \
+    -v ~/.kaggle:/root/.kaggle:ro \
+    -v $PWD:/input:ro \
+    $PINNED_IMAGE \
+    /bin/bash -c "/input/notebooks/test.sh kerasExp"
+fi
+
+if [[ $NOTEBOOK  == "computer_vision" || $NOTEBOOK == "deep_learning_intro" ]]; then
+    docker run --rm -t \
+    -e KAGGLE_USERNAME -e KAGGLE_KEY \
+    -v ~/.kaggle:/root/.kaggle:ro \
+    -v $PWD:/input:ro \
+    $PINNED_IMAGE \
+    /bin/bash -c "/input/notebooks/test.sh $TRACK $NOTEBOOK"
+fi
+
 docker run --rm -t \
     -e KAGGLE_USERNAME -e KAGGLE_KEY \
     -v ~/.kaggle:/root/.kaggle:ro \

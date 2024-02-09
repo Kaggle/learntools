@@ -20,6 +20,7 @@ pipeline {
                     set -exo pipefail
                     # Ensures the currently released Docker Python image is used.
                     docker pull gcr.io/kaggle-images/python:staging
+		    docker pull gcr.io/kaggle-images/python@sha256:287c4e0e224e592dc6113940a6cf3d099b814c7bff0c1e8da57f8e6bad123ac5
                 '''
             }
         }
