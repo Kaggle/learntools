@@ -25,7 +25,7 @@ class Q3(CodingProblem):
 Your answer should look something like:
 
 ```python
-model = keras.Sequential([
+model = tf_keras.Sequential([
     layers.InputLayer(input_shape=[128, 128, 3]),
     
     # Data Augmentation
@@ -45,10 +45,10 @@ model = keras.Sequential([
 """
     _solution = CS(
         """
-from tensorflow import keras
-from tensorflow.keras import layers
+from tf_keras
+from tf_keras import layers
 
-model = keras.Sequential([
+model = tf_keras.Sequential([
     layers.InputLayer(input_shape=[128, 128, 3]),
     
     # Data Augmentation

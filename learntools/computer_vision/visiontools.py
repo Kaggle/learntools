@@ -8,7 +8,7 @@ from skimage import draw, transform
 
 import numpy as np
 import tensorflow as tf
-
+import tf_keras
 
 # SETUP #
 
@@ -80,14 +80,14 @@ def show_kernel(kernel, label=True, digits=None, text_size=28):
     plt.yticks([])
 
 def extract_feature(image, kernel, pool_size=2):
-    model = tf.keras.Sequential([
-        tf.keras.layers.Conv2D(filters=1,
+    model = tf_keras.Sequential([
+        tf_keras.layers.Conv2D(filters=1,
                                kernel_size=kernel.shape,
                                padding='same',
                                use_bias=False,
                                input_shape=image.shape),
-        tf.keras.layers.Activation('relu'),
-        tf.keras.layers.MaxPool2D(pool_size=pool_size,
+        tf_keras.layers.Activation('relu'),
+        tf_keras.layers.MaxPool2D(pool_size=pool_size,
                                   padding='same'),
     ])
 
@@ -118,8 +118,8 @@ def show_extraction(image,
                     ops=['Input', 'Filter', 'Detect', 'Condense'],
                     gamma=1.0):
     # Create Layers
-    model = tf.keras.Sequential([
-                    tf.keras.layers.Conv2D(
+    model = tf_keras.Sequential([
+                    tf_keras.layers.Conv2D(
                         filters=1,
                         kernel_size=kernel.shape,
                         strides=conv_stride,
@@ -127,8 +127,8 @@ def show_extraction(image,
                         use_bias=False,
                         input_shape=image.shape,
                     ),
-                    tf.keras.layers.Activation(activation),
-                    tf.keras.layers.MaxPool2D(
+                    tf_keras.layers.Activation(activation),
+                    tf_keras.layers.MaxPool2D(
                         pool_size=pool_size,
                         strides=pool_stride,
                         padding=pool_padding,
@@ -175,7 +175,7 @@ def show_feature_maps(image, model, layer_name, offset=0,
                       gamma=0.5):
     
     outputs = model.get_layer(layer_name).output
-    activation_model = tf.keras.Model(inputs=model.input,
+    activation_model = tf_keras.Model(inputs=model.input,
                                       outputs=outputs)
     feature_maps = activation_model(tf.expand_dims(image, axis=0))
 

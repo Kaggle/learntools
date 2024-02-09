@@ -6,10 +6,10 @@ from learntools.core import *
 class Q1(CodingProblem):
     _hint = """You should add two `Conv2D` layers and then a `MaxPool2D` layer. They will be just the same as the other layers in the model, except for some of the parameter values."""
     _solution = CS("""
-from tensorflow import keras
-from tensorflow.keras import layers
+import tf_keras
+from tf_keras import layers
 
-model = keras.Sequential([
+model = tf_keras.Sequential([
     # Block One
     layers.Conv2D(filters=32, kernel_size=3, activation='relu', padding='same',
                   input_shape=[128, 128, 3]),
@@ -86,7 +86,7 @@ class Q2(CodingProblem):
     _hint = "This is a *binary* classification problem."
     _solution = CS("""
 model.compile(
-    optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001),
+    optimizer=tf_keras.optimizers.Adam(learning_rate=0.0001),
     loss='binary_crossentropy',
     metrics=['binary_accuracy'],
 )

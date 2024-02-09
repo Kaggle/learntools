@@ -9,7 +9,8 @@ from learntools.computer_vision.visiontools import read_image, show_image, set_s
 
 import numpy as np
 import tensorflow as tf
-from tensorflow.keras.preprocessing import image_dataset_from_directory
+import tf_keras
+from tf_keras.preprocessing import image_dataset_from_directory
 
 # Reproducability
 set_seed(31415)

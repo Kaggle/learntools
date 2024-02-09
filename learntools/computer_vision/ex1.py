@@ -16,10 +16,10 @@ class Q2(CodingProblem):
     _var = 'model'
     _hint = "You need to add two new `Dense` layers. The first should have {} units and `'relu'` activation. The second should have 1 unit and `'sigmoid'` activation.".format(hidden_units)
     _solution = CS(""" 
-from tensorflow import keras
-from tensorflow.keras import layers
+import tf_keras
+from tf_keras import layers
 
-model = keras.Sequential([
+model = tf_keras.Sequential([
     pretrained_base,
     layers.Flatten(),
     layers.Dense({}, activation='relu'),
