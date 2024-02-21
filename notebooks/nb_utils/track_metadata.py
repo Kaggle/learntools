@@ -131,6 +131,7 @@ class Notebook(object):
     def __init__(self, cfg, filename, type, author=None, title=None, lesson=None,
             slug=None, scriptid=1, kernel_sources=(), dataset_sources=(),
             competition_sources=(), keywords=(), enable_gpu=False, enable_internet=None,
+            docker_image_pinning_type=None
             ):
         self.cfg = cfg
         self.filename = filename
@@ -170,6 +171,7 @@ class Notebook(object):
         self.keywords = list(keywords)
         self.enable_gpu = bool(enable_gpu)
         self.enable_internet = enable_internet
+        self.docker_image_pinning_type = docker_image_pinning_type
 
     @staticmethod
     def _topic_to_title(topic):
@@ -221,5 +223,5 @@ class Notebook(object):
                 competition_sources=sorted(self.competition_sources),
                 kernel_sources=sorted(self.kernel_sources),
                 keywords=sorted(self.keywords),
-                docker_image_pinning_type="latest",
+                docker_image_pinning_type="latest" if self.docker_image_pinning_type is None else self.docker_image_pinning_type,
                 )
