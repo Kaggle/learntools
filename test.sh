@@ -79,7 +79,7 @@ fi
 set -x
 
 # Allows pinned notebooks to be tested independently. 
-if [[ $NOTEBOOK  == "computer_vision" || $NOTEBOOK == "deep_learning_intro" ]]; then
+if [[ $TRACK  == "computer_vision" || $TRACK == "deep_learning_intro" ]]; then
     docker run --rm -t \
     -e KAGGLE_USERNAME -e KAGGLE_KEY \
     -v ~/.kaggle:/root/.kaggle:ro \
@@ -90,7 +90,7 @@ if [[ $NOTEBOOK  == "computer_vision" || $NOTEBOOK == "deep_learning_intro" ]]; 
 fi
 
 
-if [[ $NOTEBOOK == "all" ]]; then
+if [[ $TRACK == "all" ]]; then
     docker run --rm -t \
     -e KAGGLE_USERNAME -e KAGGLE_KEY \
     -v ~/.kaggle:/root/.kaggle:ro \
