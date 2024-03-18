@@ -75,12 +75,12 @@ class PlotThreshold(CodingProblem):
              "malignant, use `hue=`.  Set `shade=True`.")
     _solution = CS(
 """# KDE plots for benign and malignant tumors
-sns.kdeplot(data=cancer_data, x='Radius (worst)', hue='Diagnosis', shade=True)
+sns.kdeplot(data=cancer_data, x='Radius (worst)', hue='Diagnosis', fill=True)
 """)
 
     def solution_plot(self):
         self._view.solution()
-        sns.kdeplot(data=df, x='Radius (worst)', hue='Diagnosis', shade=True)
+        sns.kdeplot(data=df, x='Radius (worst)', hue='Diagnosis', fill=True)
     
     def check(self, passed_plt):
         assert len(passed_plt.figure(1).axes) > 0, \
