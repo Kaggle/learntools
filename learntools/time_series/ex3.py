@@ -118,7 +118,7 @@ In scikit-learn, your solution would look like:
 ```python
 from sklearn.preprocessing import OneHotEncoder
 
-ohe = OneHotEncoder(sparse=False)
+ohe = OneHotEncoder(sparse_output=False)
 
 X_holidays = pd.DataFrame(
     ____,
@@ -134,7 +134,7 @@ X2 = X.join(X_holidays, on='date').fillna(0.0)
 # Scikit-learn solution
 from sklearn.preprocessing import OneHotEncoder
 
-ohe = OneHotEncoder(sparse=False)
+ohe = OneHotEncoder(sparse_output=False)
 
 X_holidays = pd.DataFrame(
     ohe.fit_transform(holidays),
