@@ -80,7 +80,7 @@ set -x
 
 # Allows pinned notebooks to be tested independently. 
 if [[ $TRACK  == "computer_vision" || $TRACK == "deep_learning_intro" ]]; then
-    docker run --rm -t \
+    docker run --runtime runc --rm -t \
     -e KAGGLE_USERNAME -e KAGGLE_KEY \
     -v ~/.kaggle:/root/.kaggle:ro \
     -v $PWD:/input:ro \
@@ -91,7 +91,7 @@ fi
 
 
 if [[ $TRACK == "all" ]]; then
-    docker run --rm -t \
+    docker run --runtime runc --rm -t \
     -e KAGGLE_USERNAME -e KAGGLE_KEY \
     -v ~/.kaggle:/root/.kaggle:ro \
     -v $PWD:/input:ro \
@@ -99,7 +99,7 @@ if [[ $TRACK == "all" ]]; then
     /bin/bash -c "/input/notebooks/test.sh kerasExp"
 fi
 
-docker run --rm -t \
+docker run --runtime runc --rm -t \
     -e KAGGLE_USERNAME -e KAGGLE_KEY \
     -v ~/.kaggle:/root/.kaggle:ro \
     -v $PWD:/input:ro \
