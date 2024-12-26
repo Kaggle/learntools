@@ -79,7 +79,7 @@ class CorrectQuery(CodingProblem):
                                                        "%d rows, but you have %d rows." % (len(correct_answer), len(results)))
         # check 2: calculated values
         # correct result
-        correct_list = correct_result.loc[correct_result["time_to_answer"].notna(), "time_to_answer"]
+        correct_list = correct_answer.loc[correct_answer["time_to_answer"].notna(), "time_to_answer"]
         correct_number = correct_list.sum()/len(correct_list)
         # submitted value
         submitted_list = results.loc[results["time_to_answer"].notna(), "time_to_answer"]
