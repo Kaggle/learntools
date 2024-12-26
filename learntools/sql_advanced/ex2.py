@@ -174,7 +174,7 @@ class BreakTime(CodingProblem):
         assert (len(results)==len(break_time_answer)), ("Your answer does not have the correct number of rows.")
         # check 4: specific number
         id_to_check = break_time_answer["taxi_id"].iloc[0]
-        correct_ans = break_time_answer.loc[break_time_answer"taxi_id"].eq(id_to_check) & break_time_answer["prev_break"].notna(), "prev_break"]
+        correct_ans = break_time_answer.loc[break_time_answer["taxi_id"].eq(id_to_check) & break_time_answer["prev_break"].notna(), "prev_break"]
         submitted_ans = results.loc[results["taxi_id"].eq(id_to_check) & results["prev_break"].notna(), "prev_break"]
         if len(correct_ans) > 0:
             assert (correct_ans.min() == submitted_ans.min()), ("The results don't look right. Try again.")
