@@ -193,7 +193,7 @@ bigquery_experts_results = bigquery_experts_query_job.to_dataframe()
         # check 3: correct user IDs
         correct_ids = bigquery_experts_answer.loc[bigquery_experts_answer.user_id.notna(), "user_id"].unique()
         submitted_ids = results.loc[results.user_id.notna(), "user_id"].unique()
-        assert(np.array_equal(correct_ids, submitted_ids))
+        assert(np.array_equal(correct_ids, submitted_ids)), ), ('You seem to have the wrong values in the `user_id` column.')
         # check 4: check one value from other column
         first_id = list(bigquery_experts_answer["user_id"])[0]
         correct_num = int(bigquery_experts_answer[bigquery_experts_answer["user_id"] == first_id]["number_of_answers"])
