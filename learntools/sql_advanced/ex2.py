@@ -177,8 +177,8 @@ class BreakTime(CodingProblem):
         correct_ans = break_time_answer.loc[break_time_answer["taxi_id"].eq(id_to_check) & break_time_answer["prev_break"].notna(), "prev_break"]
         submitted_ans = results.loc[results["taxi_id"].eq(id_to_check) & results["prev_break"].notna(), "prev_break"]
         if len(correct_ans) > 0:
-            assert (correct_ans.min() == submitted_ans.min()), ("The results don't look right. Try again.")
-            assert (correct_ans.max() == submitted_ans.max()), ("The results don't look right. Try again.")
+            assert correct_ans.min() == submitted_ans.min(), "The results don't look right. Try again."
+            assert correct_ans.max() == submitted_ans.max(), "The results don't look right. Try again."
 
     _solution = CS( \
 """
