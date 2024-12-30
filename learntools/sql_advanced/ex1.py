@@ -84,7 +84,7 @@ class CorrectQuery(CodingProblem):
         # submitted value
         submitted_list = results.loc[results["time_to_answer"].notna(), "time_to_answer"]
         submitted_number = submitted_list.sum()/len(submitted_list)
-        assert (int(submitted_number)==int(correct_number)), ("The results don't look right. Please make sure that the part of the query "
+        assert int(submitted_number) == int(correct_number), ("The results don't look right. Please make sure that the part of the query "
                                                               "that calculates the values in the `time_to_answer` column is unmodified.")
     
     _solution = CS(\
