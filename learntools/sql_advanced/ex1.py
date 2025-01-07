@@ -79,12 +79,12 @@ class CorrectQuery(CodingProblem):
                                                        "%d rows, but you have %d rows." % (len(correct_answer), len(results)))
         # check 2: calculated values
         # correct result
-        correct_list = [i for i in list(correct_answer["time_to_answer"]) if not math.isnan(i)]
-        correct_number = int(sum(correct_list)/len(correct_list))
+        correct_list = correct_answer.loc[correct_answer["time_to_answer"].notna(), "time_to_answer"]
+        correct_number = correct_list.sum()/len(correct_list)
         # submitted value
-        submitted_list = [i for i in list(results["time_to_answer"]) if not math.isnan(i)]
-        submitted_number = int(sum(submitted_list)/len(submitted_list))
-        assert (int(submitted_number)==int(correct_number)), ("The results don't look right. Please make sure that the part of the query "
+        submitted_list = results.loc[results["time_to_answer"].notna(), "time_to_answer"]
+        submitted_number = submitted_list.sum()/len(submitted_list)
+        assert int(submitted_number) == int(correct_number), ("The results don't look right. Please make sure that the part of the query "
                                                               "that calculates the values in the `time_to_answer` column is unmodified.")
     
     _solution = CS(\

@@ -96,11 +96,11 @@ class YearDistrib(CodingProblem):
         # check 2: length of dataframe
         assert (len(results) == len(rides_per_year_answer)), ("The results don't look right. Try again.")
         # check 3: one value in particular
-        year_to_check = list(rides_per_year_answer["year"])[-1]
-        correct_number = int(rides_per_year_answer.loc[rides_per_year_answer["year"]==year_to_check]["num_trips"].values)
-        submitted_number = int(results.loc[results["year"]==year_to_check]["num_trips"].values)
-        assert (correct_number == submitted_number), ("The results don't look right. Try again.")
-
+        year_to_check = rides_per_year_answer["year"].iloc[-1]
+        correct_number = rides_per_year_answer.loc[rides_per_year_answer["year"] == year_to_check, "num_trips"].iloc[0]
+        submitted_number = results.loc[results["year"] == year_to_check, "num_trips"].iloc[0]
+        assert correct_number == submitted_number, "The results don't look right. Try again."
+        
     _hint = "Start your query with `SELECT EXTRACT(YEAR FROM trip_start_timestamp) AS year, COUNT(1) AS num_trips`."
     _solution = CS(
 """
