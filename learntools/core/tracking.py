@@ -90,11 +90,17 @@ def track_using_kagglesdk(event):
     if question_type:
         request.question_type = question_type
 
-    # TODO(b/379083750): the following items are still TBD
-    #   - post the nudge information back to the client
-
     client = KaggleClient()
     result = client.education.education_api_client.track_exercise_interaction(request)
+
+    # Post the result back to the outer frame.  When running in Kaggle
+    # Notebooks, the outer frame is listening for this message and may show a
+    # a nudge.
+    message = dict(
+        jupyterEvent='custom.exercise_interaction_result',
+        data=result.to_json())
+    js = 'parent.postMessage({}, "*")'.format(json.dumps(message))
+    display(Javascript(js))
 
 
 def track_using_iframe(event):
