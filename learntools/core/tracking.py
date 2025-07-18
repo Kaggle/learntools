@@ -93,9 +93,8 @@ def track_using_kagglesdk(event):
     client = KaggleClient()
     result = client.education.education_api_client.track_exercise_interaction(request)
 
-    # Post the result back to the outer frame.  When running in Kaggle
-    # Notebooks, the outer frame is listening for this message and may show a
-    # a nudge.
+    # Post the result back to the outer frame. When running in Kaggle Notebooks
+    # the outer frame is listening for this message and may show a nudge.
     message = dict(
         jupyterEvent='custom.exercise_interaction_result',
         data=result.to_json())
