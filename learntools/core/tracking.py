@@ -84,7 +84,7 @@ def track_using_kagglesdk(event):
     request.value_towards_completion = event.get('valueTowardsCompletion', 0.0)
     request.interaction_type = interaction_type_to_kagglesdk(event)
     request.outcome_type = outcome_type_to_kagglesdk(request.interaction_type, event)
-    request.fork_parent_kernel_session_id = os.environ.get('KAGGLE_LEARN_SESSION_ID')
+    request.fork_parent_kernel_session_id = int(os.environ.get('KAGGLE_LEARN_SESSION_ID'))
 
     question_type = question_type_to_kagglesdk(event)
     if question_type:
