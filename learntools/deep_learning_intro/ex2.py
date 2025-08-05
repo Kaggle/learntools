@@ -61,10 +61,7 @@ model = keras.Sequential([
         assert (layer_classes == true_classes), \
             ("Your model doesn't have the correct kinds of layers. You should have five layers with classes: Dense, Dense, Dense, Dense.")
         # Check input shape
-        try:
-            input_shape = dense_layer.input_shape
-        except:
-            input_shape = None
+        input_shape = dense_layer.input.shape
         assert (input_shape == (None, inputs)), \
             ("Your model should have {} inputs. Make sure you answered the previous question correctly!".format(inputs))
         # Check activation functions
@@ -111,10 +108,7 @@ model = keras.Sequential([
         assert (layer_classes == true_classes), \
             ("Your model doesn't have the correct kinds of layers. You should have five layers with classes: Dense, Activation, Dense, Activation, Dense.")
 
-        try:
-            input_shape = model.layers[0].input_shape
-        except:
-            input_shape = None
+        input_shape = model.layers[0].input.shape
         assert (input_shape == (None, 8)), \
             ("Your model should have 8 inputs. Did you include the input shape to the first layer?")
         dense_activations = [layer.activation.__name__ for layer in model.layers]
