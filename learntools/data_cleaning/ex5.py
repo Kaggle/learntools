@@ -31,7 +31,7 @@ def replace_matches_in_column(df, column, string_to_match, min_ratio = 47):
     matches = fuzzywuzzy.process.extract(string_to_match, strings, 
                                          limit=10, scorer=fuzzywuzzy.fuzz.token_sort_ratio)
 
-    # only get matches with a ratio > 90
+    # only get matches with a ratio > 47
     close_matches = [matches[0] for matches in matches if matches[1] >= min_ratio]
 
     # get the rows of all the close matches in our dataframe
