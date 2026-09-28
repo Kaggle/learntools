@@ -245,7 +245,10 @@ def plot_multistep(y, every=1, ax=None, palette_kwargs=None):
     if ax is None:
         fig, ax = plt.subplots()
     ax.set_prop_cycle(plt.cycler('color', palette))
-    for date, preds in y[::every].iterrows():
-        preds.index = pd.period_range(start=date, periods=len(preds))
+    freq = y.index.freq
+    if freq is None:
+        freq = pd.infer_freq(y.index)
+    for datetime, preds in y[::every].iterrows():
+        preds.index = pd.period_range(start=datetime, periods=len(preds), freq=freq)
         preds.plot(ax=ax)
     return ax
