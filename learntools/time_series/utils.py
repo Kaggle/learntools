@@ -207,7 +207,7 @@ def make_lags(ts, lags, lead_time=1, name='y'):
 def make_leads(ts, leads, name='y'):
     return pd.concat(
         {f'{name}_lead_{i}': ts.shift(-i)
-         for i in reversed(range(leads))},
+         for i in reversed(range(1, leads + 1))},
         axis=1)
 
 
